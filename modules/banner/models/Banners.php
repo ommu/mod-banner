@@ -162,16 +162,14 @@ class Banners extends CActiveRecord
 			$criteria->addInCondition('t.publish',array(0,1));
 			$criteria->compare('t.publish',$this->publish);
 		}
-		if(isset($_GET['category'])) {
+		if(isset($_GET['category']))
 			$criteria->compare('t.cat_id',$_GET['category']);
-		} else {
+		else
 			$criteria->compare('t.cat_id',$this->cat_id);
-		}
-		if(isset($_GET['user'])) {
+		if(isset($_GET['user']))
 			$criteria->compare('t.user_id',$_GET['user']);
-		} else {
+		else
 			$criteria->compare('t.user_id',$this->user_id);
-		}
 		$criteria->compare('t.banner_type',$this->banner_type);
 		$criteria->compare('t.title',$this->title,true);
 		$criteria->compare('t.url',$this->url,true);
@@ -433,11 +431,9 @@ class Banners extends CActiveRecord
 		if(parent::beforeValidate()) {	
 			if($this->isNewRecord) {
 				//$this->orders = 0;
-				$this->user_id = Yii::app()->user->id;	
-				$this->creation_id = Yii::app()->user->id;			
-			} else {
-				$this->modified_id = Yii::app()->user->id;					
-			}
+				$this->user_id = Yii::app()->user->id;		
+			} else
+				$this->modified_id = Yii::app()->user->id;
 			
 			$media = CUploadedFile::getInstance($this, 'media');
 			if($media->name != '') {

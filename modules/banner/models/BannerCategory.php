@@ -44,7 +44,6 @@ class BannerCategory extends CActiveRecord
 	public $media_size_height;
 	
 	// Variable Search
-	public $count_banner;
 	public $creation_search;
 	public $modified_search;
 
@@ -81,8 +80,7 @@ class BannerCategory extends CActiveRecord
 			array('
 				media_size_width, media_size_height', 'length', 'max'=>4),
 			array('media_size', 'length', 'max'=>9),
-			array('name, desc, creation_id, modified_id,
-				count_banner', 'length', 'max'=>11),
+			array('name, desc, creation_id, modified_id', 'length', 'max'=>11),
 			array('
 				title', 'length', 'max'=>32),
 			array('
@@ -92,7 +90,7 @@ class BannerCategory extends CActiveRecord
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('cat_id, publish, orders, name, desc, media_size, limit, creation_date, creation_id, modified_date, modified_id,
-				title, description, count_banner, creation_search, modified_search', 'safe', 'on'=>'search'),
+				title, description, creation_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -104,11 +102,10 @@ class BannerCategory extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'banners' => array(self::HAS_MANY, 'Banners', 'cat_id'),
-			'title_relation' => array(self::BELONGS_TO, 'OmmuSystemPhrase', 'name'),
-			'description_relation' => array(self::BELONGS_TO, 'OmmuSystemPhrase', 'desc'),
+			'view_cat' => array(self::BELONGS_TO, 'ViewBannerCategory', 'cat_id'),
 			'creation_relation' => array(self::BELONGS_TO, 'Users', 'creation_id'),
 			'modified_relation' => array(self::BELONGS_TO, 'Users', 'modified_id'),
+			'banners' => array(self::HAS_MANY, 'Banners', 'cat_id'),
 		);
 	}
 
@@ -131,7 +128,6 @@ class BannerCategory extends CActiveRecord
 			'modified_id' => 'Modified',
 			'title' => Phrase::trans(28021,1),
 			'description' => Phrase::trans(28022,1),
-			'count_banner' => 'Banners',
 			'creation_search' => 'Creation',
 			'modified_search' => 'Modified',
 			'media_size_width' => Phrase::trans(28023,1),
@@ -182,13 +178,9 @@ class BannerCategory extends CActiveRecord
 		
 		// Custom Search
 		$criteria->with = array(
-			'title_relation' => array(
-				'alias'=>'title_relation',
-				'select'=>'en'
-			),
-			'description_relation' => array(
-				'alias'=>'description_relation',
-				'select'=>'en'
+			'view_cat' => array(
+				'alias'=>'view_cat',
+				'select'=>'category_name, category_desc'
 			),
 			'creation_relation' => array(
 				'alias'=>'creation_relation',
@@ -199,12 +191,12 @@ class BannerCategory extends CActiveRecord
 				'select'=>'displayname'
 			),
 		);
-		$criteria->compare('title_relation.en',strtolower($this->title), true);
-		$criteria->compare('description_relation.en',strtolower($this->description), true);
+		$criteria->compare('view_cat.category_name',strtolower($this->title), true);
+		$criteria->compare('view_cat.category_desc',strtolower($this->description), true);
 		$criteria->compare('creation_relation.displayname',strtolower($this->creation_search), true);
 		$criteria->compare('modified_relation.displayname',strtolower($this->modified_search), true);
 
-		if(!isset($_GET['BannerCategory_sort']))
+		if(isset($_GET['BannerCategory_sort']))
 			$criteria->order = 'cat_id DESC';
 
 		return new CActiveDataProvider($this, array(
@@ -275,6 +267,10 @@ class BannerCategory extends CActiveRecord
 				'value' => 'Phrase::trans($data->desc, 2)',
 			);
 			$this->defaultColumns[] = 'media_size';
+			$this->defaultColumns[] = array(
+				'header'=>'Count',
+				'value' => '$data->view_cat->banners',
+			);
 			$this->defaultColumns[] = array(
 				'name' => 'creation_search',
 				'value' => '$data->creation_relation->displayname',
@@ -373,19 +369,10 @@ class BannerCategory extends CActiveRecord
 			if($this->isNewRecord) {
 				//$this->orders = 0;
 				$this->creation_id = Yii::app()->user->id;			
-			} else {
-				$this->modified_id = Yii::app()->user->id;					
-			}
+			} else
+				$this->modified_id = Yii::app()->user->id;
 		}
 		return true;
-	}
-
-	/**
-	 * after find attributes
-	 */	
-	protected function afterFind() {
-		$this->count_banner = Banners::getBanner($this->cat_id, 'count');
-		parent::afterFind();
 	}
 	
 	/**
