@@ -266,7 +266,13 @@ class BannerCategory extends CActiveRecord
 				'name' => 'description',
 				'value' => 'Phrase::trans($data->desc, 2)',
 			);
-			$this->defaultColumns[] = 'media_size';
+			$this->defaultColumns[] = array(
+				'name' => 'media_size',
+				'value' => 'BannerCategory::getPreviewSize($data->media_size)',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+			);
 			$this->defaultColumns[] = array(
 				'header'=>'Count',
 				'value' => '$data->view_cat->banners',
@@ -358,6 +364,15 @@ class BannerCategory extends CActiveRecord
 		} else {
 			return false;
 		}
+	}
+
+	/**
+	 * BannerCategory get information
+	 */
+	public static function getPreviewSize($size)
+	{
+		$bannerSize = explode(',', $size);
+		return $bannerSize[0].' x '.$bannerSize[1];
 	}
 
 	/**

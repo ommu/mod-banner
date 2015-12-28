@@ -23,6 +23,8 @@
  * @property integer $id
  * @property string $license
  * @property integer $permission
+ * @property string $media_validation
+ * @property string $media_resize
  * @property string $meta_keyword
  * @property string $meta_description
  * @property string $modified_date
@@ -62,12 +64,12 @@ class BannerSetting extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('license, permission, meta_keyword, meta_description', 'required'),
+			array('license, permission, media_validation, media_resize, meta_keyword, meta_description', 'required'),
 			array('permission', 'numerical', 'integerOnly'=>true),
 			array('license', 'length', 'max'=>32),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, license, permission, meta_keyword, meta_description, modified_date, modified_id,
+			array('id, license, permission, media_validation, media_resize, meta_keyword, meta_description, modified_date, modified_id,
 				modified_search', 'safe', 'on'=>'search'),
 		);
 	}
@@ -93,6 +95,8 @@ class BannerSetting extends CActiveRecord
 			'id' => Phrase::trans(28000,1),
 			'license' => Phrase::trans(28002,1),
 			'permission' => Phrase::trans(28005,1),
+			'media_validation' => 'Media Validation',
+			'media_resize' => 'Media Resize',
 			'meta_keyword' => Phrase::trans(28009,1),
 			'meta_description' => Phrase::trans(28010,1),
 			'modified_date' => 'Modified Date',
@@ -122,6 +126,8 @@ class BannerSetting extends CActiveRecord
 		$criteria->compare('t.id',$this->id);
 		$criteria->compare('t.license',$this->license,true);
 		$criteria->compare('t.permission',$this->permission);
+		$criteria->compare('t.media_validation',$this->media_validation);
+		$criteria->compare('t.media_resize',$this->media_resize);
 		$criteria->compare('t.meta_keyword',$this->meta_keyword,true);
 		$criteria->compare('t.meta_description',$this->meta_description,true);
 		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00', '0000-00-00')))
@@ -169,6 +175,8 @@ class BannerSetting extends CActiveRecord
 			//$this->defaultColumns[] = 'id';
 			$this->defaultColumns[] = 'license';
 			$this->defaultColumns[] = 'permission';
+			$this->defaultColumns[] = 'media_validation';
+			$this->defaultColumns[] = 'media_resize';
 			$this->defaultColumns[] = 'meta_keyword';
 			$this->defaultColumns[] = 'meta_description';
 		}
@@ -183,6 +191,8 @@ class BannerSetting extends CActiveRecord
 		if(count($this->defaultColumns) == 0) {
 			$this->defaultColumns[] = 'license';
 			$this->defaultColumns[] = 'permission';
+			$this->defaultColumns[] = 'media_validation';
+			$this->defaultColumns[] = 'media_resize';
 			$this->defaultColumns[] = 'meta_keyword';
 			$this->defaultColumns[] = 'meta_description';
 			$this->defaultColumns[] = 'modified_date';

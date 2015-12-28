@@ -80,8 +80,6 @@ class Banners extends CActiveRecord
 			array('publish, cat_id, banner_type, view, click', 'numerical', 'integerOnly'=>true),
 			array('user_id, creation_id, modified_id', 'length', 'max'=>11),
 			array('title', 'length', 'max'=>64),
-			array('media,
-				old_media', 'length', 'max'=>128),
 			array('media, user_id, view, click, creation_date, creation_idmodified_date, modified_id,
 				old_media', 'safe'),
 			// The following rule is used by search().
@@ -424,6 +422,19 @@ class Banners extends CActiveRecord
 	}
 
 	/**
+	 * Get Article
+	 */
+	public static function resizeBanner($media, $size) {
+		Yii::import('ext.phpthumb.PhpThumbFactory');
+		$bannerImg = PhpThumbFactory::create($media, array('jpegQuality' => 90, 'correctPermissions' => true));
+		$resizeSize = explode(',', $size);
+		$bannerImg->adaptiveResize($resizeSize[0], $resizeSize[1]);					
+		$bannerImg->save($media);
+		
+		return true;
+	}
+
+	/**
 	 * before validate attributes
 	 */
 	protected function beforeValidate() {
@@ -438,16 +449,25 @@ class Banners extends CActiveRecord
 			$media = CUploadedFile::getInstance($this, 'media');
 			if($media->name != '') {
 				$extension = pathinfo($media->name, PATHINFO_EXTENSION);
-				if(!in_array($extension, array('bmp','gif','jpg','png')))
+				$validation = 0;
+				if(BannerSetting::getInfo(1, 'media_validation') == 1) {
+					$validation = 1;
+					$size = getimagesize($media->tempName);
+					$bannerSize = explode(',', $this->category_relation->media_size);					
+				}
+				if(!in_array(strtolower($extension), array('bmp','gif','jpg','png')))
 					$this->addError('media', 'The file "'.$media->name.'" cannot be uploaded. Only files with these extensions are allowed: bmp, gif, jpg, png.');
+				else
+					if($validation == 1 && $bannerSize[0] != $size[0] && $bannerSize[1] != $size[1])
+						$this->addError('media', 'The file "'.$media->name.'" cannot be uploaded. ukuran banner ('.$size[0].' x '.$size[1].') tidak sesuai dengan kategori ('.$bannerSize[0].' x '.$bannerSize[1].')');
 			} else {
-				if($this->isNewRecord)
+				//if($this->isNewRecord)
 					$this->addError('media', 'Media cannot be blank.');
 			}
 			
-			if(($this->published_date != '' && $this->expired_date != '') && ($this->published_date >= $this->expired_date)) {
+			if(($this->published_date != '' && $this->expired_date != '') && ($this->published_date >= $this->expired_date))
 				$this->addError('expired_date', Phrase::trans(28034,1));
-			}
+			
 			/* if(count(self::getBanner($this->cat_id)) >= $this->cat->limit) {
 				$this->addError('cat_id', Phrase::trans(28047,1));
 			} */
@@ -466,8 +486,10 @@ class Banners extends CActiveRecord
 				
 				$this->media = CUploadedFile::getInstance($this, 'media');
 				if($this->media instanceOf CUploadedFile) {
-					$fileName = $this->banner_id.'_'.time().'.'.strtolower($this->media->extensionName);
+					$fileName = $this->banner_id.'_'.time().'_'.Utility::getUrlTitle($this->title).'.'.strtolower($this->media->extensionName);
 					if($this->media->saveAs($banner_path.'/'.$fileName)) {
+						if(BannerSetting::getInfo(1, 'media_resize') == 1)
+							self::resizeBanner($banner_path.'/'.$fileName, $this->category_relation->media_size);
 						if($this->old_media != '')
 							rename($banner_path.'/'.$this->old_media, 'public/banner/verwijderen/'.$this->banner_id.'_'.$this->old_media);
 						$this->media = $fileName;
@@ -494,8 +516,10 @@ class Banners extends CActiveRecord
 			
 			$this->media = CUploadedFile::getInstance($this, 'media');
 			if($this->media instanceOf CUploadedFile) {
-				$fileName = $this->banner_id.'_'.time().'.'.strtolower($this->media->extensionName);
+				$fileName = $this->banner_id.'_'.time().'_'.Utility::getUrlTitle($this->title).'.'.strtolower($this->media->extensionName);
 				if($this->media->saveAs($banner_path.'/'.$fileName)) {
+					if(BannerSetting::getInfo(1, 'media_resize') == 1)
+						self::resizeBanner($banner_path.'/'.$fileName, $this->category_relation->media_size);
 					Banners::model()->updateByPk($this->banner_id, array('media'=>$fileName));
 				}
 			}

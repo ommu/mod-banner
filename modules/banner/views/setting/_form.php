@@ -52,6 +52,28 @@
 		</div>
 
 		<div class="clearfix">
+			<?php echo $form->labelEx($model,'media_validation'); ?>
+			<div class="desc">
+				<?php echo $form->radioButtonList($model, 'media_validation', array(
+					1 => 'Yes, validation banner size before upload.',
+					0 => 'No, not validation banner size before upload.',
+				)); ?>
+				<?php echo $form->error($model,'media_validation'); ?>
+			</div>
+		</div>
+
+		<div class="clearfix">
+			<?php echo $form->labelEx($model,'media_resize'); ?>
+			<div class="desc">
+				<?php echo $form->radioButtonList($model, 'media_resize', array(
+					1 => 'Yes, resize banner after upload.',
+					0 => 'No, not resize banner after upload.',
+				)); ?>
+				<?php echo $form->error($model,'media_resize'); ?>
+			</div>
+		</div>
+
+		<div class="clearfix">
 			<?php echo $form->labelEx($model,'meta_keyword'); ?>
 			<div class="desc">
 				<?php echo $form->textArea($model,'meta_keyword',array('rows'=>6, 'cols'=>50, 'class'=>'span-7 smaller')); ?>
