@@ -63,8 +63,9 @@
 		$model->old_media = $model->media;
 		echo $form->hiddenField($model,'old_media');
 		if($model->media != '') {
+			$resizeSize = explode(',', $model->category_relation->media_size);
 			$file = Yii::app()->request->baseUrl.'/public/banner/'.$model->media;
-			$media = '<img src="'.Utility::getTimThumb($file, 320, 150, 1).'" alt="">';
+			$media = '<img src="'.Utility::getTimThumb($file, $resizeSize[0], $resizeSize[1], 1).'" alt="">';
 			echo '<div class="clearfix">';
 			echo $form->labelEx($model,'old_media');
 			echo '<div class="desc">'.$media.'</div>';

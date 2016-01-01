@@ -267,11 +267,8 @@ class Banners extends CActiveRecord
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
 			$this->defaultColumns[] = array(
-				'name' => 'title',
-				'value' => '$data->title."<br/><span>".$data->url."</span>"',
-				'htmlOptions' => array(
-					'class' => 'bold',
-				),
+				'name' => 'media',
+				'value' => '$data->url != "-" ? CHtml::link($data->title, $data->url, array(\'target\' => \'_blank\')) : $data->title',
 				'type' => 'raw',
 			);
 			if(!isset($_GET['category'])) {

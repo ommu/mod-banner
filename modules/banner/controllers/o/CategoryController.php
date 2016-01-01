@@ -160,7 +160,7 @@ class CategoryController extends Controller
 					if($model->save()) {
 						echo CJSON::encode(array(
 							'type' => 5,
-							'get' => Yii::app()->controller->createUrl('setting/index'),
+							'get' => Yii::app()->controller->createUrl('o/setting/index'),
 							'id' => 'partial-banner-category',
 							'msg' => '<div class="errorSummary success"><strong>'.Phrase::trans(28014,1).'</strong></div>',
 						));
@@ -173,7 +173,7 @@ class CategoryController extends Controller
 			
 		} else {
 			$this->dialogDetail = true;
-			$this->dialogGroundUrl = Yii::app()->controller->createUrl('setting/index');
+			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 600;
 			
 			$this->pageTitle = Phrase::trans(28013,1);
@@ -209,7 +209,7 @@ class CategoryController extends Controller
 					if($model->save()) {
 						echo CJSON::encode(array(
 							'type' => 5,
-							'get' => Yii::app()->controller->createUrl('setting/index'),
+							'get' => Yii::app()->controller->createUrl('o/setting/index'),
 							'id' => 'partial-banner-category',
 							'msg' => '<div class="errorSummary success"><strong>'.Phrase::trans(28016,1).'</strong></div>',
 						));
@@ -222,7 +222,7 @@ class CategoryController extends Controller
 			
 		} else {
 			$this->dialogDetail = true;
-			$this->dialogGroundUrl = Yii::app()->controller->createUrl('setting/index');
+			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 600;
 			
 			$this->pageTitle = Phrase::trans(28015,1);
@@ -243,7 +243,7 @@ class CategoryController extends Controller
 		$model=$this->loadModel($id);
 		
 		$this->dialogDetail = true;
-		$this->dialogGroundUrl = Yii::app()->controller->createUrl('setting/index');
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 500;
 
 		$this->pageTitle = 'View Banner Categories';
@@ -305,7 +305,7 @@ class CategoryController extends Controller
 				if($model->delete()) {
 					echo CJSON::encode(array(
 						'type' => 5,
-						'get' => Yii::app()->controller->createUrl('setting/index'),
+						'get' => Yii::app()->controller->createUrl('o/setting/index'),
 						'id' => 'partial-banner-category',
 						'msg' => '<div class="errorSummary success"><strong>'.Phrase::trans(28018,1).'</strong></div>',
 					));
@@ -314,7 +314,7 @@ class CategoryController extends Controller
 
 		} else {
 			$this->dialogDetail = true;
-			$this->dialogGroundUrl = Yii::app()->controller->createUrl('setting/index');
+			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 350;
 
 			$this->pageTitle = Phrase::trans(28017,1);
@@ -350,7 +350,7 @@ class CategoryController extends Controller
 				if($model->update()) {
 					echo CJSON::encode(array(
 						'type' => 5,
-						'get' => Yii::app()->controller->createUrl('setting/index'),
+						'get' => Yii::app()->controller->createUrl('o/setting/index'),
 						'id' => 'partial-banner-category',
 						'msg' => '<div class="errorSummary success"><strong>'.Phrase::trans(28016,1).'</strong></div>',
 					));
@@ -359,7 +359,7 @@ class CategoryController extends Controller
 
 		} else {
 			$this->dialogDetail = true;
-			$this->dialogGroundUrl = Yii::app()->controller->createUrl('setting/index');
+			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 350;
 
 			$this->pageTitle = $title;
