@@ -1,9 +1,3 @@
-.main.banner .container,
-.body .sidebar .banner .box {
-	position: relative;	
-	padding: 0 0 0 0;
-}
-
 div[class^="banner"] *[id^="rslides"] {
 	position: relative;
 	list-style: none;
@@ -106,14 +100,7 @@ div[class^="banner"] .rslides_tabs li.rslides_here a {
 
 /* Resolution 800 */
 @media only screen and (max-width:800px) {
-	.body .sidebar .banner .box {
-		float: left !important;
-		width: 50% !important;
-		padding: 0 15px 0 0;
-	}
-	.body .sidebar .banner .box:nth-child(2n) {
-		padding: 0 0 0 15px;
-	}
+	
 }
 
 /* Resolution 600 */
@@ -121,22 +108,10 @@ div[class^="banner"] .rslides_tabs li.rslides_here a {
 	div[class^="banner"] .rslides_tabs {
 		display: none;
 	}
-	.body .sidebar .banner .box {
-		padding: 0 10px 0 0;
-	}
-	.body .sidebar .banner .box:nth-child(2n) {
-		padding: 0 0 0 10px;
-	}
 }
 
 /* Resolution 480 */
 @media only screen and (max-width:480px) {
-	.body .sidebar .banner .box {
-		padding: 0 7px 0 0;
-	}
-	.body .sidebar .banner .box:nth-child(2n) {
-		padding: 0 0 0 7px;
-	}
 	
 }
 
