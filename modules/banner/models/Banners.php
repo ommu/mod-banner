@@ -438,6 +438,8 @@ class Banners extends CActiveRecord
 		$controller = strtolower(Yii::app()->controller->id);
 		if(parent::beforeValidate()) {	
 			if($this->isNewRecord) {
+				if(self::getBanner($this->cat_id, 'count') >= $this->category_relation->limit)
+					$this->addError('cat_id', Phrase::trans($this->category_relation->name, 2).'" cannot be uploaded. jumlah banner sudah melebihi batas maksimal (limit).');
 				//$this->orders = 0;
 				$this->user_id = Yii::app()->user->id;		
 			} else
@@ -457,6 +459,7 @@ class Banners extends CActiveRecord
 				else
 					if($validation == 1 && $bannerSize[0] != $size[0] && $bannerSize[1] != $size[1])
 						$this->addError('media', 'The file "'.$media->name.'" cannot be uploaded. ukuran banner ('.$size[0].' x '.$size[1].') tidak sesuai dengan kategori ('.$bannerSize[0].' x '.$bannerSize[1].')');
+				
 			} else {
 				//if($this->isNewRecord)
 					$this->addError('media', 'Media cannot be blank.');

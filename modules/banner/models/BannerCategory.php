@@ -274,8 +274,11 @@ class BannerCategory extends CActiveRecord
 				),
 			);
 			$this->defaultColumns[] = array(
-				'header'=>'Count',
-				'value' => '$data->view_cat->banners',
+				'name' => 'limit',
+				'value' => '$data->view_cat->banners."/".$data->limit',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'creation_search',
