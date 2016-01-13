@@ -43,6 +43,7 @@
 class Banners extends CActiveRecord
 {
 	public $defaultColumns = array();
+	public $permanent;
 	public $old_media;
 	
 	// Variable Search
@@ -77,7 +78,8 @@ class Banners extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('cat_id, title, url, published_date, expired_date', 'required'),
-			array('publish, cat_id, banner_type, view, click', 'numerical', 'integerOnly'=>true),
+			array('publish, cat_id, banner_type, view, click,
+				permanent', 'numerical', 'integerOnly'=>true),
 			array('user_id, creation_id, modified_id', 'length', 'max'=>11),
 			array('title', 'length', 'max'=>64),
 			array('media, user_id, view, click, creation_date, creation_idmodified_date, modified_id,
@@ -124,6 +126,7 @@ class Banners extends CActiveRecord
 			'creation_date' => Phrase::trans(28029,1),
 			'creation_id' => 'Creation',
 			'modified_date' => Phrase::trans(28028,1),
+			'permanent' => 'Permanent',
 			'modified_id' => 'Modified',
 			'old_media' => Phrase::trans(28035,1),
 			'creation_search' => 'Creation',
@@ -465,12 +468,11 @@ class Banners extends CActiveRecord
 					$this->addError('media', 'Media cannot be blank.');
 			}
 			
+			if($this->permanent == 1)
+				$this->expired_date = '00-00-0000';
+			
 			if(($this->published_date != '' && $this->expired_date != '') && ($this->published_date >= $this->expired_date))
 				$this->addError('expired_date', Phrase::trans(28034,1));
-			
-			/* if(count(self::getBanner($this->cat_id)) >= $this->cat->limit) {
-				$this->addError('cat_id', Phrase::trans(28047,1));
-			} */
 		}
 		return true;
 	}

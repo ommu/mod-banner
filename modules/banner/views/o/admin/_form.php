@@ -11,6 +11,19 @@
  * @contect (+62)856-299-4114
  *
  */
+
+	$cs = Yii::app()->getClientScript();
+$js=<<<EOP
+	$('#Banners_permanent').live('change', function() {
+		var id = $(this).prop('checked');		
+		if(id == true) {
+			$('div#expired-date').slideUp();
+		} else {
+			$('div#expired-date').slideDown();
+		}
+	});
+EOP;
+	$cs->registerScript('expired', $js, CClientScript::POS_END);
 ?>
 
 <?php $form=$this->beginWidget('application.components.system.OActiveForm', array(
@@ -104,7 +117,22 @@
 		</div>
 	</div>
 
-	<div class="clearfix">
+	<?php 
+	$model->permanent = 0;
+	if($model->isNewRecord || (!$model->isNewRecord && $model->expired_date == '0000-00-00'))
+		$model->permanent = 1;
+	?>
+	<div class="clearfix publish">
+		<?php echo $form->labelEx($model,'permanent'); ?>
+		<div class="desc">
+			<?php echo $form->checkBox($model,'permanent'); ?>
+			<?php echo $form->labelEx($model,'permanent'); ?>
+			<?php echo $form->error($model,'permanent'); ?>
+			<?php /*<div class="small-px silent"></div>*/?>
+		</div>
+	</div>
+	
+	<div id="expired-date" class="clearfix <?php echo $model->permanent == 1 ? 'hide' : ''?>">
 		<?php echo $form->labelEx($model,'expired_date'); ?>
 		<div class="desc">
 			<?php
