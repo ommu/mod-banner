@@ -119,9 +119,10 @@ EOP;
 
 	<?php 
 	$model->permanent = 0;
-	if($model->isNewRecord || (!$model->isNewRecord && $model->expired_date == '0000-00-00'))
+	if($model->isNewRecord || (!$model->isNewRecord && in_array(date('Y-m-d', strtotime($model->expired_date)), array('0000-00-00','1970-01-01'))))
 		$model->permanent = 1;
 	?>
+	
 	<div class="clearfix publish">
 		<?php echo $form->labelEx($model,'permanent'); ?>
 		<div class="desc">
@@ -136,7 +137,7 @@ EOP;
 		<?php echo $form->labelEx($model,'expired_date'); ?>
 		<div class="desc">
 			<?php
-			!$model->isNewRecord ? ($model->expired_date != '0000-00-00' ? $model->expired_date = date('d-m-Y', strtotime($model->expired_date)) : '') : '';
+			!$model->isNewRecord ? (!in_array(date('Y-m-d', strtotime($model->expired_date)), array('0000-00-00','1970-01-01-')) ? $model->expired_date = date('d-m-Y', strtotime($model->expired_date)) : '') : '';
 			//echo $form->textField($model,'expired_date');
 			$this->widget('zii.widgets.jui.CJuiDatePicker',array(
 				'model'=>$model,

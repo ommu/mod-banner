@@ -464,14 +464,17 @@ class Banners extends CActiveRecord
 						$this->addError('media', 'The file "'.$media->name.'" cannot be uploaded. ukuran banner ('.$size[0].' x '.$size[1].') tidak sesuai dengan kategori ('.$bannerSize[0].' x '.$bannerSize[1].')');
 				
 			} else {
-				//if($this->isNewRecord)
+				if($this->isNewRecord)
 					$this->addError('media', 'Media cannot be blank.');
 			}
 			
-			if($this->permanent == 1)
-				$this->expired_date = '00-00-0000';
+			if(in_array(date('Y-m-d', strtotime($this->expired_date)), array('0000-00-00','1970-01-01')))
+				$this->permanent == 1;
 			
-			if(($this->published_date != '' && $this->expired_date != '') && ($this->published_date >= $this->expired_date))
+			if($this->permanent == 1)
+				$this->expired_date = '00-00-0000';				
+			
+			if($this->permanent != 1 && ($this->published_date != '' && $this->expired_date != '') && ($this->published_date >= $this->expired_date))
 				$this->addError('expired_date', Phrase::trans(28034,1));
 		}
 		return true;
@@ -482,7 +485,8 @@ class Banners extends CActiveRecord
 	 */
 	protected function beforeSave() {
 		if(parent::beforeSave()) {			
-			if(!$this->isNewRecord) {
+			$action = strtolower(Yii::app()->controller->action->id);
+			if(!$this->isNewRecord && $action == 'edit') {
 				//Update banner photo
 				$banner_path = "public/banner/";
 				

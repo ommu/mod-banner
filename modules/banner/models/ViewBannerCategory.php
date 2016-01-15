@@ -53,7 +53,7 @@ class ViewBannerCategory extends CActiveRecord
 	 */
 	public function primaryKey()
 	{
-		return ['cat_id'];
+		return 'cat_id';
 	}
 
 	/**
