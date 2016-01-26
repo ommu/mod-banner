@@ -469,7 +469,7 @@ class Banners extends CActiveRecord
 			}
 			
 			if(in_array(date('Y-m-d', strtotime($this->expired_date)), array('0000-00-00','1970-01-01')))
-				$this->permanent == 1;
+				$this->permanent = 1;
 			
 			if($this->permanent == 1)
 				$this->expired_date = '00-00-0000';				
@@ -496,7 +496,7 @@ class Banners extends CActiveRecord
 					if($this->media->saveAs($banner_path.'/'.$fileName)) {
 						if(BannerSetting::getInfo(1, 'media_resize') == 1)
 							self::resizeBanner($banner_path.'/'.$fileName, $this->category_relation->media_size);
-						if($this->old_media != '')
+						if($this->old_media != '' && file_exists($banner_path.'/'.$this->old_media))
 							rename($banner_path.'/'.$this->old_media, 'public/banner/verwijderen/'.$this->banner_id.'_'.$this->old_media);
 						$this->media = $fileName;
 					}
@@ -539,7 +539,7 @@ class Banners extends CActiveRecord
 		parent::afterDelete();
 		//delete article image
 		$banner_path = "public/banner/";
-		if($this->media != '')
+		if($this->media != '' && file_exists($banner_path.'/'.$this->media))
 			rename($banner_path.'/'.$this->media, 'public/banner/verwijderen/'.$this->banner_id.'_'.$this->media);
 	}
 
