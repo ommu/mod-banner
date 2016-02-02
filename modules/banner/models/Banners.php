@@ -203,7 +203,7 @@ class Banners extends CActiveRecord
 		$criteria->compare('modified_relation.displayname',strtolower($this->modified_search), true);
 
 		if(!isset($_GET['Banners_sort']))
-			$criteria->order = 'banner_id DESC';
+			$criteria->order = 't.banner_id DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

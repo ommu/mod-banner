@@ -121,7 +121,7 @@ class ViewBannerCategory extends CActiveRecord
 		$criteria->compare('t.banners',strtolower($this->banners),true);
 
 		if(!isset($_GET['ViewBannerCategory_sort']))
-			$criteria->order = 'cat_id DESC';
+			$criteria->order = 't.cat_id DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

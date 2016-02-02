@@ -196,8 +196,8 @@ class BannerCategory extends CActiveRecord
 		$criteria->compare('creation_relation.displayname',strtolower($this->creation_search), true);
 		$criteria->compare('modified_relation.displayname',strtolower($this->modified_search), true);
 
-		if(isset($_GET['BannerCategory_sort']))
-			$criteria->order = 'cat_id DESC';
+		if(!isset($_GET['BannerCategory_sort']))
+			$criteria->order = 't.cat_id DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
