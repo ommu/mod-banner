@@ -29,7 +29,6 @@
 			'linkOptions' => array('title' => Phrase::trans(308,0)),
 		),
 	);
-
 ?>
 
 <?php //begin.Search ?>
