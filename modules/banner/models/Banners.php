@@ -288,6 +288,13 @@ class Banners extends CActiveRecord
 				'type' => 'raw',
 			);
 			$this->defaultColumns[] = array(
+				'name' => 'click',
+				'value' => '$data->url != "-" ? $data->click : "-"',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),	
+			);
+			$this->defaultColumns[] = array(
 				'name' => 'published_date',
 				'value' => 'Utility::dateFormat($data->published_date)',
 				'htmlOptions' => array(
@@ -472,7 +479,7 @@ class Banners extends CActiveRecord
 				$this->permanent = 1;
 			
 			if($this->permanent == 1)
-				$this->expired_date = '00-00-0000';				
+				$this->expired_date = '00-00-0000';
 			
 			if($this->permanent != 1 && ($this->published_date != '' && $this->expired_date != '') && ($this->published_date >= $this->expired_date))
 				$this->addError('expired_date', Phrase::trans(28034,1));

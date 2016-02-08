@@ -180,7 +180,7 @@ class BannerCategory extends CActiveRecord
 		$criteria->with = array(
 			'view_cat' => array(
 				'alias'=>'view_cat',
-				'select'=>'category_name, category_desc'
+				'select'=>'category_name, category_desc, banners'
 			),
 			'creation_relation' => array(
 				'alias'=>'creation_relation',
