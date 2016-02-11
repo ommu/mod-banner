@@ -448,8 +448,9 @@ class Banners extends CActiveRecord
 		$controller = strtolower(Yii::app()->controller->id);
 		if(parent::beforeValidate()) {	
 			if($this->isNewRecord) {
-				if(self::getBanner($this->cat_id, 'count') >= $this->category_relation->limit)
-					$this->addError('cat_id', Phrase::trans($this->category_relation->name, 2).'" cannot be uploaded. jumlah banner sudah melebihi batas maksimal (limit).');
+				//if(self::getBanner($this->cat_id, 'count') >= $this->category_relation->limit)
+				//	$this->addError('cat_id', Phrase::trans($this->category_relation->name, 2).'" cannot be uploaded. jumlah banner sudah melebihi batas maksimal (limit).');
+				
 				//$this->orders = 0;
 				$this->user_id = Yii::app()->user->id;		
 			} else
@@ -495,7 +496,7 @@ class Banners extends CActiveRecord
 			$action = strtolower(Yii::app()->controller->action->id);
 			if(!$this->isNewRecord && $action == 'edit') {
 				//Update banner photo
-				$banner_path = "public/banner/";
+				$banner_path = "public/banner";
 				
 				$this->media = CUploadedFile::getInstance($this, 'media');
 				if($this->media instanceOf CUploadedFile) {
@@ -525,7 +526,7 @@ class Banners extends CActiveRecord
 		parent::afterSave();
 		
 		if($this->isNewRecord) {
-			$banner_path = "public/banner/";
+			$banner_path = "public/banner";
 			
 			$this->media = CUploadedFile::getInstance($this, 'media');
 			if($this->media instanceOf CUploadedFile) {
@@ -545,7 +546,7 @@ class Banners extends CActiveRecord
 	protected function afterDelete() {
 		parent::afterDelete();
 		//delete article image
-		$banner_path = "public/banner/";
+		$banner_path = "public/banner";
 		if($this->media != '' && file_exists($banner_path.'/'.$this->media))
 			rename($banner_path.'/'.$this->media, 'public/banner/verwijderen/'.$this->banner_id.'_'.$this->media);
 	}
