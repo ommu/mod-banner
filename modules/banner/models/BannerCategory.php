@@ -180,7 +180,7 @@ class BannerCategory extends CActiveRecord
 		$criteria->with = array(
 			'view_cat' => array(
 				'alias'=>'view_cat',
-				'select'=>'category_name, category_desc, banners'
+				//'select'=>'category_name, category_desc, banners'
 			),
 			'creation_relation' => array(
 				'alias'=>'creation_relation',
@@ -274,12 +274,34 @@ class BannerCategory extends CActiveRecord
 				),
 			);
 			$this->defaultColumns[] = array(
-				'name' => 'limit',
-				'value' => '$data->view_cat->banners."/".$data->limit',
+				'header' => 'Publish',
+				'value' => '$data->view_cat->banner_publish > $data->limit ? $data->limit."/".$data->view_cat->banner_publish : $data->view_cat->banner_publish',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
 			);
+			$this->defaultColumns[] = array(
+				'header' => 'Pending',
+				'value' => '$data->view_cat->banner_pending',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+			);
+			$this->defaultColumns[] = array(
+				'header' => 'Expired',
+				'value' => '$data->view_cat->banner_expired',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+			);
+			$this->defaultColumns[] = array(
+				'header' => 'Total',
+				'value' => '$data->view_cat->banners',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+			);
+			/*
 			$this->defaultColumns[] = array(
 				'name' => 'creation_search',
 				'value' => '$data->creation_relation->displayname',
@@ -310,8 +332,10 @@ class BannerCategory extends CActiveRecord
 					),
 				), true),
 			);
+			*/
 			if(!isset($_GET['type'])) {
 				$this->defaultColumns[] = array(
+					'header'=>'Status',
 					'name' => 'publish',
 					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl("publish",array("id"=>$data->cat_id)), $data->publish, 1)',
 					'htmlOptions' => array(

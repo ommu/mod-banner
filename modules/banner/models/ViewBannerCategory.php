@@ -23,6 +23,10 @@
  * @property integer $cat_id
  * @property string $category_name
  * @property string $category_desc
+ * @property string $banner_publish
+ * @property string $banner_pending
+ * @property string $banner_expired
+ * @property string $banner_unpublish
  * @property string $banners
  */
 class ViewBannerCategory extends CActiveRecord
@@ -65,11 +69,11 @@ class ViewBannerCategory extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('cat_id', 'numerical', 'integerOnly'=>true),
-			array('banners', 'length', 'max'=>21),
+			array('banner_publish, banner_pending, banner_expired, banner_unpublish, banners', 'length', 'max'=>21),
 			array('category_name, category_desc', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('cat_id, category_name, category_desc, banners', 'safe', 'on'=>'search'),
+			array('cat_id, category_name, category_desc, banner_publish, banner_pending, banner_expired, banner_unpublish, banners', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -93,6 +97,10 @@ class ViewBannerCategory extends CActiveRecord
 			'cat_id' => 'Cat',
 			'category_name' => 'Category Name',
 			'category_desc' => 'Category Desc',
+			'banner_publish' => 'Banner Publish',
+			'banner_pending' => 'Banner Pending',
+			'banner_expired' => 'Banner Expired',
+			'banner_unpublish' => 'Banner Unpublish',
 			'banners' => 'Banners',
 		);
 	}
@@ -118,6 +126,10 @@ class ViewBannerCategory extends CActiveRecord
 		$criteria->compare('t.cat_id',$this->cat_id);
 		$criteria->compare('t.category_name',strtolower($this->category_name),true);
 		$criteria->compare('t.category_desc',strtolower($this->category_desc),true);
+		$criteria->compare('t.banner_publish',strtolower($this->banner_publish),true);
+		$criteria->compare('t.banner_pending',strtolower($this->banner_pending),true);
+		$criteria->compare('t.banner_expired',strtolower($this->banner_expired),true);
+		$criteria->compare('t.banner_unpublish',strtolower($this->banner_unpublish),true);
 		$criteria->compare('t.banners',strtolower($this->banners),true);
 
 		if(!isset($_GET['ViewBannerCategory_sort']))
@@ -152,6 +164,10 @@ class ViewBannerCategory extends CActiveRecord
 			$this->defaultColumns[] = 'cat_id';
 			$this->defaultColumns[] = 'category_name';
 			$this->defaultColumns[] = 'category_desc';
+			$this->defaultColumns[] = 'banner_publish';
+			$this->defaultColumns[] = 'banner_pending';
+			$this->defaultColumns[] = 'banner_expired';
+			$this->defaultColumns[] = 'banner_unpublish';
 			$this->defaultColumns[] = 'banners';
 		}
 
@@ -170,6 +186,10 @@ class ViewBannerCategory extends CActiveRecord
 			$this->defaultColumns[] = 'cat_id';
 			$this->defaultColumns[] = 'category_name';
 			$this->defaultColumns[] = 'category_desc';
+			$this->defaultColumns[] = 'banner_publish';
+			$this->defaultColumns[] = 'banner_pending';
+			$this->defaultColumns[] = 'banner_expired';
+			$this->defaultColumns[] = 'banner_unpublish';
 			$this->defaultColumns[] = 'banners';
 		}
 		parent::afterConstruct();
