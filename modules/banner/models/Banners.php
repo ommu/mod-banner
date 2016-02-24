@@ -322,7 +322,7 @@ class Banners extends CActiveRecord
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'expired_date',
-				'value' => 'Utility::dateFormat($data->expired_date)',
+				'value' => '$data->expired_date != "1970-01-01" ? Utility::dateFormat($data->expired_date) : "Permanent"',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
