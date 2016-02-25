@@ -10,6 +10,15 @@ db_table_name	:
  
 db_sql_filename	: 
 
+plugin_menu		:
+	- urlTitle: View Banner
+		urlRules: {siteType: 0,1, userLevel: 1,2}
+		urlPath: {url: o/admin/manage, attr: -, icon: -}
+		
+	- urlTitle: Banner Settings
+		urlRules: {siteType: 0,1, userLevel: 1}
+		urlPath: {url: o/setting/index, attr: -, icon: -}
+
 content_menu	:
 # controller o/admin
 	- urlTitle: Add Banner
