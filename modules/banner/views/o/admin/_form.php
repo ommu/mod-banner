@@ -68,7 +68,7 @@ EOP;
 		<div class="desc">
 			<?php echo $form->textArea($model,'url',array('class'=>'span-10 smaller', 'rows'=>6, 'cols'=>50)); ?>
 			<?php echo $form->error($model,'url'); ?>
-			<?php /*<div class="small-px silent"></div>*/?>
+			<div class="small-px silent">example: http://opensource.ommu.co</div>
 		</div>
 	</div>
 	
