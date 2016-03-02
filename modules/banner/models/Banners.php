@@ -82,8 +82,8 @@ class Banners extends CActiveRecord
 				permanent', 'numerical', 'integerOnly'=>true),
 			array('user_id, creation_id, modified_id', 'length', 'max'=>11),
 			array('title', 'length', 'max'=>64),
-			array('media, user_id, view, click, creation_date, creation_idmodified_date, modified_id,
-				old_media', 'safe'),
+			array('media, user_id, view, click, creation_date, creation_id, modified_date, modified_id,
+				permanent, old_media', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('banner_id, publish, cat_id, user_id, banner_type, title, url, media, published_date, expired_date, view, click, creation_date, creation_id, modified_date, modified_id,
@@ -126,8 +126,8 @@ class Banners extends CActiveRecord
 			'creation_date' => Phrase::trans(28029,1),
 			'creation_id' => 'Creation',
 			'modified_date' => Phrase::trans(28028,1),
-			'permanent' => 'Permanent',
 			'modified_id' => 'Modified',
+			'permanent' => 'Permanent',
 			'old_media' => Phrase::trans(28035,1),
 			'creation_search' => 'Creation',
 			'modified_search' => 'Modified',
@@ -476,7 +476,7 @@ class Banners extends CActiveRecord
 					$this->addError('media', 'Media cannot be blank.');
 			}
 			
-			if(in_array(date('Y-m-d', strtotime($this->expired_date)), array('0000-00-00','1970-01-01')))
+			if(in_array(date('Y-m-d', strtotime($this->expired_date)), array('00-00-0000','01-01-1970')))
 				$this->permanent = 1;
 			
 			if($this->permanent == 1)
