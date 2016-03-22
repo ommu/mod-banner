@@ -179,7 +179,7 @@ class SettingController extends Controller
 	{
 		$model = BannerSetting::model()->findByPk($id);
 		if($model===null)
-			throw new CHttpException(404, Phrase::trans(193,0));
+			throw new CHttpException(404, Yii::t('phrase', 'The requested page does not exist.'));
 		return $model;
 	}
 
