@@ -422,33 +422,29 @@ class BannerCategory extends CActiveRecord
 	 */
 	protected function beforeSave() {
 		if(parent::beforeSave()) {
-			$action = strtolower(Yii::app()->controller->action->id);
 			//Media Name and Description
 			if($this->isNewRecord) {
-				$currentAction = strtolower(Yii::app()->controller->module->id.'/'.Yii::app()->controller->id);
+				$location = strtolower(Yii::app()->controller->module->id.'/'.Yii::app()->controller->id);
 				$title=new OmmuSystemPhrase;
-				$title->location = $currentAction;
+				$title->location = $location.'_title';
 				$title->en = $this->title;
-				if($title->save()) {
+				if($title->save())
 					$this->name = $title->phrase_id;
-				}
 
 				$desc=new OmmuSystemPhrase;
-				$desc->location = $currentAction;
+				$desc->location = $location.'_description';
 				$desc->en = $this->description;
-				if($desc->save()) {
+				if($desc->save())
 					$this->desc = $desc->phrase_id;
-				}
+				
 			} else {
-				if($action == 'edit') {
-					$title = OmmuSystemPhrase::model()->findByPk($this->name);
-					$title->en = $this->title;
-					$title->save();
+				$title = OmmuSystemPhrase::model()->findByPk($this->name);
+				$title->en = $this->title;
+				$title->save();
 
-					$desc = OmmuSystemPhrase::model()->findByPk($this->desc);
-					$desc->en = $this->description;
-					$desc->save();
-				}
+				$desc = OmmuSystemPhrase::model()->findByPk($this->desc);
+				$desc->en = $this->description;
+				$desc->save();
 			}
 			//Media Size
 			$this->media_size = $this->media_size_width.','.$this->media_size_height;
