@@ -154,13 +154,13 @@ class BannerCategory extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('t.cat_id',$this->cat_id);
-		if(isset($_GET['type']) && $_GET['type'] == 'publish') {
+		if(isset($_GET['type']) && $_GET['type'] == 'publish')
 			$criteria->compare('t.publish',1);
-		} elseif(isset($_GET['type']) && $_GET['type'] == 'unpublish') {
+		elseif(isset($_GET['type']) && $_GET['type'] == 'unpublish')
 			$criteria->compare('t.publish',0);
-		} elseif(isset($_GET['type']) && $_GET['type'] == 'trash') {
+		elseif(isset($_GET['type']) && $_GET['type'] == 'trash')
 			$criteria->compare('t.publish',2);
-		} else {
+		else {
 			$criteria->addInCondition('t.publish',array(0,1));
 			$criteria->compare('t.publish',$this->publish);
 		}
@@ -427,23 +427,23 @@ class BannerCategory extends CActiveRecord
 				$location = strtolower(Yii::app()->controller->module->id.'/'.Yii::app()->controller->id);
 				$title=new OmmuSystemPhrase;
 				$title->location = $location.'_title';
-				$title->en = $this->title;
+				$title->en_us = $this->title;
 				if($title->save())
 					$this->name = $title->phrase_id;
 
 				$desc=new OmmuSystemPhrase;
 				$desc->location = $location.'_description';
-				$desc->en = $this->description;
+				$desc->en_us = $this->description;
 				if($desc->save())
 					$this->desc = $desc->phrase_id;
 				
 			} else {
 				$title = OmmuSystemPhrase::model()->findByPk($this->name);
-				$title->en = $this->title;
+				$title->en_us = $this->title;
 				$title->save();
 
 				$desc = OmmuSystemPhrase::model()->findByPk($this->desc);
-				$desc->en = $this->description;
+				$desc->en_us = $this->description;
 				$desc->save();
 			}
 			//Media Size
