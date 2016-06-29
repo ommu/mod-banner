@@ -274,6 +274,14 @@ class BannerCategory extends CActiveRecord
 				),
 			);
 			$this->defaultColumns[] = array(
+				'header' => Yii::t('phrase', 'Limit'),
+				'name' => 'limit',
+				'value' => '$data->limit',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+			);
+			$this->defaultColumns[] = array(
 				'header' => 'Publish',
 				'value' => '$data->view_cat->banner_publish > $data->limit ? $data->limit."/".$data->view_cat->banner_publish : $data->view_cat->banner_publish',
 				'htmlOptions' => array(
