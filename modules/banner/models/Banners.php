@@ -282,11 +282,13 @@ class Banners extends CActiveRecord
 					'type' => 'raw',
 				);
 			}
+			/*
 			$this->defaultColumns[] = array(
 				'name' => 'media',
 				'value' => '$data->media != "" ? CHtml::link($data->media, Yii::app()->request->baseUrl.\'/public/banner/\'.$data->media, array(\'target\' => \'_blank\')) : "-"',
 				'type' => 'raw',
 			);
+			*/
 			$this->defaultColumns[] = array(
 				'name' => 'click',
 				'value' => '$data->url != "-" ? $data->click : "-"',
