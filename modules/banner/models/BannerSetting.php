@@ -92,16 +92,16 @@ class BannerSetting extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => Phrase::trans(28000,1),
-			'license' => Phrase::trans(28002,1),
-			'permission' => Phrase::trans(28005,1),
-			'media_validation' => 'Media Validation',
-			'media_resize' => 'Media Resize',
-			'meta_keyword' => Phrase::trans(28009,1),
-			'meta_description' => Phrase::trans(28010,1),
-			'modified_date' => 'Modified Date',
-			'modified_id' => 'Modified',
-			'modified_search' => 'Modified',
+			'id' => Yii::t('attribute', 'Banner'),
+			'license' => Yii::t('attribute', 'License Key'),
+			'permission' => Yii::t('attribute', 'Public Permission Defaults'),
+			'media_validation' => Yii::t('attribute', 'Media Validation'),
+			'media_resize' => Yii::t('attribute', 'Media Resize'),
+			'meta_keyword' => Yii::t('attribute', 'Meta Keyword'),
+			'meta_description' => Yii::t('attribute', 'Meta Description'),
+			'modified_date' => Yii::t('attribute', 'Modified Date'),
+			'modified_id' => Yii::t('attribute', 'Modified'),
+			'modified_search' => Yii::t('attribute', 'Modified'),
 		);
 	}
 

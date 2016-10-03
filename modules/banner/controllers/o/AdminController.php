@@ -128,7 +128,7 @@ class AdminController extends Controller
 		}
 		$columns = $model->getGridColumn($columnTemp);
 
-		$this->pageTitle = Phrase::trans(28036,1);
+		$this->pageTitle = Yii::t('phrase', 'Manage Banner');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_manage',array(
@@ -152,12 +152,12 @@ class AdminController extends Controller
 			$model->attributes=$_POST['Banners'];
 			
 			if($model->save()) {
-				Yii::app()->user->setFlash('success', Phrase::trans(28038,1));
+				Yii::app()->user->setFlash('success', Yii::t('phrase', 'Banner success created.'));
 				$this->redirect(array('manage'));
 			}
 		}
 
-		$this->pageTitle = Phrase::trans(28037,1);
+		$this->pageTitle = Yii::t('phrase', 'Create Banner');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_add',array(
@@ -181,12 +181,12 @@ class AdminController extends Controller
 			$model->attributes=$_POST['Banners'];
 			
 			if($model->save()) {
-				Yii::app()->user->setFlash('success', Phrase::trans(28040,1));
+				Yii::app()->user->setFlash('success', Yii::t('phrase', 'Banner success updated.'));
 				$this->redirect(array('manage'));
 			}
 		}
 
-		$this->pageTitle = Phrase::trans(28039,1).': '.$model->title;
+		$this->pageTitle = Yii::t('phrase', 'Update Banner').': '.$model->title;
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_edit',array(
@@ -263,7 +263,7 @@ class AdminController extends Controller
 						'type' => 5,
 						'get' => Yii::app()->controller->createUrl('manage'),
 						'id' => 'partial-banners',
-						'msg' => '<div class="errorSummary success"><strong>'.Phrase::trans(28042,1).'</strong></div>',
+						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Banner success deleted.').'</strong></div>',
 					));
 				}
 			}
@@ -273,7 +273,7 @@ class AdminController extends Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 350;
 
-			$this->pageTitle = Phrase::trans(28041,1).': '.$model->title;
+			$this->pageTitle = Yii::t('phrase', 'Delete Banner').': '.$model->title;
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_delete');
@@ -308,7 +308,7 @@ class AdminController extends Controller
 						'type' => 5,
 						'get' => Yii::app()->controller->createUrl('manage'),
 						'id' => 'partial-banners',
-						'msg' => '<div class="errorSummary success"><strong>'.Phrase::trans(28040,1).'</strong></div>',
+						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Banner success updated.').'</strong></div>',
 					));
 				}
 			}

@@ -111,26 +111,26 @@ class Banners extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'banner_id' => Phrase::trans(28000,1),
-			'publish' => Phrase::trans(28020,1),
-			'cat_id' => Phrase::trans(28019,1),
-			'user_id' => Phrase::trans(28045,1),
-			'banner_type' => Phrase::trans(28025,1),
-			'title' => Phrase::trans(28021,1),
-			'url' => Phrase::trans(28031,1),
-			'media' => Phrase::trans(28030,1),
-			'published_date' => Phrase::trans(28026,1),
-			'expired_date' => Phrase::trans(28027,1),
-			'view' => Phrase::trans(28046,1),
-			'click' => 'Click',
-			'creation_date' => Phrase::trans(28029,1),
-			'creation_id' => 'Creation',
-			'modified_date' => Phrase::trans(28028,1),
-			'modified_id' => 'Modified',
-			'permanent' => 'Permanent',
-			'old_media' => Phrase::trans(28035,1),
-			'creation_search' => 'Creation',
-			'modified_search' => 'Modified',
+			'banner_id' => Yii::t('attribute', 'Banner'),
+			'publish' => Yii::t('attribute', 'Publish'),
+			'cat_id' => Yii::t('attribute', 'Category'),
+			'user_id' => Yii::t('attribute', 'User'),
+			'banner_type' => Yii::t('attribute', 'Banner Type'),
+			'title' => Yii::t('attribute', 'Title'),
+			'url' => Yii::t('attribute', 'Banner Link'),
+			'media' => Yii::t('attribute', 'Media'),
+			'published_date' => Yii::t('attribute', 'Published Date'),
+			'expired_date' => Yii::t('attribute', 'Expired Date'),
+			'view' => Yii::t('attribute', 'View'),
+			'click' => Yii::t('attribute', 'Click'),
+			'creation_date' => Yii::t('attribute', 'Creation Date'),
+			'creation_id' => Yii::t('attribute', 'Creation'),
+			'modified_date' => Yii::t('attribute', 'Modified Date'),
+			'modified_id' => Yii::t('attribute', 'Modified'),
+			'permanent' => Yii::t('attribute', 'Permanent'),
+			'old_media' => Yii::t('attribute', 'Old Media'),
+			'creation_search' => Yii::t('attribute', 'Creation'),
+			'modified_search' => Yii::t('attribute', 'Modified'),
 		);
 	}
 
@@ -485,7 +485,7 @@ class Banners extends CActiveRecord
 				$this->expired_date = '00-00-0000';
 			
 			if($this->permanent != 1 && ($this->published_date != '' && $this->expired_date != '') && ($this->published_date >= $this->expired_date))
-				$this->addError('expired_date', Phrase::trans(28034,1));
+				$this->addError('expired_date', Yii::t('attribute', 'Expired lebih kecil'));
 		}
 		return true;
 	}

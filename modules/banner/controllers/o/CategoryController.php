@@ -128,7 +128,7 @@ class CategoryController extends Controller
 		}
 		$columns = $model->getGridColumn($columnTemp);
 
-		$this->pageTitle = Phrase::trans(28012,1);
+		$this->pageTitle = Yii::t('phrase', 'Banner Categories');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_manage',array(
@@ -162,7 +162,7 @@ class CategoryController extends Controller
 							'type' => 5,
 							'get' => Yii::app()->controller->createUrl('o/setting/index'),
 							'id' => 'partial-banner-category',
-							'msg' => '<div class="errorSummary success"><strong>'.Phrase::trans(28014,1).'</strong></div>',
+							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Banner category success created.').'</strong></div>',
 						));
 					} else {
 						print_r($model->getErrors());
@@ -176,7 +176,7 @@ class CategoryController extends Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 600;
 			
-			$this->pageTitle = Phrase::trans(28013,1);
+			$this->pageTitle = Yii::t('phrase', 'Create Category');
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_add',array(
@@ -211,7 +211,7 @@ class CategoryController extends Controller
 							'type' => 5,
 							'get' => Yii::app()->controller->createUrl('o/setting/index'),
 							'id' => 'partial-banner-category',
-							'msg' => '<div class="errorSummary success"><strong>'.Phrase::trans(28016,1).'</strong></div>',
+							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Banner category success updated.').'</strong></div>',
 						));
 					} else {
 						print_r($model->getErrors());
@@ -225,7 +225,7 @@ class CategoryController extends Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 600;
 			
-			$this->pageTitle = Phrase::trans(28015,1);
+			$this->pageTitle = Yii::t('phrase', 'Update Category');
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_edit',array(
@@ -307,7 +307,7 @@ class CategoryController extends Controller
 						'type' => 5,
 						'get' => Yii::app()->controller->createUrl('o/setting/index'),
 						'id' => 'partial-banner-category',
-						'msg' => '<div class="errorSummary success"><strong>'.Phrase::trans(28018,1).'</strong></div>',
+						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Banner category success deleted.').'</strong></div>',
 					));
 				}
 			}
@@ -317,7 +317,7 @@ class CategoryController extends Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 350;
 
-			$this->pageTitle = Phrase::trans(28017,1);
+			$this->pageTitle = Yii::t('phrase', 'Delete Category');
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_delete');
@@ -352,7 +352,7 @@ class CategoryController extends Controller
 						'type' => 5,
 						'get' => Yii::app()->controller->createUrl('o/setting/index'),
 						'id' => 'partial-banner-category',
-						'msg' => '<div class="errorSummary success"><strong>'.Phrase::trans(28016,1).'</strong></div>',
+						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Banner category success updated.').'</strong></div>',
 					));
 				}
 			}

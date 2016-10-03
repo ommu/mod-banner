@@ -94,14 +94,14 @@ class ViewBannerCategory extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'cat_id' => 'Cat',
-			'category_name' => 'Category Name',
-			'category_desc' => 'Category Desc',
-			'banner_publish' => 'Banner Publish',
-			'banner_pending' => 'Banner Pending',
-			'banner_expired' => 'Banner Expired',
-			'banner_unpublish' => 'Banner Unpublish',
-			'banners' => 'Banners',
+			'cat_id' => Yii::t('attribute', 'Category'),
+			'category_name' => Yii::t('attribute', 'Category'),
+			'category_desc' => Yii::t('attribute', 'Description'),
+			'banner_publish' => Yii::t('attribute', 'Publish'),
+			'banner_pending' => Yii::t('attribute', 'Pending'),
+			'banner_expired' => Yii::t('attribute', 'Expired'),
+			'banner_unpublish' => Yii::t('attribute', 'Unpublish'),
+			'banners' => Yii::t('attribute', 'Banners'),
 		);
 	}
 
