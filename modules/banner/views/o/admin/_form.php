@@ -123,11 +123,10 @@ EOP;
 		$model->permanent = 1;
 	?>
 	
-	<div class="clearfix publish">
+	<div class="clearfix">
 		<?php echo $form->labelEx($model,'permanent'); ?>
 		<div class="desc">
 			<?php echo $form->checkBox($model,'permanent'); ?>
-			<?php echo $form->labelEx($model,'permanent'); ?>
 			<?php echo $form->error($model,'permanent'); ?>
 			<?php /*<div class="small-px silent"></div>*/?>
 		</div>
@@ -155,11 +154,10 @@ EOP;
 		</div>
 	</div>
 
-	<div class="clearfix publish">
+	<div class="clearfix">
 		<?php echo $form->labelEx($model,'publish'); ?>
 		<div class="desc">
 			<?php echo $form->checkBox($model,'publish'); ?>
-			<?php echo $form->labelEx($model,'publish'); ?>
 			<?php echo $form->error($model,'publish'); ?>
 			<?php /*<div class="small-px silent"></div>*/?>
 		</div>
