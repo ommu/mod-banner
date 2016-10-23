@@ -469,10 +469,10 @@ class Banners extends CActiveRecord
 				}
 				if(!in_array(strtolower($extension), array('bmp','gif','jpg','png')))
 					$this->addError('media', 'The file "'.$media->name.'" cannot be uploaded. Only files with these extensions are allowed: bmp, gif, jpg, png.');
-				else
+				else {
 					if($validation == 1 && $bannerSize[0] != $size[0] && $bannerSize[1] != $size[1])
-						$this->addError('media', 'The file "'.$media->name.'" cannot be uploaded. ukuran banner ('.$size[0].' x '.$size[1].') tidak sesuai dengan kategori ('.$bannerSize[0].' x '.$bannerSize[1].')');
-				
+						$this->addError('media', 'The file "'.$media->name.'" cannot be uploaded. ukuran banner ('.$size[0].' x '.$size[1].') tidak sesuai dengan kategori ('.$bannerSize[0].' x '.$bannerSize[1].')');					
+				}				
 			} else {
 				if($this->isNewRecord)
 					$this->addError('media', 'Media cannot be blank.');
@@ -499,6 +499,14 @@ class Banners extends CActiveRecord
 			if(!$this->isNewRecord && $action == 'edit') {
 				//Update banner photo
 				$banner_path = "public/banner";
+				// Add directory
+				if(!file_exists($banner_path)) {
+					@mkdir($banner_path, 0755, true);
+
+					// Add file in directory (index.php)
+					$newFile = $banner_path.'/index.php';
+					$FileHandle = fopen($newFile, 'w');
+				}
 				
 				$this->media = CUploadedFile::getInstance($this, 'media');
 				if($this->media instanceOf CUploadedFile) {
@@ -529,6 +537,14 @@ class Banners extends CActiveRecord
 		
 		if($this->isNewRecord) {
 			$banner_path = "public/banner";
+			// Add directory
+			if(!file_exists($banner_path)) {
+				@mkdir($banner_path, 0755, true);
+
+				// Add file in directory (index.php)
+				$newFile = $banner_path.'/index.php';
+				$FileHandle = fopen($newFile, 'w');
+			}
 			
 			$this->media = CUploadedFile::getInstance($this, 'media');
 			if($this->media instanceOf CUploadedFile) {
