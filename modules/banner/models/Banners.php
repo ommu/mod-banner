@@ -506,7 +506,8 @@ class Banners extends CActiveRecord
 					// Add file in directory (index.php)
 					$newFile = $banner_path.'/index.php';
 					$FileHandle = fopen($newFile, 'w');
-				}
+				} else
+					@chmod($banner_path, 0755, true);
 				
 				$this->media = CUploadedFile::getInstance($this, 'media');
 				if($this->media instanceOf CUploadedFile) {
@@ -544,7 +545,8 @@ class Banners extends CActiveRecord
 				// Add file in directory (index.php)
 				$newFile = $banner_path.'/index.php';
 				$FileHandle = fopen($newFile, 'w');
-			}
+			} else
+				@chmod($banner_path, 0755, true);
 			
 			$this->media = CUploadedFile::getInstance($this, 'media');
 			if($this->media instanceOf CUploadedFile) {

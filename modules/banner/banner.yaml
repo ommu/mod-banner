@@ -32,12 +32,12 @@ content_menu	:
 # controller o/setting
 		
 	- urlTitle: Add Category
-		urlRules: {banner, o/setting, manage, siteType: 0,1, userLevel: 1,2}
+		urlRules: {banner, o/setting, manage, siteType: 0,1, userLevel: 1}
 		urlPath: {url: o/category/add, attr: -, icon: -}
 
 # controller o/category
 		
 	- urlTitle: Add Category
-		urlRules: {banner, o/category, manage, siteType: 0,1, userLevel: 1,2}
+		urlRules: {banner, o/category, manage, siteType: 0,1, userLevel: 1}
 		urlPath: {url: add, attr: -, icon: -}
 		
