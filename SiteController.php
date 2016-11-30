@@ -99,24 +99,24 @@ class SiteController extends ControllerApi
 			);
 			$now = new CDbExpression("NOW()");
 			if($category != null && $category != '') {
-				$criteria->condition = '(expired_date >= curdate() OR published_date >= curdate()) OR ((expired_date = :date OR expired_date = :datestr) OR published_date >= curdate())';
+				$criteria->condition = '(t.expired_date >= curdate() OR t.published_date >= curdate()) OR ((t.expired_date = :date OR t.expired_date = :datestr) OR t.published_date >= curdate())';
 				$criteria->params = array(
 					':date'=>'0000-00-00', 
 					':datestr'=>'1970-01-01', 
 				);
 				$criteria->compare('t.publish', 1);
 				$criteria->compare('view.category_name', $category);
-				$criteria->order = 'expired_date DESC';
+				$criteria->order = 't.expired_date DESC';
 		
 				$model = Banners::model()->findAll($criteria);
 			
 				if(!empty($model)) {
 					foreach($model as $key => $val) {
-						$banner_url = Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->request->baseUrl.'/';
-						$banner_path = 'public/banner/';
+						$banner_url = Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->request->baseUrl;
+						$banner_path = 'public/banner';
 						$extension = pathinfo($val->media, PATHINFO_EXTENSION);
-						if($val->media != '' && in_array($extension, array('bmp','gif','jpg','png')) && file_exists($banner_path.$val->media)) {
-							$banner_image = $banner_url.$banner_path.$val->media;
+						if($val->media != '' && in_array($extension, array('bmp','gif','jpg','png')) && file_exists($banner_path.'/'.$val->media)) {
+							$banner_image = $banner_url.'/'.$banner_path.'/'.$val->media;
 					
 							$data[] = array(
 								'id'=>$val->banner_id,
