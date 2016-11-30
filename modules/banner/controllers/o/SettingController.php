@@ -79,7 +79,7 @@ class SettingController extends Controller
 				//'expression'=>'isset(Yii::app()->user->level) && (Yii::app()->user->level != 1)',
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('manage'),
+				'actions'=>array('edit'),
 				'users'=>array('@'),
 				'expression'=>'isset(Yii::app()->user->level) && (Yii::app()->user->level == 1)',
 			),
@@ -98,13 +98,13 @@ class SettingController extends Controller
 	 */
 	public function actionIndex() 
 	{
-		$this->redirect(array('manage'));
+		$this->redirect(array('edit'));
 	}
 
 	/**
 	 * Manages all models.
 	 */
-	public function actionManage() 
+	public function actionEdit() 
 	{
 		$category=new BannerCategory('search');
 		$category->unsetAttributes();  // clear any default values
@@ -122,7 +122,9 @@ class SettingController extends Controller
 		}
 		$columns = $category->getGridColumn($columnTemp);
 		
-		$model=$this->loadModel(1);
+		$model = BannerSetting::model()->findByPk(1);
+		if($model == null)
+			$model=new BannerSetting;
 
 		// Uncomment the following line if AJAX validation is needed
 		$this->performAjaxValidation($model);
@@ -162,7 +164,7 @@ class SettingController extends Controller
 			$this->pageTitle = Yii::t('phrase', 'Banner Settings');
 			$this->pageDescription = '';
 			$this->pageMeta = '';
-			$this->render('admin_manage',array(
+			$this->render('admin_edit',array(
 				'model'=>$model,
 				'category'=>$category,
 				'columns' => $columns,
