@@ -9,7 +9,7 @@
  *
  * TOC :
  *	Index
- *	Manage
+ *	Edit
  *
  *	LoadModel
  *	performAjaxValidation
