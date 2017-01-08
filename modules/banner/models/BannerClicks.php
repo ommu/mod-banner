@@ -37,6 +37,10 @@
 class BannerClicks extends CActiveRecord
 {
 	public $defaultColumns = array();
+	
+	// Variable Search
+	public $banner_search;
+	public $user_search;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -71,7 +75,8 @@ class BannerClicks extends CActiveRecord
 			array('click_ip', 'length', 'max'=>20),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('click_id, banner_id, user_id, clicks, click_date, click_ip', 'safe', 'on'=>'search'),
+			array('click_id, banner_id, user_id, clicks, click_date, click_ip,
+				banner_search, user_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -83,8 +88,9 @@ class BannerClicks extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'ommuBannerClickDetails_relation' => array(self::HAS_MANY, 'OmmuBannerClickDetail', 'click_id'),
-			'banner_relation' => array(self::BELONGS_TO, 'OmmuBanners', 'banner_id'),
+			'details' => array(self::HAS_MANY, 'BannerClickDetail', 'click_id'),
+			'banner' => array(self::BELONGS_TO, 'Banners', 'banner_id'),
+			'user' => array(self::BELONGS_TO, 'Users', 'user_id'),
 		);
 	}
 
@@ -100,6 +106,8 @@ class BannerClicks extends CActiveRecord
 			'clicks' => Yii::t('attribute', 'Clicks'),
 			'click_date' => Yii::t('attribute', 'Click Date'),
 			'click_ip' => Yii::t('attribute', 'Click Ip'),
+			'banner_search' => Yii::t('attribute', 'Banner'),
+			'user_search' => Yii::t('attribute', 'User'),
 		);
 		/*
 			'Click' => 'Click',
@@ -129,6 +137,18 @@ class BannerClicks extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
+		
+		// Custom Search
+		$criteria->with = array(
+			'banner' => array(
+				'alias'=>'banner',
+				'select'=>'title'
+			),
+			'user' => array(
+				'alias'=>'user',
+				'select'=>'displayname'
+			),
+		);
 
 		$criteria->compare('t.click_id',strtolower($this->click_id),true);
 		if(isset($_GET['banner']))
@@ -143,6 +163,9 @@ class BannerClicks extends CActiveRecord
 		if($this->click_date != null && !in_array($this->click_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.click_date)',date('Y-m-d', strtotime($this->click_date)));
 		$criteria->compare('t.click_ip',strtolower($this->click_ip),true);
+		
+		$criteria->compare('banner.title',strtolower($this->banner_search), true);
+		$criteria->compare('user.displayname',strtolower($this->user_search), true);
 
 		if(!isset($_GET['BannerClicks_sort']))
 			$criteria->order = 't.click_id DESC';
@@ -189,20 +212,22 @@ class BannerClicks extends CActiveRecord
 	 */
 	protected function afterConstruct() {
 		if(count($this->defaultColumns) == 0) {
-			/*
-			$this->defaultColumns[] = array(
-				'class' => 'CCheckBoxColumn',
-				'name' => 'id',
-				'selectableRows' => 2,
-				'checkBoxHtmlOptions' => array('name' => 'trash_id[]')
-			);
-			*/
 			$this->defaultColumns[] = array(
 				'header' => 'No',
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
-			$this->defaultColumns[] = 'banner_id';
-			$this->defaultColumns[] = 'user_id';
+			if(!isset($_GET['banner'])) {
+				$this->defaultColumns[] = array(
+					'name' => 'banner_search',
+					'value' => '$data->banner->title',
+				);
+			}
+			if(!isset($_GET['user'])) {
+				$this->defaultColumns[] = array(
+					'name' => 'user_search',
+					'value' => '$data->user_id != 0 ? $data->user->displayname : "-"',
+				);
+			}
 			$this->defaultColumns[] = 'clicks';
 			$this->defaultColumns[] = array(
 				'name' => 'click_date',
@@ -230,7 +255,13 @@ class BannerClicks extends CActiveRecord
 					),
 				), true),
 			);
-			$this->defaultColumns[] = 'click_ip';
+			$this->defaultColumns[] = array(
+				'name' => 'click_ip',
+				'value' => '$data->click_ip',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+			);
 		}
 		parent::afterConstruct();
 	}
@@ -255,68 +286,14 @@ class BannerClicks extends CActiveRecord
 	/**
 	 * before validate attributes
 	 */
-	/*
 	protected function beforeValidate() {
-		if(parent::beforeValidate()) {
-			// Create action
+		if(parent::beforeValidate()) {		
+			if($this->isNewRecord)
+				$this->user_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
+			
+			$this->click_ip = $_SERVER['REMOTE_ADDR'];
 		}
 		return true;
 	}
-	*/
-
-	/**
-	 * after validate attributes
-	 */
-	/*
-	protected function afterValidate()
-	{
-		parent::afterValidate();
-			// Create action
-		return true;
-	}
-	*/
-	
-	/**
-	 * before save attributes
-	 */
-	/*
-	protected function beforeSave() {
-		if(parent::beforeSave()) {
-		}
-		return true;	
-	}
-	*/
-	
-	/**
-	 * After save attributes
-	 */
-	/*
-	protected function afterSave() {
-		parent::afterSave();
-		// Create action
-	}
-	*/
-
-	/**
-	 * Before delete attributes
-	 */
-	/*
-	protected function beforeDelete() {
-		if(parent::beforeDelete()) {
-			// Create action
-		}
-		return true;
-	}
-	*/
-
-	/**
-	 * After delete attributes
-	 */
-	/*
-	protected function afterDelete() {
-		parent::afterDelete();
-		// Create action
-	}
-	*/
 
 }
