@@ -39,12 +39,23 @@ content_menu	:
 		urlRules: {banner, o/category, manage, siteType: 0,1, userLevel: 1}
 		urlPath: {url: add, attr: -, icon: -}
 
+# controller o/view		
+	- urlTitle: Back to Banner Manage
+		urlRules: {banner, o/view, manage, siteType: 0,1, userLevel: 1,2}
+		urlPath: {url: o/admin/manage, attr: -, icon: -}		
+
+# controller o/clickdetail		
+	- urlTitle: Back to View Manage
+		urlRules: {banner, o/viewdetail, manage, siteType: 0,1, userLevel: 1,2}
+		urlPath: {url: o/view/manage, attr: -, icon: -}
+		
+
 # controller o/click		
 	- urlTitle: Back to Banner Manage
 		urlRules: {banner, o/click, manage, siteType: 0,1, userLevel: 1,2}
 		urlPath: {url: o/admin/manage, attr: -, icon: -}		
 
-# controller o/click		
+# controller o/clickdetail		
 	- urlTitle: Back to Click Manage
 		urlRules: {banner, o/clickdetail, manage, siteType: 0,1, userLevel: 1,2}
 		urlPath: {url: o/click/manage, attr: -, icon: -}

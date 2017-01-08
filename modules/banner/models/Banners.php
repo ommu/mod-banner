@@ -30,7 +30,6 @@
  * @property string $media
  * @property string $published_date
  * @property string $expired_date
- * @property integer $view
  * @property string $creation_date
  * @property string $creation_id
  * @property string $modified_date
@@ -77,15 +76,15 @@ class Banners extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('cat_id, title, url, published_date, expired_date', 'required'),
-			array('publish, cat_id, banner_type, view,
+			array('publish, cat_id, banner_type,
 				permanent', 'numerical', 'integerOnly'=>true),
 			array('user_id, creation_id, modified_id', 'length', 'max'=>11),
 			array('title', 'length', 'max'=>64),
-			array('media, user_id, view, creation_date, creation_id, modified_date, modified_id,
+			array('media, user_id, creation_date, creation_id, modified_date, modified_id,
 				permanent, old_media', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('banner_id, publish, cat_id, user_id, banner_type, title, url, media, published_date, expired_date, view, creation_date, creation_id, modified_date, modified_id,
+			array('banner_id, publish, cat_id, user_id, banner_type, title, url, media, published_date, expired_date, creation_date, creation_id, modified_date, modified_id,
 				creation_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
@@ -98,10 +97,11 @@ class Banners extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'views' => array(self::BELONGS_TO, 'ViewBanners', 'banner_id'),
+			'view' => array(self::BELONGS_TO, 'ViewBanners', 'banner_id'),
 			'category_relation' => array(self::BELONGS_TO, 'BannerCategory', 'cat_id'),
 			'creation_relation' => array(self::BELONGS_TO, 'Users', 'creation_id'),
 			'modified_relation' => array(self::BELONGS_TO, 'Users', 'modified_id'),
+			'clicks' => array(self::HAS_MANY, 'BannerClicks', 'banner_id'),
 		);
 	}
 
@@ -121,7 +121,6 @@ class Banners extends CActiveRecord
 			'media' => Yii::t('attribute', 'Media'),
 			'published_date' => Yii::t('attribute', 'Published Date'),
 			'expired_date' => Yii::t('attribute', 'Expired Date'),
-			'view' => Yii::t('attribute', 'View'),
 			'creation_date' => Yii::t('attribute', 'Creation Date'),
 			'creation_id' => Yii::t('attribute', 'Creation'),
 			'modified_date' => Yii::t('attribute', 'Modified Date'),
@@ -190,7 +189,6 @@ class Banners extends CActiveRecord
 			$criteria->compare('date(t.published_date)',date('Y-m-d', strtotime($this->published_date)));
 		if($this->expired_date != null && !in_array($this->expired_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.expired_date)',date('Y-m-d', strtotime($this->expired_date)));
-		$criteria->compare('t.view',$this->view);
 		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.creation_date)',date('Y-m-d', strtotime($this->creation_date)));
 		$criteria->compare('t.creation_id',$this->creation_id);
@@ -240,7 +238,6 @@ class Banners extends CActiveRecord
 			$this->defaultColumns[] = 'media';
 			$this->defaultColumns[] = 'published_date';
 			$this->defaultColumns[] = 'expired_date';
-			$this->defaultColumns[] = 'view';
 			$this->defaultColumns[] = 'creation_date';
 			$this->defaultColumns[] = 'creation_id';
 			$this->defaultColumns[] = 'modified_date';
@@ -288,8 +285,16 @@ class Banners extends CActiveRecord
 			);
 			*/
 			$this->defaultColumns[] = array(
+				'header' => Yii::t('phrase', 'Views'),
+				'value' => 'CHtml::link($data->view->views != null ? $data->view->views : "0", Yii::app()->controller->createUrl("o/view/manage",array(\'banner\'=>$data->banner_id)))',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'type' => 'raw',
+			);
+			$this->defaultColumns[] = array(
 				'header' => Yii::t('phrase', 'Clicks'),
-				'value' => '$data->url != "-" ? CHtml::link($data->views->clicks != null ? $data->views->clicks : "0", Yii::app()->controller->createUrl("o/click/manage",array(\'banner\'=>$data->banner_id))) : "-"',
+				'value' => '$data->url != "-" ? CHtml::link($data->view->clicks != null ? $data->view->clicks : "0", Yii::app()->controller->createUrl("o/click/manage",array(\'banner\'=>$data->banner_id))) : "-"',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),

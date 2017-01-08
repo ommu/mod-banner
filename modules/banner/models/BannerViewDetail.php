@@ -1,6 +1,6 @@
 <?php
 /**
- * BannerClickDetail
+ * BannerViewDetail
  * version: 0.0.1
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
@@ -20,18 +20,18 @@
  *
  * --------------------------------------------------------------------------------------
  *
- * This is the model class for table "ommu_banner_click_detail".
+ * This is the model class for table "ommu_banner_view_detail".
  *
- * The followings are the available columns in table 'ommu_banner_click_detail':
+ * The followings are the available columns in table 'ommu_banner_view_detail':
  * @property string $id
- * @property string $click_id
- * @property string $click_date
- * @property string $click_ip
+ * @property string $view_id
+ * @property string $view_date
+ * @property string $view_ip
  *
  * The followings are the available model relations:
- * @property OmmuBannerClicks $click
+ * @property BannerViews $view
  */
-class BannerClickDetail extends CActiveRecord
+class BannerViewDetail extends CActiveRecord
 {
 	public $defaultColumns = array();
 
@@ -39,7 +39,7 @@ class BannerClickDetail extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return BannerClickDetail the static model class
+	 * @return BannerViewDetail the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -51,7 +51,7 @@ class BannerClickDetail extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'ommu_banner_click_detail';
+		return 'ommu_banner_view_detail';
 	}
 
 	/**
@@ -62,13 +62,13 @@ class BannerClickDetail extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('click_id, click_ip', 'required'),
-			array('click_id', 'length', 'max'=>11),
-			array('click_ip', 'length', 'max'=>20),
-			array('click_date', 'safe'),
+			array('view_id, view_ip', 'required'),
+			array('view_id', 'length', 'max'=>11),
+			array('view_ip', 'length', 'max'=>20),
+			array('view_date', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, click_id, click_date, click_ip', 'safe', 'on'=>'search'),
+			array('id, view_id, view_date, view_ip', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -80,7 +80,7 @@ class BannerClickDetail extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'click' => array(self::BELONGS_TO, 'BannerClicks', 'click_id'),
+			'view' => array(self::BELONGS_TO, 'BannerViewDetail', 'view_id'),
 		);
 	}
 
@@ -91,15 +91,15 @@ class BannerClickDetail extends CActiveRecord
 	{
 		return array(
 			'id' => Yii::t('attribute', 'ID'),
-			'click_id' => Yii::t('attribute', 'Click'),
-			'click_date' => Yii::t('attribute', 'Click Date'),
-			'click_ip' => Yii::t('attribute', 'Click Ip'),
+			'view_id' => Yii::t('attribute', 'View'),
+			'view_date' => Yii::t('attribute', 'View Date'),
+			'view_ip' => Yii::t('attribute', 'View Ip'),
 		);
 		/*
 			'ID' => 'ID',
-			'Click' => 'Click',
-			'Click Date' => 'Click Date',
-			'Click Ip' => 'Click Ip',
+			'View' => 'View',
+			'View Date' => 'View Date',
+			'View Ip' => 'View Ip',
 		
 		*/
 	}
@@ -123,15 +123,15 @@ class BannerClickDetail extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('t.id',strtolower($this->id),true);
-		if(isset($_GET['click']))
-			$criteria->compare('t.click_id',$_GET['click']);
+		if(isset($_GET['view']))
+			$criteria->compare('t.view_id',$_GET['view']);
 		else
-			$criteria->compare('t.click_id',$this->click_id);
-		if($this->click_date != null && !in_array($this->click_date, array('0000-00-00 00:00:00', '0000-00-00')))
-			$criteria->compare('date(t.click_date)',date('Y-m-d', strtotime($this->click_date)));
-		$criteria->compare('t.click_ip',strtolower($this->click_ip),true);
+			$criteria->compare('t.view_id',$this->view_id);
+		if($this->view_date != null && !in_array($this->view_date, array('0000-00-00 00:00:00', '0000-00-00')))
+			$criteria->compare('date(t.view_date)',date('Y-m-d', strtotime($this->view_date)));
+		$criteria->compare('t.view_ip',strtolower($this->view_ip),true);
 
-		if(!isset($_GET['BannerClickDetail_sort']))
+		if(!isset($_GET['BannerViewDetail_sort']))
 			$criteria->order = 't.id DESC';
 
 		return new CActiveDataProvider($this, array(
@@ -161,9 +161,9 @@ class BannerClickDetail extends CActiveRecord
 			}
 		} else {
 			//$this->defaultColumns[] = 'id';
-			$this->defaultColumns[] = 'click_id';
-			$this->defaultColumns[] = 'click_date';
-			$this->defaultColumns[] = 'click_ip';
+			$this->defaultColumns[] = 'view_id';
+			$this->defaultColumns[] = 'view_date';
+			$this->defaultColumns[] = 'view_ip';
 		}
 
 		return $this->defaultColumns;
@@ -178,22 +178,22 @@ class BannerClickDetail extends CActiveRecord
 				'header' => 'No',
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
-			if(!isset($_GET['click']))
-				$this->defaultColumns[] = 'click_id';
+			if(!isset($_GET['view']))
+				$this->defaultColumns[] = 'view_id';
 			$this->defaultColumns[] = array(
-				'name' => 'click_date',
-				'value' => 'Utility::dateFormat($data->click_date, true)',
+				'name' => 'view_date',
+				'value' => 'Utility::dateFormat($data->view_date, true)',
 				'htmlOptions' => array(
 					//'class' => 'center',
 				),
 				'filter' => Yii::app()->controller->widget('zii.widgets.jui.CJuiDatePicker', array(
 					'model'=>$this,
-					'attribute'=>'click_date',
+					'attribute'=>'view_date',
 					'language' => 'ja',
 					'i18nScriptFile' => 'jquery.ui.datepicker-en.js',
 					//'mode'=>'datetime',
 					'htmlOptions' => array(
-						'id' => 'click_date_filter',
+						'id' => 'view_date_filter',
 					),
 					'options'=>array(
 						'showOn' => 'focus',
@@ -207,8 +207,8 @@ class BannerClickDetail extends CActiveRecord
 				), true),
 			);
 			$this->defaultColumns[] = array(
-				'name' => 'click_ip',
-				'value' => '$data->click_ip',
+				'name' => 'view_ip',
+				'value' => '$data->view_ip',
 				'htmlOptions' => array(
 					//'class' => 'center',
 				),

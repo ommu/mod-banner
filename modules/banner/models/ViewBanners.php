@@ -25,6 +25,7 @@
  * The followings are the available columns in table '_view_banners':
  * @property string $banner_id
  * @property string $clicks
+ * @property string $views
  */
 class ViewBanners extends CActiveRecord
 {
@@ -66,10 +67,10 @@ class ViewBanners extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('banner_id', 'length', 'max'=>11),
-			array('clicks', 'length', 'max'=>32),
+			array('clicks, views', 'length', 'max'=>32),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('banner_id, clicks', 'safe', 'on'=>'search'),
+			array('banner_id, clicks, views', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -92,6 +93,7 @@ class ViewBanners extends CActiveRecord
 		return array(
 			'banner_id' => Yii::t('attribute', 'Banner'),
 			'clicks' => Yii::t('attribute', 'Clicks'),
+			'views' => Yii::t('attribute', 'Views'),
 		);
 		/*
 			'Banner' => 'Banner',
@@ -120,6 +122,7 @@ class ViewBanners extends CActiveRecord
 
 		$criteria->compare('t.banner_id',strtolower($this->banner_id),true);
 		$criteria->compare('t.clicks',strtolower($this->clicks),true);
+		$criteria->compare('t.views',strtolower($this->views),true);
 
 		if(!isset($_GET['ViewBanners_sort']))
 			$criteria->order = 't.banner_id DESC';
@@ -152,6 +155,7 @@ class ViewBanners extends CActiveRecord
 		} else {
 			$this->defaultColumns[] = 'banner_id';
 			$this->defaultColumns[] = 'clicks';
+			$this->defaultColumns[] = 'views';
 		}
 
 		return $this->defaultColumns;
@@ -168,6 +172,7 @@ class ViewBanners extends CActiveRecord
 			);
 			$this->defaultColumns[] = 'banner_id';
 			$this->defaultColumns[] = 'clicks';
+			$this->defaultColumns[] = 'views';
 		}
 		parent::afterConstruct();
 	}
