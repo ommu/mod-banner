@@ -228,12 +228,19 @@ class BannerClicks extends CActiveRecord
 					'value' => '$data->user_id != 0 ? $data->user->displayname : "-"',
 				);
 			}
-			$this->defaultColumns[] = 'clicks';
+			$this->defaultColumns[] = array(
+				'name' => 'clicks',
+				'value' => 'CHtml::link($data->clicks, Yii::app()->controller->createUrl("o/clickdetail/manage",array(\'click\'=>$data->click_id)))',
+				'htmlOptions' => array(
+					//'class' => 'center',
+				),
+				'type' => 'raw',
+			);
 			$this->defaultColumns[] = array(
 				'name' => 'click_date',
-				'value' => 'Utility::dateFormat($data->click_date)',
+				'value' => 'Utility::dateFormat($data->click_date, true)',
 				'htmlOptions' => array(
-					'class' => 'center',
+					//'class' => 'center',
 				),
 				'filter' => Yii::app()->controller->widget('zii.widgets.jui.CJuiDatePicker', array(
 					'model'=>$this,
@@ -259,7 +266,7 @@ class BannerClicks extends CActiveRecord
 				'name' => 'click_ip',
 				'value' => '$data->click_ip',
 				'htmlOptions' => array(
-					'class' => 'center',
+					//'class' => 'center',
 				),
 			);
 		}

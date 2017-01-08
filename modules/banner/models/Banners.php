@@ -98,6 +98,7 @@ class Banners extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'views' => array(self::BELONGS_TO, 'ViewBanners', 'banner_id'),
 			'category_relation' => array(self::BELONGS_TO, 'BannerCategory', 'cat_id'),
 			'creation_relation' => array(self::BELONGS_TO, 'Users', 'creation_id'),
 			'modified_relation' => array(self::BELONGS_TO, 'Users', 'modified_id'),
@@ -285,14 +286,15 @@ class Banners extends CActiveRecord
 				'value' => '$data->media != "" ? CHtml::link($data->media, Yii::app()->request->baseUrl.\'/public/banner/\'.$data->media, array(\'target\' => \'_blank\')) : "-"',
 				'type' => 'raw',
 			);
+			*/
 			$this->defaultColumns[] = array(
-				'name' => 'click',
-				'value' => '$data->url != "-" ? $data->click : "-"',
+				'header' => Yii::t('phrase', 'Clicks'),
+				'value' => '$data->url != "-" ? CHtml::link($data->views->clicks != null ? $data->views->clicks : "0", Yii::app()->controller->createUrl("o/click/manage",array(\'banner\'=>$data->banner_id))) : "-"',
 				'htmlOptions' => array(
 					'class' => 'center',
-				),	
+				),
+				'type' => 'raw',
 			);
-			*/
 			$this->defaultColumns[] = array(
 				'name' => 'published_date',
 				'value' => 'Utility::dateFormat($data->published_date)',
