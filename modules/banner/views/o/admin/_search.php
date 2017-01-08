@@ -74,11 +74,6 @@
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('click'); ?><br/>
-			<?php echo $form->textField($model,'click'); ?>
-		</li>
-
-		<li>
 			<?php echo $model->getAttributeLabel('creation_date'); ?><br/>
 			<?php echo $form->textField($model,'creation_date'); ?>
 		</li>

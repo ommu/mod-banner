@@ -23,7 +23,7 @@
 		'attributes'=>array(
 			array(
 				'name'=>'cat_id',
-				'value'=>Phrase::trans($model->category_relation->name, 2),
+				'value'=>Phrase::trans($model->category_relation->name),
 			),
 			'title',
 			array(

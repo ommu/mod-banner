@@ -103,6 +103,8 @@ class BannerCategory extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'view_cat' => array(self::BELONGS_TO, 'ViewBannerCategory', 'cat_id'),
+			'title' => array(self::BELONGS_TO, 'OmmuSystemPhrase', 'name'),
+			'description' => array(self::BELONGS_TO, 'OmmuSystemPhrase', 'desc'),
 			'creation_relation' => array(self::BELONGS_TO, 'Users', 'creation_id'),
 			'modified_relation' => array(self::BELONGS_TO, 'Users', 'modified_id'),
 			'banners' => array(self::HAS_MANY, 'Banners', 'cat_id'),
@@ -152,6 +154,35 @@ class BannerCategory extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
+		
+		// Custom Search
+		$defaultLang = OmmuLanguages::getDefault('code');
+		if(isset(Yii::app()->session['language']))
+			$language = Yii::app()->session['language'];
+		else 
+			$language = $defaultLang;
+		
+		$criteria->with = array(
+			'view_cat' => array(
+				'alias'=>'view_cat',
+			),
+			'title' => array(
+				'alias'=>'title',
+				'select'=>$language,
+			),
+			'description' => array(
+				'alias'=>'description',
+				'select'=>$language,
+			),
+			'creation_relation' => array(
+				'alias'=>'creation_relation',
+				'select'=>'displayname'
+			),
+			'modified_relation' => array(
+				'alias'=>'modified_relation',
+				'select'=>'displayname'
+			),
+		);
 
 		$criteria->compare('t.cat_id',$this->cat_id);
 		if(isset($_GET['type']) && $_GET['type'] == 'publish')
@@ -176,23 +207,8 @@ class BannerCategory extends CActiveRecord
 			$criteria->compare('date(t.modified_date)',date('Y-m-d', strtotime($this->modified_date)));
 		$criteria->compare('t.modified_id',$this->modified_id,true);
 		
-		// Custom Search
-		$criteria->with = array(
-			'view_cat' => array(
-				'alias'=>'view_cat',
-				//'select'=>'category_name, category_desc, banners'
-			),
-			'creation_relation' => array(
-				'alias'=>'creation_relation',
-				'select'=>'displayname'
-			),
-			'modified_relation' => array(
-				'alias'=>'modified_relation',
-				'select'=>'displayname'
-			),
-		);
-		$criteria->compare('view_cat.category_name',strtolower($this->title), true);
-		$criteria->compare('view_cat.category_desc',strtolower($this->description), true);
+		$criteria->compare('title.'.$language,strtolower($this->title), true);
+		$criteria->compare('description.'.$language,strtolower($this->description), true);
 		$criteria->compare('creation_relation.displayname',strtolower($this->creation_search), true);
 		$criteria->compare('modified_relation.displayname',strtolower($this->modified_search), true);
 
@@ -260,11 +276,11 @@ class BannerCategory extends CActiveRecord
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'title',
-				'value' => 'Phrase::trans($data->name, 2)',
+				'value' => 'Phrase::trans($data->name)',
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'description',
-				'value' => 'Phrase::trans($data->desc, 2)',
+				'value' => 'Phrase::trans($data->desc)',
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'media_size',
@@ -283,7 +299,7 @@ class BannerCategory extends CActiveRecord
 			);
 			$this->defaultColumns[] = array(
 				'header' => 'Publish',
-				'value' => '$data->view_cat->banner_publish > $data->limit ? $data->limit."/".$data->view_cat->banner_publish : $data->view_cat->banner_publish',
+				'value' => '$data->view_cat->banners > $data->limit ? $data->limit."/".$data->view_cat->banners : $data->view_cat->banners',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -304,7 +320,7 @@ class BannerCategory extends CActiveRecord
 			);
 			$this->defaultColumns[] = array(
 				'header' => 'Total',
-				'value' => '$data->view_cat->banners',
+				'value' => '$data->view_cat->banner_all',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -393,7 +409,7 @@ class BannerCategory extends CActiveRecord
 		$items = array();
 		if($model != null) {
 			foreach($model as $key => $val) {
-				$items[$val->cat_id] = Phrase::trans($val->name, 2);
+				$items[$val->cat_id] = Phrase::trans($val->name);
 			}
 			return $items;
 		} else {

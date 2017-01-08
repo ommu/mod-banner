@@ -31,7 +31,6 @@
  * @property string $published_date
  * @property string $expired_date
  * @property integer $view
- * @property integer $click
  * @property string $creation_date
  * @property string $creation_id
  * @property string $modified_date
@@ -78,15 +77,15 @@ class Banners extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('cat_id, title, url, published_date, expired_date', 'required'),
-			array('publish, cat_id, banner_type, view, click,
+			array('publish, cat_id, banner_type, view,
 				permanent', 'numerical', 'integerOnly'=>true),
 			array('user_id, creation_id, modified_id', 'length', 'max'=>11),
 			array('title', 'length', 'max'=>64),
-			array('media, user_id, view, click, creation_date, creation_id, modified_date, modified_id,
+			array('media, user_id, view, creation_date, creation_id, modified_date, modified_id,
 				permanent, old_media', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('banner_id, publish, cat_id, user_id, banner_type, title, url, media, published_date, expired_date, view, click, creation_date, creation_id, modified_date, modified_id,
+			array('banner_id, publish, cat_id, user_id, banner_type, title, url, media, published_date, expired_date, view, creation_date, creation_id, modified_date, modified_id,
 				creation_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
@@ -122,7 +121,6 @@ class Banners extends CActiveRecord
 			'published_date' => Yii::t('attribute', 'Published Date'),
 			'expired_date' => Yii::t('attribute', 'Expired Date'),
 			'view' => Yii::t('attribute', 'View'),
-			'click' => Yii::t('attribute', 'Click'),
 			'creation_date' => Yii::t('attribute', 'Creation Date'),
 			'creation_id' => Yii::t('attribute', 'Creation'),
 			'modified_date' => Yii::t('attribute', 'Modified Date'),
@@ -180,7 +178,6 @@ class Banners extends CActiveRecord
 		if($this->expired_date != null && !in_array($this->expired_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.expired_date)',date('Y-m-d', strtotime($this->expired_date)));
 		$criteria->compare('t.view',$this->view);
-		$criteria->compare('t.click',$this->click);
 		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.creation_date)',date('Y-m-d', strtotime($this->creation_date)));
 		$criteria->compare('t.creation_id',$this->creation_id);
@@ -242,7 +239,6 @@ class Banners extends CActiveRecord
 			$this->defaultColumns[] = 'published_date';
 			$this->defaultColumns[] = 'expired_date';
 			$this->defaultColumns[] = 'view';
-			$this->defaultColumns[] = 'click';
 			$this->defaultColumns[] = 'creation_date';
 			$this->defaultColumns[] = 'creation_id';
 			$this->defaultColumns[] = 'modified_date';
@@ -277,7 +273,7 @@ class Banners extends CActiveRecord
 			if(!isset($_GET['category'])) {
 				$this->defaultColumns[] = array(
 					'name' => 'cat_id',
-					'value' => 'Phrase::trans($data->category_relation->name, 2)',
+					'value' => 'Phrase::trans($data->category_relation->name)',
 					'filter'=> BannerCategory::getCategory(),
 					'type' => 'raw',
 				);
@@ -288,7 +284,6 @@ class Banners extends CActiveRecord
 				'value' => '$data->media != "" ? CHtml::link($data->media, Yii::app()->request->baseUrl.\'/public/banner/\'.$data->media, array(\'target\' => \'_blank\')) : "-"',
 				'type' => 'raw',
 			);
-			*/
 			$this->defaultColumns[] = array(
 				'name' => 'click',
 				'value' => '$data->url != "-" ? $data->click : "-"',
@@ -296,6 +291,7 @@ class Banners extends CActiveRecord
 					'class' => 'center',
 				),	
 			);
+			*/
 			$this->defaultColumns[] = array(
 				'name' => 'published_date',
 				'value' => 'Utility::dateFormat($data->published_date)',
@@ -451,7 +447,7 @@ class Banners extends CActiveRecord
 		if(parent::beforeValidate()) {	
 			if($this->isNewRecord) {
 				//if(self::getBanner($this->cat_id, 'count') >= $this->category_relation->limit)
-				//	$this->addError('cat_id', Phrase::trans($this->category_relation->name, 2).'" cannot be uploaded. jumlah banner sudah melebihi batas maksimal (limit).');
+				//	$this->addError('cat_id', Phrase::trans($this->category_relation->name).'" cannot be uploaded. jumlah banner sudah melebihi batas maksimal (limit).');
 				
 				//$this->orders = 0;
 				$this->user_id = Yii::app()->user->id;		
