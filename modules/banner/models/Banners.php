@@ -149,6 +149,18 @@ class Banners extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
+		
+		// Custom Search
+		$criteria->with = array(
+			'creation_relation' => array(
+				'alias'=>'creation_relation',
+				'select'=>'displayname'
+			),
+			'modified_relation' => array(
+				'alias'=>'modified_relation',
+				'select'=>'displayname'
+			),
+		);
 
 		$criteria->compare('t.banner_id',$this->banner_id,true);
 		if(isset($_GET['type']) && $_GET['type'] == 'publish') {
@@ -185,17 +197,6 @@ class Banners extends CActiveRecord
 			$criteria->compare('date(t.modified_date)',date('Y-m-d', strtotime($this->modified_date)));
 		$criteria->compare('t.modified_id',$this->modified_id);
 		
-		// Custom Search
-		$criteria->with = array(
-			'creation_relation' => array(
-				'alias'=>'creation_relation',
-				'select'=>'displayname'
-			),
-			'modified_relation' => array(
-				'alias'=>'modified_relation',
-				'select'=>'displayname'
-			),
-		);
 		$criteria->compare('creation_relation.displayname',strtolower($this->creation_search), true);
 		$criteria->compare('modified_relation.displayname',strtolower($this->modified_search), true);
 
