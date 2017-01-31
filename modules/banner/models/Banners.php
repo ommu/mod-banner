@@ -435,7 +435,7 @@ class Banners extends CActiveRecord
 	}
 
 	/**
-	 * Get Article
+	 * Resize Banner
 	 */
 	public static function resizeBanner($media, $size) {
 		Yii::import('ext.phpthumb.PhpThumbFactory');
