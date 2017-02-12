@@ -24,10 +24,9 @@
  * @property integer $publish
  * @property integer $cat_id
  * @property string $user_id
- * @property integer $banner_type
  * @property string $title
  * @property string $url
- * @property string $media
+ * @property string $banner_filename
  * @property string $published_date
  * @property string $expired_date
  * @property string $creation_date
@@ -41,8 +40,9 @@
 class Banners extends CActiveRecord
 {
 	public $defaultColumns = array();
-	public $permanent;
-	public $old_media;
+	public $linked_input;
+	public $permanent_input;
+	public $old_banner_filename_input;
 	
 	// Variable Search
 	public $creation_search;
@@ -76,15 +76,15 @@ class Banners extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('cat_id, title, url, published_date, expired_date', 'required'),
-			array('publish, cat_id, banner_type,
-				permanent', 'numerical', 'integerOnly'=>true),
+			array('publish, cat_id,
+				linked_input, permanent_input', 'numerical', 'integerOnly'=>true),
 			array('user_id, creation_id, modified_id', 'length', 'max'=>11),
 			array('title', 'length', 'max'=>64),
-			array('media, user_id, creation_date, creation_id, modified_date, modified_id,
-				permanent, old_media', 'safe'),
+			array('banner_filename, user_id, creation_date, creation_id, modified_date, modified_id,
+				linked_input, permanent_input, old_banner_filename_input', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('banner_id, publish, cat_id, user_id, banner_type, title, url, media, published_date, expired_date, creation_date, creation_id, modified_date, modified_id,
+			array('banner_id, publish, cat_id, user_id, title, url, banner_filename, published_date, expired_date, creation_date, creation_id, modified_date, modified_id,
 				creation_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
@@ -98,9 +98,9 @@ class Banners extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'view' => array(self::BELONGS_TO, 'ViewBanners', 'banner_id'),
-			'category_relation' => array(self::BELONGS_TO, 'BannerCategory', 'cat_id'),
-			'creation_relation' => array(self::BELONGS_TO, 'Users', 'creation_id'),
-			'modified_relation' => array(self::BELONGS_TO, 'Users', 'modified_id'),
+			'category' => array(self::BELONGS_TO, 'BannerCategory', 'cat_id'),
+			'creation' => array(self::BELONGS_TO, 'Users', 'creation_id'),
+			'modified' => array(self::BELONGS_TO, 'Users', 'modified_id'),
 			'clicks' => array(self::HAS_MANY, 'BannerClicks', 'banner_id'),
 		);
 	}
@@ -115,18 +115,18 @@ class Banners extends CActiveRecord
 			'publish' => Yii::t('attribute', 'Publish'),
 			'cat_id' => Yii::t('attribute', 'Category'),
 			'user_id' => Yii::t('attribute', 'User'),
-			'banner_type' => Yii::t('attribute', 'Banner Type'),
 			'title' => Yii::t('attribute', 'Title'),
 			'url' => Yii::t('attribute', 'Banner Link'),
-			'media' => Yii::t('attribute', 'Media'),
+			'banner_filename' => Yii::t('attribute', 'Banner (File)'),
 			'published_date' => Yii::t('attribute', 'Published Date'),
 			'expired_date' => Yii::t('attribute', 'Expired Date'),
 			'creation_date' => Yii::t('attribute', 'Creation Date'),
 			'creation_id' => Yii::t('attribute', 'Creation'),
 			'modified_date' => Yii::t('attribute', 'Modified Date'),
 			'modified_id' => Yii::t('attribute', 'Modified'),
-			'permanent' => Yii::t('attribute', 'Permanent'),
-			'old_media' => Yii::t('attribute', 'Old Media'),
+			'linked_input' => Yii::t('attribute', 'Linked'),
+			'permanent_input' => Yii::t('attribute', 'Permanent'),
+			'old_banner_filename_input' => Yii::t('attribute', 'Old Media'),
 			'creation_search' => Yii::t('attribute', 'Creation'),
 			'modified_search' => Yii::t('attribute', 'Modified'),
 		);
@@ -152,12 +152,12 @@ class Banners extends CActiveRecord
 		
 		// Custom Search
 		$criteria->with = array(
-			'creation_relation' => array(
-				'alias'=>'creation_relation',
+			'creation' => array(
+				'alias'=>'creation',
 				'select'=>'displayname'
 			),
-			'modified_relation' => array(
-				'alias'=>'modified_relation',
+			'modified' => array(
+				'alias'=>'modified',
 				'select'=>'displayname'
 			),
 		);
@@ -181,10 +181,9 @@ class Banners extends CActiveRecord
 			$criteria->compare('t.user_id',$_GET['user']);
 		else
 			$criteria->compare('t.user_id',$this->user_id);
-		$criteria->compare('t.banner_type',$this->banner_type);
 		$criteria->compare('t.title',$this->title,true);
 		$criteria->compare('t.url',$this->url,true);
-		$criteria->compare('t.media',$this->media,true);
+		$criteria->compare('t.banner_filename',$this->banner_filename,true);
 		if($this->published_date != null && !in_array($this->published_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.published_date)',date('Y-m-d', strtotime($this->published_date)));
 		if($this->expired_date != null && !in_array($this->expired_date, array('0000-00-00 00:00:00', '0000-00-00')))
@@ -196,8 +195,8 @@ class Banners extends CActiveRecord
 			$criteria->compare('date(t.modified_date)',date('Y-m-d', strtotime($this->modified_date)));
 		$criteria->compare('t.modified_id',$this->modified_id);
 		
-		$criteria->compare('creation_relation.displayname',strtolower($this->creation_search), true);
-		$criteria->compare('modified_relation.displayname',strtolower($this->modified_search), true);
+		$criteria->compare('creation.displayname',strtolower($this->creation_search), true);
+		$criteria->compare('modified.displayname',strtolower($this->modified_search), true);
 
 		if(!isset($_GET['Banners_sort']))
 			$criteria->order = 't.banner_id DESC';
@@ -232,10 +231,9 @@ class Banners extends CActiveRecord
 			$this->defaultColumns[] = 'publish';
 			$this->defaultColumns[] = 'cat_id';
 			$this->defaultColumns[] = 'user_id';
-			$this->defaultColumns[] = 'banner_type';
 			$this->defaultColumns[] = 'title';
 			$this->defaultColumns[] = 'url';
-			$this->defaultColumns[] = 'media';
+			$this->defaultColumns[] = 'banner_filename';
 			$this->defaultColumns[] = 'published_date';
 			$this->defaultColumns[] = 'expired_date';
 			$this->defaultColumns[] = 'creation_date';
@@ -272,15 +270,15 @@ class Banners extends CActiveRecord
 			if(!isset($_GET['category'])) {
 				$this->defaultColumns[] = array(
 					'name' => 'cat_id',
-					'value' => 'Phrase::trans($data->category_relation->name)',
+					'value' => 'Phrase::trans($data->category->name)',
 					'filter'=> BannerCategory::getCategory(),
 					'type' => 'raw',
 				);
 			}
 			/*
 			$this->defaultColumns[] = array(
-				'name' => 'media',
-				'value' => '$data->media != "" ? CHtml::link($data->media, Yii::app()->request->baseUrl.\'/public/banner/\'.$data->media, array(\'target\' => \'_blank\')) : "-"',
+				'name' => 'banner_filename',
+				'value' => '$data->banner_filename != "" ? CHtml::link($data->banner_filename, Yii::app()->request->baseUrl.\'/public/banner/\'.$data->banner_filename, array(\'target\' => \'_blank\')) : "-"',
 				'type' => 'raw',
 			);
 			*/
@@ -354,7 +352,7 @@ class Banners extends CActiveRecord
 			);
 			/* $this->defaultColumns[] = array(
 				'name' => 'creation_search',
-				'value' => '$data->creation_relation->displayname',
+				'value' => '$data->creation->displayname',
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'creation_date',
@@ -418,31 +416,16 @@ class Banners extends CActiveRecord
 	}
 
 	/**
-	 * Get Article
-	 */
-	public static function getBanner($id, $type=null) {
-		$criteria=new CDbCriteria;
-		$criteria->compare('cat_id',$id);
-		
-		if($type == null) {
-			//$criteria->select = '';
-			$model = Banners::model()->findAll($criteria);
-		} else {
-			$model = Banners::model()->count($criteria);
-		}
-		
-		return $model;
-	}
-
-	/**
 	 * Resize Banner
 	 */
-	public static function resizeBanner($media, $size) {
+	public static function resizeBanner($banner, $resize) {
 		Yii::import('ext.phpthumb.PhpThumbFactory');
-		$bannerImg = PhpThumbFactory::create($media, array('jpegQuality' => 90, 'correctPermissions' => true));
-		$resizeSize = explode(',', $size);
-		$bannerImg->adaptiveResize($resizeSize[0], $resizeSize[1]);					
-		$bannerImg->save($media);
+		$resizeBanner = PhpThumbFactory::create($banner, array('jpegQuality' => 90, 'correctPermissions' => true));
+		if($resize['height'] == 0)
+			$resizeBanner->resize($resize['width']);
+		else			
+			$resizeBanner->adaptiveResize($resize['width'], $resize['height']);
+		$resizeBanner->save($banner);
 		
 		return true;
 	}
@@ -452,43 +435,49 @@ class Banners extends CActiveRecord
 	 */
 	protected function beforeValidate() {
 		$controller = strtolower(Yii::app()->controller->id);
+		$setting = BannerSetting::model()->findByPk(1, array(
+			'select' => 'media_validation',
+		));
+		
 		if(parent::beforeValidate()) {	
-			if($this->isNewRecord) {
-				//if(self::getBanner($this->cat_id, 'count') >= $this->category_relation->limit)
-				//	$this->addError('cat_id', Phrase::trans($this->category_relation->name).'" cannot be uploaded. jumlah banner sudah melebihi batas maksimal (limit).');
-				
-				//$this->orders = 0;
+			if($this->isNewRecord)
 				$this->user_id = Yii::app()->user->id;		
-			} else
+			else
 				$this->modified_id = Yii::app()->user->id;
 			
-			$media = CUploadedFile::getInstance($this, 'media');
-			if($media->name != '') {
-				$extension = pathinfo($media->name, PATHINFO_EXTENSION);
+			$banner_filename = CUploadedFile::getInstance($this, 'banner_filename');
+			if($banner_filename != null) {
+				$extension = pathinfo($banner_filename->name, PATHINFO_EXTENSION);
 				$validation = 0;
-				if(BannerSetting::getInfo(1, 'media_validation') == 1) {
+				if($setting->media_validation == 1)
 					$validation = 1;
-					$size = getimagesize($media->tempName);
-					$bannerSize = explode(',', $this->category_relation->media_size);					
-				}
+				$fileSize = getimagesize($banner_filename->tempName);
+				$bannerSize = unserialize($this->category->banner_size);
+				
 				if(!in_array(strtolower($extension), array('bmp','gif','jpg','png')))
-					$this->addError('media', 'The file "'.$media->name.'" cannot be uploaded. Only files with these extensions are allowed: bmp, gif, jpg, png.');
+					$this->addError('banner_filename', 'The file "'.$banner_filename->name.'" cannot be uploaded. Only files with these extensions are allowed: bmp, gif, jpg, png.');
 				else {
-					if($validation == 1 && $bannerSize[0] != $size[0] && $bannerSize[1] != $size[1])
-						$this->addError('media', 'The file "'.$media->name.'" cannot be uploaded. ukuran banner ('.$size[0].' x '.$size[1].') tidak sesuai dengan kategori ('.$bannerSize[0].' x '.$bannerSize[1].')');					
+					if($validation == 1 && !($fileSize[0] == $bannerSize['width'] && $fileSize[1] == $bannerSize['height']))
+						$this->addError('banner_filename', 'The file "'.$banner_filename->name.'" cannot be uploaded. ukuran banner ('.$fileSize[0].' x '.$fileSize[1].') tidak sesuai dengan kategori ('.$bannerSize['width'].' x '.$bannerSize['height'].')');
 				}				
 			} else {
-				if($this->isNewRecord)
-					$this->addError('media', 'Media cannot be blank.');
+				if($this->isNewRecord && $controller == 'o/admin')
+					$this->addError('banner_filename', 'Banner (File) cannot be blank.');
 			}
 			
-			if(in_array(date('Y-m-d', strtotime($this->expired_date)), array('00-00-0000','01-01-1970')))
-				$this->permanent = 1;
+			if($this->linked_input == 0)
+				$this->url = '-';
 			
-			if($this->permanent == 1)
+			if(in_array(date('Y-m-d', strtotime($this->expired_date)), array('00-00-0000','01-01-1970')))
+				$this->permanent_input = 1;
+			
+			if($this->permanent_input == 1)
 				$this->expired_date = '00-00-0000';
 			
-			if($this->permanent != 1 && ($this->published_date != '' && $this->expired_date != '') && ($this->published_date >= $this->expired_date))
+			if($this->linked_input == 1 && $this->url == '-')
+				$this->addError('url', Yii::t('attribute', 'URL harus dalam format hyperlink'));
+			
+			if($this->permanent_input != 1 && ($this->published_date != '' && $this->expired_date != '') && ($this->published_date >= $this->expired_date))
 				$this->addError('expired_date', Yii::t('attribute', 'Expired lebih kecil'));
 		}
 		return true;
@@ -498,11 +487,15 @@ class Banners extends CActiveRecord
 	 * before save attributes
 	 */
 	protected function beforeSave() {
+		
+		$setting = BannerSetting::model()->findByPk(1, array(
+			'select' => 'media_resize',
+		));
+		
 		if(parent::beforeSave()) {			
-			$action = strtolower(Yii::app()->controller->action->id);
-			if(!$this->isNewRecord && $action == 'edit') {
-				//Update banner photo
+			if(!$this->isNewRecord) {
 				$banner_path = "public/banner";
+				
 				// Add directory
 				if(!file_exists($banner_path)) {
 					@mkdir($banner_path, 0755, true);
@@ -513,21 +506,25 @@ class Banners extends CActiveRecord
 				} else
 					@chmod($banner_path, 0755, true);
 				
-				$this->media = CUploadedFile::getInstance($this, 'media');
-				if($this->media instanceOf CUploadedFile) {
-					$fileName = $this->banner_id.'_'.time().'_'.Utility::getUrlTitle($this->title).'.'.strtolower($this->media->extensionName);
-					if($this->media->saveAs($banner_path.'/'.$fileName)) {
-						if(BannerSetting::getInfo(1, 'media_resize') == 1)
-							self::resizeBanner($banner_path.'/'.$fileName, $this->category_relation->media_size);
-						if($this->old_media != '' && file_exists($banner_path.'/'.$this->old_media))
-							rename($banner_path.'/'.$this->old_media, 'public/banner/verwijderen/'.$this->banner_id.'_'.$this->old_media);
-						$this->media = $fileName;
+				$this->banner_filename = CUploadedFile::getInstance($this, 'banner_filename');
+				if($this->banner_filename != null) {
+					if($this->banner_filename instanceOf CUploadedFile) {
+						$fileName = time().'_'.$this->banner_id.'_'.Utility::getUrlTitle($this->title).'.'.strtolower($this->banner_filename->extensionName);
+						if($this->banner_filename->saveAs($banner_path.'/'.$fileName)) {							
+							if($this->old_banner_filename_input != '' && file_exists($banner_path.'/'.$this->old_banner_filename_input))
+								rename($banner_path.'/'.$this->old_banner_filename_input, 'public/banner/verwijderen/'.$this->banner_id.'_'.$this->old_banner_filename_input);
+							$this->banner_filename = $fileName;
+							
+							if($setting->media_resize == 1)
+								self::resizeBanner($banner_path.'/'.$fileName, unserialize($this->category->banner_size));
+						}
 					}
+				} else {
+					if($this->banner_filename == '')
+						$this->banner_filename = $this->old_banner_filename_input;
 				}
-					
-				if($this->media == '')
-					$this->media = $this->old_media;
 			}
+			
 			$this->published_date = date('Y-m-d', strtotime($this->published_date));
 			$this->expired_date = date('Y-m-d', strtotime($this->expired_date));
 		}
@@ -540,8 +537,13 @@ class Banners extends CActiveRecord
 	protected function afterSave() {
 		parent::afterSave();
 		
+		$setting = BannerSetting::model()->findByPk(1, array(
+			'select' => 'media_resize',
+		));
+		
 		if($this->isNewRecord) {
 			$banner_path = "public/banner";
+			
 			// Add directory
 			if(!file_exists($banner_path)) {
 				@mkdir($banner_path, 0755, true);
@@ -552,13 +554,15 @@ class Banners extends CActiveRecord
 			} else
 				@chmod($banner_path, 0755, true);
 			
-			$this->media = CUploadedFile::getInstance($this, 'media');
-			if($this->media instanceOf CUploadedFile) {
-				$fileName = $this->banner_id.'_'.time().'_'.Utility::getUrlTitle($this->title).'.'.strtolower($this->media->extensionName);
-				if($this->media->saveAs($banner_path.'/'.$fileName)) {
-					if(BannerSetting::getInfo(1, 'media_resize') == 1)
-						self::resizeBanner($banner_path.'/'.$fileName, $this->category_relation->media_size);
-					Banners::model()->updateByPk($this->banner_id, array('media'=>$fileName));
+			$this->banner_filename = CUploadedFile::getInstance($this, 'banner_filename');
+			if($this->banner_filename != null) {
+				if($this->banner_filename instanceOf CUploadedFile) {
+					$fileName = time().'_'.$this->banner_id.'_'.Utility::getUrlTitle($this->title).'.'.strtolower($this->banner_filename->extensionName);
+					if($this->banner_filename->saveAs($banner_path.'/'.$fileName)) {
+						if($setting->media_resize == 1)
+							self::resizeBanner($banner_path.'/'.$fileName, unserialize($this->category->banner_size));
+						self::model()->updateByPk($this->banner_id, array('banner_filename'=>$fileName));
+					}
 				}
 			}
 		}
@@ -571,8 +575,9 @@ class Banners extends CActiveRecord
 		parent::afterDelete();
 		//delete article image
 		$banner_path = "public/banner";
-		if($this->media != '' && file_exists($banner_path.'/'.$this->media))
-			rename($banner_path.'/'.$this->media, 'public/banner/verwijderen/'.$this->banner_id.'_'.$this->media);
+		
+		if($this->banner_filename != '' && file_exists($banner_path.'/'.$this->banner_filename))
+			rename($banner_path.'/'.$this->banner_filename, 'public/banner/verwijderen/'.$this->banner_id.'_'.$this->banner_filename);
 	}
 
 }

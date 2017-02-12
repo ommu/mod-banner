@@ -29,11 +29,10 @@ if(Yii::app()->user->hasFlash('success'))
 	'attributes'=>array(
 		'cat_id',
 		'publish',
-		'orders',
 		'name',
 		'desc',
-		'media_size',
-		'limit',
+		'banner_size',
+		'banner_limit',
 		'creation_date',
 		'creation_id',
 		'modified_date',

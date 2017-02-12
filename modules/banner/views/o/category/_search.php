@@ -29,11 +29,6 @@
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('orders'); ?><br/>
-			<?php echo $form->textField($model,'orders'); ?>
-		</li>
-
-		<li>
 			<?php echo $model->getAttributeLabel('name'); ?><br/>
 			<?php echo $form->textField($model,'name',array('size'=>11,'maxlength'=>11)); ?>
 		</li>
@@ -44,13 +39,13 @@
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('media_size'); ?><br/>
-			<?php echo $form->textField($model,'media_size',array('size'=>9,'maxlength'=>9)); ?>
+			<?php echo $model->getAttributeLabel('banner_size'); ?><br/>
+			<?php echo $form->textField($model,'banner_size',array('size'=>9,'maxlength'=>9)); ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('limit'); ?><br/>
-			<?php echo $form->textField($model,'limit'); ?>
+			<?php echo $model->getAttributeLabel('banner_limit'); ?><br/>
+			<?php echo $form->textField($model,'banner_limit'); ?>
 		</li>
 
 		<li>

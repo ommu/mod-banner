@@ -158,7 +158,7 @@ class CategoryController extends Controller
 					if($model->save()) {
 						echo CJSON::encode(array(
 							'type' => 5,
-							'get' => Yii::app()->controller->createUrl('o/setting/index'),
+							'get' => Yii::app()->controller->createUrl('o/setting/edit'),
 							'id' => 'partial-banner-category',
 							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Banner category success created.').'</strong></div>',
 						));
@@ -207,7 +207,7 @@ class CategoryController extends Controller
 					if($model->save()) {
 						echo CJSON::encode(array(
 							'type' => 5,
-							'get' => Yii::app()->controller->createUrl('o/setting/index'),
+							'get' => Yii::app()->controller->createUrl('o/setting/edit'),
 							'id' => 'partial-banner-category',
 							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Banner category success updated.').'</strong></div>',
 						));
@@ -303,7 +303,7 @@ class CategoryController extends Controller
 				if($model->delete()) {
 					echo CJSON::encode(array(
 						'type' => 5,
-						'get' => Yii::app()->controller->createUrl('o/setting/index'),
+						'get' => Yii::app()->controller->createUrl('o/setting/edit'),
 						'id' => 'partial-banner-category',
 						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Banner category success deleted.').'</strong></div>',
 					));
@@ -348,7 +348,7 @@ class CategoryController extends Controller
 				if($model->update()) {
 					echo CJSON::encode(array(
 						'type' => 5,
-						'get' => Yii::app()->controller->createUrl('o/setting/index'),
+						'get' => Yii::app()->controller->createUrl('o/setting/edit'),
 						'id' => 'partial-banner-category',
 						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Banner category success updated.').'</strong></div>',
 					));

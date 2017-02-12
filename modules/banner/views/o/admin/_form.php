@@ -14,12 +14,20 @@
 
 	$cs = Yii::app()->getClientScript();
 $js=<<<EOP
-	$('#Banners_permanent').live('change', function() {
+	$('#Banners_permanent_input').live('change', function() {
 		var id = $(this).prop('checked');		
 		if(id == true) {
 			$('div#expired-date').slideUp();
 		} else {
 			$('div#expired-date').slideDown();
+		}
+	});
+	$('#Banners_linked_input').live('change', function() {
+		var id = $(this).prop('checked');		
+		if(id == true) {
+			$('div#url').slideDown();
+		} else {
+			$('div#url').slideUp();
 		}
 	});
 EOP;
@@ -63,7 +71,23 @@ EOP;
 		</div>
 	</div>
 
+	<?php 
+	if(!$model->getErrors()) {
+		$model->linked_input = 0;
+		if($model->isNewRecord || (!$model->isNewRecord && $model->url != '-'))
+			$model->linked_input = 1;
+	}?>
+	
 	<div class="clearfix">
+		<?php echo $form->labelEx($model,'linked_input'); ?>
+		<div class="desc">
+			<?php echo $form->checkBox($model,'linked_input'); ?>
+			<?php echo $form->error($model,'linked_input'); ?>
+			<?php /*<div class="small-px silent"></div>*/?>
+		</div>
+	</div>
+
+	<div id="url" class="<?php echo $model->linked_input == 0 ? 'hide' : ''?> clearfix">
 		<?php echo $form->labelEx($model,'url'); ?>
 		<div class="desc">
 			<?php echo $form->textArea($model,'url',array('class'=>'span-10 smaller', 'rows'=>6, 'cols'=>50)); ?>
@@ -71,26 +95,23 @@ EOP;
 			<div class="small-px silent">example: http://opensource.ommu.co</div>
 		</div>
 	</div>
-	
-	<?php if(!$model->isNewRecord) {
-		$model->old_media = $model->media;
-		echo $form->hiddenField($model,'old_media');
-		if($model->media != '') {
-			$resizeSize = explode(',', $model->category_relation->media_size);
-			$file = Yii::app()->request->baseUrl.'/public/banner/'.$model->old_media;
-			$media = '<img src="'.Utility::getTimThumb($file, $resizeSize[0], $resizeSize[1], 1).'" alt="">';
-			echo '<div class="clearfix">';
-			echo $form->labelEx($model,'old_media');
-			echo '<div class="desc">'.$media.'</div>';
-			echo '</div>';
-		}
-	}?>
 
 	<div class="clearfix">
-		<?php echo $form->labelEx($model,'media'); ?>
+		<?php echo $form->labelEx($model,'banner_filename'); ?>
 		<div class="desc">
-			<?php echo $form->fileField($model,'media'); ?>
-			<?php echo $form->error($model,'media'); ?>
+			<?php 
+			if(!$model->isNewRecord) {
+				if(!$model->getErrors())
+					$model->old_banner_filename_input = $model->banner_filename;
+				echo $form->hiddenField($model,'old_banner_filename_input');
+				if($model->old_banner_filename_input != '') {
+					$bannerSize = unserialize($model->category->banner_size);
+					$banner = Yii::app()->request->baseUrl.'/public/banner/'.$model->old_banner_filename_input;?>
+					<img class="mb-15" src="<?php echo Utility::getTimThumb($banner, $bannerSize['width'], $bannerSize['height'], 3);?>" alt="">
+			<?php }
+			}?>
+			<?php echo $form->fileField($model,'banner_filename'); ?>
+			<?php echo $form->error($model,'banner_filename'); ?>
 			<?php /*<div class="small-px silent"></div>*/?>
 		</div>
 	</div>
@@ -118,21 +139,22 @@ EOP;
 	</div>
 
 	<?php 
-	$model->permanent = 0;
-	if($model->isNewRecord || (!$model->isNewRecord && in_array(date('Y-m-d', strtotime($model->expired_date)), array('0000-00-00','1970-01-01'))))
-		$model->permanent = 1;
-	?>
+	if(!$model->getErrors()) {
+		$model->permanent_input = 0;
+		if($model->isNewRecord || (!$model->isNewRecord && in_array(date('Y-m-d', strtotime($model->expired_date)), array('0000-00-00','1970-01-01'))))
+			$model->permanent_input = 1;
+	}?>
 	
 	<div class="clearfix">
-		<?php echo $form->labelEx($model,'permanent'); ?>
+		<?php echo $form->labelEx($model,'permanent_input'); ?>
 		<div class="desc">
-			<?php echo $form->checkBox($model,'permanent'); ?>
-			<?php echo $form->error($model,'permanent'); ?>
+			<?php echo $form->checkBox($model,'permanent_input'); ?>
+			<?php echo $form->error($model,'permanent_input'); ?>
 			<?php /*<div class="small-px silent"></div>*/?>
 		</div>
 	</div>
 	
-	<div id="expired-date" class="clearfix <?php echo $model->permanent == 1 ? 'hide' : ''?>">
+	<div id="expired-date" class="<?php echo $model->permanent_input == 1 ? 'hide' : ''?> clearfix">
 		<?php echo $form->labelEx($model,'expired_date'); ?>
 		<div class="desc">
 			<?php

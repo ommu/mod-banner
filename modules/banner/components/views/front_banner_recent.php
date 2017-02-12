@@ -14,11 +14,11 @@ if($model != null) {?>
 <div class="banner top">
 	<ul id="rslides" class="clearfix">
 	<?php foreach($model as $key => $val) {
-		$extension = pathinfo($val->media, PATHINFO_EXTENSION);
+		$extension = pathinfo($val->banner_filename, PATHINFO_EXTENSION);
 		if(!in_array($extension, array('bmp','gif','jpg','png')))
-			$images = Yii::app()->request->baseUrl.'/public/banner/'.$val->media;
+			$images = Yii::app()->request->baseUrl.'/public/banner/'.$val->banner_filename;
 		else
-			$images = Yii::app()->request->baseUrl.'/public/banner/'.$val->media;
+			$images = Yii::app()->request->baseUrl.'/public/banner/'.$val->banner_filename;
 		?>
 		<li>
 			<?php if($val->url != '-') {?>

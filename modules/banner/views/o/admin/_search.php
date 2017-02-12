@@ -39,11 +39,6 @@
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('banner_type'); ?><br/>
-			<?php echo $form->textField($model,'banner_type'); ?>
-		</li>
-
-		<li>
 			<?php echo $model->getAttributeLabel('title'); ?><br/>
 			<?php echo $form->textField($model,'title',array('size'=>60,'maxlength'=>64)); ?>
 		</li>
@@ -54,8 +49,8 @@
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('media'); ?><br/>
-			<?php echo $form->textField($model,'media',array('size'=>60,'maxlength'=>128)); ?>
+			<?php echo $model->getAttributeLabel('banner_filename'); ?><br/>
+			<?php echo $form->textField($model,'banner_filename',array('size'=>60,'maxlength'=>128)); ?>
 		</li>
 
 		<li>
