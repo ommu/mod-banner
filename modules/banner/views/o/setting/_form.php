@@ -59,24 +59,24 @@
 		</div>
 
 		<div class="clearfix">
-			<?php echo $form->labelEx($model,'media_validation'); ?>
+			<?php echo $form->labelEx($model,'banner_validation'); ?>
 			<div class="desc">
-				<?php echo $form->radioButtonList($model, 'media_validation', array(
+				<?php echo $form->radioButtonList($model, 'banner_validation', array(
 					1 => 'Yes, validation banner size before upload.',
 					0 => 'No, not validation banner size before upload.',
 				)); ?>
-				<?php echo $form->error($model,'media_validation'); ?>
+				<?php echo $form->error($model,'banner_validation'); ?>
 			</div>
 		</div>
 
 		<div class="clearfix">
-			<?php echo $form->labelEx($model,'media_resize'); ?>
+			<?php echo $form->labelEx($model,'banner_resize'); ?>
 			<div class="desc">
-				<?php echo $form->radioButtonList($model, 'media_resize', array(
+				<?php echo $form->radioButtonList($model, 'banner_resize', array(
 					1 => 'Yes, resize banner after upload.',
 					0 => 'No, not resize banner after upload.',
 				)); ?>
-				<?php echo $form->error($model,'media_resize'); ?>
+				<?php echo $form->error($model,'banner_resize'); ?>
 			</div>
 		</div>
 

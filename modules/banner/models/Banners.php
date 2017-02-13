@@ -436,7 +436,7 @@ class Banners extends CActiveRecord
 	protected function beforeValidate() {
 		$controller = strtolower(Yii::app()->controller->id);
 		$setting = BannerSetting::model()->findByPk(1, array(
-			'select' => 'media_validation',
+			'select' => 'banner_validation',
 		));
 		
 		if(parent::beforeValidate()) {	
@@ -449,7 +449,7 @@ class Banners extends CActiveRecord
 			if($banner_filename != null) {
 				$extension = pathinfo($banner_filename->name, PATHINFO_EXTENSION);
 				$validation = 0;
-				if($setting->media_validation == 1)
+				if($setting->banner_validation == 1)
 					$validation = 1;
 				$fileSize = getimagesize($banner_filename->tempName);
 				$bannerSize = unserialize($this->category->banner_size);
@@ -489,7 +489,7 @@ class Banners extends CActiveRecord
 	protected function beforeSave() {
 		
 		$setting = BannerSetting::model()->findByPk(1, array(
-			'select' => 'media_resize',
+			'select' => 'banner_resize',
 		));
 		
 		if(parent::beforeSave()) {			
@@ -515,7 +515,7 @@ class Banners extends CActiveRecord
 								rename($banner_path.'/'.$this->old_banner_filename_input, 'public/banner/verwijderen/'.$this->banner_id.'_'.$this->old_banner_filename_input);
 							$this->banner_filename = $fileName;
 							
-							if($setting->media_resize == 1)
+							if($setting->banner_resize == 1)
 								self::resizeBanner($banner_path.'/'.$fileName, unserialize($this->category->banner_size));
 						}
 					}
@@ -538,7 +538,7 @@ class Banners extends CActiveRecord
 		parent::afterSave();
 		
 		$setting = BannerSetting::model()->findByPk(1, array(
-			'select' => 'media_resize',
+			'select' => 'banner_resize',
 		));
 		
 		if($this->isNewRecord) {
@@ -559,7 +559,7 @@ class Banners extends CActiveRecord
 				if($this->banner_filename instanceOf CUploadedFile) {
 					$fileName = time().'_'.$this->banner_id.'_'.Utility::getUrlTitle($this->title).'.'.strtolower($this->banner_filename->extensionName);
 					if($this->banner_filename->saveAs($banner_path.'/'.$fileName)) {
-						if($setting->media_resize == 1)
+						if($setting->banner_resize == 1)
 							self::resizeBanner($banner_path.'/'.$fileName, unserialize($this->category->banner_size));
 						self::model()->updateByPk($this->banner_id, array('banner_filename'=>$fileName));
 					}
