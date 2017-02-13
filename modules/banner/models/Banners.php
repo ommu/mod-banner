@@ -436,8 +436,9 @@ class Banners extends CActiveRecord
 	protected function beforeValidate() {
 		$controller = strtolower(Yii::app()->controller->id);
 		$setting = BannerSetting::model()->findByPk(1, array(
-			'select' => 'banner_validation',
+			'select' => 'banner_validation, banner_file_type',
 		));
+		$banner_file_type = unserialize($setting->banner_file_type);
 		
 		if(parent::beforeValidate()) {	
 			if($this->isNewRecord)
@@ -454,15 +455,22 @@ class Banners extends CActiveRecord
 				$fileSize = getimagesize($banner_filename->tempName);
 				$bannerSize = unserialize($this->category->banner_size);
 				
-				if(!in_array(strtolower($extension), array('bmp','gif','jpg','png')))
-					$this->addError('banner_filename', 'The file "'.$banner_filename->name.'" cannot be uploaded. Only files with these extensions are allowed: bmp, gif, jpg, png.');
+				if(!in_array(strtolower($extension), $banner_file_type))
+					$this->addError('banner_filename', Yii::t('phrase', 'The file {name} cannot be uploaded. Only files with these extensions are allowed: {extensions}.', array(
+						'{name}'=>$banner_filename->name,
+						'{extensions}'=>Utility::formatFileType($banner_file_type, false),
+					)));
 				else {
 					if($validation == 1 && !($fileSize[0] == $bannerSize['width'] && $fileSize[1] == $bannerSize['height']))
-						$this->addError('banner_filename', 'The file "'.$banner_filename->name.'" cannot be uploaded. ukuran banner ('.$fileSize[0].' x '.$fileSize[1].') tidak sesuai dengan kategori ('.$bannerSize['width'].' x '.$bannerSize['height'].')');
+						$this->addError('banner_filename', Yii::t('phrase', 'The file {name} cannot be uploaded. ukuran banner ({file_size}) tidak sesuai dengan kategori ({banner_size})', array(
+							'{name}'=>$banner_filename->name,
+							'{file_size}'=>$fileSize[0].' x '.$fileSize[1],
+							'{banner_size}'=>$bannerSize['width'].' x '.$bannerSize['height'],
+						)));
 				}				
 			} else {
 				if($this->isNewRecord && $controller == 'o/admin')
-					$this->addError('banner_filename', 'Banner (File) cannot be blank.');
+					$this->addError('banner_filename', Yii::t('attribute', 'Banner (File) cannot be blank.'));
 			}
 			
 			if($this->linked_input == 0)

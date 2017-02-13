@@ -59,6 +59,22 @@
 		</div>
 
 		<div class="clearfix">
+			<?php echo $form->labelEx($model,'meta_keyword'); ?>
+			<div class="desc">
+				<?php echo $form->textArea($model,'meta_keyword',array('rows'=>6, 'cols'=>50, 'class'=>'span-7 smaller')); ?>
+				<?php echo $form->error($model,'meta_keyword'); ?>
+			</div>
+		</div>
+
+		<div class="clearfix">
+			<?php echo $form->labelEx($model,'meta_description'); ?>
+			<div class="desc">
+				<?php echo $form->textArea($model,'meta_description',array('rows'=>6, 'cols'=>50, 'class'=>'span-7 smaller')); ?>
+				<?php echo $form->error($model,'meta_description'); ?>
+			</div>
+		</div>
+
+		<div class="clearfix">
 			<?php echo $form->labelEx($model,'banner_validation'); ?>
 			<div class="desc">
 				<?php echo $form->radioButtonList($model, 'banner_validation', array(
@@ -81,18 +97,17 @@
 		</div>
 
 		<div class="clearfix">
-			<?php echo $form->labelEx($model,'meta_keyword'); ?>
+			<?php echo $form->labelEx($model,'banner_file_type'); ?>
 			<div class="desc">
-				<?php echo $form->textArea($model,'meta_keyword',array('rows'=>6, 'cols'=>50, 'class'=>'span-7 smaller')); ?>
-				<?php echo $form->error($model,'meta_keyword'); ?>
-			</div>
-		</div>
-
-		<div class="clearfix">
-			<?php echo $form->labelEx($model,'meta_description'); ?>
-			<div class="desc">
-				<?php echo $form->textArea($model,'meta_description',array('rows'=>6, 'cols'=>50, 'class'=>'span-7 smaller')); ?>
-				<?php echo $form->error($model,'meta_description'); ?>
+				<?php				
+				if(!$model->getErrors()) {
+					$banner_file_type = unserialize($model->banner_file_type);
+					if(!empty($banner_file_type))
+						$model->banner_file_type = Utility::formatFileType($banner_file_type, false);
+				}
+				echo $form->textField($model,'banner_file_type', array('class'=>'span-6')); ?>
+				<?php echo $form->error($model,'banner_file_type'); ?>
+				<span class="small-px">pisahkan jenis file dengan koma (,). example: "jpg, png, bmp"</span>
 			</div>
 		</div>
 
