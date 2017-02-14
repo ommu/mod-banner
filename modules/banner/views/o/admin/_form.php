@@ -112,7 +112,7 @@ EOP;
 			}?>
 			<?php echo $form->fileField($model,'banner_filename'); ?>
 			<?php echo $form->error($model,'banner_filename'); ?>
-			<?php /*<div class="small-px silent"></div>*/?>
+			<span class="small-px">extensions are allowed: <?php echo Utility::formatFileType(unserialize($setting->banner_file_type), false);?></span>
 		</div>
 	</div>
 

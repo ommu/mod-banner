@@ -141,6 +141,9 @@ class AdminController extends Controller
 	 */
 	public function actionAdd() 
 	{
+		$setting = BannerSetting::model()->findByPk(1,array(
+			'select' => 'banner_file_type',
+		));
 		$model=new Banners;
 
 		// Uncomment the following line if AJAX validation is needed
@@ -160,6 +163,7 @@ class AdminController extends Controller
 		$this->pageMeta = '';
 		$this->render('admin_add',array(
 			'model'=>$model,
+			'setting'=>$setting,
 		));
 	}
 
@@ -170,6 +174,9 @@ class AdminController extends Controller
 	 */
 	public function actionEdit($id) 
 	{
+		$setting = BannerSetting::model()->findByPk(1,array(
+			'select' => 'banner_file_type',
+		));
 		$model=$this->loadModel($id);
 
 		// Uncomment the following line if AJAX validation is needed
@@ -189,6 +196,7 @@ class AdminController extends Controller
 		$this->pageMeta = '';
 		$this->render('admin_edit',array(
 			'model'=>$model,
+			'setting'=>$setting,
 		));
 	}
 	
