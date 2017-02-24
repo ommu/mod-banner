@@ -427,7 +427,7 @@ class BannerCategory extends CActiveRecord
 				$this->modified_id = Yii::app()->user->id;
 			
 			if($this->banner_size['width'] == '' || $this->banner_size['height'] == '')
-				$this->addError('banner_size', Yii::t('attribute', 'Banner Size cannot be blank.'));
+				$this->addError('banner_size', Yii::t('phrase', 'Banner Size cannot be blank.'));
 		}
 		return true;
 	}

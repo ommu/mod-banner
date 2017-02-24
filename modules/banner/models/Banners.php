@@ -470,7 +470,7 @@ class Banners extends CActiveRecord
 				}				
 			} else {
 				if($this->isNewRecord && $controller == 'o/admin')
-					$this->addError('banner_filename', Yii::t('attribute', 'Banner (File) cannot be blank.'));
+					$this->addError('banner_filename', Yii::t('phrase', 'Banner (File) cannot be blank.'));
 			}
 			
 			if($this->linked_input == 0)
@@ -483,10 +483,10 @@ class Banners extends CActiveRecord
 				$this->expired_date = '00-00-0000';
 			
 			if($this->linked_input == 1 && $this->url == '-')
-				$this->addError('url', Yii::t('attribute', 'URL harus dalam format hyperlink'));
+				$this->addError('url', Yii::t('phrase', 'URL harus dalam format hyperlink'));
 			
 			if($this->permanent_input != 1 && ($this->published_date != '' && $this->expired_date != '') && ($this->published_date >= $this->expired_date))
-				$this->addError('expired_date', Yii::t('attribute', 'Expired lebih kecil'));
+				$this->addError('expired_date', Yii::t('phrase', 'Expired lebih kecil'));
 		}
 		return true;
 	}
