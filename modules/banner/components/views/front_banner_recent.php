@@ -1,7 +1,9 @@
 <?php 
 	$cs = Yii::app()->getClientScript();
-	$cs->registerCssFile(Yii::app()->request->baseUrl.'/externals/banner/responsiveslides.css');
-	$cs->registerScriptFile(Yii::app()->request->baseUrl.'/externals/banner/plugin/responsiveslides.min.js', CClientScript::POS_END);
+	$cs->registerCssFile($this->module->assetsUrl.'/responsiveslides.css');
+	$cs->registerScriptFile($this->module->assetsUrl.'/plugin/responsiveslides.min.js', CClientScript::POS_END);
+	//Yii::app()->getModule('banner')->getAssetsUrl;
+	
 	$js=<<<EOP
 		$("#rslides").responsiveSlides({
 			//nav: true,
