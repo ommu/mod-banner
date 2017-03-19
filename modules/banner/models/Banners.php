@@ -104,6 +104,7 @@ class Banners extends CActiveRecord
 			'creation' => array(self::BELONGS_TO, 'Users', 'creation_id'),
 			'modified' => array(self::BELONGS_TO, 'Users', 'modified_id'),
 			'clicks' => array(self::HAS_MANY, 'BannerClicks', 'banner_id'),
+			'views' => array(self::HAS_MANY, 'BannerViews', 'banner_id'),
 		);
 	}
 

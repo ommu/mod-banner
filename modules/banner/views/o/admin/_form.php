@@ -38,7 +38,7 @@ EOP;
 <?php $form=$this->beginWidget('application.components.system.OActiveForm', array(
 	'id'=>'banners-form',
 	'enableAjaxValidation'=>true,
-	'htmlOptions' => array('enctype' => 'multipart/form-data')
+	'htmlOptions' => array('enctype' => 'multipart/form-data'),
 )); ?>
 
 <?php //begin.Messages ?>

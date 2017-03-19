@@ -26,6 +26,7 @@
  * @property integer $publish
  * @property string $name
  * @property string $desc
+ * @property string $banner_code
  * @property string $banner_size
  * @property integer $banner_limit
  * @property string $creation_date
@@ -78,14 +79,14 @@ class BannerCategory extends CActiveRecord
 			array('publish, banner_limit', 'numerical', 'integerOnly'=>true),
 			array('banner_limit', 'length', 'max'=>2),
 			array('name, desc, creation_id, modified_id', 'length', 'max'=>11),
-			array('
+			array('cat_code,
 				title', 'length', 'max'=>32),
 			array('
 				description', 'length', 'max'=>64),
-			array('name, desc, banner_size, banner_limit, creation_id, modified_id', 'safe'),
+			array('cat_code, banner_size, banner_limit', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('cat_id, publish, name, desc, banner_size, banner_limit, creation_date, creation_id, modified_date, modified_id,
+			array('cat_id, publish, name, desc, cat_code, banner_size, banner_limit, creation_date, creation_id, modified_date, modified_id,
 				title, description, creation_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
@@ -117,6 +118,7 @@ class BannerCategory extends CActiveRecord
 			'publish' => Yii::t('attribute', 'Publish'),
 			'name' => Yii::t('attribute', 'Title'),
 			'desc' => Yii::t('attribute', 'Description'),
+			'cat_code' => Yii::t('attribute', 'Code'),
 			'banner_size' => Yii::t('attribute', 'Banner Size'),
 			'banner_limit' => Yii::t('attribute', 'Banner Limit'),
 			'creation_date' => Yii::t('attribute', 'Creation Date'),
@@ -190,6 +192,7 @@ class BannerCategory extends CActiveRecord
 		}
 		$criteria->compare('t.name',$this->name,true);
 		$criteria->compare('t.desc',$this->desc,true);
+		$criteria->compare('t.cat_code',strtolower($this->cat_code),true);
 		$criteria->compare('t.banner_size',$this->banner_size,true);
 		$criteria->compare('t.banner_limit',$this->banner_limit);
 		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00', '0000-00-00')))
@@ -237,6 +240,7 @@ class BannerCategory extends CActiveRecord
 			$this->defaultColumns[] = 'publish';
 			$this->defaultColumns[] = 'name';
 			$this->defaultColumns[] = 'desc';
+			$this->defaultColumns[] = 'cat_code';
 			$this->defaultColumns[] = 'banner_size';
 			$this->defaultColumns[] = 'banner_limit';
 			$this->defaultColumns[] = 'creation_date';
@@ -266,13 +270,22 @@ class BannerCategory extends CActiveRecord
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
 			$this->defaultColumns[] = array(
+				'name' => 'cat_code',
+				'value' => '$data->cat_code',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+			);
+			$this->defaultColumns[] = array(
 				'name' => 'title',
 				'value' => 'Phrase::trans($data->name)',
 			);
+			/*
 			$this->defaultColumns[] = array(
 				'name' => 'description',
 				'value' => 'Phrase::trans($data->desc)',
 			);
+			*/
 			$this->defaultColumns[] = array(
 				'name' => 'banner_size',
 				'value' => 'BannerCategory::getPreviewSize($data->banner_size)',
@@ -352,7 +365,7 @@ class BannerCategory extends CActiveRecord
 				$this->defaultColumns[] = array(
 					'header'=>'Status',
 					'name' => 'publish',
-					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl("publish",array("id"=>$data->cat_id)), $data->publish, 1)',
+					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl("o/category/publish",array("id"=>$data->cat_id)), $data->publish, 1)',
 					'htmlOptions' => array(
 						'class' => 'center',
 					),
@@ -437,7 +450,9 @@ class BannerCategory extends CActiveRecord
 	/**
 	 * before save attributes
 	 */
-	protected function beforeSave() {
+	protected function beforeSave() 
+	{
+		$action = strtolower(Yii::app()->controller->action->id);
 		if(parent::beforeSave()) {
 			//Media Name and Description
 			if($this->isNewRecord) {
@@ -463,8 +478,12 @@ class BannerCategory extends CActiveRecord
 				$desc->en_us = $this->description;
 				$desc->save();
 			}
-			//Media Size
-			$this->banner_size = serialize($this->banner_size);
+			
+			if($action != 'publish') {
+				$this->cat_code = Utility::getUrlTitle(strtolower(trim($this->title)));
+				//Media Size
+				$this->banner_size = serialize($this->banner_size);
+			}
 		}
 		return true;
 	}
