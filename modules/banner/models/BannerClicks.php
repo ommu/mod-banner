@@ -246,7 +246,7 @@ class BannerClicks extends CActiveRecord
 					'model'=>$this,
 					'attribute'=>'click_date',
 					'language' => 'en',
-					'i18nScriptFile' => 'jquery-ui-i18n.min.js'
+					'i18nScriptFile' => 'jquery-ui-i18n.min.js',
 					//'mode'=>'datetime',
 					'htmlOptions' => array(
 						'id' => 'click_date_filter',

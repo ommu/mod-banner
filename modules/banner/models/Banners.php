@@ -311,7 +311,7 @@ class Banners extends CActiveRecord
 					'model'=>$this,
 					'attribute'=>'published_date',
 					'language' => 'en',
-					'i18nScriptFile' => 'jquery-ui-i18n.min.js'
+					'i18nScriptFile' => 'jquery-ui-i18n.min.js',
 					//'mode'=>'datetime',
 					'htmlOptions' => array(
 						'id' => 'published_date_filter',
@@ -337,7 +337,7 @@ class Banners extends CActiveRecord
 					'model'=>$this,
 					'attribute'=>'expired_date',
 					'language' => 'en',
-					'i18nScriptFile' => 'jquery-ui-i18n.min.js'
+					'i18nScriptFile' => 'jquery-ui-i18n.min.js',
 					//'mode'=>'datetime',
 					'htmlOptions' => array(
 						'id' => 'expired_date_filter',
@@ -367,7 +367,7 @@ class Banners extends CActiveRecord
 					'model'=>$this,
 					'attribute'=>'creation_date',
 					'language' => 'en',
-					'i18nScriptFile' => 'jquery-ui-i18n.min.js'
+					'i18nScriptFile' => 'jquery-ui-i18n.min.js',
 					//'mode'=>'datetime',
 					'htmlOptions' => array(
 						'id' => 'creation_date_filter',

@@ -217,7 +217,7 @@ class ViewBannerStatistics extends CActiveRecord
 					'model'=>$this,
 					'attribute'=>'date_key',
 					'language' => 'en',
-					'i18nScriptFile' => 'jquery-ui-i18n.min.js'
+					'i18nScriptFile' => 'jquery-ui-i18n.min.js',
 					//'mode'=>'datetime',
 					'htmlOptions' => array(
 						'id' => 'date_key_filter',
