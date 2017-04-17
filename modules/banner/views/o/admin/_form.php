@@ -123,7 +123,7 @@ EOP;
 			<?php
 			!$model->isNewRecord ? ($model->published_date != '0000-00-00' ? $model->published_date = date('d-m-Y', strtotime($model->published_date)) : '') : '';
 			//echo $form->textField($model,'published_date');
-			$this->widget('zii.widgets.jui.CJuiDatePicker',array(
+			$this->widget('application.components.system.CJuiDatePicker',array(
 				'model'=>$model,
 				'attribute'=>'published_date',
 				//'mode'=>'datetime',
@@ -161,7 +161,7 @@ EOP;
 			<?php
 			!$model->isNewRecord ? (!in_array(date('Y-m-d', strtotime($model->expired_date)), array('0000-00-00','1970-01-01')) ? $model->expired_date = date('d-m-Y', strtotime($model->expired_date)) : '') : '';
 			//echo $form->textField($model,'expired_date');
-			$this->widget('zii.widgets.jui.CJuiDatePicker',array(
+			$this->widget('application.components.system.CJuiDatePicker',array(
 				'model'=>$model,
 				'attribute'=>'expired_date',
 				//'mode'=>'datetime',
