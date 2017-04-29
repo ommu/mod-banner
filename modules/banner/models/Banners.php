@@ -42,13 +42,28 @@
 class Banners extends CActiveRecord
 {
 	public $defaultColumns = array();
-	public $linked_input;
-	public $permanent_input;
-	public $old_banner_filename_input;
+	public $linked_i;
+	public $permanent_i;
+	public $old_banner_filename_i;
 	
 	// Variable Search
 	public $creation_search;
 	public $modified_search;
+
+	/**
+	 * Behaviors for this model
+	 */
+	public function behaviors() 
+	{
+		return array(
+			'sluggable' => array(
+				'class'=>'ext.yii-behavior-sluggable.SluggableBehavior',
+				'columns' => array('title'),
+				'unique' => true,
+				'update' => true,
+			),
+		);
+	}
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -79,11 +94,11 @@ class Banners extends CActiveRecord
 		return array(
 			array('cat_id, title, url, published_date, expired_date', 'required'),
 			array('publish, cat_id,
-				linked_input, permanent_input', 'numerical', 'integerOnly'=>true),
+				linked_i, permanent_i', 'numerical', 'integerOnly'=>true),
 			array('user_id, creation_id, modified_id', 'length', 'max'=>11),
 			array('title', 'length', 'max'=>64),
 			array('banner_filename, user_id, creation_date, creation_id, modified_date, modified_id,
-				linked_input, permanent_input, old_banner_filename_input', 'safe'),
+				linked_i, permanent_i, old_banner_filename_i', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('banner_id, publish, cat_id, user_id, title, url, banner_filename, published_date, expired_date, creation_date, creation_id, modified_date, modified_id,
@@ -127,9 +142,9 @@ class Banners extends CActiveRecord
 			'creation_id' => Yii::t('attribute', 'Creation'),
 			'modified_date' => Yii::t('attribute', 'Modified Date'),
 			'modified_id' => Yii::t('attribute', 'Modified'),
-			'linked_input' => Yii::t('attribute', 'Linked'),
-			'permanent_input' => Yii::t('attribute', 'Permanent'),
-			'old_banner_filename_input' => Yii::t('attribute', 'Old Media'),
+			'linked_i' => Yii::t('attribute', 'Linked'),
+			'permanent_i' => Yii::t('attribute', 'Permanent'),
+			'old_banner_filename_i' => Yii::t('attribute', 'Old Media'),
 			'creation_search' => Yii::t('attribute', 'Creation'),
 			'modified_search' => Yii::t('attribute', 'Modified'),
 		);
@@ -476,19 +491,19 @@ class Banners extends CActiveRecord
 					$this->addError('banner_filename', Yii::t('phrase', 'Banner (File) cannot be blank.'));
 			}
 			
-			if($this->linked_input == 0)
+			if($this->linked_i == 0)
 				$this->url = '-';
 			
 			if(in_array(date('Y-m-d', strtotime($this->expired_date)), array('00-00-0000','01-01-1970')))
-				$this->permanent_input = 1;
+				$this->permanent_i = 1;
 			
-			if($this->permanent_input == 1)
+			if($this->permanent_i == 1)
 				$this->expired_date = '00-00-0000';
 			
-			if($this->linked_input == 1 && $this->url == '-')
+			if($this->linked_i == 1 && $this->url == '-')
 				$this->addError('url', Yii::t('phrase', 'URL harus dalam format hyperlink'));
 			
-			if($this->permanent_input != 1 && ($this->published_date != '' && $this->expired_date != '') && ($this->published_date >= $this->expired_date))
+			if($this->permanent_i != 1 && ($this->published_date != '' && $this->expired_date != '') && ($this->published_date >= $this->expired_date))
 				$this->addError('expired_date', Yii::t('phrase', 'Expired lebih kecil'));
 		}
 		return true;
@@ -522,8 +537,8 @@ class Banners extends CActiveRecord
 					if($this->banner_filename instanceOf CUploadedFile) {
 						$fileName = time().'_'.$this->banner_id.'_'.Utility::getUrlTitle($this->title).'.'.strtolower($this->banner_filename->extensionName);
 						if($this->banner_filename->saveAs($banner_path.'/'.$fileName)) {							
-							if($this->old_banner_filename_input != '' && file_exists($banner_path.'/'.$this->old_banner_filename_input))
-								rename($banner_path.'/'.$this->old_banner_filename_input, 'public/banner/verwijderen/'.$this->banner_id.'_'.$this->old_banner_filename_input);
+							if($this->old_banner_filename_i != '' && file_exists($banner_path.'/'.$this->old_banner_filename_i))
+								rename($banner_path.'/'.$this->old_banner_filename_i, 'public/banner/verwijderen/'.$this->banner_id.'_'.$this->old_banner_filename_i);
 							$this->banner_filename = $fileName;
 							
 							if($setting->banner_resize == 1)
@@ -532,7 +547,7 @@ class Banners extends CActiveRecord
 					}
 				} else {
 					if($this->banner_filename == '')
-						$this->banner_filename = $this->old_banner_filename_input;
+						$this->banner_filename = $this->old_banner_filename_i;
 				}
 			}
 			
