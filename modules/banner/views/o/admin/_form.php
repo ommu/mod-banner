@@ -12,10 +12,10 @@
  * @contact (+62)856-299-4114
  *
  */
-
+	
 	$cs = Yii::app()->getClientScript();
 $js=<<<EOP
-	$('#Banners_permanent_i').live('change', function() {
+	$('#Banners_permanent_i').on('change', function() {
 		var id = $(this).prop('checked');		
 		if(id == true) {
 			$('div#expired-date').slideUp();
@@ -23,7 +23,7 @@ $js=<<<EOP
 			$('div#expired-date').slideDown();
 		}
 	});
-	$('#Banners_linked_i').live('change', function() {
+	$('#Banners_linked_i').on('change', function() {
 		var id = $(this).prop('checked');		
 		if(id == true) {
 			$('div#url').slideDown();
@@ -113,7 +113,7 @@ EOP;
 			}?>
 			<?php echo $form->fileField($model,'banner_filename'); ?>
 			<?php echo $form->error($model,'banner_filename'); ?>
-			<span class="small-px">extensions are allowed: <?php echo Utility::formatFileType(unserialize($setting->banner_file_type), false);?></span>
+			<span class="small-px">extensions are allowed: <?php echo Utility::formatFileType($banner_file_type, false);?></span>
 		</div>
 	</div>
 

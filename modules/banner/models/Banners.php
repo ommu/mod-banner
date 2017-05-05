@@ -457,6 +457,8 @@ class Banners extends CActiveRecord
 			'select' => 'banner_validation, banner_file_type',
 		));
 		$banner_file_type = unserialize($setting->banner_file_type);
+		if(empty($banner_file_type))
+			$banner_file_type = array();
 		
 		if(parent::beforeValidate()) {	
 			if($this->isNewRecord)

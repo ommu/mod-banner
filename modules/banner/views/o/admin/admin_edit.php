@@ -23,6 +23,6 @@
 <div class="form">
 	<?php echo $this->renderPartial('_form', array(
 		'model'=>$model,
-		'setting'=>$setting,
+		'banner_file_type'=>$banner_file_type,
 	)); ?>
 </div>
