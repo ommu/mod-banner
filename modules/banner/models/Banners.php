@@ -302,7 +302,7 @@ class Banners extends CActiveRecord
 			*/
 			$this->defaultColumns[] = array(
 				'header' => Yii::t('phrase', 'Views'),
-				'value' => 'CHtml::link($data->view->views != null ? $data->view->views : "0", Yii::app()->controller->createUrl("o/view/manage",array(\'banner\'=>$data->banner_id)))',
+				'value' => 'CHtml::link($data->view->views ? $data->view->views : 0, Yii::app()->controller->createUrl("o/view/manage",array(\'banner\'=>$data->banner_id)))',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -310,7 +310,7 @@ class Banners extends CActiveRecord
 			);
 			$this->defaultColumns[] = array(
 				'header' => Yii::t('phrase', 'Clicks'),
-				'value' => '$data->url != "-" ? CHtml::link($data->view->clicks != null ? $data->view->clicks : "0", Yii::app()->controller->createUrl("o/click/manage",array(\'banner\'=>$data->banner_id))) : "-"',
+				'value' => '$data->url != "-" ? CHtml::link($data->view->clicks ? $data->view->clicks : 0, Yii::app()->controller->createUrl("o/click/manage",array(\'banner\'=>$data->banner_id))) : "-"',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),

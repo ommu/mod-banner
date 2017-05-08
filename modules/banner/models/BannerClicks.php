@@ -69,7 +69,7 @@ class BannerClicks extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('banner_id, user_id, click_date, click_ip', 'required'),
+			array('banner_id, user_id', 'required'),
 			array('clicks', 'numerical', 'integerOnly'=>true),
 			array('banner_id, user_id', 'length', 'max'=>11),
 			array('click_ip', 'length', 'max'=>20),
@@ -287,6 +287,27 @@ class BannerClicks extends CActiveRecord
 		} else {
 			$model = self::model()->findByPk($id);
 			return $model;			
+		}
+	}
+
+	/**
+	 * User get information
+	 */
+	public static function insertClick($banner_id)
+	{
+		$criteria=new CDbCriteria;
+		$criteria->select = 't.click_id, t.banner_id, t.user_id, t.clicks';
+		$criteria->compare('t.banner_id', $banner_id);
+		$criteria->compare('t.user_id', !Yii::app()->user->isGuest ? Yii::app()->user->id : '0');
+		$findClick = self::model()->find($criteria);
+		
+		if($findClick != null)
+			self::model()->updateByPk($findClick->click_id, array('clicks'=>$findClick->clicks + 1));
+		
+		else {
+			$click=new BannerClicks;
+			$click->banner_id = $banner_id;
+			$click->save();
 		}
 	}
 

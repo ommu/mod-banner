@@ -69,7 +69,7 @@ class BannerViews extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('banner_id, user_id, view_date, view_ip', 'required'),
+			array('banner_id, user_id', 'required'),
 			array('views', 'numerical', 'integerOnly'=>true),
 			array('banner_id, user_id', 'length', 'max'=>11),
 			array('view_ip', 'length', 'max'=>20),
@@ -287,6 +287,27 @@ class BannerViews extends CActiveRecord
 		} else {
 			$model = self::model()->findByPk($id);
 			return $model;			
+		}
+	}
+
+	/**
+	 * User get information
+	 */
+	public static function insertView($banner_id)
+	{
+		$criteria=new CDbCriteria;
+		$criteria->select = 't.view_id, t.banner_id, t.user_id, t.views';
+		$criteria->compare('t.banner_id', $banner_id);
+		$criteria->compare('t.user_id', !Yii::app()->user->isGuest ? Yii::app()->user->id : '0');
+		$findView = self::model()->find($criteria);
+		
+		if($findView != null)
+			self::model()->updateByPk($findView->view_id, array('views'=>$findView->views + 1));
+		
+		else {
+			$view=new BannerViews;
+			$view->banner_id = $banner_id;
+			$view->save();
 		}
 	}
 
