@@ -122,7 +122,7 @@ class SiteController extends ControllerApi
 								'id'=>$val->banner_id,
 								'title'=>$val->title,
 								'image'=>$banner_image,
-								'url'=>($val->url != '-' && $val->url != '') ? Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->controller->createUrl('site/click', array('id'=>$val->banner_id, 't'=>Utility::getUrlTitle($val->title))) : '-',
+								'url'=>($val->url != '-' && $val->url != '') ? Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->controller->createUrl('site/click', array('id'=>$val->banner_id, 'slug'=>Utility::getUrlTitle($val->title))) : '-',
 							);
 						}
 					}
