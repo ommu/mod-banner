@@ -10,7 +10,6 @@
  * TOC :
  *	Index
  *	List
- *	Detail
  *
  *	LoadModel
  *	performAjaxValidation
@@ -34,42 +33,14 @@ class SiteController extends ControllerApi
 	public $defaultAction = 'index';
 
 	/**
-	 * @return array action filters
+	 * Initialize public template
 	 */
-	public function filters() 
+	public function init() 
 	{
-		return array(
-			'accessControl', // perform access control for CRUD operations
-			//'postOnly + delete', // we only allow deletion via POST request
-		);
-	}
-
-	/**
-	 * Specifies the access control rules.
-	 * This method is used by the 'accessControl' filter.
-	 * @return array access control rules
-	 */
-	public function accessRules() 
-	{
-		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','main','list','detail'),
-				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array(),
-				'users'=>array('@'),
-				'expression'=>'isset(Yii::app()->user->level)',
-				//'expression'=>'isset(Yii::app()->user->level) && (Yii::app()->user->level != 1)',
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array(),
-				'users'=>array('admin'),
-			),
-			array('deny',  // deny all users
-				'users'=>array('*'),
-			),
-		);
+		$arrThemes = Utility::getCurrentTemplate('public');
+		Yii::app()->theme = $arrThemes['folder'];
+		$this->layout = $arrThemes['layout'];
+		//$this->pageGuest = true;
 	}
 	
 	/**
@@ -87,25 +58,34 @@ class SiteController extends ControllerApi
 	{
 		if(Yii::app()->request->isPostRequest) {
 			$category = trim($_POST['category']);
+
+			$setting = BannerSetting::model()->findByPk(1, array(
+				'select' => 'banner_file_type',
+			));
+			$banner_file_type = unserialize($setting->banner_file_type);
+			if(empty($banner_file_type))
+				$banner_file_type = array();
+			
+			$categoryFind = BannerCategory::model()->findByAttributes(array('cat_code' => $category), array(
+				'select' => 'banner_limit',
+			));
 			
 			$criteria=new CDbCriteria;
 			$criteria->with = array(
-				'category_relation' => array(
-					'alias'=>'category_relation',
-				),
-				'category_relation.view_cat' => array(
-					'alias'=>'view',
+				'category' => array(
+					'alias'=>'category',
 				),
 			);
-			$now = new CDbExpression("NOW()");
-			if($category != null && $category != '') {
+			if($category) {
 				$criteria->condition = '(t.expired_date >= curdate() OR t.published_date >= curdate()) OR ((t.expired_date = :date OR t.expired_date = :datestr) OR t.published_date >= curdate())';
 				$criteria->params = array(
 					':date'=>'0000-00-00', 
 					':datestr'=>'1970-01-01', 
 				);
 				$criteria->compare('t.publish', 1);
-				$criteria->compare('view.category_name', $category);
+				$criteria->compare('category.cat_code', $category);
+				$criteria->order = 't.expired_date ASC';
+				$criteria->limit = $categoryFind->banner_limit;
 				$criteria->order = 't.expired_date DESC';
 		
 				$model = Banners::model()->findAll($criteria);
@@ -114,15 +94,15 @@ class SiteController extends ControllerApi
 					foreach($model as $key => $val) {
 						$banner_url = Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->request->baseUrl;
 						$banner_path = 'public/banner';
-						$extension = pathinfo($val->media, PATHINFO_EXTENSION);
-						if($val->media != '' && in_array($extension, array('bmp','gif','jpg','png')) && file_exists($banner_path.'/'.$val->media)) {
-							$banner_image = $banner_url.'/'.$banner_path.'/'.$val->media;
+						$extension = pathinfo($val->banner_filename, PATHINFO_EXTENSION);
+						if($val->banner_filename && in_array($extension, $banner_file_type) && file_exists($banner_path.'/'.$val->banner_filename)) {
+							$banner_url_path = $banner_url.'/'.$banner_path.'/'.$val->banner_filename;
 					
 							$data[] = array(
 								'id'=>$val->banner_id,
 								'title'=>$val->title,
-								'image'=>$banner_image,
-								'url'=>($val->url != '-' && $val->url != '') ? Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->controller->createUrl('site/click', array('id'=>$val->banner_id, 'slug'=>Utility::getUrlTitle($val->title))) : '-',
+								'image'=>$banner_url_path,
+								'url'=>($val->url && $val->url != '-') ? Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->controller->createUrl('site/click', array('id'=>$val->banner_id, 'slug'=>Utility::getUrlTitle($val->title))) : '-',
 							);
 						}
 					}

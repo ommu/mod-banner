@@ -35,6 +35,7 @@ class BannerModule extends CWebModule
 			//list public controller in this module
 			$publicControllers = array(
 				'site',
+				'api/site',
 			);
 			
 			// pake ini untuk set theme per action di controller..
