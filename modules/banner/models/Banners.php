@@ -517,7 +517,7 @@ class Banners extends CActiveRecord
 	protected function beforeSave() {
 		
 		$setting = BannerSetting::model()->findByPk(1, array(
-			'select' => 'banner_resize',
+			'select' => 'banner_validation, banner_resize',
 		));
 		
 		if(parent::beforeSave()) {			
@@ -543,7 +543,7 @@ class Banners extends CActiveRecord
 								rename($banner_path.'/'.$this->old_banner_filename_i, 'public/banner/verwijderen/'.$this->banner_id.'_'.$this->old_banner_filename_i);
 							$this->banner_filename = $fileName;
 							
-							if($setting->banner_resize == 1)
+							if($setting->banner_validation == 0 && $setting->banner_resize == 1)
 								self::resizeBanner($banner_path.'/'.$fileName, unserialize($this->category->banner_size));
 						}
 					}
@@ -566,7 +566,7 @@ class Banners extends CActiveRecord
 		parent::afterSave();
 		
 		$setting = BannerSetting::model()->findByPk(1, array(
-			'select' => 'banner_resize',
+			'select' => 'banner_validation, banner_resize',
 		));
 		
 		if($this->isNewRecord) {
@@ -587,7 +587,7 @@ class Banners extends CActiveRecord
 				if($this->banner_filename instanceOf CUploadedFile) {
 					$fileName = time().'_'.$this->banner_id.'_'.Utility::getUrlTitle($this->title).'.'.strtolower($this->banner_filename->extensionName);
 					if($this->banner_filename->saveAs($banner_path.'/'.$fileName)) {
-						if($setting->banner_resize == 1)
+						if($setting->banner_validation == 0 && $setting->banner_resize == 1)
 							self::resizeBanner($banner_path.'/'.$fileName, unserialize($this->category->banner_size));
 						self::model()->updateByPk($this->banner_id, array('banner_filename'=>$fileName));
 					}
