@@ -296,9 +296,9 @@ class BannerViews extends CActiveRecord
 	public static function insertView($banner_id)
 	{
 		$criteria=new CDbCriteria;
-		$criteria->select = 't.view_id, t.banner_id, t.user_id, t.views';
-		$criteria->compare('t.banner_id', $banner_id);
-		$criteria->compare('t.user_id', !Yii::app()->user->isGuest ? Yii::app()->user->id : '0');
+		$criteria->select = 'view_id, banner_id, user_id, views';
+		$criteria->compare('banner_id', $banner_id);
+		$criteria->compare('user_id', !Yii::app()->user->isGuest ? Yii::app()->user->id : '0');
 		$findView = self::model()->find($criteria);
 		
 		if($findView != null)

@@ -296,9 +296,9 @@ class BannerClicks extends CActiveRecord
 	public static function insertClick($banner_id)
 	{
 		$criteria=new CDbCriteria;
-		$criteria->select = 't.click_id, t.banner_id, t.user_id, t.clicks';
-		$criteria->compare('t.banner_id', $banner_id);
-		$criteria->compare('t.user_id', !Yii::app()->user->isGuest ? Yii::app()->user->id : '0');
+		$criteria->select = 'click_id, banner_id, user_id, clicks';
+		$criteria->compare('banner_id', $banner_id);
+		$criteria->compare('user_id', !Yii::app()->user->isGuest ? Yii::app()->user->id : '0');
 		$findClick = self::model()->find($criteria);
 		
 		if($findClick != null)

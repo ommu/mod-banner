@@ -421,7 +421,7 @@ class BannerCategory extends CActiveRecord
 		
 		$criteria=new CDbCriteria;
 		if($publish != null)
-			$criteria->compare('t.publish',$publish);
+			$criteria->compare('publish',$publish);
 		
 		$model = self::model()->findAll($criteria);
 
@@ -468,21 +468,16 @@ class BannerCategory extends CActiveRecord
 	protected function beforeSave() 
 	{
 		$action = strtolower(Yii::app()->controller->action->id);
+		$currentAction = strtolower(Yii::app()->controller->id.'/'.Yii::app()->controller->action->id);
+		$location = Utility::getUrlTitle($currentAction);
+		
 		if(parent::beforeSave()) {
-			//Media Name and Description
-			if($this->isNewRecord) {
-				$location = strtolower(Yii::app()->controller->module->id.'/'.Yii::app()->controller->id);
+			if($this->isNewRecord || (!$this->isNewRecord && $this->name == 0)) {
 				$title=new OmmuSystemPhrase;
 				$title->location = $location.'_title_i';
 				$title->en_us = $this->title_i;
 				if($title->save())
 					$this->name = $title->phrase_id;
-
-				$desc=new OmmuSystemPhrase;
-				$desc->location = $location.'_description_i';
-				$desc->en_us = $this->description_i;
-				if($desc->save())
-					$this->desc = $desc->phrase_id;
 				
 				$this->slug = Utility::getUrlTitle($this->title_i);	
 				
@@ -490,7 +485,16 @@ class BannerCategory extends CActiveRecord
 				$title = OmmuSystemPhrase::model()->findByPk($this->name);
 				$title->en_us = $this->title_i;
 				$title->save();
-
+			}
+			
+			if($this->isNewRecord || (!$this->isNewRecord && $this->desc == 0)) {
+				$desc=new OmmuSystemPhrase;
+				$desc->location = $location.'_description_i';
+				$desc->en_us = $this->description_i;
+				if($desc->save())
+					$this->desc = $desc->phrase_id;
+				
+			} else {
 				$desc = OmmuSystemPhrase::model()->findByPk($this->desc);
 				$desc->en_us = $this->description_i;
 				$desc->save();
