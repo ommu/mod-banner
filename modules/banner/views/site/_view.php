@@ -3,10 +3,11 @@
  * Banners (banners)
  * @var $this SiteController
  * @var $data Banners
+ * version: 0.0.1
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @copyright Copyright (c) 2015 Ommu Platform (opensource.ommu.co)
- * @link https://github.com/ommu/Banner
+ * @link https://github.com/ommu/mod-banner
  * @contact (+62)856-299-4114
  *
  */
