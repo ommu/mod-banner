@@ -14,6 +14,7 @@ plugin_menu		:
 	- urlTitle: View Banner
 		urlRules: {siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: o/admin/manage, attr: -, icon: -}
+
 	- urlTitle: Datas
 		urlRules: {siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: -, attr: -, icon: -}
@@ -27,7 +28,7 @@ plugin_menu		:
 			- urlTitle: Clicks
 				urlRules: {siteType: "0,1", userLevel: "1,2"}
 				urlPath: {url: o/click/manage, attr: -, icon: -}
-		
+
 	- urlTitle: Settings
 		urlRules: {siteType: "0,1", userLevel: 1}
 		urlPath: {url: o/setting/edit, attr: -, icon: -}
@@ -42,33 +43,33 @@ content_menu	:
 		urlRules: {banner, o/admin, "add,edit", siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: manage, attr: -, icon: -}
 
-# controller o/setting		
+# controller o/setting
 	- urlTitle: Add Category
-		urlRules: {banner, o/setting, edit, siteType: "0,1", userLevel: 1}
+		urlRules: {banner, o/setting, edit, siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: o/category/add, attr: -, icon: -}
 
-# controller o/category		
+# controller o/category
 	- urlTitle: Add Category
-		urlRules: {banner, o/category, manage, siteType: "0,1", userLevel: 1}
+		urlRules: {banner, o/category, manage, siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: add, attr: -, icon: -}
 
-# controller o/view		
+# controller o/view
 	- urlTitle: Back to Banner Manage
 		urlRules: {banner, o/view, manage, siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: o/admin/manage, attr: -, icon: -}		
 
-# controller o/clickdetail		
+# controller o/clickdetail
 	- urlTitle: Back to View Manage
 		urlRules: {banner, o/viewdetail, manage, siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: o/view/manage, attr: -, icon: -}
 		
 
-# controller o/click		
+# controller o/click
 	- urlTitle: Back to Banner Manage
 		urlRules: {banner, o/click, manage, siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: o/admin/manage, attr: -, icon: -}		
 
-# controller o/clickdetail		
+# controller o/clickdetail
 	- urlTitle: Back to Click Manage
 		urlRules: {banner, o/clickdetail, manage, siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: o/click/manage, attr: -, icon: -}
