@@ -26,22 +26,18 @@
 			array(
 				'name'=>'view_id',
 				'value'=>$model->view_id,
-				//'value'=>$model->view_id != '' ? $model->view_id : '-',
 			),
 			array(
 				'name'=>'banner_id',
-				'value'=>$model->banner_id,
-				//'value'=>$model->banner_id != '' ? $model->banner_id : '-',
+				'value'=>$model->banner_id ? $model->banner->title : '-',
 			),
 			array(
 				'name'=>'user_id',
-				'value'=>$model->user_id,
-				//'value'=>$model->user_id != '' ? $model->user_id : '-',
+				'value'=>$model->user_id ? $model->user->displayname : '-',
 			),
 			array(
 				'name'=>'views',
-				'value'=>$model->views,
-				//'value'=>$model->views != '' ? $model->views : '-',
+				'value'=>$model->views ? $model->views : 0,
 			),
 			array(
 				'name'=>'view_date',
@@ -49,8 +45,7 @@
 			),
 			array(
 				'name'=>'view_ip',
-				'value'=>$model->view_ip,
-				//'value'=>$model->view_ip != '' ? $model->view_ip : '-',
+				'value'=>$model->view_ip ? $model->view_ip : '-',
 			),
 		),
 	)); ?>

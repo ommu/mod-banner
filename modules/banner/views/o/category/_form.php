@@ -62,7 +62,7 @@
 		</div>
 		
 		<div class="clearfix">
-			<?php echo $form->labelEx($model,'banner_size'); ?>
+			<label><?php echo $model->getAttributeLabel('banner_size');?> <span class="required">*</span></label>
 			<div class="desc">
 				<?php 
 				if(!$model->getErrors())
