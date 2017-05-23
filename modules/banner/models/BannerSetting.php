@@ -30,6 +30,7 @@
  * @property string $banner_validation
  * @property string $banner_resize
  * @property string $banner_file_type
+ * @property integer $public_access
  * @property string $modified_date
  * @property string $modified_id
  */
@@ -67,12 +68,12 @@ class BannerSetting extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('license, permission, meta_keyword, meta_description, banner_validation, banner_resize, banner_file_type', 'required'),
-			array('permission', 'numerical', 'integerOnly'=>true),
+			array('license, permission, meta_keyword, meta_description, banner_validation, banner_resize, banner_file_type, public_access', 'required'),
+			array('permission, public_access', 'numerical', 'integerOnly'=>true),
 			array('license', 'length', 'max'=>32),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, license, permission, meta_keyword, meta_description, banner_validation, banner_resize, banner_file_type, modified_date, modified_id,
+			array('id, license, permission, meta_keyword, meta_description, banner_validation, banner_resize, banner_file_type, public_access, modified_date, modified_id,
 				modified_search', 'safe', 'on'=>'search'),
 		);
 	}
@@ -103,6 +104,7 @@ class BannerSetting extends CActiveRecord
 			'banner_validation' => Yii::t('attribute', 'Banner Validation'),
 			'banner_resize' => Yii::t('attribute', 'Banner Resize'),
 			'banner_file_type' => Yii::t('attribute', 'Banner Filetype'),
+			'public_access' => Yii::t('attribute', 'Public Access'),
 			'modified_date' => Yii::t('attribute', 'Modified Date'),
 			'modified_id' => Yii::t('attribute', 'Modified'),
 			'modified_search' => Yii::t('attribute', 'Modified'),
@@ -135,6 +137,7 @@ class BannerSetting extends CActiveRecord
 		$criteria->compare('t.banner_validation',$this->banner_validation);
 		$criteria->compare('t.banner_resize',$this->banner_resize);
 		$criteria->compare('t.banner_file_type',$this->banner_file_type,true);
+		$criteria->compare('t.public_access',$this->public_access);
 		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.modified_date)',date('Y-m-d', strtotime($this->modified_date)));
 		$criteria->compare('t.modified_id',$this->modified_id);
@@ -185,6 +188,7 @@ class BannerSetting extends CActiveRecord
 			$this->defaultColumns[] = 'banner_validation';
 			$this->defaultColumns[] = 'banner_resize';
 			$this->defaultColumns[] = 'banner_file_type';
+			$this->defaultColumns[] = 'public_access';
 		}
 
 		return $this->defaultColumns;
@@ -202,6 +206,7 @@ class BannerSetting extends CActiveRecord
 			$this->defaultColumns[] = 'banner_validation';
 			$this->defaultColumns[] = 'banner_resize';
 			$this->defaultColumns[] = 'banner_file_type';
+			$this->defaultColumns[] = 'public_access';
 			$this->defaultColumns[] = 'modified_date';
 			$this->defaultColumns[] = 'modified_id';
 			$this->defaultColumns[] = array(

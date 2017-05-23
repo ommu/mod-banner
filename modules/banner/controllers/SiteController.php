@@ -43,17 +43,6 @@ class SiteController extends Controller
 	}
 
 	/**
-	 * @return array action filters
-	 */
-	public function filters() 
-	{
-		return array(
-			'accessControl', // perform access control for CRUD operations
-			//'postOnly + delete', // we only allow deletion via POST request
-		);
-	}
-
-	/**
 	 * Specifies the access control rules.
 	 * This method is used by the 'accessControl' filter.
 	 * @return array access control rules
@@ -71,11 +60,6 @@ class SiteController extends Controller
 				'expression'=>'isset(Yii::app()->user->level)',
 				//'expression'=>'isset(Yii::app()->user->level) && (Yii::app()->user->level != 1)',
 			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array(),
-				'users'=>array('@'),
-				'expression'=>'isset(Yii::app()->user->level) && (Yii::app()->user->level == 1)',
-			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array(),
 				'users'=>array('admin'),
@@ -91,11 +75,12 @@ class SiteController extends Controller
 	 */
 	public function actionIndex() 
 	{
-		$this->redirect(Yii::app()->createUrl('site/index'));
-		
 		$setting = Banners::model()->findByPk(1,array(
-			'select' => 'meta_description, meta_keyword',
+			'select' => 'meta_description, meta_keyword, public_access',
 		));
+		
+		if($setting->public_access == 0)
+			$this->redirect(Yii::app()->createUrl('site/index'));
 
 		$criteria=new CDbCriteria;
 		$criteria->condition = 'publish = :publish';
@@ -109,7 +94,7 @@ class SiteController extends Controller
 			),
 		));
 
-		$this->pageTitle = 'Banners';
+		$this->pageTitle =  Yii::t('phrase', 'Banners');
 		$this->pageDescription = $setting->meta_description;
 		$this->pageMeta = $setting->meta_keyword;
 		$this->render('front_index',array(
@@ -122,17 +107,19 @@ class SiteController extends Controller
 	 * @param integer $id the ID of the model to be displayed
 	 */
 	public function actionView($id) 
-	{
-		$this->redirect(Yii::app()->createUrl('site/index'));
-		
+	{		
 		$setting = BannerSetting::model()->findByPk(1,array(
-			'select' => 'meta_keyword',
+			'select' => 'meta_keyword, public_access',
 		));
+		
+		if($setting->public_access == 0)
+			$this->redirect(Yii::app()->createUrl('site/index'));
 
 		$model=$this->loadModel($id);
+		BannerViews::insertView($model->banner_id);
 
-		$this->pageTitle = 'View Banners';
-		$this->pageDescription = '';
+		$this->pageTitle =  Yii::t('phrase', 'View Banners');
+		$this->pageDescription = $model->banner_desc;
 		$this->pageMeta = $setting->meta_keyword;
 		$this->render('front_view',array(
 			'model'=>$model,
@@ -149,7 +136,7 @@ class SiteController extends Controller
 		if($id == null || $model == null)
 			$this->redirect(Yii::app()->createUrl('site/index'));
 		else {
-			Banners::model()->updateByPk($id, array('click'=>$model->click + 1));
+			BannerClicks::insertClick($model->banner_id);
 			$this->redirect($model->url);
 		}
 	}

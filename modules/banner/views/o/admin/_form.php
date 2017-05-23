@@ -72,6 +72,14 @@ EOP;
 		</div>
 	</div>
 
+	<div id="url" class="clearfix">
+		<?php echo $form->labelEx($model,'banner_desc'); ?>
+		<div class="desc">
+			<?php echo $form->textArea($model,'banner_desc',array('class'=>'span-10 smaller', 'rows'=>6, 'cols'=>50)); ?>
+			<?php echo $form->error($model,'banner_desc'); ?>
+		</div>
+	</div>
+
 	<?php 
 	if(!$model->getErrors()) {
 		$model->linked_i = 0;

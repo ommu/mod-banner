@@ -29,6 +29,7 @@
  * @property string $title
  * @property string $url
  * @property string $banner_filename
+ * @property string $banner_desc
  * @property string $published_date
  * @property string $expired_date
  * @property string $creation_date
@@ -97,11 +98,11 @@ class Banners extends CActiveRecord
 				linked_i, permanent_i', 'numerical', 'integerOnly'=>true),
 			array('user_id, creation_id, modified_id', 'length', 'max'=>11),
 			array('title', 'length', 'max'=>64),
-			array('banner_filename, user_id, creation_date, creation_id, modified_date, modified_id,
+			array('banner_filename, banner_desc, user_id, creation_date, creation_id, modified_date, modified_id,
 				linked_i, permanent_i, old_banner_filename_i', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('banner_id, publish, cat_id, user_id, title, url, banner_filename, published_date, expired_date, creation_date, creation_id, modified_date, modified_id,
+			array('banner_id, publish, cat_id, user_id, title, url, banner_filename, banner_desc, published_date, expired_date, creation_date, creation_id, modified_date, modified_id,
 				creation_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
@@ -136,6 +137,7 @@ class Banners extends CActiveRecord
 			'title' => Yii::t('attribute', 'Title'),
 			'url' => Yii::t('attribute', 'Banner Link'),
 			'banner_filename' => Yii::t('attribute', 'Banner (File)'),
+			'banner_desc' => Yii::t('attribute', 'Description'),
 			'published_date' => Yii::t('attribute', 'Published Date'),
 			'expired_date' => Yii::t('attribute', 'Expired Date'),
 			'creation_date' => Yii::t('attribute', 'Creation Date'),
@@ -202,6 +204,7 @@ class Banners extends CActiveRecord
 		$criteria->compare('t.title',$this->title,true);
 		$criteria->compare('t.url',$this->url,true);
 		$criteria->compare('t.banner_filename',$this->banner_filename,true);
+		$criteria->compare('t.banner_desc',$this->banner_desc,true);
 		if($this->published_date != null && !in_array($this->published_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.published_date)',date('Y-m-d', strtotime($this->published_date)));
 		if($this->expired_date != null && !in_array($this->expired_date, array('0000-00-00 00:00:00', '0000-00-00')))
@@ -252,6 +255,7 @@ class Banners extends CActiveRecord
 			$this->defaultColumns[] = 'title';
 			$this->defaultColumns[] = 'url';
 			$this->defaultColumns[] = 'banner_filename';
+			$this->defaultColumns[] = 'banner_desc';
 			$this->defaultColumns[] = 'published_date';
 			$this->defaultColumns[] = 'expired_date';
 			$this->defaultColumns[] = 'creation_date';
