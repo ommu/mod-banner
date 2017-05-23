@@ -31,12 +31,19 @@ class SiteController extends Controller
 	 */
 	//public $layout='//layouts/column2';
 	public $defaultAction = 'index';
+	
+	public $permission;
 
 	/**
 	 * Initialize admin page theme
 	 */
 	public function init() 
 	{
+		$this->permission = 0;
+		$permission = BannerSetting::getInfo('permission');
+		if($permission == 1 || ($permission == 0 && !Yii::app()->user->isGuest))
+			$this->permission = 1;
+			
 		$arrThemes = Utility::getCurrentTemplate('public');
 		Yii::app()->theme = $arrThemes['folder'];
 		$this->layout = $arrThemes['layout'];
@@ -75,12 +82,13 @@ class SiteController extends Controller
 	 */
 	public function actionIndex() 
 	{
-		$setting = Banners::model()->findByPk(1,array(
-			'select' => 'meta_description, meta_keyword, public_access',
-		));
+		$siteType = OmmuSettings::getInfo('site_type');		
+		if($this->permission == 0)
+			$this->redirect($siteType == 0 ? Yii::app()->createUrl('site/index') : Yii::app()->createUrl('site/login'));
 		
-		if($setting->public_access == 0)
-			$this->redirect(Yii::app()->createUrl('site/index'));
+		$setting = BannerSetting::model()->findByPk(1,array(
+			'select' => 'meta_description, meta_keyword',
+		));
 
 		$criteria=new CDbCriteria;
 		$criteria->condition = 'publish = :publish';
@@ -107,13 +115,14 @@ class SiteController extends Controller
 	 * @param integer $id the ID of the model to be displayed
 	 */
 	public function actionView($id) 
-	{		
-		$setting = BannerSetting::model()->findByPk(1,array(
-			'select' => 'meta_keyword, public_access',
-		));
+	{
+		$siteType = OmmuSettings::getInfo('site_type');		
+		if($this->permission == 0)
+			$this->redirect($siteType == 0 ? Yii::app()->createUrl('site/index') : Yii::app()->createUrl('site/login'));
 		
-		if($setting->public_access == 0)
-			$this->redirect(Yii::app()->createUrl('site/index'));
+		$setting = BannerSetting::model()->findByPk(1,array(
+			'select' => 'meta_keyword',
+		));
 
 		$model=$this->loadModel($id);
 		BannerViews::insertView($model->banner_id);
