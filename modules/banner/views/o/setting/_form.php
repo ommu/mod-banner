@@ -12,6 +12,17 @@
  * @contact (+62)856-299-4114
  *
  */
+	
+	$cs = Yii::app()->getClientScript();
+$js=<<<EOP
+	$('input[name="BannerSetting[banner_validation]"]').on('change', function() {
+		var id = $(this).val();
+		if(id == '1') {
+			$('input[name="BannerSetting[banner_resize]"][value="0"]').prop('checked', true);
+		}
+	});
+EOP;
+	$cs->registerScript('validation', $js, CClientScript::POS_END);
 ?>
 
 <?php $form=$this->beginWidget('application.components.system.OActiveForm', array(
