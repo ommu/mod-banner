@@ -72,7 +72,7 @@ EOP;
 		</div>
 	</div>
 
-	<div id="url" class="clearfix">
+	<div class="clearfix">
 		<?php echo $form->labelEx($model,'banner_desc'); ?>
 		<div class="desc">
 			<?php echo $form->textArea($model,'banner_desc',array('class'=>'span-10 smaller', 'rows'=>6, 'cols'=>50)); ?>
