@@ -24,7 +24,6 @@
 		'banner_id',
 		'publish',
 		'cat_id',
-		'user_id',
 		'title',
 		'url',
 		'banner_filename',

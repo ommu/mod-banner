@@ -35,11 +35,6 @@
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('user_id'); ?><br/>
-			<?php echo $form->textField($model,'user_id',array('size'=>11,'maxlength'=>11)); ?>
-		</li>
-
-		<li>
 			<?php echo $model->getAttributeLabel('title'); ?><br/>
 			<?php echo $form->textField($model,'title',array('size'=>60,'maxlength'=>64)); ?>
 		</li>
@@ -55,6 +50,11 @@
 		</li>
 
 		<li>
+			<?php echo $model->getAttributeLabel('banner_desc'); ?><br/>
+			<?php echo $form->textArea($model,'banner_desc',array('rows'=>6, 'cols'=>50)); ?>
+		</li>
+
+		<li>
 			<?php echo $model->getAttributeLabel('published_date'); ?><br/>
 			<?php echo $form->textField($model,'published_date'); ?>
 		</li>
@@ -62,11 +62,6 @@
 		<li>
 			<?php echo $model->getAttributeLabel('expired_date'); ?><br/>
 			<?php echo $form->textField($model,'expired_date'); ?>
-		</li>
-
-		<li>
-			<?php echo $model->getAttributeLabel('view'); ?><br/>
-			<?php echo $form->textField($model,'view'); ?>
 		</li>
 
 		<li>
@@ -88,6 +83,10 @@
 			<?php echo $model->getAttributeLabel('modified_id'); ?><br/>
 			<?php echo $form->textField($model,'modified_id',array('size'=>11,'maxlength'=>11)); ?>
 		</li>
+
+		<li>
+			<?php echo $model->getAttributeLabel('slug'); ?><br/>
+			<?php echo $form->textField($model,'slug'); ?>
 
 		<li class="submit">
 			<?php echo CHtml::submitButton(Yii::t('phrase', 'Search')); ?>

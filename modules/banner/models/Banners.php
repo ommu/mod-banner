@@ -25,7 +25,6 @@
  * @property string $banner_id
  * @property integer $publish
  * @property integer $cat_id
- * @property string $user_id
  * @property string $title
  * @property string $url
  * @property string $banner_filename
@@ -96,13 +95,13 @@ class Banners extends CActiveRecord
 			array('cat_id, title, url, published_date, expired_date', 'required'),
 			array('publish, cat_id,
 				linked_i, permanent_i', 'numerical', 'integerOnly'=>true),
-			array('user_id, creation_id, modified_id', 'length', 'max'=>11),
+			array('creation_id, modified_id', 'length', 'max'=>11),
 			array('title', 'length', 'max'=>64),
-			array('banner_filename, banner_desc, user_id, creation_date, creation_id, modified_date, modified_id,
+			array('banner_filename, banner_desc, creation_date, creation_id, modified_date, modified_id,
 				linked_i, permanent_i, old_banner_filename_i', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('banner_id, publish, cat_id, user_id, title, url, banner_filename, banner_desc, published_date, expired_date, creation_date, creation_id, modified_date, modified_id,
+			array('banner_id, publish, cat_id, title, url, banner_filename, banner_desc, published_date, expired_date, creation_date, creation_id, modified_date, modified_id,
 				creation_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
@@ -133,7 +132,6 @@ class Banners extends CActiveRecord
 			'banner_id' => Yii::t('attribute', 'Banner'),
 			'publish' => Yii::t('attribute', 'Publish'),
 			'cat_id' => Yii::t('attribute', 'Category'),
-			'user_id' => Yii::t('attribute', 'User'),
 			'title' => Yii::t('attribute', 'Title'),
 			'url' => Yii::t('attribute', 'Banner Link'),
 			'banner_filename' => Yii::t('attribute', 'Banner (File)'),
@@ -197,10 +195,6 @@ class Banners extends CActiveRecord
 			$criteria->compare('t.cat_id',$_GET['category']);
 		else
 			$criteria->compare('t.cat_id',$this->cat_id);
-		if(isset($_GET['user']))
-			$criteria->compare('t.user_id',$_GET['user']);
-		else
-			$criteria->compare('t.user_id',$this->user_id);
 		$criteria->compare('t.title',$this->title,true);
 		$criteria->compare('t.url',$this->url,true);
 		$criteria->compare('t.banner_filename',$this->banner_filename,true);
@@ -251,7 +245,6 @@ class Banners extends CActiveRecord
 			//$this->defaultColumns[] = 'banner_id';
 			$this->defaultColumns[] = 'publish';
 			$this->defaultColumns[] = 'cat_id';
-			$this->defaultColumns[] = 'user_id';
 			$this->defaultColumns[] = 'title';
 			$this->defaultColumns[] = 'url';
 			$this->defaultColumns[] = 'banner_filename';
@@ -466,7 +459,7 @@ class Banners extends CActiveRecord
 		
 		if(parent::beforeValidate()) {	
 			if($this->isNewRecord)
-				$this->user_id = Yii::app()->user->id;		
+				$this->creation_id = Yii::app()->user->id;		
 			else
 				$this->modified_id = Yii::app()->user->id;
 			
