@@ -37,11 +37,13 @@ content_menu	:
 # controller o/admin
 	- urlTitle: Add Banner
 		urlRules: {banner, o/admin, manage, siteType: "0,1", userLevel: "1,2"}
-		urlPath: {url: add, attr: -, icon: -}
-		
+		urlPath: {url: add, attr: -, icon: -}		
 	- urlTitle: Back to Manage
 		urlRules: {banner, o/admin, "add,edit", siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: manage, attr: -, icon: -}
+	- urlTitle: Download Manual Book
+		urlRules: {banner, o/admin, manage, siteType: "0,1", userLevel: "1,2"}
+		urlPath: {url: o/setting/manual, attr: -, icon: -}
 
 # controller o/category
 	- urlTitle: Add Category
