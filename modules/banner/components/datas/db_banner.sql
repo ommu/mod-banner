@@ -79,7 +79,6 @@ CREATE TABLE `ommu_banner_setting` (
   `banner_validation` tinyint(1) NOT NULL,
   `banner_resize` tinyint(1) NOT NULL,
   `banner_file_type` text NOT NULL,
-  `public_access` tinyint(1) NOT NULL DEFAULT '0',
   `modified_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'trigger',
   `modified_id` int(11) unsigned NOT NULL,
   PRIMARY KEY (`id`)
@@ -123,7 +122,6 @@ CREATE TABLE `ommu_banners` (
   `banner_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `publish` tinyint(1) NOT NULL DEFAULT '1',
   `cat_id` tinyint(3) unsigned NOT NULL,
-  `user_id` int(11) unsigned NOT NULL,
   `title` varchar(64) NOT NULL,
   `url` text NOT NULL,
   `banner_filename` text NOT NULL,
@@ -218,19 +216,6 @@ DELIMITER ;
 
 DELIMITER $$
 
-/*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `bannerBeforeInsert` */$$
-
-/*!50003 CREATE */ /*!50017 DEFINER = 'root'@'localhost' */ /*!50003 TRIGGER `bannerBeforeInsert` BEFORE INSERT ON `ommu_banners` FOR EACH ROW BEGIN
-	SET NEW.creation_id = NEW.user_id;	
-    END */$$
-
-
-DELIMITER ;
-
-/* Trigger structure for table `ommu_banners` */
-
-DELIMITER $$
-
 /*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `bannerBeforeUpdate` */$$
 
 /*!50003 CREATE */ /*!50017 DEFINER = 'root'@'localhost' */ /*!50003 TRIGGER `bannerBeforeUpdate` BEFORE UPDATE ON `ommu_banners` FOR EACH ROW BEGIN
@@ -241,9 +226,6 @@ DELIMITER $$
 		SET column_update_count = column_update_count + 1;
 	END IF;	
 	IF (NEW.cat_id <> OLD.cat_id) THEN
-		SET column_update_count = column_update_count + 1;
-	END IF;	
-	IF (NEW.user_id <> OLD.user_id) THEN
 		SET column_update_count = column_update_count + 1;
 	END IF;	
 	IF (NEW.title <> OLD.title) THEN
