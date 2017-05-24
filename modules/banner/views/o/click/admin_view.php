@@ -28,12 +28,16 @@
 				'value'=>$model->click_id,
 			),
 			array(
+				'name'=>'category_search',
+				'value'=>Phrase::trans($model->banner->category->name),
+			),
+			array(
 				'name'=>'banner_id',
-				'value'=>$model->banner_id ? $model->banner->title : '-',
+				'value'=>$model->banner->title ? $model->banner->title : '-',
 			),
 			array(
 				'name'=>'user_id',
-				'value'=>$model->user_id ? $model->user->displayname : '-',
+				'value'=>$model->user->displayname ? $model->user->displayname : '-',
 			),
 			array(
 				'name'=>'clicks',
