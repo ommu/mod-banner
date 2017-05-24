@@ -302,7 +302,7 @@ class BannerClicks extends CActiveRecord
 		$findClick = self::model()->find($criteria);
 		
 		if($findClick != null)
-			self::model()->updateByPk($findClick->click_id, array('clicks'=>$findClick->clicks + 1));
+			self::model()->updateByPk($findClick->click_id, array('clicks'=>$findClick->clicks + 1, 'click_ip'=>$_SERVER['REMOTE_ADDR']));
 		
 		else {
 			$click=new BannerClicks;

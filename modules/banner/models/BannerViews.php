@@ -302,7 +302,7 @@ class BannerViews extends CActiveRecord
 		$findView = self::model()->find($criteria);
 		
 		if($findView != null)
-			self::model()->updateByPk($findView->view_id, array('views'=>$findView->views + 1));
+			self::model()->updateByPk($findView->view_id, array('views'=>$findView->views + 1, 'view_ip'=>$_SERVER['REMOTE_ADDR']));
 		
 		else {
 			$view=new BannerViews;
