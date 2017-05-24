@@ -34,6 +34,11 @@
 class BannerViewDetail extends CActiveRecord
 {
 	public $defaultColumns = array();
+	
+	// Variable Search
+	public $category_search;
+	public $banner_search;
+	public $user_search;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -68,7 +73,8 @@ class BannerViewDetail extends CActiveRecord
 			array('view_date', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, view_id, view_date, view_ip', 'safe', 'on'=>'search'),
+			array('id, view_id, view_date, view_ip,
+				category_search, banner_search, user_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -80,7 +86,7 @@ class BannerViewDetail extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'view' => array(self::BELONGS_TO, 'BannerViewDetail', 'view_id'),
+			'view' => array(self::BELONGS_TO, 'BannerViews', 'view_id'),
 		);
 	}
 
@@ -94,6 +100,9 @@ class BannerViewDetail extends CActiveRecord
 			'view_id' => Yii::t('attribute', 'View'),
 			'view_date' => Yii::t('attribute', 'View Date'),
 			'view_ip' => Yii::t('attribute', 'View Ip'),
+			'category_search' => Yii::t('attribute', 'Category'),
+			'banner_search' => Yii::t('attribute', 'Banner'),
+			'user_search' => Yii::t('attribute', 'User'),
 		);
 		/*
 			'ID' => 'ID',
@@ -121,6 +130,22 @@ class BannerViewDetail extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
+		
+		// Custom Search
+		$criteria->with = array(
+			'view' => array(
+				'alias'=>'view',
+				'select'=>'banner_id, user_id'
+			),
+			'view.banner' => array(
+				'alias'=>'view_banner',
+				'select'=>'cat_id, title'
+			),
+			'view.user' => array(
+				'alias'=>'view_user',
+				'select'=>'displayname'
+			),
+		);
 
 		$criteria->compare('t.id',strtolower($this->id),true);
 		if(isset($_GET['view']))
@@ -130,6 +155,10 @@ class BannerViewDetail extends CActiveRecord
 		if($this->view_date != null && !in_array($this->view_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.view_date)',date('Y-m-d', strtotime($this->view_date)));
 		$criteria->compare('t.view_ip',strtolower($this->view_ip),true);
+		
+		$criteria->compare('view_banner.cat_id',$this->category_search);
+		$criteria->compare('view_banner.title',strtolower($this->banner_search), true);
+		$criteria->compare('view_user.displayname',strtolower($this->user_search), true);
 
 		if(!isset($_GET['BannerViewDetail_sort']))
 			$criteria->order = 't.id DESC';
@@ -178,8 +207,22 @@ class BannerViewDetail extends CActiveRecord
 				'header' => 'No',
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
-			if(!isset($_GET['view']))
-				$this->defaultColumns[] = 'view_id';
+			if(!isset($_GET['view'])) {
+				$this->defaultColumns[] = array(
+					'name' => 'category_search',
+					'value' => 'Phrase::trans($data->view->banner->category->name)',
+					'filter'=> BannerCategory::getCategory(),
+					'type' => 'raw',
+				);
+				$this->defaultColumns[] = array(
+					'name' => 'banner_search',
+					'value' => '$data->view->banner->title',
+				);
+				$this->defaultColumns[] = array(
+					'name' => 'user_search',
+					'value' => '$data->view->user->displayname ? $data->view->user->displayname : \'-\'',
+				);
+			}
 			$this->defaultColumns[] = array(
 				'name' => 'view_date',
 				'value' => 'Utility::dateFormat($data->view_date, true)',

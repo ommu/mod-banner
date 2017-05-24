@@ -126,7 +126,7 @@ class AdminController extends Controller
 		}
 		$columns = $model->getGridColumn($columnTemp);
 
-		$this->pageTitle = Yii::t('phrase', 'Manage Banner');
+		$this->pageTitle = Yii::t('phrase', 'Banners');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_manage',array(
@@ -199,7 +199,7 @@ class AdminController extends Controller
 			}
 		}
 
-		$this->pageTitle = Yii::t('phrase', 'Update Banner').': '.$model->title;
+		$this->pageTitle = Yii::t('phrase', 'Update Banner: {title}', array('{title}'=>$model->title));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_edit',array(
@@ -216,7 +216,7 @@ class AdminController extends Controller
 	{
 		$model=$this->loadModel($id);
 
-		$this->pageTitle = 'View Banners: '.$model->title;
+		$this->pageTitle = Yii::t('phrase', 'View Banner: {title}', array('{title}'=>$model->title));		
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_view',array(
@@ -287,7 +287,7 @@ class AdminController extends Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 350;
 
-			$this->pageTitle = Yii::t('phrase', 'Delete Banner').': '.$model->title;
+			$this->pageTitle = Yii::t('phrase', 'Delete Banner: {title}', array('{title}'=>$model->title));		
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_delete');
@@ -310,6 +310,7 @@ class AdminController extends Controller
 			$title = Yii::t('phrase', 'Publish');
 			$replace = 1;
 		}
+		$pageTitle = Yii::t('phrase', '{title}: {banner_title}', array('{title}'=>$title, '{banner_title}'=>$model->title));
 
 		if(Yii::app()->request->isPostRequest) {
 			// we only allow deletion via POST request
@@ -332,7 +333,7 @@ class AdminController extends Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 350;
 
-			$this->pageTitle = $title;
+			$this->pageTitle = $pageTitle;
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_publish',array(

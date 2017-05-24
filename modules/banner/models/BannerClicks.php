@@ -39,6 +39,7 @@ class BannerClicks extends CActiveRecord
 	public $defaultColumns = array();
 	
 	// Variable Search
+	public $category_search;
 	public $banner_search;
 	public $user_search;
 
@@ -76,7 +77,7 @@ class BannerClicks extends CActiveRecord
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('click_id, banner_id, user_id, clicks, click_date, click_ip,
-				banner_search, user_search', 'safe', 'on'=>'search'),
+				category_search, banner_search, user_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -88,9 +89,9 @@ class BannerClicks extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'details' => array(self::HAS_MANY, 'BannerClickDetail', 'click_id'),
 			'banner' => array(self::BELONGS_TO, 'Banners', 'banner_id'),
 			'user' => array(self::BELONGS_TO, 'Users', 'user_id'),
+			'details' => array(self::HAS_MANY, 'BannerClickDetail', 'click_id'),
 		);
 	}
 
@@ -106,6 +107,7 @@ class BannerClicks extends CActiveRecord
 			'clicks' => Yii::t('attribute', 'Clicks'),
 			'click_date' => Yii::t('attribute', 'Click Date'),
 			'click_ip' => Yii::t('attribute', 'Click Ip'),
+			'category_search' => Yii::t('attribute', 'Category'),
 			'banner_search' => Yii::t('attribute', 'Banner'),
 			'user_search' => Yii::t('attribute', 'User'),
 		);
@@ -142,7 +144,7 @@ class BannerClicks extends CActiveRecord
 		$criteria->with = array(
 			'banner' => array(
 				'alias'=>'banner',
-				'select'=>'title'
+				'select'=>'cat_id, title'
 			),
 			'user' => array(
 				'alias'=>'user',
@@ -164,6 +166,7 @@ class BannerClicks extends CActiveRecord
 			$criteria->compare('date(t.click_date)',date('Y-m-d', strtotime($this->click_date)));
 		$criteria->compare('t.click_ip',strtolower($this->click_ip),true);
 		
+		$criteria->compare('banner.cat_id',$this->category_search);
 		$criteria->compare('banner.title',strtolower($this->banner_search), true);
 		$criteria->compare('user.displayname',strtolower($this->user_search), true);
 
@@ -218,6 +221,12 @@ class BannerClicks extends CActiveRecord
 			);
 			if(!isset($_GET['banner'])) {
 				$this->defaultColumns[] = array(
+					'name' => 'category_search',
+					'value' => 'Phrase::trans($data->banner->category->name)',
+					'filter'=> BannerCategory::getCategory(),
+					'type' => 'raw',
+				);
+				$this->defaultColumns[] = array(
 					'name' => 'banner_search',
 					'value' => '$data->banner->title',
 				);
@@ -232,7 +241,7 @@ class BannerClicks extends CActiveRecord
 				'name' => 'clicks',
 				'value' => 'CHtml::link($data->clicks, Yii::app()->controller->createUrl("o/clickdetail/manage",array(\'click\'=>$data->click_id)))',
 				'htmlOptions' => array(
-					//'class' => 'center',
+					'class' => 'center',
 				),
 				'type' => 'raw',
 			);

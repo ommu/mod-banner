@@ -103,8 +103,14 @@ class ClickdetailController extends Controller
 	/**
 	 * Manages all models.
 	 */
-	public function actionManage() 
+	public function actionManage($click=null)
 	{
+		$pageTitle = Yii::t('phrase', 'Data Banner Clicks');
+		if($click != null) {
+			$data = BannerClicks::model()->findByPk($click);
+			$pageTitle = Yii::t('phrase', 'Data Banner Clicks: {data}', array ('{data}'=>$data->banner->title.' ('.Phrase::trans($data->banner->category->name).')'));
+		}
+		
 		$model=new BannerClickDetail('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['BannerClickDetail'])) {
@@ -121,7 +127,7 @@ class ClickdetailController extends Controller
 		}
 		$columns = $model->getGridColumn($columnTemp);
 
-		$this->pageTitle = Yii::t('phrase', 'Banner Click Details Manage');
+		$this->pageTitle = $pageTitle;
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('/o/click_detail/admin_manage',array(

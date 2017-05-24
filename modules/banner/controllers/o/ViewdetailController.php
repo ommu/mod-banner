@@ -103,8 +103,14 @@ class ViewdetailController extends Controller
 	/**
 	 * Manages all models.
 	 */
-	public function actionManage() 
+	public function actionManage($view=null) 
 	{
+		$pageTitle = Yii::t('phrase', 'Data Banner Views');
+		if($view != null) {
+			$data = BannerViews::model()->findByPk($view);
+			$pageTitle = Yii::t('phrase', 'Data Banner Views: {data}', array ('{data}'=>$data->banner->title.' ('.Phrase::trans($data->banner->category->name).')'));
+		}
+		
 		$model=new BannerViewDetail('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['BannerViewDetail'])) {
@@ -121,7 +127,7 @@ class ViewdetailController extends Controller
 		}
 		$columns = $model->getGridColumn($columnTemp);
 
-		$this->pageTitle = Yii::t('phrase', 'Banner View Details Manage');
+		$this->pageTitle = $pageTitle;
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('/o/view_detail/admin_manage',array(

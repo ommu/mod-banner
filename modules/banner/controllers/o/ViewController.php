@@ -105,8 +105,14 @@ class ViewController extends Controller
 	/**
 	 * Manages all models.
 	 */
-	public function actionManage() 
+	public function actionManage($banner=null) 
 	{
+		$pageTitle = Yii::t('phrase', 'Banner Views');
+		if($banner != null) {
+			$data = Banners::model()->findByPk($banner);
+			$pageTitle = Yii::t('phrase', 'Banner Views: {data}', array ('{data}'=>$data->title.' ('.Phrase::trans($data->category->name).')'));
+		}
+		
 		$model=new BannerViews('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['BannerViews'])) {
@@ -123,7 +129,7 @@ class ViewController extends Controller
 		}
 		$columns = $model->getGridColumn($columnTemp);
 
-		$this->pageTitle = Yii::t('phrase', 'Banner Views Manage');
+		$this->pageTitle = $pageTitle;
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_manage',array(
@@ -143,7 +149,7 @@ class ViewController extends Controller
 		$this->dialogDetail = true;
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 600;
-		$this->pageTitle = Yii::t('phrase', 'View Banner Views');
+		$this->pageTitle = Yii::t('phrase', 'View Banner View: {data}', array ('{data}'=>$model->banner->title.' ('.Phrase::trans($model->banner->category->name).')'));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_view',array(
@@ -178,7 +184,7 @@ class ViewController extends Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 350;
 
-			$this->pageTitle = Yii::t('phrase', 'BannerViews Delete.');
+			$this->pageTitle = Yii::t('phrase', 'Delete Banner View: {data}', array ('{data}'=>$model->banner->title.' ('.Phrase::trans($model->banner->category->name).')'));
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_delete');

@@ -34,6 +34,11 @@
 class BannerClickDetail extends CActiveRecord
 {
 	public $defaultColumns = array();
+	
+	// Variable Search
+	public $category_search;
+	public $banner_search;
+	public $user_search;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -68,7 +73,8 @@ class BannerClickDetail extends CActiveRecord
 			array('click_date', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, click_id, click_date, click_ip', 'safe', 'on'=>'search'),
+			array('id, click_id, click_date, click_ip,
+				category_search, banner_search, user_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -94,6 +100,9 @@ class BannerClickDetail extends CActiveRecord
 			'click_id' => Yii::t('attribute', 'Click'),
 			'click_date' => Yii::t('attribute', 'Click Date'),
 			'click_ip' => Yii::t('attribute', 'Click Ip'),
+			'category_search' => Yii::t('attribute', 'Category'),
+			'banner_search' => Yii::t('attribute', 'Banner'),
+			'user_search' => Yii::t('attribute', 'User'),
 		);
 		/*
 			'ID' => 'ID',
@@ -121,6 +130,22 @@ class BannerClickDetail extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
+		
+		// Custom Search
+		$criteria->with = array(
+			'click' => array(
+				'alias'=>'click',
+				'select'=>'banner_id, user_id'
+			),
+			'click.banner' => array(
+				'alias'=>'click_banner',
+				'select'=>'cat_id, title'
+			),
+			'click.user' => array(
+				'alias'=>'click_user',
+				'select'=>'displayname'
+			),
+		);
 
 		$criteria->compare('t.id',strtolower($this->id),true);
 		if(isset($_GET['click']))
@@ -130,6 +155,10 @@ class BannerClickDetail extends CActiveRecord
 		if($this->click_date != null && !in_array($this->click_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.click_date)',date('Y-m-d', strtotime($this->click_date)));
 		$criteria->compare('t.click_ip',strtolower($this->click_ip),true);
+		
+		$criteria->compare('click_banner.cat_id',$this->category_search);
+		$criteria->compare('click_banner.title',strtolower($this->banner_search), true);
+		$criteria->compare('click_user.displayname',strtolower($this->user_search), true);
 
 		if(!isset($_GET['BannerClickDetail_sort']))
 			$criteria->order = 't.id DESC';
@@ -178,8 +207,22 @@ class BannerClickDetail extends CActiveRecord
 				'header' => 'No',
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
-			if(!isset($_GET['click']))
-				$this->defaultColumns[] = 'click_id';
+			if(!isset($_GET['click'])) {
+				$this->defaultColumns[] = array(
+					'name' => 'category_search',
+					'value' => 'Phrase::trans($data->click->banner->category->name)',
+					'filter'=> BannerCategory::getCategory(),
+					'type' => 'raw',
+				);
+				$this->defaultColumns[] = array(
+					'name' => 'banner_search',
+					'value' => '$data->click->banner->title',
+				);
+				$this->defaultColumns[] = array(
+					'name' => 'user_search',
+					'value' => '$data->click->user->displayname ? $data->click->user->displayname : \'-\'',
+				);			
+			}
 			$this->defaultColumns[] = array(
 				'name' => 'click_date',
 				'value' => 'Utility::dateFormat($data->click_date, true)',
