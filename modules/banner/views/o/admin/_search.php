@@ -21,7 +21,7 @@
 	<ul>
 		<li>
 			<?php echo $model->getAttributeLabel('banner_id'); ?><br/>
-			<?php echo $form->textField($model,'banner_id',array('size'=>11,'maxlength'=>11)); ?>
+			<?php echo $form->textField($model,'banner_id'); ?>
 		</li>
 
 		<li>
@@ -36,22 +36,22 @@
 
 		<li>
 			<?php echo $model->getAttributeLabel('title'); ?><br/>
-			<?php echo $form->textField($model,'title',array('size'=>60,'maxlength'=>64)); ?>
+			<?php echo $form->textField($model,'title'); ?>
 		</li>
 
 		<li>
 			<?php echo $model->getAttributeLabel('url'); ?><br/>
-			<?php echo $form->textArea($model,'url',array('rows'=>6, 'cols'=>50)); ?>
+			<?php echo $form->textArea($model,'url'); ?>
 		</li>
 
 		<li>
 			<?php echo $model->getAttributeLabel('banner_filename'); ?><br/>
-			<?php echo $form->textField($model,'banner_filename',array('size'=>60,'maxlength'=>128)); ?>
+			<?php echo $form->textField($model,'banner_filename'); ?>
 		</li>
 
 		<li>
 			<?php echo $model->getAttributeLabel('banner_desc'); ?><br/>
-			<?php echo $form->textArea($model,'banner_desc',array('rows'=>6, 'cols'=>50)); ?>
+			<?php echo $form->textArea($model,'banner_desc'); ?>
 		</li>
 
 		<li>
@@ -71,7 +71,7 @@
 
 		<li>
 			<?php echo $model->getAttributeLabel('creation_id'); ?><br/>
-			<?php echo $form->textField($model,'creation_id',array('size'=>11,'maxlength'=>11)); ?>
+			<?php echo $form->textField($model,'creation_id'); ?>
 		</li>
 
 		<li>
@@ -81,7 +81,7 @@
 
 		<li>
 			<?php echo $model->getAttributeLabel('modified_id'); ?><br/>
-			<?php echo $form->textField($model,'modified_id',array('size'=>11,'maxlength'=>11)); ?>
+			<?php echo $form->textField($model,'modified_id'); ?>
 		</li>
 
 		<li>

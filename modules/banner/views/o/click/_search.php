@@ -22,17 +22,17 @@
 	<ul>
 		<li>
 			<?php echo $model->getAttributeLabel('click_id'); ?><br/>
-			<?php echo $form->textField($model,'click_id',array('size'=>11,'maxlength'=>11)); ?>
+			<?php echo $form->textField($model,'click_id'); ?>
 		</li>
 
 		<li>
 			<?php echo $model->getAttributeLabel('banner_id'); ?><br/>
-			<?php echo $form->textField($model,'banner_id',array('size'=>11,'maxlength'=>11)); ?>
+			<?php echo $form->textField($model,'banner_id'); ?>
 		</li>
 
 		<li>
 			<?php echo $model->getAttributeLabel('user_id'); ?><br/>
-			<?php echo $form->textField($model,'user_id',array('size'=>11,'maxlength'=>11)); ?>
+			<?php echo $form->textField($model,'user_id'); ?>
 		</li>
 
 		<li>
@@ -47,7 +47,7 @@
 
 		<li>
 			<?php echo $model->getAttributeLabel('click_ip'); ?><br/>
-			<?php echo $form->textField($model,'click_ip',array('size'=>20,'maxlength'=>20)); ?>
+			<?php echo $form->textField($model,'click_ip'); ?>
 		</li>
 
 		<li class="submit">
