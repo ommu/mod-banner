@@ -152,7 +152,7 @@ class BannerClicks extends CActiveRecord
 			),
 		);
 
-		$criteria->compare('t.click_id',strtolower($this->click_id),true);
+		$criteria->compare('t.click_id',$this->click_id);
 		if(isset($_GET['banner']))
 			$criteria->compare('t.banner_id',$_GET['banner']);
 		else

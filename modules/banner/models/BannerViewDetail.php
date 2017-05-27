@@ -147,7 +147,7 @@ class BannerViewDetail extends CActiveRecord
 			),
 		);
 
-		$criteria->compare('t.id',strtolower($this->id),true);
+		$criteria->compare('t.id',$this->id);
 		if(isset($_GET['view']))
 			$criteria->compare('t.view_id',$_GET['view']);
 		else

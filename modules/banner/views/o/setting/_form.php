@@ -37,6 +37,7 @@ EOP;
 	</div>
 	<?php //begin.Messages ?>
 
+	<h3><?php echo Yii::t('phrase', 'Public Settings');?></h3>
 	<fieldset>
 
 		<div class="clearfix">

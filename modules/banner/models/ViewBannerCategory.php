@@ -121,11 +121,11 @@ class ViewBannerCategory extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('t.cat_id',$this->cat_id);
-		$criteria->compare('t.banners',strtolower($this->banners),true);
-		$criteria->compare('t.banner_pending',strtolower($this->banner_pending),true);
-		$criteria->compare('t.banner_expired',strtolower($this->banner_expired),true);
-		$criteria->compare('t.banner_unpublish',strtolower($this->banner_unpublish),true);
-		$criteria->compare('t.banner_all',strtolower($this->banner_all),true);
+		$criteria->compare('t.banners',$this->banners);
+		$criteria->compare('t.banner_pending',$this->banner_pending);
+		$criteria->compare('t.banner_expired',$this->banner_expired);
+		$criteria->compare('t.banner_unpublish',$this->banner_unpublish);
+		$criteria->compare('t.banner_all',$this->banner_all);
 
 		if(!isset($_GET['ViewBannerCategory_sort']))
 			$criteria->order = 't.cat_id DESC';

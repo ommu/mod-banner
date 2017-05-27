@@ -68,7 +68,7 @@
 			),
 			array(
 				'name'=>'creation_id',
-				'value'=>$model->creation->displayname,
+				'value'=>$model->creation->displayname ? $model->creation->displayname : '-',
 			),
 			array(
 				'name'=>'modified_date',
@@ -76,7 +76,7 @@
 			),
 			array(
 				'name'=>'modified_id',
-				'value'=>$model->modified->displayname,
+				'value'=>$model->modified->displayname ? $model->modified->displayname : '-',
 			),
 		),
 	)); ?>

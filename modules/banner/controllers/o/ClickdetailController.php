@@ -105,10 +105,12 @@ class ClickdetailController extends Controller
 	 */
 	public function actionManage($click=null)
 	{
-		$pageTitle = Yii::t('phrase', 'Data Banner Clicks');
+		$pageTitle = Yii::t('phrase', 'Banner Clicks Data');
 		if($click != null) {
 			$data = BannerClicks::model()->findByPk($click);
-			$pageTitle = Yii::t('phrase', 'Data Banner Clicks: {data}', array ('{data}'=>$data->banner->title.' ('.Phrase::trans($data->banner->category->name).')'));
+			$pageTitle = Yii::t('phrase', 'Banner Clicks Data: {banner_title} ({category_name}) - Guest', array ('{banner_title}'=>$data->banner->title, '{category_name}'=>Phrase::trans($data->banner->category->name)));	
+			if($data->user->displayname)
+				$pageTitle = Yii::t('phrase', 'Banner Clicks Data: {banner_title} ({category_name}) - {user_displayname}', array ('{banner_title}'=>$data->banner->title, '{category_name}'=>Phrase::trans($data->banner->category->name), '{user_displayname}'=>$data->user->displayname));
 		}
 		
 		$model=new BannerClickDetail('search');

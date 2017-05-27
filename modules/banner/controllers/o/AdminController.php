@@ -108,8 +108,14 @@ class AdminController extends Controller
 	/**
 	 * Manages all models.
 	 */
-	public function actionManage() 
+	public function actionManage($category=null) 
 	{
+		$pageTitle = Yii::t('phrase', 'Banners');
+		if($category != null) {
+			$data = BannerCategory::model()->findByPk($category);
+			$pageTitle = Yii::t('phrase', 'Banners: Category {category_name}', array ('{category_name}'=>Phrase::trans($data->name)));
+		}
+		
 		$model=new Banners('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['Banners'])) {
@@ -126,7 +132,7 @@ class AdminController extends Controller
 		}
 		$columns = $model->getGridColumn($columnTemp);
 
-		$this->pageTitle = Yii::t('phrase', 'Banners');
+		$this->pageTitle = $pageTitle;
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_manage',array(
@@ -287,7 +293,7 @@ class AdminController extends Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 350;
 
-			$this->pageTitle = Yii::t('phrase', 'Delete Banner: {title}', array('{title}'=>$model->title));		
+			$this->pageTitle = Yii::t('phrase', 'Delete Banner: {title}', array('{title}'=>$model->title));
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_delete');

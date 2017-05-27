@@ -205,8 +205,8 @@ class BannerCategory extends CActiveRecord
 			$criteria->addInCondition('t.publish',array(0,1));
 			$criteria->compare('t.publish',$this->publish);
 		}
-		$criteria->compare('t.name',$this->name,true);
-		$criteria->compare('t.desc',$this->desc,true);
+		$criteria->compare('t.name',$this->name);
+		$criteria->compare('t.desc',$this->desc);
 		$criteria->compare('t.cat_code',strtolower($this->cat_code),true);
 		$criteria->compare('t.banner_size',$this->banner_size,true);
 		$criteria->compare('t.banner_limit',$this->banner_limit);

@@ -49,6 +49,8 @@ class Banners extends CActiveRecord
 	// Variable Search
 	public $creation_search;
 	public $modified_search;
+	public $view_search;
+	public $click_search;
 
 	/**
 	 * Behaviors for this model
@@ -102,7 +104,7 @@ class Banners extends CActiveRecord
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('banner_id, publish, cat_id, title, url, banner_filename, banner_desc, published_date, expired_date, creation_date, creation_id, modified_date, modified_id,
-				creation_search, modified_search', 'safe', 'on'=>'search'),
+				creation_search, modified_search, view_search, click_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -147,6 +149,8 @@ class Banners extends CActiveRecord
 			'old_banner_filename_i' => Yii::t('attribute', 'Old Media'),
 			'creation_search' => Yii::t('attribute', 'Creation'),
 			'modified_search' => Yii::t('attribute', 'Modified'),
+			'view_search' => Yii::t('attribute', 'Views'),
+			'click_search' => Yii::t('attribute', 'Clicks'),
 		);
 	}
 
@@ -170,6 +174,9 @@ class Banners extends CActiveRecord
 		
 		// Custom Search
 		$criteria->with = array(
+			'view' => array(
+				'alias'=>'view',
+			),
 			'creation' => array(
 				'alias'=>'creation',
 				'select'=>'displayname'
@@ -181,13 +188,13 @@ class Banners extends CActiveRecord
 		);
 
 		$criteria->compare('t.banner_id',$this->banner_id,true);
-		if(isset($_GET['type']) && $_GET['type'] == 'publish') {
+		if(isset($_GET['type']) && $_GET['type'] == 'publish')
 			$criteria->compare('t.publish',1);
-		} elseif(isset($_GET['type']) && $_GET['type'] == 'unpublish') {
+		elseif(isset($_GET['type']) && $_GET['type'] == 'unpublish')
 			$criteria->compare('t.publish',0);
-		} elseif(isset($_GET['type']) && $_GET['type'] == 'trash') {
+		elseif(isset($_GET['type']) && $_GET['type'] == 'trash')
 			$criteria->compare('t.publish',2);
-		} else {
+		else {
 			$criteria->addInCondition('t.publish',array(0,1));
 			$criteria->compare('t.publish',$this->publish);
 		}
@@ -195,10 +202,10 @@ class Banners extends CActiveRecord
 			$criteria->compare('t.cat_id',$_GET['category']);
 		else
 			$criteria->compare('t.cat_id',$this->cat_id);
-		$criteria->compare('t.title',$this->title,true);
-		$criteria->compare('t.url',$this->url,true);
-		$criteria->compare('t.banner_filename',$this->banner_filename,true);
-		$criteria->compare('t.banner_desc',$this->banner_desc,true);
+		$criteria->compare('t.title',strtolower($this->title),true);
+		$criteria->compare('t.url',strtolower($this->url),true);
+		$criteria->compare('t.banner_filename',strtolower($this->banner_filename),true);
+		$criteria->compare('t.banner_desc',strtolower($this->banner_desc),true);
 		if($this->published_date != null && !in_array($this->published_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.published_date)',date('Y-m-d', strtotime($this->published_date)));
 		if($this->expired_date != null && !in_array($this->expired_date, array('0000-00-00 00:00:00', '0000-00-00')))
@@ -212,6 +219,8 @@ class Banners extends CActiveRecord
 		
 		$criteria->compare('creation.displayname',strtolower($this->creation_search), true);
 		$criteria->compare('modified.displayname',strtolower($this->modified_search), true);
+		$criteria->compare('view.clicks',$this->view_search);
+		$criteria->compare('view.views',$this->click_search);
 
 		if(!isset($_GET['Banners_sort']))
 			$criteria->order = 't.banner_id DESC';
@@ -298,7 +307,7 @@ class Banners extends CActiveRecord
 			);
 			*/
 			$this->defaultColumns[] = array(
-				'header' => Yii::t('phrase', 'Views'),
+				'name' => 'view_search',
 				'value' => 'CHtml::link($data->view->views ? $data->view->views : 0, Yii::app()->controller->createUrl("o/view/manage",array(\'banner\'=>$data->banner_id)))',
 				'htmlOptions' => array(
 					'class' => 'center',
@@ -306,8 +315,8 @@ class Banners extends CActiveRecord
 				'type' => 'raw',
 			);
 			$this->defaultColumns[] = array(
-				'header' => Yii::t('phrase', 'Clicks'),
-				'value' => '$data->url != "-" ? CHtml::link($data->view->clicks ? $data->view->clicks : 0, Yii::app()->controller->createUrl("o/click/manage",array(\'banner\'=>$data->banner_id))) : "-"',
+				'name' => 'click_search',
+				'value' => '$data->url != \'-\' ? CHtml::link($data->view->clicks ? $data->view->clicks : 0, Yii::app()->controller->createUrl("o/click/manage",array(\'banner\'=>$data->banner_id))) : "-"',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),

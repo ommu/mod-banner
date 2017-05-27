@@ -120,9 +120,9 @@ class ViewBanners extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('t.banner_id',strtolower($this->banner_id),true);
-		$criteria->compare('t.clicks',strtolower($this->clicks),true);
-		$criteria->compare('t.views',strtolower($this->views),true);
+		$criteria->compare('t.banner_id',$this->banner_id);
+		$criteria->compare('t.clicks',$this->clicks);
+		$criteria->compare('t.views',$this->views);
 
 		if(!isset($_GET['ViewBanners_sort']))
 			$criteria->order = 't.banner_id DESC';

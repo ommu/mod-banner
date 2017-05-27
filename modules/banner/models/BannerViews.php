@@ -152,7 +152,7 @@ class BannerViews extends CActiveRecord
 			),
 		);
 
-		$criteria->compare('t.view_id',strtolower($this->view_id),true);
+		$criteria->compare('t.view_id', $this->view_id);
 		if(isset($_GET['banner']))
 			$criteria->compare('t.banner_id',$_GET['banner']);
 		else

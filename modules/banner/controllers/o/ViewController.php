@@ -10,7 +10,6 @@
  * TOC :
  *	Index
  *	Manage
- *	View
  *	Delete
  *
  *	LoadModel
@@ -80,7 +79,7 @@ class ViewController extends Controller
 				//'expression'=>'isset(Yii::app()->user->level) && (Yii::app()->user->level != 1)',
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('manage','view','delete'),
+				'actions'=>array('manage','delete'),
 				'users'=>array('@'),
 				'expression'=>'isset(Yii::app()->user->level) && in_array(Yii::app()->user->level, array(1,2))',
 			),
@@ -135,25 +134,6 @@ class ViewController extends Controller
 		$this->render('admin_manage',array(
 			'model'=>$model,
 			'columns' => $columns,
-		));
-	}	
-	
-	/**
-	 * Displays a particular model.
-	 * @param integer $id the ID of the model to be displayed
-	 */
-	public function actionView($id) 
-	{
-		$model=$this->loadModel($id);
-		
-		$this->dialogDetail = true;
-		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
-		$this->dialogWidth = 600;
-		$this->pageTitle = Yii::t('phrase', 'View Banner View: {data}', array ('{data}'=>$model->banner->title.' ('.Phrase::trans($model->banner->category->name).')'));
-		$this->pageDescription = '';
-		$this->pageMeta = '';
-		$this->render('admin_view',array(
-			'model'=>$model,
 		));
 	}
 
