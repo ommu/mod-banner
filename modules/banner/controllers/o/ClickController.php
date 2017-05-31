@@ -109,7 +109,7 @@ class ClickController extends Controller
 		$pageTitle = Yii::t('phrase', 'Banner Clicks');
 		if($banner != null) {
 			$data = Banners::model()->findByPk($banner);
-			$pageTitle = Yii::t('phrase', 'Banner Clicks: {data}', array ('{data}'=>$data->title.' ('.Phrase::trans($data->category->name).')'));
+			$pageTitle = Yii::t('phrase', 'Banner Clicks: {banner_title} from category {category_name}', array ('{banner_title}'=>$data->title, '{category_name}'=>Phrase::trans($data->category->name)));
 		}
 		
 		$model=new BannerClicks('search');
@@ -164,7 +164,7 @@ class ClickController extends Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 350;
 
-			$this->pageTitle = Yii::t('phrase', 'Delete Banner Click: {data}', array ('{data}'=>$model->banner->title.' ('.Phrase::trans($model->banner->category->name).')'));
+			$this->pageTitle = Yii::t('phrase', 'Delete Click: {banner_title} from category {category_name}', array ('{banner_title}'=>$model->banner->title, '{category_name}'=>Phrase::trans($model->banner->category->name)));
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_delete');

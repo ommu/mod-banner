@@ -205,7 +205,7 @@ class AdminController extends Controller
 			}
 		}
 
-		$this->pageTitle = Yii::t('phrase', 'Update Banner: {title}', array('{title}'=>$model->title));
+		$this->pageTitle = Yii::t('phrase', 'Update Banner: {banner_title}', array('{banner_title}'=>$model->title));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_edit',array(
@@ -222,7 +222,7 @@ class AdminController extends Controller
 	{
 		$model=$this->loadModel($id);
 
-		$this->pageTitle = Yii::t('phrase', 'View Banner: {title}', array('{title}'=>$model->title));		
+		$this->pageTitle = Yii::t('phrase', 'View Banner: {banner_title}', array('{banner_title}'=>$model->title));		
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_view',array(
@@ -293,7 +293,7 @@ class AdminController extends Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 350;
 
-			$this->pageTitle = Yii::t('phrase', 'Delete Banner: {title}', array('{title}'=>$model->title));
+			$this->pageTitle = Yii::t('phrase', 'Delete Banner: {banner_title}', array('{banner_title}'=>$model->title));
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_delete');
