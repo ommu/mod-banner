@@ -144,7 +144,7 @@ class BannerViews extends CActiveRecord
 		$criteria->with = array(
 			'banner' => array(
 				'alias'=>'banner',
-				'select'=>'cat_id, title'
+				'select'=>'publish, cat_id, title'
 			),
 			'user' => array(
 				'alias'=>'user',
@@ -167,8 +167,10 @@ class BannerViews extends CActiveRecord
 		$criteria->compare('t.view_ip',strtolower($this->view_ip),true);
 		
 		$criteria->compare('banner.cat_id',$this->category_search);
-		$criteria->compare('banner.title',strtolower($this->banner_search), true);
-		$criteria->compare('user.displayname',strtolower($this->user_search), true);
+		$criteria->compare('banner.title',strtolower($this->banner_search),true);
+		if(isset($_GET['banner']) && isset($_GET['publish']))
+			$criteria->compare('banner.publish',$_GET['publish']);
+		$criteria->compare('user.displayname',strtolower($this->user_search),true);
 
 		if(!isset($_GET['BannerViews_sort']))
 			$criteria->order = 't.view_id DESC';

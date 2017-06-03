@@ -187,7 +187,7 @@ class Banners extends CActiveRecord
 			),
 		);
 
-		$criteria->compare('t.banner_id',$this->banner_id,true);
+		$criteria->compare('t.banner_id',$this->banner_id);
 		if(isset($_GET['type']) && $_GET['type'] == 'publish')
 			$criteria->compare('t.publish',1);
 		elseif(isset($_GET['type']) && $_GET['type'] == 'unpublish')
@@ -212,13 +212,19 @@ class Banners extends CActiveRecord
 			$criteria->compare('date(t.expired_date)',date('Y-m-d', strtotime($this->expired_date)));
 		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.creation_date)',date('Y-m-d', strtotime($this->creation_date)));
-		$criteria->compare('t.creation_id',$this->creation_id);
+		if(isset($_GET['creation']))
+			$criteria->compare('t.creation_id',$_GET['creation']);
+		else
+			$criteria->compare('t.creation_id',$this->creation_id);
 		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.modified_date)',date('Y-m-d', strtotime($this->modified_date)));
-		$criteria->compare('t.modified_id',$this->modified_id);
+		if(isset($_GET['modified']))
+			$criteria->compare('t.modified_id',$_GET['modified']);
+		else
+			$criteria->compare('t.modified_id',$this->modified_id);
 		
-		$criteria->compare('creation.displayname',strtolower($this->creation_search), true);
-		$criteria->compare('modified.displayname',strtolower($this->modified_search), true);
+		$criteria->compare('creation.displayname',strtolower($this->creation_search),true);
+		$criteria->compare('modified.displayname',strtolower($this->modified_search),true);
 		$criteria->compare('view.clicks',$this->view_search);
 		$criteria->compare('view.views',$this->click_search);
 
@@ -532,13 +538,13 @@ class Banners extends CActiveRecord
 				
 				// Add directory
 				if(!file_exists($banner_path)) {
-					@mkdir($banner_path, 0755, true);
+					@mkdir($banner_path, 0755,true);
 
 					// Add file in directory (index.php)
 					$newFile = $banner_path.'/index.php';
 					$FileHandle = fopen($newFile, 'w');
 				} else
-					@chmod($banner_path, 0755, true);
+					@chmod($banner_path, 0755,true);
 				
 				$this->banner_filename = CUploadedFile::getInstance($this, 'banner_filename');
 				if($this->banner_filename != null) {
@@ -580,13 +586,13 @@ class Banners extends CActiveRecord
 			
 			// Add directory
 			if(!file_exists($banner_path)) {
-				@mkdir($banner_path, 0755, true);
+				@mkdir($banner_path, 0755,true);
 
 				// Add file in directory (index.php)
 				$newFile = $banner_path.'/index.php';
 				$FileHandle = fopen($newFile, 'w');
 			} else
-				@chmod($banner_path, 0755, true);
+				@chmod($banner_path, 0755,true);
 			
 			$this->banner_filename = CUploadedFile::getInstance($this, 'banner_filename');
 			if($this->banner_filename != null) {

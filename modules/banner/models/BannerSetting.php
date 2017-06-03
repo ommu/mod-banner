@@ -137,7 +137,10 @@ class BannerSetting extends CActiveRecord
 		$criteria->compare('t.banner_file_type',$this->banner_file_type,true);
 		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.modified_date)',date('Y-m-d', strtotime($this->modified_date)));
-		$criteria->compare('t.modified_id',$this->modified_id);
+		if(isset($_GET['modified']))
+			$criteria->compare('t.modified_id',$_GET['modified']);
+		else
+			$criteria->compare('t.modified_id',$this->modified_id);
 		
 		// Custom Search
 		$criteria->with = array(
@@ -146,7 +149,7 @@ class BannerSetting extends CActiveRecord
 				'select'=>'displayname',
 			),
 		);
-		$criteria->compare('modified.displayname',strtolower($this->modified_search), true);
+		$criteria->compare('modified.displayname',strtolower($this->modified_search),true);
 
 		if(!isset($_GET['BannerSetting_sort']))
 			$criteria->order = 't.id DESC';

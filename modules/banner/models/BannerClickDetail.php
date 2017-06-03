@@ -157,8 +157,8 @@ class BannerClickDetail extends CActiveRecord
 		$criteria->compare('t.click_ip',strtolower($this->click_ip),true);
 		
 		$criteria->compare('click_banner.cat_id',$this->category_search);
-		$criteria->compare('click_banner.title',strtolower($this->banner_search), true);
-		$criteria->compare('click_user.displayname',strtolower($this->user_search), true);
+		$criteria->compare('click_banner.title',strtolower($this->banner_search),true);
+		$criteria->compare('click_user.displayname',strtolower($this->user_search),true);
 
 		if(!isset($_GET['BannerClickDetail_sort']))
 			$criteria->order = 't.id DESC';

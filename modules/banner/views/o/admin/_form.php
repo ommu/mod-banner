@@ -167,7 +167,8 @@ EOP;
 		<?php echo $form->labelEx($model,'expired_date'); ?>
 		<div class="desc">
 			<?php
-			!$model->isNewRecord ? (!in_array(date('Y-m-d', strtotime($model->expired_date)), array('0000-00-00','1970-01-01')) ? $model->expired_date = date('d-m-Y', strtotime($model->expired_date)) : '') : '';
+			if(!$model->getErrors())
+				$model->expired_date = !$model->isNewRecord ? (!in_array(date('Y-m-d', strtotime($model->expired_date)), array('0000-00-00','1970-01-01')) ? date('d-m-Y', strtotime($model->expired_date)) : '00-00-0000') : '';
 			//echo $form->textField($model,'expired_date');
 			$this->widget('application.components.system.CJuiDatePicker',array(
 				'model'=>$model,
