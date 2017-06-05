@@ -474,13 +474,13 @@ class BannerCategory extends CActiveRecord
 	protected function beforeSave() 
 	{
 		$action = strtolower(Yii::app()->controller->action->id);
-		$currentAction = strtolower(Yii::app()->controller->id.'/'.Yii::app()->controller->action->id);
-		$location = Utility::getUrlTitle($currentAction);
+		$currentModule = strtolower(Yii::app()->controller->module->id.'/'.Yii::app()->controller->id);
+		$location = Utility::getUrlTitle($currentModule);
 		
 		if(parent::beforeSave()) {
 			if($this->isNewRecord || (!$this->isNewRecord && $this->name == 0)) {
 				$title=new OmmuSystemPhrase;
-				$title->location = $location.'_title_i';
+				$title->location = $location.'_title';
 				$title->en_us = $this->title_i;
 				if($title->save())
 					$this->name = $title->phrase_id;
@@ -495,7 +495,7 @@ class BannerCategory extends CActiveRecord
 			
 			if($this->isNewRecord || (!$this->isNewRecord && $this->desc == 0)) {
 				$desc=new OmmuSystemPhrase;
-				$desc->location = $location.'_description_i';
+				$desc->location = $location.'_description';
 				$desc->en_us = $this->description_i;
 				if($desc->save())
 					$this->desc = $desc->phrase_id;
