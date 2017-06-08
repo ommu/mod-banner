@@ -33,7 +33,7 @@ plugin_menu		:
 		urlRules: {siteType: "0,1", userLevel: 1}
 		urlPath: {url: o/setting/edit, attr: -, icon: -}
                 
-	- urlTitle: Download Manual Book
+	- urlTitle: Banner Manual
 		urlRules: {siteType: "0,1", userLevel: 2}
 		urlPath: {url: o/setting/manual, attr: -, icon: -}
 
@@ -54,9 +54,6 @@ content_menu	:
 	- urlTitle: Delete Banner
 		urlRules: {banner, o/admin, "edit,view", siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: delete, attr: id=$_GET*id, icon: -}
-	- urlTitle: Download Manual Book
-		urlRules: {banner, o/admin, manage, siteType: "0,1", userLevel: "1,2"}
-		urlPath: {url: o/setting/manual, attr: -, icon: -}
 
 # controller o/category
 	- urlTitle: Add Category
@@ -93,3 +90,6 @@ content_menu	:
 	- urlTitle: Add Category
 		urlRules: {banner, o/setting, edit, siteType: "0,1", userLevel: 1}
 		urlPath: {url: o/category/add, attr: -, icon: -}
+	- urlTitle: Banner Manual
+		urlRules: {banner, o/setting, edit, siteType: "0,1", userLevel: 1}
+		urlPath: {url: manual, attr: -, icon: -}
