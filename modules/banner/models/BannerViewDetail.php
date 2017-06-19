@@ -104,13 +104,6 @@ class BannerViewDetail extends CActiveRecord
 			'banner_search' => Yii::t('attribute', 'Banner'),
 			'user_search' => Yii::t('attribute', 'User'),
 		);
-		/*
-			'ID' => 'ID',
-			'View' => 'View',
-			'View Date' => 'View Date',
-			'View Ip' => 'View Ip',
-		
-		*/
 	}
 
 	/**

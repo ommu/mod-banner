@@ -95,11 +95,6 @@ class ViewBanners extends CActiveRecord
 			'clicks' => Yii::t('attribute', 'Clicks'),
 			'views' => Yii::t('attribute', 'Views'),
 		);
-		/*
-			'Banner' => 'Banner',
-			'Clicks' => 'Clicks',
-		
-		*/
 	}
 
 	/**

@@ -104,13 +104,6 @@ class BannerClickDetail extends CActiveRecord
 			'banner_search' => Yii::t('attribute', 'Banner'),
 			'user_search' => Yii::t('attribute', 'User'),
 		);
-		/*
-			'ID' => 'ID',
-			'Click' => 'Click',
-			'Click Date' => 'Click Date',
-			'Click Ip' => 'Click Ip',
-		
-		*/
 	}
 
 	/**
