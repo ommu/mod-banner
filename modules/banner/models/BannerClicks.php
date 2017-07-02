@@ -31,8 +31,8 @@
  * @property string $click_ip
  *
  * The followings are the available model relations:
- * @property OmmuBannerClickDetail[] $ommuBannerClickDetails
- * @property OmmuBanners $banner
+ * @property BannerClickDetail[] $BannerClickDetails
+ * @property Banners $banner
  */
 class BannerClicks extends CActiveRecord
 {

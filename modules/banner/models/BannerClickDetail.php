@@ -29,7 +29,7 @@
  * @property string $click_ip
  *
  * The followings are the available model relations:
- * @property OmmuBannerClicks $click
+ * @property BannerClicks $click
  */
 class BannerClickDetail extends CActiveRecord
 {

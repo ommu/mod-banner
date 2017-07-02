@@ -32,7 +32,7 @@
  *
  * The followings are the available model relations:
  * @property BannerViewDetail[] $BannerViewDetail
- * @property OmmuBanners $banner
+ * @property Banners $banner
  */
 class BannerViews extends CActiveRecord
 {
