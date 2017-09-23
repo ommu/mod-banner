@@ -1,0 +1,36 @@
+{
+	"name": "ommu/banner",
+	"description": "Banner Module for Ommu Platform",
+	"keywords": [
+		"module",
+		"banner",
+		"ommu",
+		"platform",
+		"ommu platform"
+	],
+	"homepage": "https://github.com/ommu/ommu-banner",
+	"type": "ommu-module",
+	"license": "Apache-2.0",
+	"support": {
+		"issues": "https://github.com/ommu/ommu-banner/issues",
+		"wiki": "https://github.com/ommu/ommu-banner/wiki",
+		"source": "https://github.com/ommu/ommu-banner"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/ommu/ommu-banner.git"
+	},
+	"authors": [
+		{
+			"name": "Putra Sudaryanto",
+			"email": "putra@sudaryanto.id",
+			"homepage": "https://putra.sudaryanto.id",
+			"role": "Creator"
+		}
+	],
+	"require": {
+		"php": ">=5.3.2",
+		"oomphinc/composer-installers-extender": "^1.0",
+		"yiisoft/yii": "1.1.16"
+	}
+}
