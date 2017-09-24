@@ -59,7 +59,7 @@ class Banners extends CActiveRecord
 	{
 		return array(
 			'sluggable' => array(
-				'class'=>'ext.yii-behavior-sluggable.SluggableBehavior',
+				'class'=>'application.vendors.mintao.yii-behavior-sluggable.SluggableBehavior',
 				'columns' => array('title'),
 				'unique' => true,
 				'update' => true,

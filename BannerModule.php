@@ -11,8 +11,12 @@
  *----------------------------------------------------------------------------------------------------------
  */
 
+namespace application\modules\banner;
+
 class BannerModule extends CWebModule
 {
+	public $controllerNamespace = '\application\modules\banner\controllers';
+
 	public $defaultController = 'site';
 	
 	// getAssetsUrl()
