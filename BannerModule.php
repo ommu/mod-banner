@@ -11,7 +11,12 @@
  *----------------------------------------------------------------------------------------------------------
  */
 
-class BannerModule extends CWebModule
+namespace ommu\banner;
+
+use Yii;
+use Utility;
+
+class BannerModule extends \CWebModule
 {
 	public $defaultController = 'site';
 	
