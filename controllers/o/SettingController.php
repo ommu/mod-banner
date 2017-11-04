@@ -37,6 +37,8 @@ class SettingController extends Controller
 	 */
 	public function init() 
 	{
+		print_r(Yii::app()->user);
+		echo Yii::app()->user->level;
 		if(!Yii::app()->user->isGuest) {
 			if(in_array(Yii::app()->user->level, array(1,2))) {
 				$arrThemes = Utility::getCurrentTemplate('admin');
@@ -78,6 +80,9 @@ class SettingController extends Controller
 				'users'=>array('@'),
 				'expression'=>'in_array($user->level, array(1,2))',
 			),
+			array('deny',  // deny all users
+				'users'=>array('*'),
+			),
 		);
 	}
 	
@@ -94,9 +99,6 @@ class SettingController extends Controller
 	 */
 	public function actionEdit() 
 	{
-		if(Yii::app()->user->level != 1)
-			throw new CHttpException(404, Yii::t('phrase', 'The requested page does not exist.'));
-				
 		$category=new BannerCategory('search');
 		$category->unsetAttributes();  // clear any default values
 		if(isset($_GET['BannerCategory'])) {
