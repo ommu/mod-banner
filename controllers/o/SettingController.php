@@ -37,16 +37,13 @@ class SettingController extends Controller
 	 */
 	public function init() 
 	{
-		print_r(Yii::app()->user);
-		echo Yii::app()->user->level;
 		if(!Yii::app()->user->isGuest) {
 			if(in_array(Yii::app()->user->level, array(1,2))) {
 				$arrThemes = Utility::getCurrentTemplate('admin');
 				Yii::app()->theme = $arrThemes['folder'];
 				$this->layout = $arrThemes['layout'];
 				Utility::applyViewPath(__dir__);
-			} else
-				throw new CHttpException(404, Yii::t('phrase', 'The requested page does not exist.'));
+			}
 		} else
 			$this->redirect(Yii::app()->createUrl('site/login'));
 	}
