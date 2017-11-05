@@ -66,11 +66,11 @@ content_menu	:
 		urlPath: {url: o/admin/manage, attr: -, icon: -}
 	- urlTitle: View Banner Views Data
 		urlRules: {banner, o/view, manage, siteType: "0,1", userLevel: "1,2"}
-		urlPath: {url: o/viewdetail/manage, attr: -, icon: -}
+		urlPath: {url: history/view/manage, attr: -, icon: -}
 
-# controller o/viewdetail
+# controller history/view
 	- urlTitle: Back to Banner Views
-		urlRules: {banner, o/viewdetail, manage, siteType: "0,1", userLevel: "1,2"}
+		urlRules: {banner, history/view, manage, siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: o/view/manage, attr: -, icon: -}
 
 # controller o/click
@@ -79,11 +79,11 @@ content_menu	:
 		urlPath: {url: o/admin/manage, attr: -, icon: -}
 	- urlTitle: View Banner Clicks Data
 		urlRules: {banner, o/click, manage, siteType: "0,1", userLevel: "1,2"}
-		urlPath: {url: o/clickdetail/manage, attr: -, icon: -}
+		urlPath: {url: history/click/manage, attr: -, icon: -}
 
-# controller o/clickdetail
+# controller history/click
 	- urlTitle: Back to Banner Clicks
-		urlRules: {banner, o/clickdetail, manage, siteType: "0,1", userLevel: "1,2"}
+		urlRules: {banner, history/click, manage, siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: o/click/manage, attr: -, icon: -}
 
 # controller o/setting

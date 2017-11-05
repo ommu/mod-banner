@@ -31,7 +31,7 @@
  * @property string $click_ip
  *
  * The followings are the available model relations:
- * @property BannerClickDetail[] $BannerClickDetails
+ * @property BannerClickHistory[] $BannerClickHistorys
  * @property Banners $banner
  */
 class BannerClicks extends CActiveRecord
@@ -91,7 +91,7 @@ class BannerClicks extends CActiveRecord
 		return array(
 			'banner' => array(self::BELONGS_TO, 'Banners', 'banner_id'),
 			'user' => array(self::BELONGS_TO, 'Users', 'user_id'),
-			'details' => array(self::HAS_MANY, 'BannerClickDetail', 'click_id'),
+			'details' => array(self::HAS_MANY, 'BannerClickHistory', 'click_id'),
 		);
 	}
 
@@ -232,7 +232,7 @@ class BannerClicks extends CActiveRecord
 			}
 			$this->defaultColumns[] = array(
 				'name' => 'clicks',
-				'value' => 'CHtml::link($data->clicks, Yii::app()->controller->createUrl("o/clickdetail/manage",array(\'click\'=>$data->click_id)))',
+				'value' => 'CHtml::link($data->clicks, Yii::app()->controller->createUrl("history/click/manage",array(\'click\'=>$data->click_id)))',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),

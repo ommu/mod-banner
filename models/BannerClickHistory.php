@@ -1,6 +1,6 @@
 <?php
 /**
- * BannerClickDetail
+ * BannerClickHistory
  * version: 1.3.0
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
@@ -20,9 +20,9 @@
  *
  * --------------------------------------------------------------------------------------
  *
- * This is the model class for table "ommu_banner_click_detail".
+ * This is the model class for table "ommu_banner_click_history".
  *
- * The followings are the available columns in table 'ommu_banner_click_detail':
+ * The followings are the available columns in table 'ommu_banner_click_history':
  * @property string $id
  * @property string $click_id
  * @property string $click_date
@@ -31,7 +31,7 @@
  * The followings are the available model relations:
  * @property BannerClicks $click
  */
-class BannerClickDetail extends CActiveRecord
+class BannerClickHistory extends CActiveRecord
 {
 	public $defaultColumns = array();
 	
@@ -44,7 +44,7 @@ class BannerClickDetail extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return BannerClickDetail the static model class
+	 * @return BannerClickHistory the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -56,7 +56,7 @@ class BannerClickDetail extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'ommu_banner_click_detail';
+		return 'ommu_banner_click_history';
 	}
 
 	/**
@@ -153,7 +153,7 @@ class BannerClickDetail extends CActiveRecord
 		$criteria->compare('click_banner.title',strtolower($this->banner_search),true);
 		$criteria->compare('click_user.displayname',strtolower($this->user_search),true);
 
-		if(!isset($_GET['BannerClickDetail_sort']))
+		if(!isset($_GET['BannerClickHistory_sort']))
 			$criteria->order = 't.id DESC';
 
 		return new CActiveDataProvider($this, array(

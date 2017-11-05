@@ -31,7 +31,7 @@
  * @property string $view_ip
  *
  * The followings are the available model relations:
- * @property BannerViewDetail[] $BannerViewDetail
+ * @property BannerViewHistory[] $BannerViewHistory
  * @property Banners $banner
  */
 class BannerViews extends CActiveRecord
@@ -91,7 +91,7 @@ class BannerViews extends CActiveRecord
 		return array(
 			'banner' => array(self::BELONGS_TO, 'Banners', 'banner_id'),
 			'user' => array(self::BELONGS_TO, 'Users', 'user_id'),
-			'details' => array(self::HAS_MANY, 'BannerViewDetail', 'view_id'),
+			'details' => array(self::HAS_MANY, 'BannerViewHistory', 'view_id'),
 		);
 	}
 
@@ -232,7 +232,7 @@ class BannerViews extends CActiveRecord
 			}
 			$this->defaultColumns[] = array(
 				'name' => 'views',
-				'value' => 'CHtml::link($data->views, Yii::app()->controller->createUrl("o/viewdetail/manage",array(\'view\'=>$data->view_id)))',
+				'value' => 'CHtml::link($data->views, Yii::app()->controller->createUrl("history/view/manage",array(\'view\'=>$data->view_id)))',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),

@@ -1,8 +1,8 @@
 <?php
 /**
- * Banner Click Details (banner-click-detail)
- * @var $this ClickdetailController
- * @var $model BannerClickDetail
+ * Banner View Details (banner-view-detail)
+ * @var $this ViewController
+ * @var $model BannerViewHistory
  * version: 1.3.0
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
@@ -14,7 +14,7 @@
  */
 
 	$this->breadcrumbs=array(
-		'Banner Click Details'=>array('manage'),
+		'Banner View Details'=>array('manage'),
 		'Manage',
 	);
 	$this->menu=array(
@@ -36,7 +36,7 @@
 
 <?php //begin.Search ?>
 <div class="search-form">
-<?php $this->renderPartial('/o/click_detail/_search',array(
+<?php $this->renderPartial('_search',array(
 	'model'=>$model,
 )); ?>
 </div>
@@ -44,13 +44,13 @@
 
 <?php //begin.Grid Option ?>
 <div class="grid-form">
-<?php $this->renderPartial('/o/click_detail/_option_form',array(
+<?php $this->renderPartial('_option_form',array(
 	'model'=>$model,
 )); ?>
 </div>
 <?php //end.Grid Option ?>
 
-<div id="partial-banner-click-detail">
+<div id="partial-banner-view-detail">
 	<?php //begin.Messages ?>
 	<div id="ajax-message">
 	<?php
@@ -98,7 +98,7 @@
 			*/
 
 			$this->widget('application.components.system.OGridView', array(
-				'id'=>'banner-click-detail-grid',
+				'id'=>'banner-view-detail-grid',
 				'dataProvider'=>$model->search(),
 				'filter'=>$model,
 				'afterAjaxUpdate' => 'reinstallDatePicker',

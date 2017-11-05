@@ -1,8 +1,8 @@
 <?php
 /**
  * Banner View Details (banner-view-detail)
- * @var $this ViewdetailController
- * @var $model BannerViewDetail
+ * @var $this ViewController
+ * @var $model BannerViewHistory
  * @var $form CActiveForm
  * version: 1.3.0
  *

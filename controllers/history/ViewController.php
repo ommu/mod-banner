@@ -1,8 +1,8 @@
 <?php
 /**
- * ViewdetailController
- * @var $this ViewdetailController
- * @var $model BannerViewDetail
+ * ViewController
+ * @var $this ViewController
+ * @var $model BannerViewHistory
  * @var $form CActiveForm
  * version: 1.3.0
  * Reference start
@@ -23,7 +23,7 @@
  *----------------------------------------------------------------------------------------------------------
  */
 
-class ViewdetailController extends Controller
+class ViewController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -99,10 +99,10 @@ class ViewdetailController extends Controller
 				$pageTitle = Yii::t('phrase', 'Banner Views Data: {banner_title} from category {category_name} - user {user_displayname}', array ('{banner_title}'=>$data->banner->title, '{category_name}'=>Phrase::trans($data->banner->category->name), '{user_displayname}'=>$data->user->displayname));
 		}
 		
-		$model=new BannerViewDetail('search');
+		$model=new BannerViewHistory('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['BannerViewDetail'])) {
-			$model->attributes=$_GET['BannerViewDetail'];
+		if(isset($_GET['BannerViewHistory'])) {
+			$model->attributes=$_GET['BannerViewHistory'];
 		}
 
 		$columnTemp = array();
@@ -118,7 +118,7 @@ class ViewdetailController extends Controller
 		$this->pageTitle = $pageTitle;
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('/o/view_detail/admin_manage',array(
+		$this->render('admin_manage',array(
 			'model'=>$model,
 			'columns' => $columns,
 		));
@@ -131,7 +131,7 @@ class ViewdetailController extends Controller
 	 */
 	public function loadModel($id) 
 	{
-		$model = BannerViewDetail::model()->findByPk($id);
+		$model = BannerViewHistory::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404, Yii::t('phrase', 'The requested page does not exist.'));
 		return $model;

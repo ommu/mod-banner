@@ -1,8 +1,8 @@
 <?php
 /**
  * Banner Click Details (banner-click-detail)
- * @var $this ClickdetailController
- * @var $model BannerClickDetail
+ * @var $this ClickController
+ * @var $model BannerClickHistory
  * @var $form CActiveForm
  * version: 1.3.0
  *

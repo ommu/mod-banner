@@ -1,8 +1,8 @@
 <?php
 /**
- * ClickdetailController
- * @var $this ClickdetailController
- * @var $model BannerClickDetail
+ * ClickController
+ * @var $this ClickController
+ * @var $model BannerClickHistory
  * @var $form CActiveForm
  * version: 1.3.0
  * Reference start
@@ -23,7 +23,7 @@
  *----------------------------------------------------------------------------------------------------------
  */
 
-class ClickdetailController extends Controller
+class ClickController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -99,10 +99,10 @@ class ClickdetailController extends Controller
 				$pageTitle = Yii::t('phrase', 'Banner Clicks Data: {banner_title} from category {category_name} - user {user_displayname}', array ('{banner_title}'=>$data->banner->title, '{category_name}'=>Phrase::trans($data->banner->category->name), '{user_displayname}'=>$data->user->displayname));
 		}
 		
-		$model=new BannerClickDetail('search');
+		$model=new BannerClickHistory('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['BannerClickDetail'])) {
-			$model->attributes=$_GET['BannerClickDetail'];
+		if(isset($_GET['BannerClickHistory'])) {
+			$model->attributes=$_GET['BannerClickHistory'];
 		}
 
 		$columnTemp = array();
@@ -118,7 +118,7 @@ class ClickdetailController extends Controller
 		$this->pageTitle = $pageTitle;
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('/o/click_detail/admin_manage',array(
+		$this->render('admin_manage',array(
 			'model'=>$model,
 			'columns' => $columns,
 		));
@@ -131,7 +131,7 @@ class ClickdetailController extends Controller
 	 */
 	public function loadModel($id) 
 	{
-		$model = BannerClickDetail::model()->findByPk($id);
+		$model = BannerClickHistory::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404, Yii::t('phrase', 'The requested page does not exist.'));
 		return $model;
