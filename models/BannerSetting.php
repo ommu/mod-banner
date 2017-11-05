@@ -8,17 +8,6 @@
  * @link https://github.com/ommu/mod-banner
  * @contact (+62)856-299-4114
  *
- * This is the template for generating the model class of a specified table.
- * - $this: the ModelCode object
- * - $tableName: the table name for this class (prefix is already removed if necessary)
- * - $modelClass: the model class name
- * - $columns: list of table columns (name=>CDbColumnSchema)
- * - $labels: list of attribute labels (name=>label)
- * - $rules: list of validation rules
- * - $relations: list of relations (name=>relation declaration)
- *
- * --------------------------------------------------------------------------------------
- *
  * This is the model class for table "ommu_banner_setting".
  *
  * The followings are the available columns in table 'ommu_banner_setting':
@@ -36,6 +25,8 @@
 class BannerSetting extends CActiveRecord
 {
 	public $defaultColumns = array();
+	public $templateColumns = array();
+	public $gridForbiddenColumn = array();
 	
 	// Variable Search
 	public $modified_search;
@@ -127,6 +118,14 @@ class BannerSetting extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
+		// Custom Search
+		$criteria->with = array(
+			'modified' => array(
+				'alias'=>'modified',
+				'select'=>'displayname'
+			),
+		);
+
 		$criteria->compare('t.id',$this->id);
 		$criteria->compare('t.license',$this->license,true);
 		$criteria->compare('t.permission',$this->permission);
@@ -135,20 +134,10 @@ class BannerSetting extends CActiveRecord
 		$criteria->compare('t.banner_validation',$this->banner_validation);
 		$criteria->compare('t.banner_resize',$this->banner_resize);
 		$criteria->compare('t.banner_file_type',$this->banner_file_type,true);
-		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00', '0000-00-00')))
+		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00', '1970-01-01 00:00:00')))
 			$criteria->compare('date(t.modified_date)',date('Y-m-d', strtotime($this->modified_date)));
-		if(isset($_GET['modified']))
-			$criteria->compare('t.modified_id',$_GET['modified']);
-		else
-			$criteria->compare('t.modified_id',$this->modified_id);
+		$criteria->compare('t.modified_id', isset($_GET['modified']) ? $_GET['modified'] : $this->modified_id);
 		
-		// Custom Search
-		$criteria->with = array(
-			'modified' => array(
-				'alias'=>'modified',
-				'select'=>'displayname',
-			),
-		);
 		$criteria->compare('modified.displayname',strtolower($this->modified_search),true);
 
 		if(!isset($_GET['BannerSetting_sort']))
@@ -162,73 +151,184 @@ class BannerSetting extends CActiveRecord
 		));
 	}
 
-
 	/**
-	 * Get column for CGrid View
+	 * Get kolom untuk Grid View
+	 *
+	 * @param array $columns kolom dari view
+	 * @return array dari grid yang aktif
 	 */
-	public function getGridColumn($columns=null) {
-		if($columns !== null) {
-			foreach($columns as $val) {
-				/*
-				if(trim($val) == 'enabled') {
-					$this->defaultColumns[] = array(
-						'name'  => 'enabled',
-						'value' => '$data->enabled == 1? "Ya": "Tidak"',
-					);
-				}
-				*/
-				$this->defaultColumns[] = $val;
+	public function getGridColumn($columns=null) 
+	{
+		// Jika $columns kosong maka isi defaultColumns dg templateColumns
+		if(empty($columns) || $columns == null) {
+			array_splice($this->defaultColumns, 0);
+			foreach($this->templateColumns as $key => $val) {
+				if(!in_array($key, $this->gridForbiddenColumn) && !in_array($key, $this->defaultColumns))
+					$this->defaultColumns[] = $val;
 			}
-		} else {
-			//$this->defaultColumns[] = 'id';
-			$this->defaultColumns[] = 'license';
-			$this->defaultColumns[] = 'permission';
-			$this->defaultColumns[] = 'meta_keyword';
-			$this->defaultColumns[] = 'meta_description';
-			$this->defaultColumns[] = 'banner_validation';
-			$this->defaultColumns[] = 'banner_resize';
-			$this->defaultColumns[] = 'banner_file_type';
+			return $this->defaultColumns;
 		}
+
+		foreach($columns as $val) {
+			if(!in_array($val, $this->gridForbiddenColumn) && !in_array($val, $this->defaultColumns)) {
+				$col = $this->getTemplateColumn($val);
+				if($col != null)
+					$this->defaultColumns[] = $col;
+			}
+		}
+
+		array_unshift($this->defaultColumns, array(
+			'header' => Yii::t('app', 'No'),
+			'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
+		));
+
+		array_unshift($this->defaultColumns, array(
+			'class' => 'CCheckBoxColumn',
+			'name' => 'id',
+			'selectableRows' => 2,
+			'checkBoxHtmlOptions' => array('name' => 'trash_id[]')
+		));
 
 		return $this->defaultColumns;
 	}
 
 	/**
-	 * Set default columns to display
+	 * Get kolom template berdasarkan id pengenal
+	 *
+	 * @param string $name nama pengenal
+	 * @return mixed
 	 */
-	protected function afterConstruct() {
-		if(count($this->defaultColumns) == 0) {
-			$this->defaultColumns[] = 'license';
-			$this->defaultColumns[] = 'permission';
-			$this->defaultColumns[] = 'meta_keyword';
-			$this->defaultColumns[] = 'meta_description';
-			$this->defaultColumns[] = 'banner_validation';
-			$this->defaultColumns[] = 'banner_resize';
-			$this->defaultColumns[] = 'banner_file_type';
-			$this->defaultColumns[] = 'modified_date';
-			$this->defaultColumns[] = 'modified_id';
-			$this->defaultColumns[] = array(
-				'name' => 'modified_search',
-				'value' => '$data->modified->displayname',
-			);
+	public function getTemplateColumn($name) 
+	{
+		$data = null;
+		if(trim($name) == '') return $data;
+
+		foreach($this->templateColumns as $key => $item) {
+			if($name == $key) {
+				$data = $item;
+				break;
+			}
 		}
-		parent::afterConstruct();
+		return $data;
+	}
+
+	/** 
+	 * Set default columns to display 
+	 */ 
+	protected function afterConstruct() { 
+		if(count($this->templateColumns) == 0) { 
+			$this->templateColumns['_option'] = array( 
+				'class' => 'CCheckBoxColumn', 
+				'name' => 'id', 
+				'selectableRows' => 2, 
+				'checkBoxHtmlOptions' => array('name' => 'trash_id[]') 
+			); 
+			$this->templateColumns['_no'] = array( 
+				'header' => Yii::t('app', 'No'), 
+				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1' 
+			); 
+			$this->templateColumns['license'] = array(
+				'name' => 'license',
+				'value' => '$data->license',
+			);
+			$this->templateColumns['meta_keyword'] = array(
+				'name' => 'meta_keyword',
+				'value' => '$data->meta_keyword',
+			);
+			$this->templateColumns['meta_description'] = array(
+				'name' => 'meta_description',
+				'value' => '$data->meta_description',
+			);
+			$this->templateColumns['banner_file_type'] = array(
+				'name' => 'banner_file_type',
+				'value' => '$data->banner_file_type',
+			);
+			$this->templateColumns['modified_date'] = array(
+				'name' => 'modified_date',
+				'value' => '!in_array($data->modified_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\')) ? Utility::dateFormat($data->modified_date) : \'-\'',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'filter' => Yii::app()->controller->widget('application.components.system.CJuiDatePicker', array(
+					'model'=>$this,
+					'attribute'=>'modified_date',
+					'language' => 'en',
+					'i18nScriptFile' => 'jquery-ui-i18n.min.js',
+					//'mode'=>'datetime',
+					'htmlOptions' => array(
+						'id' => 'modified_date_filter',
+					),
+					'options'=>array(
+						'showOn' => 'focus',
+						'dateFormat' => 'dd-mm-yy',
+						'showOtherMonths' => true,
+						'selectOtherMonths' => true,
+						'changeMonth' => true,
+						'changeYear' => true,
+						'showButtonPanel' => true,
+					),
+				), true),
+			);
+			if(!isset($_GET['modified'])) {
+				$this->templateColumns['modified_search'] = array(
+					'name' => 'modified_search',
+					'value' => '$data->modified->displayname',
+				);
+			}
+			$this->templateColumns['permission'] = array(
+				'name' => 'permission',
+				'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'permission\',array(\'id\'=>$data->id)), $data->permission)',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'filter'=>array(
+					1=>Yii::t('phrase', 'Yes'),
+					0=>Yii::t('phrase', 'No'),
+				),
+				'type' => 'raw',
+			);
+			$this->templateColumns['banner_validation'] = array(
+				'name' => 'banner_validation',
+				'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'banner_validation\',array(\'id\'=>$data->id)), $data->banner_validation)',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'filter'=>array(
+					1=>Yii::t('phrase', 'Yes'),
+					0=>Yii::t('phrase', 'No'),
+				),
+				'type' => 'raw',
+			);
+			$this->templateColumns['banner_resize'] = array(
+				'name' => 'banner_resize',
+				'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'banner_resize\',array(\'id\'=>$data->id)), $data->banner_resize)',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'filter'=>array(
+					1=>Yii::t('phrase', 'Yes'),
+					0=>Yii::t('phrase', 'No'),
+				),
+				'type' => 'raw',
+			);
+		} 
+		parent::afterConstruct(); 
 	}
 
 	/**
 	 * User get information
 	 */
-	public static function getInfo($id, $column=null)
+	public static function getInfo($column=null)
 	{
 		if($column != null) {
-			$model = self::model()->findByPk($id,array(
+			$model = self::model()->findByPk(1,array(
 				'select' => $column
 			));
 			return $model->$column;
 			
 		} else {
-			$model = self::model()->findByPk($id);
-			return $model;			
+			$model = self::model()->findByPk(1);
+			return $model;
 		}
 	}
 
@@ -263,7 +363,7 @@ class BannerSetting extends CActiveRecord
 	 * before validate attributes
 	 */
 	protected function beforeValidate() {
-		if(parent::beforeValidate()) {			
+		if(parent::beforeValidate()) {
 			$this->modified_id = Yii::app()->user->id;
 		}
 		return true;
