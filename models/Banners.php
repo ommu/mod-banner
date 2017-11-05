@@ -59,7 +59,7 @@ class Banners extends CActiveRecord
 	{
 		return array(
 			'sluggable' => array(
-				'class'=>'application.vendor.mintao.yii-behavior-sluggable.SluggableBehavior',
+				'class'=>'ext.yii-behavior-sluggable.SluggableBehavior',
 				'columns' => array('title'),
 				'unique' => true,
 				'update' => true,
@@ -198,10 +198,7 @@ class Banners extends CActiveRecord
 			$criteria->addInCondition('t.publish',array(0,1));
 			$criteria->compare('t.publish',$this->publish);
 		}
-		if(isset($_GET['category']))
-			$criteria->compare('t.cat_id',$_GET['category']);
-		else
-			$criteria->compare('t.cat_id',$this->cat_id);
+		$criteria->compare('t.cat_id', isset($_GET['category']) ? $_GET['category'] : $this->cat_id);
 		$criteria->compare('t.title',strtolower($this->title),true);
 		$criteria->compare('t.url',strtolower($this->url),true);
 		$criteria->compare('t.banner_filename',strtolower($this->banner_filename),true);
@@ -212,16 +209,10 @@ class Banners extends CActiveRecord
 			$criteria->compare('date(t.expired_date)',date('Y-m-d', strtotime($this->expired_date)));
 		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.creation_date)',date('Y-m-d', strtotime($this->creation_date)));
-		if(isset($_GET['creation']))
-			$criteria->compare('t.creation_id',$_GET['creation']);
-		else
-			$criteria->compare('t.creation_id',$this->creation_id);
+		$criteria->compare('t.creation_id', isset($_GET['creation']) ? $_GET['creation'] : $this->creation_id);
 		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.modified_date)',date('Y-m-d', strtotime($this->modified_date)));
-		if(isset($_GET['modified']))
-			$criteria->compare('t.modified_id',$_GET['modified']);
-		else
-			$criteria->compare('t.modified_id',$this->modified_id);
+		$criteria->compare('t.modified_id', isset($_GET['modified']) ? $_GET['modified'] : $this->modified_id);
 		
 		$criteria->compare('creation.displayname',strtolower($this->creation_search),true);
 		$criteria->compare('modified.displayname',strtolower($this->modified_search),true);
@@ -300,7 +291,7 @@ class Banners extends CActiveRecord
 			if(!isset($_GET['category'])) {
 				$this->defaultColumns[] = array(
 					'name' => 'cat_id',
-					'value' => 'Phrase::trans($data->category->name)',
+					'value' => '$data->category->title->message',
 					'filter'=> BannerCategory::getCategory(),
 					'type' => 'raw',
 				);
@@ -532,19 +523,26 @@ class Banners extends CActiveRecord
 			'select' => 'banner_validation, banner_resize',
 		));
 		
-		if(parent::beforeSave()) {			
+		if(parent::beforeSave()) {
 			if(!$this->isNewRecord) {
 				$banner_path = "public/banner";
+				$verwijderen_path = join('/', array($banner_path, 'verwijderen'));
 				
 				// Add directory
-				if(!file_exists($banner_path)) {
+				if(!file_exists($banner_path) || !file_exists($verwijderen_path)) {
 					@mkdir($banner_path, 0755,true);
+					@mkdir($verwijderen_path, 0755,true);
 
 					// Add file in directory (index.php)
 					$newFile = $banner_path.'/index.php';
 					$FileHandle = fopen($newFile, 'w');
-				} else
+					
+					$newVerwijderenFile = $verwijderen_path.'/index.php';
+					$FileHandle = fopen($newVerwijderenFile, 'w');
+				} else {
 					@chmod($banner_path, 0755,true);
+					@chmod($verwijderen_path, 0755,true);
+				}
 				
 				$this->banner_filename = CUploadedFile::getInstance($this, 'banner_filename');
 				if($this->banner_filename != null) {
@@ -583,16 +581,23 @@ class Banners extends CActiveRecord
 		
 		if($this->isNewRecord) {
 			$banner_path = "public/banner";
+			$verwijderen_path = join('/', array($banner_path, 'verwijderen'));
 			
 			// Add directory
-			if(!file_exists($banner_path)) {
+			if(!file_exists($banner_path) || !file_exists($verwijderen_path)) {
 				@mkdir($banner_path, 0755,true);
+				@mkdir($verwijderen_path, 0755,true);
 
 				// Add file in directory (index.php)
 				$newFile = $banner_path.'/index.php';
 				$FileHandle = fopen($newFile, 'w');
-			} else
+				
+				$newVerwijderenFile = $verwijderen_path.'/index.php';
+				$FileHandle = fopen($newVerwijderenFile, 'w');
+			} else {
 				@chmod($banner_path, 0755,true);
+				@chmod($verwijderen_path, 0755,true);
+			}
 			
 			$this->banner_filename = CUploadedFile::getInstance($this, 'banner_filename');
 			if($this->banner_filename != null) {

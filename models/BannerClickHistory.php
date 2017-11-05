@@ -203,7 +203,7 @@ class BannerClickHistory extends CActiveRecord
 			if(!isset($_GET['click'])) {
 				$this->defaultColumns[] = array(
 					'name' => 'category_search',
-					'value' => 'Phrase::trans($data->click->banner->category->name)',
+					'value' => '$data->click->banner->category->title->message',
 					'filter'=> BannerCategory::getCategory(),
 					'type' => 'raw',
 				);

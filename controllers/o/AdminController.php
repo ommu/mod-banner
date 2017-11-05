@@ -99,7 +99,7 @@ class AdminController extends Controller
 		$pageTitle = Yii::t('phrase', 'Banners');
 		if($category != null) {
 			$data = BannerCategory::model()->findByPk($category);
-			$pageTitle = Yii::t('phrase', 'Banners: Category {category_name}', array ('{category_name}'=>Phrase::trans($data->name)));
+			$pageTitle = Yii::t('phrase', 'Banners: Category {category_name}', array ('{category_name}'=>$data->title->message));
 		}
 		
 		$model=new Banners('search');

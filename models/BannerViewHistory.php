@@ -203,7 +203,7 @@ class BannerViewHistory extends CActiveRecord
 			if(!isset($_GET['view'])) {
 				$this->defaultColumns[] = array(
 					'name' => 'category_search',
-					'value' => 'Phrase::trans($data->view->banner->category->name)',
+					'value' => '$data->view->banner->category->title->message',
 					'filter'=> BannerCategory::getCategory(),
 					'type' => 'raw',
 				);

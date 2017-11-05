@@ -40,8 +40,8 @@
 class BannerCategory extends CActiveRecord
 {
 	public $defaultColumns = array();
-	public $title_i;
-	public $description_i;
+	public $name_i;
+	public $desc_i;
 	
 	// Variable Search
 	public $creation_search;
@@ -54,8 +54,8 @@ class BannerCategory extends CActiveRecord
 	{
 		return array(
 			'sluggable' => array(
-				'class'=>'application.vendor.mintao.yii-behavior-sluggable.SluggableBehavior',
-				'columns' => array('title.en_us'),
+				'class'=>'ext.yii-behavior-sluggable.SluggableBehavior',
+				'columns' => array('title.message'),
 				'unique' => true,
 				'update' => true,
 			),
@@ -90,19 +90,19 @@ class BannerCategory extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('banner_limit,
-				title_i, description_i', 'required'),
+				name_i, desc_i', 'required'),
 			array('publish, banner_limit', 'numerical', 'integerOnly'=>true),
 			array('banner_limit', 'length', 'max'=>2),
 			array('name, desc, creation_id, modified_id', 'length', 'max'=>11),
 			array('cat_code,
-				title_i', 'length', 'max'=>32),
+				name_i', 'length', 'max'=>32),
 			array('
-				description_i', 'length', 'max'=>64),
+				desc_i', 'length', 'max'=>64),
 			array('cat_code, banner_size, banner_limit', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('cat_id, publish, name, desc, cat_code, banner_size, banner_limit, creation_date, creation_id, modified_date, modified_id,
-				title_i, description_i, creation_search, modified_search', 'safe', 'on'=>'search'),
+				name_i, desc_i, creation_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -115,8 +115,8 @@ class BannerCategory extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'view' => array(self::BELONGS_TO, 'ViewBannerCategory', 'cat_id'),
-			'title' => array(self::BELONGS_TO, 'OmmuSystemPhrase', 'name'),
-			'description' => array(self::BELONGS_TO, 'OmmuSystemPhrase', 'desc'),
+			'title' => array(self::BELONGS_TO, 'SourceMessage', 'name'),
+			'description' => array(self::BELONGS_TO, 'SourceMessage', 'desc'),
 			'creation' => array(self::BELONGS_TO, 'Users', 'creation_id'),
 			'modified' => array(self::BELONGS_TO, 'Users', 'modified_id'),
 			'banners' => array(self::HAS_MANY, 'Banners', 'cat_id'),
@@ -140,8 +140,8 @@ class BannerCategory extends CActiveRecord
 			'creation_id' => Yii::t('attribute', 'Creation'),
 			'modified_date' => Yii::t('attribute', 'Modified Date'),
 			'modified_id' => Yii::t('attribute', 'Modified'),
-			'title_i' => Yii::t('attribute', 'Title'),
-			'description_i' => Yii::t('attribute', 'Description'),
+			'name_i' => Yii::t('attribute', 'Title'),
+			'desc_i' => Yii::t('attribute', 'Description'),
 			'creation_search' => Yii::t('attribute', 'Creation'),
 			'modified_search' => Yii::t('attribute', 'Modified'),
 		);
@@ -166,23 +166,17 @@ class BannerCategory extends CActiveRecord
 		$criteria=new CDbCriteria;
 		
 		// Custom Search
-		$defaultLang = OmmuLanguages::getDefault('code');
-		if(isset(Yii::app()->session['language']))
-			$language = Yii::app()->session['language'];
-		else 
-			$language = $defaultLang;
-		
 		$criteria->with = array(
 			'view' => array(
 				'alias'=>'view',
 			),
 			'title' => array(
 				'alias'=>'title',
-				'select'=>$language,
+				'select'=>'message',
 			),
 			'description' => array(
 				'alias'=>'description',
-				'select'=>$language,
+				'select'=>'message',
 			),
 			'creation' => array(
 				'alias'=>'creation',
@@ -212,19 +206,13 @@ class BannerCategory extends CActiveRecord
 		$criteria->compare('t.banner_limit',$this->banner_limit);
 		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.creation_date)',date('Y-m-d', strtotime($this->creation_date)));
-		if(isset($_GET['creation']))
-			$criteria->compare('t.creation_id',$_GET['creation']);
-		else
-			$criteria->compare('t.creation_id',$this->creation_id);
+		$criteria->compare('t.creation_id', isset($_GET['creation']) ? $_GET['creation'] : $this->creation_id);
 		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.modified_date)',date('Y-m-d', strtotime($this->modified_date)));
-		if(isset($_GET['modified']))
-			$criteria->compare('t.modified_id',$_GET['modified']);
-		else
-			$criteria->compare('t.modified_id',$this->modified_id);
+		$criteria->compare('t.modified_id', isset($_GET['modified']) ? $_GET['modified'] : $this->modified_id);
 		
-		$criteria->compare('title.'.$language,strtolower($this->title_i),true);
-		$criteria->compare('description.'.$language,strtolower($this->description_i),true);
+		$criteria->compare('title.message',strtolower($this->name_i),true);
+		$criteria->compare('description.message',strtolower($this->desc_i),true);
 		$criteria->compare('creation.displayname',strtolower($this->creation_search),true);
 		$criteria->compare('modified.displayname',strtolower($this->modified_search),true);
 
@@ -298,13 +286,13 @@ class BannerCategory extends CActiveRecord
 				),
 			);
 			$this->defaultColumns[] = array(
-				'name' => 'title_i',
-				'value' => 'Phrase::trans($data->name)',
+				'name' => 'name_i',
+				'value' => '$data->title->message',
 			);
 			/*
 			$this->defaultColumns[] = array(
-				'name' => 'description_i',
-				'value' => 'Phrase::trans($data->desc)',
+				'name' => 'desc_i',
+				'value' => '$data->description->message',
 			);
 			*/
 			$this->defaultColumns[] = array(
@@ -414,7 +402,7 @@ class BannerCategory extends CActiveRecord
 			
 		} else {
 			$model = self::model()->findByPk($id);
-			return $model;			
+			return $model;
 		}
 	}
 
@@ -423,8 +411,8 @@ class BannerCategory extends CActiveRecord
 	 * 0 = unpublish
 	 * 1 = publish
 	 */
-	public static function getCategory($publish=null) {
-		
+	public static function getCategory($publish=null) 
+	{
 		$criteria=new CDbCriteria;
 		if($publish != null)
 			$criteria->compare('publish',$publish);
@@ -434,12 +422,12 @@ class BannerCategory extends CActiveRecord
 		$items = array();
 		if($model != null) {
 			foreach($model as $key => $val) {
-				$items[$val->cat_id] = Phrase::trans($val->name);
+				$items[$val->cat_id] = $val->title->message;
 			}
 			return $items;
-		} else {
+
+		} else
 			return false;
-		}
 	}
 
 	/**
@@ -452,15 +440,26 @@ class BannerCategory extends CActiveRecord
 	}
 
 	/**
+	 * This is invoked when a record is populated with data from a find() call.
+	 */
+	protected function afterFind()
+	{
+		$this->name_i = $this->title->message;
+		$this->desc_i = $this->description->message;
+		
+		parent::afterFind();
+	}
+
+	/**
 	 * before validate attributes
 	 */
 	protected function beforeValidate() {
 		$controller = strtolower(Yii::app()->controller->id);
-		if(parent::beforeValidate()) {	
+		if(parent::beforeValidate()) {
 			if($this->isNewRecord)
-				$this->creation_id = Yii::app()->user->id;			
+				$this->creation_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
 			else
-				$this->modified_id = Yii::app()->user->id;
+				$this->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
 			
 			if($this->banner_size['width'] == '' || $this->banner_size['height'] == '')
 				$this->addError('banner_size', Yii::t('phrase', 'Banner Size cannot be blank.'));
@@ -473,42 +472,44 @@ class BannerCategory extends CActiveRecord
 	 */
 	protected function beforeSave() 
 	{
+		$module = strtolower(Yii::app()->controller->module->id);
+		$controller = strtolower(Yii::app()->controller->id);
 		$action = strtolower(Yii::app()->controller->action->id);
-		$currentModule = strtolower(Yii::app()->controller->module->id.'/'.Yii::app()->controller->id);
-		$location = Utility::getUrlTitle($currentModule);
+
+		$location = $module.' '.$controller;
 		
 		if(parent::beforeSave()) {
-			if($this->isNewRecord || (!$this->isNewRecord && $this->name == 0)) {
-				$title=new OmmuSystemPhrase;
-				$title->location = $location.'_title';
-				$title->en_us = $this->title_i;
-				if($title->save())
-					$this->name = $title->phrase_id;
+			if($this->isNewRecord || (!$this->isNewRecord && !$this->name)) {
+				$name=new SourceMessage;
+				$name->message = $this->name_i;
+				$name->location = $location.'_title';
+				if($name->save())
+					$this->name = $name->id;
 				
-				$this->slug = Utility::getUrlTitle($this->title_i);	
+				$this->slug = Utility::getUrlTitle($this->name_i);
 				
 			} else {
-				$title = OmmuSystemPhrase::model()->findByPk($this->name);
-				$title->en_us = $this->title_i;
-				$title->save();
+				$name = SourceMessage::model()->findByPk($this->name);
+				$name->message = $this->name_i;
+				$name->save();
 			}
 			
-			if($this->isNewRecord || (!$this->isNewRecord && $this->desc == 0)) {
-				$desc=new OmmuSystemPhrase;
+			if($this->isNewRecord || (!$this->isNewRecord && !$this->desc)) {
+				$desc=new SourceMessage;
+				$desc->message = $this->desc_i;
 				$desc->location = $location.'_description';
-				$desc->en_us = $this->description_i;
 				if($desc->save())
-					$this->desc = $desc->phrase_id;
+					$this->desc = $desc->id;
 				
 			} else {
-				$desc = OmmuSystemPhrase::model()->findByPk($this->desc);
-				$desc->en_us = $this->description_i;
+				$desc = SourceMessage::model()->findByPk($this->desc);
+				$desc->message = $this->desc_i;
 				$desc->save();
 			}
 			
 			if($action != 'publish') {
-				$this->cat_code = Utility::getUrlTitle(strtolower(trim($this->title_i)));
-				//Media Size
+				$this->cat_code = Utility::getUrlTitle(strtolower(trim($this->name_i)));
+				//Banner Size
 				$this->banner_size = serialize($this->banner_size);
 			}
 		}

@@ -30,11 +30,11 @@
 			),
 			array(
 				'name'=>'name',
-				'value'=>Phrase::trans($model->name),
+				'value'=>$model->title->message,
 			),
 			array(
 				'name'=>'desc',
-				'value'=>Phrase::trans($model->desc),
+				'value'=>$model->description->message,
 			),
 			'cat_code',
 			'slug',

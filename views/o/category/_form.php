@@ -29,25 +29,19 @@
 		<?php //begin.Messages ?>
 		
 		<div class="clearfix">
-			<?php echo $form->labelEx($model,'title_i'); ?>
+			<?php echo $form->labelEx($model,'name_i'); ?>
 			<div class="desc">
-				<?php 
-				if(!$model->getErrors())
-					$model->title_i = Phrase::trans($model->name);
-				echo $form->textField($model,'title_i',array('maxlength'=>32,'class'=>'span-8')); ?>
-				<?php echo $form->error($model,'title_i'); ?>
+				<?php echo $form->textField($model,'name_i',array('maxlength'=>32,'class'=>'span-8')); ?>
+				<?php echo $form->error($model,'name_i'); ?>
 				<?php /*<div class="small-px silent"></div>*/?>
 			</div>
 		</div>
 
 		<div class="clearfix">
-			<?php echo $form->labelEx($model,'description_i'); ?>
+			<?php echo $form->labelEx($model,'desc_i'); ?>
 			<div class="desc">
-				<?php 
-				if(!$model->getErrors())
-					$model->description_i = Phrase::trans($model->desc);
-				echo $form->textArea($model,'description_i',array('maxlength'=>64,'class'=>'span-11 smaller')); ?>
-				<?php echo $form->error($model,'description_i'); ?>
+				<?php echo $form->textArea($model,'desc_i',array('maxlength'=>64,'class'=>'span-11 smaller')); ?>
+				<?php echo $form->error($model,'desc_i'); ?>
 				<?php /*<div class="small-px silent"></div>*/?>
 			</div>
 		</div>

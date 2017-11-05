@@ -33,7 +33,7 @@
 			),
 			array(
 				'name'=>'cat_id',
-				'value'=>Phrase::trans($model->category->name),
+				'value'=>$model->category->title->message,
 			),
 			'title',
 			array(

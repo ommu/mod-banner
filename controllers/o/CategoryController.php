@@ -148,9 +148,8 @@ class CategoryController extends Controller
 							'id' => 'partial-banner-category',
 							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Banner category success created.').'</strong></div>',
 						));
-					} else {
+					} else
 						print_r($model->getErrors());
-					}
 				}
 			}
 			Yii::app()->end();
@@ -165,7 +164,7 @@ class CategoryController extends Controller
 			$this->pageMeta = '';
 			$this->render('admin_add',array(
 				'model'=>$model,
-			));			
+			));
 		}
 	}
 
@@ -197,9 +196,8 @@ class CategoryController extends Controller
 							'id' => 'partial-banner-category',
 							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Banner category success updated.').'</strong></div>',
 						));
-					} else {
+					} else
 						print_r($model->getErrors());
-					}
 				}
 			}
 			Yii::app()->end();
@@ -209,12 +207,12 @@ class CategoryController extends Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 600;
 			
-			$this->pageTitle = Yii::t('phrase', 'Update Category: {category_name}', array('{category_name}'=>Phrase::trans($model->name)));
+			$this->pageTitle = Yii::t('phrase', 'Update Category: {category_name}', array('{category_name}'=>$model->title->message));
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_edit',array(
 				'model'=>$model,
-			));			
+			));
 		}
 	}
 	
@@ -230,7 +228,7 @@ class CategoryController extends Controller
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 500;
 
-		$this->pageTitle = Yii::t('phrase', 'View Category: {category_name}', array('{category_name}'=>Phrase::trans($model->name)));
+		$this->pageTitle = Yii::t('phrase', 'View Category: {category_name}', array('{category_name}'=>$model->title->message));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_view',array(
@@ -301,7 +299,7 @@ class CategoryController extends Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 350;
 
-			$this->pageTitle = Yii::t('phrase', 'Delete Category: {category_name}', array('{category_name}'=>Phrase::trans($model->name)));
+			$this->pageTitle = Yii::t('phrase', 'Delete Category: {category_name}', array('{category_name}'=>$model->title->message));
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_delete');
@@ -324,7 +322,7 @@ class CategoryController extends Controller
 			$title = Yii::t('phrase', 'Publish');
 			$replace = 1;
 		}
-		$pageTitle = Yii::t('phrase', '{title}: {category_name}', array('{title}'=>$title, '{category_name}'=>Phrase::trans($model->name)));
+		$pageTitle = Yii::t('phrase', '{title}: {category_name}', array('{title}'=>$title, '{category_name}'=>$model->title->message));
 
 		if(Yii::app()->request->isPostRequest) {
 			// we only allow deletion via POST request

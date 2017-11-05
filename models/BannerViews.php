@@ -215,7 +215,7 @@ class BannerViews extends CActiveRecord
 			if(!isset($_GET['banner'])) {
 				$this->defaultColumns[] = array(
 					'name' => 'category_search',
-					'value' => 'Phrase::trans($data->banner->category->name)',
+					'value' => '$data->banner->category->title->message',
 					'filter'=> BannerCategory::getCategory(),
 					'type' => 'raw',
 				);

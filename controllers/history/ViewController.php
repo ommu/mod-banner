@@ -94,9 +94,9 @@ class ViewController extends Controller
 		$pageTitle = Yii::t('phrase', 'Banner Views Data');
 		if($view != null) {
 			$data = BannerViews::model()->findByPk($view);
-			$pageTitle = Yii::t('phrase', 'Banner Views Data: {banner_title} from category {category_name} - user Guest', array ('{banner_title}'=>$data->banner->title, '{category_name}'=>Phrase::trans($data->banner->category->name)));	
+			$pageTitle = Yii::t('phrase', 'Banner Views Data: {banner_title} from category {category_name} - user Guest', array ('{banner_title}'=>$data->banner->title, '{category_name}'=>$data->banner->category->title->message));	
 			if($data->user->displayname)
-				$pageTitle = Yii::t('phrase', 'Banner Views Data: {banner_title} from category {category_name} - user {user_displayname}', array ('{banner_title}'=>$data->banner->title, '{category_name}'=>Phrase::trans($data->banner->category->name), '{user_displayname}'=>$data->user->displayname));
+				$pageTitle = Yii::t('phrase', 'Banner Views Data: {banner_title} from category {category_name} - user {user_displayname}', array ('{banner_title}'=>$data->banner->title, '{category_name}'=>$data->banner->category->title->message, '{user_displayname}'=>$data->user->displayname));
 		}
 		
 		$model=new BannerViewHistory('search');

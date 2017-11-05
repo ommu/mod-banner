@@ -95,7 +95,7 @@ class ViewController extends Controller
 		$pageTitle = Yii::t('phrase', 'Banner Views');
 		if($banner != null) {
 			$data = Banners::model()->findByPk($banner);
-			$pageTitle = Yii::t('phrase', 'Banner Views: {banner_title} from category {category_name}', array ('{banner_title}'=>$data->title, '{category_name}'=>Phrase::trans($data->category->name)));
+			$pageTitle = Yii::t('phrase', 'Banner Views: {banner_title} from category {category_name}', array ('{banner_title}'=>$data->title, '{category_name}'=>$data->category->title->message));
 		}
 		
 		$model=new BannerViews('search');
@@ -150,7 +150,7 @@ class ViewController extends Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 350;
 
-			$this->pageTitle = Yii::t('phrase', 'Delete View: {banner_title} from category {category_name}', array ('{banner_title}'=>$model->banner->title, '{category_name}'=>Phrase::trans($model->banner->category->name)));
+			$this->pageTitle = Yii::t('phrase', 'Delete View: {banner_title} from category {category_name}', array ('{banner_title}'=>$model->banner->title, '{category_name}'=>$model->banner->category->title->message));
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_delete');
