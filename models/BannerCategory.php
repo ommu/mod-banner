@@ -40,6 +40,8 @@
 class BannerCategory extends CActiveRecord
 {
 	public $defaultColumns = array();
+	public $templateColumns = array();
+	public $gridForbiddenColumn = array();
 	public $name_i;
 	public $desc_i;
 	
