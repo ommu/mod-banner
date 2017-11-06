@@ -71,21 +71,21 @@
 				'class'=>'CButtonColumn',
 				'buttons' => array(
 					'view' => array(
-						'label' => 'view',
+						'label' => Yii::t('phrase', 'View Banner Category'),
 						'imageUrl' => false,
 						'options' => array(
 							'class' => 'view',
 						),
 						'url' => 'Yii::app()->controller->createUrl(\'view\',array(\'id\'=>$data->primaryKey))'),
 					'update' => array(
-						'label' => 'update',
+						'label' => Yii::t('phrase', 'Update Banner Category'),
 						'imageUrl' => false,
 						'options' => array(
 							'class' => 'update'
 						),
 						'url' => 'Yii::app()->controller->createUrl(\'edit\',array(\'id\'=>$data->primaryKey))'),
 					'delete' => array(
-						'label' => 'delete',
+						'label' => Yii::t('phrase', 'Delete Banner Category'),
 						'imageUrl' => false,
 						'options' => array(
 							'class' => 'delete'

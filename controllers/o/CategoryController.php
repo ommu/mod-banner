@@ -146,8 +146,12 @@ class CategoryController extends Controller
 							'type' => 5,
 							'get' => Yii::app()->controller->createUrl('o/setting/edit'),
 							'id' => 'partial-banner-category',
-							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Banner Categories success created.').'</strong></div>',
+							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Banner category success created.').'</strong></div>',
 						));
+						/*
+						Yii::app()->user->setFlash('success', Yii::t('phrase', 'Banner category success created.'));
+						$this->redirect(array('manage'));
+						*/
 					} else
 						print_r($model->getErrors());
 				}
@@ -159,7 +163,7 @@ class CategoryController extends Controller
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage'); 
 		$this->dialogWidth = 600; 
 
-		$this->pageTitle = Yii::t('phrase', 'Create Banner Categories');
+		$this->pageTitle = Yii::t('phrase', 'Create Banner Category');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_add',array(
@@ -193,8 +197,12 @@ class CategoryController extends Controller
 							'type' => 5,
 							'get' => Yii::app()->controller->createUrl('o/setting/edit'),
 							'id' => 'partial-banner-category',
-							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Banner Categories success updated.').'</strong></div>',
+							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Banner category success updated.').'</strong></div>',
 						));
+						/*
+						Yii::app()->user->setFlash('success', Yii::t('phrase', 'Banner category success updated.'));
+						$this->redirect(array('manage'));
+						*/
 					} else
 						print_r($model->getErrors());
 				}
@@ -206,7 +214,7 @@ class CategoryController extends Controller
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage'); 
 		$this->dialogWidth = 600; 
 
-		$this->pageTitle = Yii::t('phrase', 'Update Banner Categories');
+		$this->pageTitle = Yii::t('phrase', 'Update Banner Category: {name}', array('{name}'=>$model->title->message));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_edit',array(
@@ -226,7 +234,7 @@ class CategoryController extends Controller
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 600;
 
-		$this->pageTitle = Yii::t('phrase', 'View Category: {category_name}', array('{category_name}'=>$model->title->message));
+		$this->pageTitle = Yii::t('phrase', 'View Banner Category: {name}', array('{name}'=>$model->title->message));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_view',array(
@@ -288,8 +296,12 @@ class CategoryController extends Controller
 					'type' => 5,
 					'get' => Yii::app()->controller->createUrl('manage'),
 					'id' => 'partial-banner-category',
-					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Banner Categories success deleted.').'</strong></div>',
+					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Banner category success deleted.').'</strong></div>',
 				));
+				/*
+				Yii::app()->user->setFlash('success', Yii::t('phrase', 'Banner category success deleted.'));
+				$this->redirect(array('manage'));
+				*/
 			}
 			Yii::app()->end();
 		}
@@ -298,7 +310,7 @@ class CategoryController extends Controller
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 350;
 
-		$this->pageTitle = Yii::t('phrase', 'Delete Banner Categories');
+		$this->pageTitle = Yii::t('phrase', 'Delete Banner Category: {name}', array('{name}'=>$model->title->message));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_delete');
@@ -326,8 +338,12 @@ class CategoryController extends Controller
 					'type' => 5,
 					'get' => Yii::app()->controller->createUrl('manage'),
 					'id' => 'partial-banner-category',
-					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Banner Categories success updated.').'</strong></div>',
+					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Banner category success updated.').'</strong></div>',
 				));
+				/*
+				Yii::app()->user->setFlash('success', Yii::t('phrase', 'Banner category success updated.'));
+				$this->redirect(array('manage'));
+				*/
 			}
 			Yii::app()->end();
 		}
@@ -336,7 +352,7 @@ class CategoryController extends Controller
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 350;
 
-		$this->pageTitle = Yii::t('phrase', '$title Banner Categories', array('$title'=>$title));
+		$this->pageTitle = Yii::t('phrase', '{title} Banner Category: {name}', array('{title}'=>$title, '{name}'=>$model->title->message));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_publish',array(

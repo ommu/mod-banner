@@ -27,13 +27,12 @@
 			<?php echo $form->errorSummary($model); ?>
 		</div>
 		<?php //begin.Messages ?>
-		
+
 		<div class="clearfix">
 			<?php echo $form->labelEx($model,'name_i'); ?>
 			<div class="desc">
 				<?php echo $form->textField($model,'name_i',array('maxlength'=>32,'class'=>'span-8')); ?>
 				<?php echo $form->error($model,'name_i'); ?>
-				<?php /*<div class="small-px silent"></div>*/?>
 			</div>
 		</div>
 
@@ -42,7 +41,6 @@
 			<div class="desc">
 				<?php echo $form->textArea($model,'desc_i',array('maxlength'=>64,'class'=>'span-11 smaller')); ?>
 				<?php echo $form->error($model,'desc_i'); ?>
-				<?php /*<div class="small-px silent"></div>*/?>
 			</div>
 		</div>
 
@@ -51,7 +49,6 @@
 			<div class="desc">
 				<?php echo $form->textField($model,'banner_limit',array('class'=>'span-3', 'maxlength'=>2)); ?>
 				<?php echo $form->error($model,'banner_limit'); ?>
-				<?php /*<div class="small-px silent"></div>*/?>
 			</div>
 		</div>
 		
@@ -64,7 +61,6 @@
 				echo Yii::t('phrase', 'Width').': ';?><?php echo $form->textField($model,'banner_size[width]',array('maxlength'=>4,'class'=>'span-3')); ?>&nbsp;&nbsp;&nbsp;
 				<?php echo Yii::t('phrase', 'Height').': ';?><?php echo $form->textField($model,'banner_size[height]',array('maxlength'=>4,'class'=>'span-3')); ?>
 				<?php echo $form->error($model,'banner_size'); ?>
-				<?php /*<div class="small-px silent"></div>*/?>
 			</div>
 		</div>
 
@@ -74,15 +70,13 @@
 				<?php echo $form->checkBox($model,'publish'); ?>
 				<?php echo $form->labelEx($model,'publish'); ?>
 				<?php echo $form->error($model,'publish'); ?>
-				<?php /*<div class="small-px silent"></div>*/?>
 			</div>
 		</div>
+
 	</fieldset>
 </div>
 <div class="dialog-submit">
 	<?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('phrase', 'Create') : Yii::t('phrase', 'Save') ,array('onclick' => 'setEnableSave()')); ?>
-	<?php echo CHtml::button(Yii::t('phrase', 'Close'), array('id'=>'closed')); ?>
+	<?php echo CHtml::button(Yii::t('phrase', 'Cancel'), array('id'=>'closed')); ?>
 </div>
 <?php $this->endWidget(); ?>
-
-

@@ -50,7 +50,7 @@
 			),
 			array(
 				'name'=>'banner_limit',
-				'value'=>$model->banner_limit ? $model->banner_limit : '0',
+				'value'=>$model->banner_limit ? $model->banner_limit : '-',
 			),
 			array(
 				'name'=>'creation_date',

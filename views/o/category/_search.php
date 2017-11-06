@@ -87,13 +87,13 @@
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('banner_limit'); ?>
-			<?php echo $form->textField($model,'banner_limit'); ?>
+			<?php echo $model->getAttributeLabel('publish'); ?>
+			<?php echo $form->dropDownList($model,'publish', array('0'=>Yii::t('phrase', 'No'), '1'=>Yii::t('phrase', 'Yes'))); ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('publish'); ?>
-			<?php echo $form->dropDownList($model,'publish', array('0'=>Yii::t('phrase', 'No'), '1'=>Yii::t('phrase', 'Yes'))); ?>
+			<?php echo $model->getAttributeLabel('banner_limit'); ?>
+			<?php echo $form->textField($model,'banner_limit'); ?>
 		</li>
 
 		<li class="submit">
