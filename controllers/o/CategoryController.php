@@ -144,7 +144,7 @@ class CategoryController extends Controller
 					if($model->save()) {
 						echo CJSON::encode(array(
 							'type' => 5,
-							'get' => Yii::app()->controller->createUrl('o/setting/edit'),
+							'get' => Yii::app()->controller->createUrl('manage'),
 							'id' => 'partial-banner-category',
 							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Banner category success created.').'</strong></div>',
 						));
@@ -160,7 +160,7 @@ class CategoryController extends Controller
 		}
 		
 		$this->dialogDetail = true; 
-		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage'); 
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('o/setting/edit'); 
 		$this->dialogWidth = 600; 
 
 		$this->pageTitle = Yii::t('phrase', 'Create Banner Category');
@@ -195,7 +195,7 @@ class CategoryController extends Controller
 					if($model->save()) {
 						echo CJSON::encode(array(
 							'type' => 5,
-							'get' => Yii::app()->controller->createUrl('o/setting/edit'),
+							'get' => Yii::app()->controller->createUrl('manage'),
 							'id' => 'partial-banner-category',
 							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Banner category success updated.').'</strong></div>',
 						));
@@ -211,7 +211,7 @@ class CategoryController extends Controller
 		}
 		
 		$this->dialogDetail = true; 
-		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage'); 
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('o/setting/edit'); 
 		$this->dialogWidth = 600; 
 
 		$this->pageTitle = Yii::t('phrase', 'Update Banner Category: {name}', array('{name}'=>$model->title->message));
@@ -231,7 +231,7 @@ class CategoryController extends Controller
 		$model=$this->loadModel($id);
 		
 		$this->dialogDetail = true;
-		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('o/setting/edit');
 		$this->dialogWidth = 600;
 
 		$this->pageTitle = Yii::t('phrase', 'View Banner Category: {name}', array('{name}'=>$model->title->message));
@@ -307,7 +307,7 @@ class CategoryController extends Controller
 		}
 
 		$this->dialogDetail = true;
-		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('o/setting/edit');
 		$this->dialogWidth = 350;
 
 		$this->pageTitle = Yii::t('phrase', 'Delete Banner Category: {name}', array('{name}'=>$model->title->message));
@@ -349,7 +349,7 @@ class CategoryController extends Controller
 		}
 
 		$this->dialogDetail = true;
-		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('o/setting/edit');
 		$this->dialogWidth = 350;
 
 		$this->pageTitle = Yii::t('phrase', '{title} Banner Category: {name}', array('{title}'=>$title, '{name}'=>$model->title->message));

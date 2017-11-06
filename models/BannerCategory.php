@@ -33,7 +33,7 @@ class BannerCategory extends CActiveRecord
 {
 	public $defaultColumns = array();
 	public $templateColumns = array();
-	public $gridForbiddenColumn = array();
+	public $gridForbiddenColumn = array('desc_i','cat_code','banner_size','creation_date','creation_search','modified_date','modified_search');
 	public $name_i;
 	public $desc_i;
 	
@@ -315,11 +315,11 @@ class BannerCategory extends CActiveRecord
 				'header' => Yii::t('app', 'No'),
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
-			$this->templateColumns['name'] = array(
+			$this->templateColumns['name_i'] = array(
 				'name' => 'name_i',
 				'value' => '$data->title->message',
 			);
-			$this->templateColumns['desc'] = array(
+			$this->templateColumns['desc_i'] = array(
 				'name' => 'desc_i',
 				'value' => '$data->description->message',
 			);
