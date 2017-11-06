@@ -8,17 +8,6 @@
  * @link https://github.com/ommu/mod-banner
  * @contact (+62)856-299-4114
  *
- * This is the template for generating the model class of a specified table.
- * - $this: the ModelCode object
- * - $tableName: the table name for this class (prefix is already removed if necessary)
- * - $modelClass: the model class name
- * - $columns: list of table columns (name=>CDbColumnSchema)
- * - $labels: list of attribute labels (name=>label)
- * - $rules: list of validation rules
- * - $relations: list of relations (name=>relation declaration)
- *
- * --------------------------------------------------------------------------------------
- *
  * This is the model class for table "ommu_banner_category".
  *
  * The followings are the available columns in table 'ommu_banner_category':
@@ -26,16 +15,19 @@
  * @property integer $publish
  * @property string $name
  * @property string $desc
- * @property string $banner_code
+ * @property string $cat_code
  * @property string $banner_size
  * @property integer $banner_limit
  * @property string $creation_date
  * @property string $creation_id
  * @property string $modified_date
  * @property string $modified_id
+ * @property string $slug
  *
  * The followings are the available model relations:
- * @property Banners[] $Banners
+ * @property Banners[] $banners
+ * @property Users $creation;
+ * @property Users $modified;
  */
 class BannerCategory extends CActiveRecord
 {
@@ -85,7 +77,8 @@ class BannerCategory extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'ommu_banner_category';
+		preg_match("/dbname=([^;]+)/i", $this->dbConnection->connectionString, $matches);
+		return $matches[1].'.ommu_banner_category';
 	}
 
 	/**
@@ -101,14 +94,14 @@ class BannerCategory extends CActiveRecord
 			array('publish, banner_limit', 'numerical', 'integerOnly'=>true),
 			array('banner_limit', 'length', 'max'=>2),
 			array('name, desc, creation_id, modified_id', 'length', 'max'=>11),
-			array('cat_code,
+			array('cat_code, slug,
 				name_i', 'length', 'max'=>32),
 			array('
 				desc_i', 'length', 'max'=>64),
 			array('cat_code, banner_size, banner_limit', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('cat_id, publish, name, desc, cat_code, banner_size, banner_limit, creation_date, creation_id, modified_date, modified_id,
+			array('cat_id, publish, name, desc, cat_code, banner_size, banner_limit, creation_date, creation_id, modified_date, modified_id, slug, 
 				name_i, desc_i, publish_search, pending_search, expired_search, unpublish_search, all_search, creation_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
@@ -147,6 +140,7 @@ class BannerCategory extends CActiveRecord
 			'creation_id' => Yii::t('attribute', 'Creation'),
 			'modified_date' => Yii::t('attribute', 'Modified Date'),
 			'modified_id' => Yii::t('attribute', 'Modified'),
+			'slug' => Yii::t('attribute', 'Slug'),
 			'name_i' => Yii::t('attribute', 'Title'),
 			'desc_i' => Yii::t('attribute', 'Description'),
 			'publish_search' => Yii::t('attribute', 'Publish'),
@@ -176,7 +170,7 @@ class BannerCategory extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
-		
+
 		// Custom Search
 		$criteria->with = array(
 			'view' => array(
@@ -200,38 +194,39 @@ class BannerCategory extends CActiveRecord
 			),
 		);
 
-		$criteria->compare('t.cat_id',$this->cat_id);
+		$criteria->compare('t.cat_id', $this->cat_id);
 		if(isset($_GET['type']) && $_GET['type'] == 'publish')
-			$criteria->compare('t.publish',1);
+			$criteria->compare('t.publish', 1);
 		elseif(isset($_GET['type']) && $_GET['type'] == 'unpublish')
-			$criteria->compare('t.publish',0);
+			$criteria->compare('t.publish', 0);
 		elseif(isset($_GET['type']) && $_GET['type'] == 'trash')
-			$criteria->compare('t.publish',2);
+			$criteria->compare('t.publish', 2);
 		else {
-			$criteria->addInCondition('t.publish',array(0,1));
-			$criteria->compare('t.publish',$this->publish);
+			$criteria->addInCondition('t.publish', array(0,1));
+			$criteria->compare('t.publish', $this->publish);
 		}
-		$criteria->compare('t.name',$this->name);
-		$criteria->compare('t.desc',$this->desc);
-		$criteria->compare('t.cat_code',strtolower($this->cat_code),true);
-		$criteria->compare('t.banner_size',$this->banner_size,true);
-		$criteria->compare('t.banner_limit',$this->banner_limit);
+		$criteria->compare('t.name', $this->name);
+		$criteria->compare('t.desc', $this->desc);
+		$criteria->compare('t.cat_code', strtolower($this->cat_code), true);
+		$criteria->compare('t.banner_size', $this->banner_size, true);
+		$criteria->compare('t.banner_limit', $this->banner_limit);
 		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00', '1970-01-01 00:00:00')))
 			$criteria->compare('date(t.creation_date)', date('Y-m-d', strtotime($this->creation_date)));
 		$criteria->compare('t.creation_id', isset($_GET['creation']) ? $_GET['creation'] : $this->creation_id);
 		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00', '1970-01-01 00:00:00')))
 			$criteria->compare('date(t.modified_date)', date('Y-m-d', strtotime($this->modified_date)));
 		$criteria->compare('t.modified_id', isset($_GET['modified']) ? $_GET['modified'] : $this->modified_id);
-		
-		$criteria->compare('title.message',strtolower($this->name_i),true);
-		$criteria->compare('description.message',strtolower($this->desc_i),true);
-		$criteria->compare('view.banners',$this->publish_search);
-		$criteria->compare('view.banner_pending',$this->pending_search);
-		$criteria->compare('view.banner_expired',$this->expired_search);
-		$criteria->compare('view.banner_unpublish',$this->unpublish_search);
-		$criteria->compare('view.banner_all',$this->all_search);
-		$criteria->compare('creation.displayname',strtolower($this->creation_search),true);
-		$criteria->compare('modified.displayname',strtolower($this->modified_search),true);
+		$criteria->compare('t.slug', strtolower($this->slug), true);
+
+		$criteria->compare('title.message', strtolower($this->name_i), true);
+		$criteria->compare('description.message', strtolower($this->desc_i), true);
+		$criteria->compare('view.banners', $this->publish_search);
+		$criteria->compare('view.banner_pending', $this->pending_search);
+		$criteria->compare('view.banner_expired', $this->expired_search);
+		$criteria->compare('view.banner_unpublish', $this->unpublish_search);
+		$criteria->compare('view.banner_all', $this->all_search);
+		$criteria->compare('creation.displayname', strtolower($this->creation_search), true);
+		$criteria->compare('modified.displayname', strtolower($this->modified_search), true);
 
 		if(!isset($_GET['BannerCategory_sort']))
 			$criteria->order = 't.cat_id DESC';
@@ -305,21 +300,21 @@ class BannerCategory extends CActiveRecord
 		return $data;
 	}
 
-	/** 
-	 * Set default columns to display 
-	 */ 
-	protected function afterConstruct() { 
-		if(count($this->templateColumns) == 0) { 
-			$this->templateColumns['_option'] = array( 
-				'class' => 'CCheckBoxColumn', 
-				'name' => 'id', 
-				'selectableRows' => 2, 
-				'checkBoxHtmlOptions' => array('name' => 'trash_id[]') 
-			); 
-			$this->templateColumns['_no'] = array( 
-				'header' => Yii::t('app', 'No'), 
-				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1' 
-			); 
+	/**
+	 * Set default columns to display
+	 */
+	protected function afterConstruct() {
+		if(count($this->templateColumns) == 0) {
+			$this->templateColumns['_option'] = array(
+				'class' => 'CCheckBoxColumn',
+				'name' => 'id',
+				'selectableRows' => 2,
+				'checkBoxHtmlOptions' => array('name' => 'trash_id[]')
+			);
+			$this->templateColumns['_no'] = array(
+				'header' => Yii::t('app', 'No'),
+				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
+			);
 			$this->templateColumns['name'] = array(
 				'name' => 'name_i',
 				'value' => '$data->title->message',
@@ -412,7 +407,7 @@ class BannerCategory extends CActiveRecord
 			);
 			$this->templateColumns['banner_limit'] = array(
 				'name' => 'banner_limit',
-				'value' => '$data->banner_limit',
+				'value' => '$data->banner_limit ? $data->banner_limit : \'-\'',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -466,8 +461,8 @@ class BannerCategory extends CActiveRecord
 					'type' => 'raw',
 				);
 			}
-		} 
-		parent::afterConstruct(); 
+		}
+		parent::afterConstruct();
 	}
 
 	/**
@@ -492,23 +487,25 @@ class BannerCategory extends CActiveRecord
 	 * 0 = unpublish
 	 * 1 = publish
 	 */
-	public static function getCategory($publish=null) 
+	public static function getCategory($publish=null, $type=null) 
 	{
 		$criteria=new CDbCriteria;
 		if($publish != null)
-			$criteria->compare('publish',$publish);
+			$criteria->compare('publish', $publish);
 		
 		$model = self::model()->findAll($criteria);
 
-		$items = array();
-		if($model != null) {
-			foreach($model as $key => $val) {
-				$items[$val->cat_id] = $val->title->message;
-			}
-			return $items;
-
+		if($type == null) {
+			$items = array();
+			if($model != null) {
+				foreach($model as $key => $val) {
+					$items[$val->cat_id] = $val->name;
+				}
+				return $items;
+			} else
+				return false;
 		} else
-			return false;
+			return $model;
 	}
 
 	/**
@@ -534,8 +531,8 @@ class BannerCategory extends CActiveRecord
 	/**
 	 * before validate attributes
 	 */
-	protected function beforeValidate() {
-		$controller = strtolower(Yii::app()->controller->id);
+	protected function beforeValidate() 
+	{
 		if(parent::beforeValidate()) {
 			if($this->isNewRecord)
 				$this->creation_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
