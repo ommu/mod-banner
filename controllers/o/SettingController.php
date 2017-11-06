@@ -144,9 +144,12 @@ class SettingController extends Controller
 							'type' => 0,
 							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Banner setting success updated.').'</strong></div>',
 						));
-					} else {
+						/*
+						Yii::app()->user->setFlash('success', Yii::t('phrase', 'Banner setting success updated.'));
+						$this->redirect(array('edit'));
+						*/
+					} else
 						print_r($model->getErrors());
-					}
 				}
 			}
 			
@@ -177,7 +180,7 @@ class SettingController extends Controller
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_manual', array(
-			'manual_path'=>$manual_path,			
+			'manual_path'=>$manual_path,
 		));
 	}
 

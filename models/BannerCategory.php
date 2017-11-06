@@ -33,7 +33,7 @@ class BannerCategory extends CActiveRecord
 {
 	public $defaultColumns = array();
 	public $templateColumns = array();
-	public $gridForbiddenColumn = array('desc_i','cat_code','banner_size','creation_date','creation_search','modified_date','modified_search');
+	public $gridForbiddenColumn = array('desc_i','cat_code','banner_size','creation_date','creation_search','modified_date','modified_search','slug');
 	public $name_i;
 	public $desc_i;
 	

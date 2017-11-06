@@ -16,8 +16,8 @@
  * @property integer $permission
  * @property string $meta_keyword
  * @property string $meta_description
- * @property string $banner_validation
- * @property string $banner_resize
+ * @property integer $banner_validation
+ * @property integer $banner_resize
  * @property string $banner_file_type
  * @property string $modified_date
  * @property string $modified_id
@@ -47,7 +47,8 @@ class BannerSetting extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'ommu_banner_setting';
+		preg_match("/dbname=([^;]+)/i", $this->dbConnection->connectionString, $matches);
+		return $matches[1].'.ommu_banner_setting';
 	}
 
 	/**
@@ -59,8 +60,9 @@ class BannerSetting extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('license, permission, meta_keyword, meta_description, banner_validation, banner_resize, banner_file_type', 'required'),
-			array('permission', 'numerical', 'integerOnly'=>true),
+			array('permission, banner_validation, banner_resize', 'numerical', 'integerOnly'=>true),
 			array('license', 'length', 'max'=>32),
+			array('modified_id', 'length', 'max'=>11),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, license, permission, meta_keyword, meta_description, banner_validation, banner_resize, banner_file_type, modified_date, modified_id,
@@ -126,19 +128,19 @@ class BannerSetting extends CActiveRecord
 			),
 		);
 
-		$criteria->compare('t.id',$this->id);
-		$criteria->compare('t.license',$this->license,true);
-		$criteria->compare('t.permission',$this->permission);
-		$criteria->compare('t.meta_keyword',$this->meta_keyword,true);
-		$criteria->compare('t.meta_description',$this->meta_description,true);
-		$criteria->compare('t.banner_validation',$this->banner_validation);
-		$criteria->compare('t.banner_resize',$this->banner_resize);
-		$criteria->compare('t.banner_file_type',$this->banner_file_type,true);
+		$criteria->compare('t.id', $this->id);
+		$criteria->compare('t.license', strtolower($this->license), true);
+		$criteria->compare('t.permission', $this->permission);
+		$criteria->compare('t.meta_keyword', strtolower($this->meta_keyword), true);
+		$criteria->compare('t.meta_description', strtolower($this->meta_description), true);
+		$criteria->compare('t.banner_validation', $this->banner_validation);
+		$criteria->compare('t.banner_resize', $this->banner_resize);
+		$criteria->compare('t.banner_file_type', strtolower($this->banner_file_type), true);
 		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00', '1970-01-01 00:00:00')))
-			$criteria->compare('date(t.modified_date)',date('Y-m-d', strtotime($this->modified_date)));
+			$criteria->compare('date(t.modified_date)', date('Y-m-d', strtotime($this->modified_date)));
 		$criteria->compare('t.modified_id', isset($_GET['modified']) ? $_GET['modified'] : $this->modified_id);
 		
-		$criteria->compare('modified.displayname',strtolower($this->modified_search),true);
+		$criteria->compare('modified.displayname', strtolower($this->modified_search), true);
 
 		if(!isset($_GET['BannerSetting_sort']))
 			$criteria->order = 't.id DESC';
@@ -212,21 +214,21 @@ class BannerSetting extends CActiveRecord
 		return $data;
 	}
 
-	/** 
-	 * Set default columns to display 
-	 */ 
-	protected function afterConstruct() { 
-		if(count($this->templateColumns) == 0) { 
-			$this->templateColumns['_option'] = array( 
-				'class' => 'CCheckBoxColumn', 
-				'name' => 'id', 
-				'selectableRows' => 2, 
-				'checkBoxHtmlOptions' => array('name' => 'trash_id[]') 
-			); 
-			$this->templateColumns['_no'] = array( 
-				'header' => Yii::t('app', 'No'), 
-				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1' 
-			); 
+	/**
+	 * Set default columns to display
+	 */
+	protected function afterConstruct() {
+		if(count($this->templateColumns) == 0) {
+			$this->templateColumns['_option'] = array(
+				'class' => 'CCheckBoxColumn',
+				'name' => 'id',
+				'selectableRows' => 2,
+				'checkBoxHtmlOptions' => array('name' => 'trash_id[]')
+			);
+			$this->templateColumns['_no'] = array(
+				'header' => Yii::t('app', 'No'),
+				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
+			);
 			$this->templateColumns['license'] = array(
 				'name' => 'license',
 				'value' => '$data->license',
@@ -311,8 +313,8 @@ class BannerSetting extends CActiveRecord
 				),
 				'type' => 'raw',
 			);
-		} 
-		parent::afterConstruct(); 
+		}
+		parent::afterConstruct();
 	}
 
 	/**
@@ -364,7 +366,7 @@ class BannerSetting extends CActiveRecord
 	 */
 	protected function beforeValidate() {
 		if(parent::beforeValidate()) {
-			$this->modified_id = Yii::app()->user->id;
+			$this->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
 		}
 		return true;
 	}
