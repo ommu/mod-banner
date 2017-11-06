@@ -22,26 +22,35 @@
 	<?php $this->widget('application.components.system.FDetailView', array(
 		'data'=>$model,
 		'attributes'=>array(
-			'cat_id',
+			array(
+				'name'=>'cat_id',
+				'value'=>$model->cat_id,
+			),
 			array(
 				'name'=>'publish',
-				'value'=>$model->publish == 1 ? CHtml::image(Yii::app()->theme->baseUrl.'/images/icons/publish.png') : CHtml::image(Yii::app()->theme->baseUrl.'/images/icons/unpublish.png'),
-				'type' => 'raw',
+				'value'=>$model->publish == '1' ? Chtml::image(Yii::app()->theme->baseUrl.'/images/icons/publish.png') : Chtml::image(Yii::app()->theme->baseUrl.'/images/icons/unpublish.png'),
+				'type'=>'raw',
 			),
 			array(
 				'name'=>'name',
-				'value'=>$model->title->message,
+				'value'=>$model->name ? $model->title->message : '-',
 			),
 			array(
 				'name'=>'desc',
-				'value'=>$model->description->message,
+				'value'=>$model->desc ? $model->description->message : '-',
 			),
-			'cat_code',
-			'slug',
-			'banner_limit',
+			array(
+				'name'=>'cat_code',
+				'value'=>$model->cat_code ? $model->cat_code : '-',
+			),
 			array(
 				'name'=>'banner_size',
 				'value'=>BannerCategory::getPreviewSize($model->banner_size),
+				'type'=>'raw',
+			),
+			array(
+				'name'=>'banner_limit',
+				'value'=>$model->banner_limit ? $model->banner_limit : '0',
 			),
 			array(
 				'name'=>'creation_date',
@@ -49,7 +58,7 @@
 			),
 			array(
 				'name'=>'creation_id',
-				'value'=>$model->creation->displayname ? $model->creation->displayname : '-',
+				'value'=>$model->creation_id ? $model->creation->displayname : '-',
 			),
 			array(
 				'name'=>'modified_date',
@@ -57,7 +66,11 @@
 			),
 			array(
 				'name'=>'modified_id',
-				'value'=>$model->modified->displayname ? $model->modified->displayname : '-',
+				'value'=>$model->modified_id ? $model->modified->displayname : '-',
+			),
+			array(
+				'name'=>'slug',
+				'value'=>$model->slug ? $model->slug : '-',
 			),
 		),
 	)); ?>

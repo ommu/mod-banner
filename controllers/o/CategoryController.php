@@ -102,12 +102,12 @@ class CategoryController extends Controller
 			$model->attributes=$_GET['BannerCategory'];
 		}
 
+		$gridColumn = $_GET['GridColumn'];
 		$columnTemp = array();
-		if(isset($_GET['GridColumn'])) {
-			foreach($_GET['GridColumn'] as $key => $val) {
-				if($_GET['GridColumn'][$key] == 1) {
+		if(isset($gridColumn)) {
+			foreach($gridColumn as $key => $val) {
+				if($gridColumn[$key] == 1)
 					$columnTemp[] = $key;
-				}
 			}
 		}
 		$columns = $model->getGridColumn($columnTemp);
@@ -134,7 +134,7 @@ class CategoryController extends Controller
 
 		if(isset($_POST['BannerCategory'])) {
 			$model->attributes=$_POST['BannerCategory'];
-			
+
 			$jsonError = CActiveForm::validate($model);
 			if(strlen($jsonError) > 2) {
 				echo $jsonError;
@@ -146,26 +146,25 @@ class CategoryController extends Controller
 							'type' => 5,
 							'get' => Yii::app()->controller->createUrl('o/setting/edit'),
 							'id' => 'partial-banner-category',
-							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Banner category success created.').'</strong></div>',
+							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Banner Categories success created.').'</strong></div>',
 						));
 					} else
 						print_r($model->getErrors());
 				}
 			}
 			Yii::app()->end();
-			
-		} else {
-			$this->dialogDetail = true;
-			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
-			$this->dialogWidth = 600;
-			
-			$this->pageTitle = Yii::t('phrase', 'Create Category');
-			$this->pageDescription = '';
-			$this->pageMeta = '';
-			$this->render('admin_add',array(
-				'model'=>$model,
-			));
 		}
+		
+		$this->dialogDetail = true; 
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage'); 
+		$this->dialogWidth = 600; 
+
+		$this->pageTitle = Yii::t('phrase', 'Create Banner Categories');
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('admin_add',array(
+			'model'=>$model,
+		));
 	}
 
 	/**
@@ -182,7 +181,7 @@ class CategoryController extends Controller
 
 		if(isset($_POST['BannerCategory'])) {
 			$model->attributes=$_POST['BannerCategory'];
-			
+
 			$jsonError = CActiveForm::validate($model);
 			if(strlen($jsonError) > 2) {
 				echo $jsonError;
@@ -194,26 +193,25 @@ class CategoryController extends Controller
 							'type' => 5,
 							'get' => Yii::app()->controller->createUrl('o/setting/edit'),
 							'id' => 'partial-banner-category',
-							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Banner category success updated.').'</strong></div>',
+							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Banner Categories success updated.').'</strong></div>',
 						));
 					} else
 						print_r($model->getErrors());
 				}
 			}
 			Yii::app()->end();
-			
-		} else {
-			$this->dialogDetail = true;
-			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
-			$this->dialogWidth = 600;
-			
-			$this->pageTitle = Yii::t('phrase', 'Update Category: {category_name}', array('{category_name}'=>$model->title->message));
-			$this->pageDescription = '';
-			$this->pageMeta = '';
-			$this->render('admin_edit',array(
-				'model'=>$model,
-			));
 		}
+		
+		$this->dialogDetail = true; 
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage'); 
+		$this->dialogWidth = 600; 
+
+		$this->pageTitle = Yii::t('phrase', 'Update Banner Categories');
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('admin_edit',array(
+			'model'=>$model,
+		));
 	}
 	
 	/**
@@ -226,7 +224,7 @@ class CategoryController extends Controller
 		
 		$this->dialogDetail = true;
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
-		$this->dialogWidth = 500;
+		$this->dialogWidth = 600;
 
 		$this->pageTitle = Yii::t('phrase', 'View Category: {category_name}', array('{category_name}'=>$model->title->message));
 		$this->pageDescription = '';
@@ -234,7 +232,7 @@ class CategoryController extends Controller
 		$this->render('admin_view',array(
 			'model'=>$model,
 		));
-	}
+	}	
 
 	/**
 	 * Displays a particular model.
@@ -247,7 +245,7 @@ class CategoryController extends Controller
 
 		if(count($id) > 0) {
 			$criteria = new CDbCriteria;
-			$criteria->addInCondition('id', $id);
+			$criteria->addInCondition('cat_id', $id);
 
 			if($actions == 'publish') {
 				BannerCategory::model()->updateAll(array(
@@ -283,27 +281,27 @@ class CategoryController extends Controller
 		
 		if(Yii::app()->request->isPostRequest) {
 			// we only allow deletion via POST request
-			if(isset($id)) {
-				if($model->delete()) {
-					echo CJSON::encode(array(
-						'type' => 5,
-						'get' => Yii::app()->controller->createUrl('o/setting/edit'),
-						'id' => 'partial-banner-category',
-						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Banner category success deleted.').'</strong></div>',
-					));
-				}
+			$model->publish = 2;
+			
+			if($model->save()) {
+				echo CJSON::encode(array(
+					'type' => 5,
+					'get' => Yii::app()->controller->createUrl('manage'),
+					'id' => 'partial-banner-category',
+					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Banner Categories success deleted.').'</strong></div>',
+				));
 			}
-
-		} else {
-			$this->dialogDetail = true;
-			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
-			$this->dialogWidth = 350;
-
-			$this->pageTitle = Yii::t('phrase', 'Delete Category: {category_name}', array('{category_name}'=>$model->title->message));
-			$this->pageDescription = '';
-			$this->pageMeta = '';
-			$this->render('admin_delete');
+			Yii::app()->end();
 		}
+
+		$this->dialogDetail = true;
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+		$this->dialogWidth = 350;
+
+		$this->pageTitle = Yii::t('phrase', 'Delete Banner Categories');
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('admin_delete');
 	}
 
 	/**
@@ -315,44 +313,36 @@ class CategoryController extends Controller
 	{
 		$model=$this->loadModel($id);
 		
-		if($model->publish == 1) {
-			$title = Yii::t('phrase', 'Unpublish');
-			$replace = 0;
-		} else {
-			$title = Yii::t('phrase', 'Publish');
-			$replace = 1;
-		}
-		$pageTitle = Yii::t('phrase', '{title}: {category_name}', array('{title}'=>$title, '{category_name}'=>$model->title->message));
+		$title = $model->publish == 1 ? Yii::t('phrase', 'Unpublish') : Yii::t('phrase', 'Publish');
+		$replace = $model->publish == 1 ? 0 : 1;
 
 		if(Yii::app()->request->isPostRequest) {
 			// we only allow deletion via POST request
-			if(isset($id)) {
-				//change value active or publish
-				$model->publish = $replace;
+			//change value active or publish
+			$model->publish = $replace;
 
-				if($model->update()) {
-					echo CJSON::encode(array(
-						'type' => 5,
-						'get' => Yii::app()->controller->createUrl('o/setting/edit'),
-						'id' => 'partial-banner-category',
-						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Banner category success updated.').'</strong></div>',
-					));
-				}
+			if($model->update()) {
+				echo CJSON::encode(array(
+					'type' => 5,
+					'get' => Yii::app()->controller->createUrl('manage'),
+					'id' => 'partial-banner-category',
+					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Banner Categories success updated.').'</strong></div>',
+				));
 			}
-
-		} else {
-			$this->dialogDetail = true;
-			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
-			$this->dialogWidth = 350;
-
-			$this->pageTitle = $pageTitle;
-			$this->pageDescription = '';
-			$this->pageMeta = '';
-			$this->render('admin_publish',array(
-				'title'=>$title,
-				'model'=>$model,
-			));
+			Yii::app()->end();
 		}
+
+		$this->dialogDetail = true;
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+		$this->dialogWidth = 350;
+
+		$this->pageTitle = Yii::t('phrase', '$title Banner Categories', array('$title'=>$title));
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('admin_publish',array(
+			'title'=>$title,
+			'model'=>$model,
+		));
 	}
 
 	/**
