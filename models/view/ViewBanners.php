@@ -14,6 +14,7 @@
  * The followings are the available columns in table '_view_banners':
  * @property string $banner_id
  * @property integer $publish
+ * @property integer $permanent
  * @property string $views
  * @property string $clicks
  */
@@ -59,12 +60,12 @@ class ViewBanners extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('publish', 'numerical', 'integerOnly'=>true),
+			array('publish, permanent', 'numerical', 'integerOnly'=>true),
 			array('banner_id', 'length', 'max'=>11),
 			array('views, clicks', 'length', 'max'=>32),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('banner_id, publish, views, clicks', 'safe', 'on'=>'search'),
+			array('banner_id, publish, permanent, views, clicks', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -87,6 +88,7 @@ class ViewBanners extends CActiveRecord
 		return array(
 			'banner_id' => Yii::t('attribute', 'Banner'),
 			'publish' => Yii::t('attribute', 'Publish'),
+			'permanent' => Yii::t('attribute', 'Permanent'),
 			'views' => Yii::t('attribute', 'Views'),
 			'clicks' => Yii::t('attribute', 'Clicks'),
 		);
@@ -111,16 +113,8 @@ class ViewBanners extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('t.banner_id', strtolower($this->banner_id), true);
-		if(isset($_GET['type']) && $_GET['type'] == 'publish')
-			$criteria->compare('t.publish', 1);
-		elseif(isset($_GET['type']) && $_GET['type'] == 'unpublish')
-			$criteria->compare('t.publish', 0);
-		elseif(isset($_GET['type']) && $_GET['type'] == 'trash')
-			$criteria->compare('t.publish', 2);
-		else {
-			$criteria->addInCondition('t.publish', array(0,1));
-			$criteria->compare('t.publish', $this->publish);
-		}
+		$criteria->compare('t.publish', $this->publish);
+		$criteria->compare('t.permanent', $this->permanent);
 		$criteria->compare('t.views', strtolower($this->views), true);
 		$criteria->compare('t.clicks', strtolower($this->clicks), true);
 
@@ -224,6 +218,10 @@ class ViewBanners extends CActiveRecord
 			$this->templateColumns['publish'] = array(
 				'name' => 'publish',
 				'value' => '$data->publish',
+			);
+			$this->templateColumns['permanent'] = array(
+				'name' => 'permanent',
+				'value' => '$data->permanent',
 			);
 			$this->templateColumns['views'] = array(
 				'name' => 'views',

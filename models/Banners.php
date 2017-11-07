@@ -45,6 +45,7 @@ class Banners extends CActiveRecord
 	// Variable Search
 	public $creation_search;
 	public $modified_search;
+	public $permanent_search;
 	public $view_search;
 	public $click_search;
 
@@ -101,7 +102,7 @@ class Banners extends CActiveRecord
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('banner_id, publish, cat_id, title, url, banner_filename, banner_desc, published_date, expired_date, creation_date, creation_id, modified_date, modified_id, slug,
-				creation_search, modified_search, view_search, click_search', 'safe', 'on'=>'search'),
+				creation_search, modified_search, permanent_search, view_search, click_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -147,6 +148,7 @@ class Banners extends CActiveRecord
 			'old_banner_filename_i' => Yii::t('attribute', 'Old Media'),
 			'creation_search' => Yii::t('attribute', 'Creation'),
 			'modified_search' => Yii::t('attribute', 'Modified'),
+			'permanent_search' => Yii::t('attribute', 'Permanent'),
 			'view_search' => Yii::t('attribute', 'Views'),
 			'click_search' => Yii::t('attribute', 'Clicks'),
 		);
@@ -215,6 +217,7 @@ class Banners extends CActiveRecord
 		
 		$criteria->compare('creation.displayname', strtolower($this->creation_search), true);
 		$criteria->compare('modified.displayname', strtolower($this->modified_search), true);
+		$criteria->compare('view.permanent', $this->permanent_search);
 		$criteria->compare('view.clicks', $this->view_search);
 		$criteria->compare('view.views', $this->click_search);
 
@@ -470,6 +473,18 @@ class Banners extends CActiveRecord
 				'value' => '$data->url != \'-\' ? CHtml::link($data->view->clicks ? $data->view->clicks : 0, Yii::app()->controller->createUrl("o/click/manage",array(\'banner\'=>$data->banner_id))) : \'-\'',
 				'htmlOptions' => array(
 					'class' => 'center',
+				),
+				'type' => 'raw',
+			);
+			$this->templateColumns['permanent_search'] = array(
+				'name' => 'permanent_search',
+				'value' => '$data->view->permanent == 1 ? CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'filter'=>array(
+					1=>Yii::t('phrase', 'Yes'),
+					0=>Yii::t('phrase', 'No'),
 				),
 				'type' => 'raw',
 			);
