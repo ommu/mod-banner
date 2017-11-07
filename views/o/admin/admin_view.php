@@ -28,21 +28,16 @@
 			),
 			array(
 				'name'=>'publish',
-				'value'=>$model->publish == 1 ? CHtml::image(Yii::app()->theme->baseUrl.'/images/icons/publish.png') : CHtml::image(Yii::app()->theme->baseUrl.'/images/icons/unpublish.png'),
+				'value'=>$model->publish == '1' ? CHtml::image(Yii::app()->theme->baseUrl.'/images/icons/publish.png') : CHtml::image(Yii::app()->theme->baseUrl.'/images/icons/unpublish.png'),
 				'type' => 'raw',
 			),
 			array(
 				'name'=>'cat_id',
 				'value'=>$model->category->title->message,
 			),
-			'title',
 			array(
-				'name'=>'slug',
-				'value'=>$model->slug ? $model->slug : '-',
-			),
-			array(
-				'name'=>'banner_desc',
-				'value'=>$model->banner_desc ? $model->banner_desc : '-',
+				'name'=>'title',
+				'value'=>$model->title,
 			),
 			array(
 				'name'=>'url',
@@ -53,6 +48,10 @@
 				'name'=>'banner_filename',
 				'value'=>CHtml::link($model->banner_filename, Yii::app()->request->baseUrl.'/public/banner/'.$model->banner_filename, array('target' => '_blank')),
 				'type' => 'raw',
+			),
+			array(
+				'name'=>'banner_desc',
+				'value'=>$model->banner_desc ? $model->banner_desc : '-',
 			),
 			array(
 				'name'=>'published_date',
@@ -77,6 +76,10 @@
 			array(
 				'name'=>'modified_id',
 				'value'=>$model->modified->displayname ? $model->modified->displayname : '-',
+			),
+			array(
+				'name'=>'slug',
+				'value'=>$model->slug ? $model->slug : '-',
 			),
 		),
 	)); ?>

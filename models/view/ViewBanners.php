@@ -9,27 +9,19 @@
  * @link https://github.com/ommu/mod-banner
  * @contact (+62)856-299-4114
  *
- * This is the template for generating the model class of a specified table.
- * - $this: the ModelCode object
- * - $tableName: the table name for this class (prefix is already removed if necessary)
- * - $modelClass: the model class name
- * - $columns: list of table columns (name=>CDbColumnSchema)
- * - $labels: list of attribute labels (name=>label)
- * - $rules: list of validation rules
- * - $relations: list of relations (name=>relation declaration)
- *
- * --------------------------------------------------------------------------------------
- *
  * This is the model class for table "_view_banners".
  *
  * The followings are the available columns in table '_view_banners':
  * @property string $banner_id
- * @property string $clicks
+ * @property integer $publish
  * @property string $views
+ * @property string $clicks
  */
 class ViewBanners extends CActiveRecord
 {
 	public $defaultColumns = array();
+	public $templateColumns = array();
+	public $gridForbiddenColumn = array();
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -47,9 +39,10 @@ class ViewBanners extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return '_view_banners';
+		preg_match("/dbname=([^;]+)/i", $this->dbConnection->connectionString, $matches);
+		return $matches[1].'._view_banners';
 	}
-
+	
 	/**
 	 * @return string the primarykey column
 	 */
@@ -66,11 +59,12 @@ class ViewBanners extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
+			array('publish', 'numerical', 'integerOnly'=>true),
 			array('banner_id', 'length', 'max'=>11),
-			array('clicks, views', 'length', 'max'=>32),
+			array('views, clicks', 'length', 'max'=>32),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('banner_id, clicks, views', 'safe', 'on'=>'search'),
+			array('banner_id, publish, views, clicks', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -92,8 +86,9 @@ class ViewBanners extends CActiveRecord
 	{
 		return array(
 			'banner_id' => Yii::t('attribute', 'Banner'),
-			'clicks' => Yii::t('attribute', 'Clicks'),
+			'publish' => Yii::t('attribute', 'Publish'),
 			'views' => Yii::t('attribute', 'Views'),
+			'clicks' => Yii::t('attribute', 'Clicks'),
 		);
 	}
 
@@ -115,9 +110,19 @@ class ViewBanners extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('t.banner_id',$this->banner_id);
-		$criteria->compare('t.clicks',$this->clicks);
-		$criteria->compare('t.views',$this->views);
+		$criteria->compare('t.banner_id', strtolower($this->banner_id), true);
+		if(isset($_GET['type']) && $_GET['type'] == 'publish')
+			$criteria->compare('t.publish', 1);
+		elseif(isset($_GET['type']) && $_GET['type'] == 'unpublish')
+			$criteria->compare('t.publish', 0);
+		elseif(isset($_GET['type']) && $_GET['type'] == 'trash')
+			$criteria->compare('t.publish', 2);
+		else {
+			$criteria->addInCondition('t.publish', array(0,1));
+			$criteria->compare('t.publish', $this->publish);
+		}
+		$criteria->compare('t.views', strtolower($this->views), true);
+		$criteria->compare('t.clicks', strtolower($this->clicks), true);
 
 		if(!isset($_GET['ViewBanners_sort']))
 			$criteria->order = 't.banner_id DESC';
@@ -130,44 +135,104 @@ class ViewBanners extends CActiveRecord
 		));
 	}
 
-
 	/**
-	 * Get column for CGrid View
+	 * Get kolom untuk Grid View
+	 *
+	 * @param array $columns kolom dari view
+	 * @return array dari grid yang aktif
 	 */
-	public function getGridColumn($columns=null) {
-		if($columns !== null) {
-			foreach($columns as $val) {
-				/*
-				if(trim($val) == 'enabled') {
-					$this->defaultColumns[] = array(
-						'name'  => 'enabled',
-						'value' => '$data->enabled == 1? "Ya": "Tidak"',
-					);
-				}
-				*/
-				$this->defaultColumns[] = $val;
+	public function getGridColumn($columns=null) 
+	{
+		// Jika $columns kosong maka isi defaultColumns dg templateColumns
+		if(empty($columns) || $columns == null) {
+			array_splice($this->defaultColumns, 0);
+			foreach($this->templateColumns as $key => $val) {
+				if(!in_array($key, $this->gridForbiddenColumn) && !in_array($key, $this->defaultColumns))
+					$this->defaultColumns[] = $val;
 			}
-		} else {
-			$this->defaultColumns[] = 'banner_id';
-			$this->defaultColumns[] = 'clicks';
-			$this->defaultColumns[] = 'views';
+			return $this->defaultColumns;
 		}
 
+		foreach($columns as $val) {
+			if(!in_array($val, $this->gridForbiddenColumn) && !in_array($val, $this->defaultColumns)) {
+				$col = $this->getTemplateColumn($val);
+				if($col != null)
+					$this->defaultColumns[] = $col;
+			}
+		}
+
+		array_unshift($this->defaultColumns, array(
+			'header' => Yii::t('app', 'No'),
+			'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1',
+			'htmlOptions' => array(
+				'class' => 'center',
+			),
+		));
+
+		array_unshift($this->defaultColumns, array(
+			'class' => 'CCheckBoxColumn',
+			'name' => 'id',
+			'selectableRows' => 2,
+			'checkBoxHtmlOptions' => array('name' => 'trash_id[]')
+		));
+
 		return $this->defaultColumns;
+	}
+
+	/**
+	 * Get kolom template berdasarkan id pengenal
+	 *
+	 * @param string $name nama pengenal
+	 * @return mixed
+	 */
+	public function getTemplateColumn($name) 
+	{
+		$data = null;
+		if(trim($name) == '') return $data;
+
+		foreach($this->templateColumns as $key => $item) {
+			if($name == $key) {
+				$data = $item;
+				break;
+			}
+		}
+		return $data;
 	}
 
 	/**
 	 * Set default columns to display
 	 */
 	protected function afterConstruct() {
-		if(count($this->defaultColumns) == 0) {
-			$this->defaultColumns[] = array(
-				'header' => 'No',
-				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
+		if(count($this->templateColumns) == 0) {
+			$this->templateColumns['_option'] = array(
+				'class' => 'CCheckBoxColumn',
+				'name' => 'id',
+				'selectableRows' => 2,
+				'checkBoxHtmlOptions' => array('name' => 'trash_id[]')
 			);
-			$this->defaultColumns[] = 'banner_id';
-			$this->defaultColumns[] = 'clicks';
-			$this->defaultColumns[] = 'views';
+			$this->templateColumns['_no'] = array(
+				'header' => Yii::t('app', 'No'),
+				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+			);
+			$this->templateColumns['banner_id'] = array(
+				'name' => 'banner_id',
+				'value' => '$data->banner_id',
+			);
+			$this->templateColumns['publish'] = array(
+				'name' => 'publish',
+				'value' => '$data->publish',
+			);
+			$this->templateColumns['views'] = array(
+				'name' => 'views',
+				'value' => '$data->views',
+			);
+			$this->templateColumns['clicks'] = array(
+				'name' => 'clicks',
+				'value' => '$data->clicks',
+			);
 		}
 		parent::afterConstruct();
 	}
@@ -185,7 +250,7 @@ class ViewBanners extends CActiveRecord
 			
 		} else {
 			$model = self::model()->findByPk($id);
-			return $model;			
+			return $model;
 		}
 	}
 

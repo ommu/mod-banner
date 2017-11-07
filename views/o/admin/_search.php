@@ -20,73 +20,114 @@
 )); ?>
 	<ul>
 		<li>
-			<?php echo $model->getAttributeLabel('banner_id'); ?><br/>
-			<?php echo $form->textField($model,'banner_id'); ?>
-		</li>
-
-		<li>
-			<?php echo $model->getAttributeLabel('publish'); ?><br/>
-			<?php echo $form->textField($model,'publish'); ?>
-		</li>
-
-		<li>
-			<?php echo $model->getAttributeLabel('cat_id'); ?><br/>
+			<?php echo $model->getAttributeLabel('cat_id'); ?>
 			<?php echo $form->textField($model,'cat_id'); ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('title'); ?><br/>
+			<?php echo $model->getAttributeLabel('title'); ?>
 			<?php echo $form->textField($model,'title'); ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('url'); ?><br/>
+			<?php echo $model->getAttributeLabel('url'); ?>
 			<?php echo $form->textArea($model,'url'); ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('banner_filename'); ?><br/>
+			<?php echo $model->getAttributeLabel('banner_filename'); ?>
 			<?php echo $form->textField($model,'banner_filename'); ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('banner_desc'); ?><br/>
+			<?php echo $model->getAttributeLabel('banner_desc'); ?>
 			<?php echo $form->textArea($model,'banner_desc'); ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('published_date'); ?><br/>
-			<?php echo $form->textField($model,'published_date'); ?>
+			<?php echo $model->getAttributeLabel('published_date'); ?>
+			<?php //echo $form->textField($model,'published_date');
+			$this->widget('application.components.system.CJuiDatePicker',array(
+				'model'=>$model,
+				'attribute'=>'published_date',
+				//'mode'=>'datetime',
+				'options'=>array(
+					'dateFormat' => 'dd-mm-yy',
+				),
+				'htmlOptions'=>array(
+					'class' => 'span-4',
+				 ),
+			));; ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('expired_date'); ?><br/>
-			<?php echo $form->textField($model,'expired_date'); ?>
+			<?php echo $model->getAttributeLabel('expired_date'); ?>
+			<?php //echo $form->textField($model,'expired_date');
+			$this->widget('application.components.system.CJuiDatePicker',array(
+				'model'=>$model,
+				'attribute'=>'expired_date',
+				//'mode'=>'datetime',
+				'options'=>array(
+					'dateFormat' => 'dd-mm-yy',
+				),
+				'htmlOptions'=>array(
+					'class' => 'span-4',
+				 ),
+			));; ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('creation_date'); ?><br/>
-			<?php echo $form->textField($model,'creation_date'); ?>
+			<?php echo $model->getAttributeLabel('creation_date'); ?>
+			<?php //echo $form->textField($model,'creation_date');
+			$this->widget('application.components.system.CJuiDatePicker',array(
+				'model'=>$model,
+				'attribute'=>'creation_date',
+				//'mode'=>'datetime',
+				'options'=>array(
+					'dateFormat' => 'dd-mm-yy',
+				),
+				'htmlOptions'=>array(
+					'class' => 'span-4',
+				 ),
+			));; ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('creation_id'); ?><br/>
-			<?php echo $form->textField($model,'creation_id'); ?>
+			<?php echo $model->getAttributeLabel('creation_search'); ?>
+			<?php echo $form->textField($model,'creation_search'); ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('modified_date'); ?><br/>
-			<?php echo $form->textField($model,'modified_date'); ?>
+			<?php echo $model->getAttributeLabel('modified_date'); ?>
+			<?php //echo $form->textField($model,'modified_date');
+			$this->widget('application.components.system.CJuiDatePicker',array(
+				'model'=>$model,
+				'attribute'=>'modified_date',
+				//'mode'=>'datetime',
+				'options'=>array(
+					'dateFormat' => 'dd-mm-yy',
+				),
+				'htmlOptions'=>array(
+					'class' => 'span-4',
+				 ),
+			));; ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('modified_id'); ?><br/>
-			<?php echo $form->textField($model,'modified_id'); ?>
+			<?php echo $model->getAttributeLabel('modified_search'); ?>
+			<?php echo $form->textField($model,'modified_search'); ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('slug'); ?><br/>
+			<?php echo $model->getAttributeLabel('slug'); ?>
 			<?php echo $form->textField($model,'slug'); ?>
+		</li>
+
+		<li>
+			<?php echo $model->getAttributeLabel('publish'); ?>
+			<?php echo $form->dropDownList($model,'publish', array('0'=>Yii::t('phrase', 'No'), '1'=>Yii::t('phrase', 'Yes'))); ?>
+		</li>
+
 
 		<li class="submit">
 			<?php echo CHtml::submitButton(Yii::t('phrase', 'Search')); ?>

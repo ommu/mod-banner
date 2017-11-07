@@ -16,7 +16,7 @@
 	$cs = Yii::app()->getClientScript();
 $js=<<<EOP
 	$('#Banners_permanent_i').on('change', function() {
-		var id = $(this).prop('checked');		
+		var id = $(this).prop('checked');
 		if(id == true) {
 			$('div#expired-date').slideUp();
 		} else {
@@ -24,7 +24,7 @@ $js=<<<EOP
 		}
 	});
 	$('#Banners_linked_i').on('change', function() {
-		var id = $(this).prop('checked');		
+		var id = $(this).prop('checked');
 		if(id == true) {
 			$('div#url').slideDown();
 		} else {
@@ -59,7 +59,6 @@ EOP;
 			else
 				echo $form->dropDownList($model,'cat_id', array('prompt'=>'No Parent'));
 			echo $form->error($model,'cat_id');?>
-			<?php /*<div class="small-px silent"></div>*/?>
 		</div>
 	</div>
 
@@ -68,7 +67,6 @@ EOP;
 		<div class="desc">
 			<?php echo $form->textField($model,'title',array('class'=>'span-7', 'maxlength'=>64)); ?>
 			<?php echo $form->error($model,'title'); ?>
-			<?php /*<div class="small-px silent"></div>*/?>
 		</div>
 	</div>
 
@@ -92,7 +90,6 @@ EOP;
 		<div class="desc">
 			<?php echo $form->checkBox($model,'linked_i'); ?>
 			<?php echo $form->error($model,'linked_i'); ?>
-			<?php /*<div class="small-px silent"></div>*/?>
 		</div>
 	</div>
 
@@ -143,7 +140,6 @@ EOP;
 				 ),
 			)); ?>
 			<?php echo $form->error($model,'published_date'); ?>
-			<?php /*<div class="small-px silent"></div>*/?>
 		</div>
 	</div>
 
@@ -159,7 +155,6 @@ EOP;
 		<div class="desc">
 			<?php echo $form->checkBox($model,'permanent_i'); ?>
 			<?php echo $form->error($model,'permanent_i'); ?>
-			<?php /*<div class="small-px silent"></div>*/?>
 		</div>
 	</div>
 	
@@ -182,7 +177,6 @@ EOP;
 				 ),
 			)); ?>
 			<?php echo $form->error($model,'expired_date'); ?>
-			<?php /*<div class="small-px silent"></div>*/?>
 		</div>
 	</div>
 
@@ -191,7 +185,6 @@ EOP;
 		<div class="desc">
 			<?php echo $form->checkBox($model,'publish'); ?>
 			<?php echo $form->error($model,'publish'); ?>
-			<?php /*<div class="small-px silent"></div>*/?>
 		</div>
 	</div>
 

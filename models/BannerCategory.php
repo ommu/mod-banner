@@ -505,7 +505,7 @@ class BannerCategory extends CActiveRecord
 			$items = array();
 			if($model != null) {
 				foreach($model as $key => $val) {
-					$items[$val->cat_id] = $val->name;
+					$items[$val->cat_id] = $val->title->message;
 				}
 				return $items;
 			} else

@@ -8,17 +8,6 @@
  * @link https://github.com/ommu/mod-banner
  * @contact (+62)856-299-4114
  *
- * This is the template for generating the model class of a specified table.
- * - $this: the ModelCode object
- * - $tableName: the table name for this class (prefix is already removed if necessary)
- * - $modelClass: the model class name
- * - $columns: list of table columns (name=>CDbColumnSchema)
- * - $labels: list of attribute labels (name=>label)
- * - $rules: list of validation rules
- * - $relations: list of relations (name=>relation declaration)
- *
- * --------------------------------------------------------------------------------------
- *
  * This is the model class for table "_view_banner_category".
  *
  * The followings are the available columns in table '_view_banner_category':
@@ -32,6 +21,8 @@
 class ViewBannerCategory extends CActiveRecord
 {
 	public $defaultColumns = array();
+	public $templateColumns = array();
+	public $gridForbiddenColumn = array();
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -49,7 +40,8 @@ class ViewBannerCategory extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return '_view_banner_category';
+		preg_match("/dbname=([^;]+)/i", $this->dbConnection->connectionString, $matches);
+		return $matches[1].'._view_banner_category';
 	}
 
 	/**
@@ -69,7 +61,8 @@ class ViewBannerCategory extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('cat_id', 'numerical', 'integerOnly'=>true),
-			array('banners, banner_pending, banner_expired, banner_unpublish, banner_all', 'length', 'max'=>21),
+			array('banners, banner_pending, banner_expired, banner_unpublish', 'length', 'max'=>23),
+			array('banner_all', 'length', 'max'=>21),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('cat_id, banners, banner_pending, banner_expired, banner_unpublish, banner_all', 'safe', 'on'=>'search'),
@@ -95,9 +88,9 @@ class ViewBannerCategory extends CActiveRecord
 		return array(
 			'cat_id' => Yii::t('attribute', 'Category'),
 			'banners' => Yii::t('attribute', 'Banners'),
-			'banner_pending' => Yii::t('attribute', 'Pending'),
-			'banner_expired' => Yii::t('attribute', 'Expired'),
-			'banner_unpublish' => Yii::t('attribute', 'Unpublish'),
+			'banner_pending' => Yii::t('attribute', 'Banner Pending'),
+			'banner_expired' => Yii::t('attribute', 'Banner Expired'),
+			'banner_unpublish' => Yii::t('attribute', 'Banner Unpublish'),
 			'banner_all' => Yii::t('attribute', 'Banner All'),
 		);
 	}
@@ -120,12 +113,12 @@ class ViewBannerCategory extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('t.cat_id',$this->cat_id);
-		$criteria->compare('t.banners',$this->banners);
-		$criteria->compare('t.banner_pending',$this->banner_pending);
-		$criteria->compare('t.banner_expired',$this->banner_expired);
-		$criteria->compare('t.banner_unpublish',$this->banner_unpublish);
-		$criteria->compare('t.banner_all',$this->banner_all);
+		$criteria->compare('t.cat_id', $this->cat_id);
+		$criteria->compare('t.banners', strtolower($this->banners), true);
+		$criteria->compare('t.banner_pending', strtolower($this->banner_pending), true);
+		$criteria->compare('t.banner_expired', strtolower($this->banner_expired), true);
+		$criteria->compare('t.banner_unpublish', strtolower($this->banner_unpublish), true);
+		$criteria->compare('t.banner_all', strtolower($this->banner_all), true);
 
 		if(!isset($_GET['ViewBannerCategory_sort']))
 			$criteria->order = 't.cat_id DESC';
@@ -138,50 +131,112 @@ class ViewBannerCategory extends CActiveRecord
 		));
 	}
 
-
 	/**
-	 * Get column for CGrid View
+	 * Get kolom untuk Grid View
+	 *
+	 * @param array $columns kolom dari view
+	 * @return array dari grid yang aktif
 	 */
-	public function getGridColumn($columns=null) {
-		if($columns !== null) {
-			foreach($columns as $val) {
-				/*
-				if(trim($val) == 'enabled') {
-					$this->defaultColumns[] = array(
-						'name'  => 'enabled',
-						'value' => '$data->enabled == 1? "Ya": "Tidak"',
-					);
-				}
-				*/
-				$this->defaultColumns[] = $val;
+	public function getGridColumn($columns=null) 
+	{
+		// Jika $columns kosong maka isi defaultColumns dg templateColumns
+		if(empty($columns) || $columns == null) {
+			array_splice($this->defaultColumns, 0);
+			foreach($this->templateColumns as $key => $val) {
+				if(!in_array($key, $this->gridForbiddenColumn) && !in_array($key, $this->defaultColumns))
+					$this->defaultColumns[] = $val;
 			}
-		} else {
-			$this->defaultColumns[] = 'cat_id';
-			$this->defaultColumns[] = 'banners';
-			$this->defaultColumns[] = 'banner_pending';
-			$this->defaultColumns[] = 'banner_expired';
-			$this->defaultColumns[] = 'banner_unpublish';
-			$this->defaultColumns[] = 'banner_all';
+			return $this->defaultColumns;
 		}
 
+		foreach($columns as $val) {
+			if(!in_array($val, $this->gridForbiddenColumn) && !in_array($val, $this->defaultColumns)) {
+				$col = $this->getTemplateColumn($val);
+				if($col != null)
+					$this->defaultColumns[] = $col;
+			}
+		}
+
+		array_unshift($this->defaultColumns, array(
+			'header' => Yii::t('app', 'No'),
+			'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1',
+			'htmlOptions' => array(
+				'class' => 'center',
+			),
+		));
+
+		array_unshift($this->defaultColumns, array(
+			'class' => 'CCheckBoxColumn',
+			'name' => 'id',
+			'selectableRows' => 2,
+			'checkBoxHtmlOptions' => array('name' => 'trash_id[]')
+		));
+
 		return $this->defaultColumns;
+	}
+
+	/**
+	 * Get kolom template berdasarkan id pengenal
+	 *
+	 * @param string $name nama pengenal
+	 * @return mixed
+	 */
+	public function getTemplateColumn($name) 
+	{
+		$data = null;
+		if(trim($name) == '') return $data;
+
+		foreach($this->templateColumns as $key => $item) {
+			if($name == $key) {
+				$data = $item;
+				break;
+			}
+		}
+		return $data;
 	}
 
 	/**
 	 * Set default columns to display
 	 */
 	protected function afterConstruct() {
-		if(count($this->defaultColumns) == 0) {
-			$this->defaultColumns[] = array(
-				'header' => 'No',
-				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
+		if(count($this->templateColumns) == 0) {
+			$this->templateColumns['_option'] = array(
+				'class' => 'CCheckBoxColumn',
+				'name' => 'id',
+				'selectableRows' => 2,
+				'checkBoxHtmlOptions' => array('name' => 'trash_id[]')
 			);
-			$this->defaultColumns[] = 'cat_id';
-			$this->defaultColumns[] = 'banners';
-			$this->defaultColumns[] = 'banner_pending';
-			$this->defaultColumns[] = 'banner_expired';
-			$this->defaultColumns[] = 'banner_unpublish';
-			$this->defaultColumns[] = 'banner_all';
+			$this->templateColumns['_no'] = array(
+				'header' => Yii::t('app', 'No'),
+				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+			);
+			$this->templateColumns['cat_id'] = array(
+				'name' => 'cat_id',
+				'value' => '$data->cat_id',
+			);
+			$this->templateColumns['banners'] = array(
+				'name' => 'banners',
+				'value' => '$data->banners',
+			);
+			$this->templateColumns['banner_pending'] = array(
+				'name' => 'banner_pending',
+				'value' => '$data->banner_pending',
+			);
+			$this->templateColumns['banner_expired'] = array(
+				'name' => 'banner_expired',
+				'value' => '$data->banner_expired',
+			);
+			$this->templateColumns['banner_unpublish'] = array(
+				'name' => 'banner_unpublish',
+				'value' => '$data->banner_unpublish',
+			);
+			$this->templateColumns['banner_all'] = array(
+				'name' => 'banner_all',
+				'value' => '$data->banner_all',
+			);
 		}
 		parent::afterConstruct();
 	}
@@ -199,7 +254,7 @@ class ViewBannerCategory extends CActiveRecord
 			
 		} else {
 			$model = self::model()->findByPk($id);
-			return $model;			
+			return $model;
 		}
 	}
 
