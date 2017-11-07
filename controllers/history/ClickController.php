@@ -10,6 +10,7 @@
  * TOC :
  *	Index
  *	Manage
+ *	Delete
  *
  *	LoadModel
  *	performAjaxValidation
@@ -68,7 +69,7 @@ class ClickController extends Controller
 	{
 		return array(
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('index','manage'),
+				'actions'=>array('index','manage','delete'),
 				'users'=>array('@'),
 				'expression'=>'in_array($user->level, array(1,2))',
 			),
@@ -91,12 +92,12 @@ class ClickController extends Controller
 	 */
 	public function actionManage($click=null)
 	{
-		$pageTitle = Yii::t('phrase', 'Banner Clicks Data');
+		$pageTitle = Yii::t('phrase', 'Banner Click Datas');
 		if($click != null) {
 			$data = BannerClicks::model()->findByPk($click);
-			$pageTitle = Yii::t('phrase', 'Banner Clicks Data: {banner_title} from category {category_name} - user Guest', array ('{banner_title}'=>$data->banner->title, '{category_name}'=>$data->banner->category->title->message));	
+			$pageTitle = Yii::t('phrase', 'Banner Click Data: {banner_title} from category {category_name} - user Guest', array ('{banner_title}'=>$data->banner->title, '{category_name}'=>$data->banner->category->title->message));	
 			if($data->user->displayname)
-				$pageTitle = Yii::t('phrase', 'Banner Clicks Data: {banner_title} from category {category_name} - user {user_displayname}', array ('{banner_title}'=>$data->banner->title, '{category_name}'=>$data->banner->category->title->message, '{user_displayname}'=>$data->user->displayname));
+				$pageTitle = Yii::t('phrase', 'Banner Click Data: {banner_title} from category {category_name} - user {user_displayname}', array ('{banner_title}'=>$data->banner->title, '{category_name}'=>$data->banner->category->title->message, '{user_displayname}'=>$data->user->displayname));
 		}
 		
 		$model=new BannerClickHistory('search');
@@ -105,12 +106,12 @@ class ClickController extends Controller
 			$model->attributes=$_GET['BannerClickHistory'];
 		}
 
+		$gridColumn = $_GET['GridColumn'];
 		$columnTemp = array();
-		if(isset($_GET['GridColumn'])) {
-			foreach($_GET['GridColumn'] as $key => $val) {
-				if($_GET['GridColumn'][$key] == 1) {
+		if(isset($gridColumn)) {
+			foreach($gridColumn as $key => $val) {
+				if($gridColumn[$key] == 1)
 					$columnTemp[] = $key;
-				}
 			}
 		}
 		$columns = $model->getGridColumn($columnTemp);
@@ -122,6 +123,38 @@ class ClickController extends Controller
 			'model'=>$model,
 			'columns' => $columns,
 		));
+	}
+
+	/**
+	 * Deletes a particular model.
+	 * If deletion is successful, the browser will be redirected to the 'admin' page.
+	 * @param integer $id the ID of the model to be deleted
+	 */
+	public function actionDelete($id) 
+	{
+		$model=$this->loadModel($id);
+		
+		if(Yii::app()->request->isPostRequest) {
+			// we only allow deletion via POST request
+			if($model->delete()) {
+				echo CJSON::encode(array(
+					'type' => 5,
+					'get' => Yii::app()->controller->createUrl('manage'),
+					'id' => 'partial-banner-click-history',
+					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Banner click data success deleted.').'</strong></div>',
+				));
+			}
+			Yii::app()->end();
+		}
+
+		$this->dialogDetail = true;
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+		$this->dialogWidth = 350;
+
+		$this->pageTitle = Yii::t('phrase', 'Delete Click Data: {banner_title} from category {category_name}', array ('{banner_title}'=>$model->click->banner->title, '{category_name}'=>$model->click->banner->category->title->message));
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('admin_delete');
 	}
 
 	/**
@@ -143,7 +176,7 @@ class ClickController extends Controller
 	 */
 	protected function performAjaxValidation($model) 
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='banner-click-detail-form') {
+		if(isset($_POST['ajax']) && $_POST['ajax']==='banner-click-history-form') {
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}

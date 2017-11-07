@@ -86,10 +86,10 @@
 						),
 						'url' => 'Yii::app()->controller->createUrl(\'edit\',array(\'id\'=>$data->primaryKey))'),
 					'delete' => array(
-						'label' => 'delete',
+						'label' => Yii::t('phrase', 'Delete Banner View'),
 						'imageUrl' => false,
 						'options' => array(
-							'class' => Yii::t('phrase', 'Delete Banner View'),
+							'class' => 'delete',
 						),
 						'url' => 'Yii::app()->controller->createUrl(\'delete\',array(\'id\'=>$data->primaryKey))'),
 				),

@@ -1,6 +1,6 @@
 <?php
 /**
- * Banner View Details (banner-view-detail)
+ * Banner View Histories (banner-view-history)
  * @var $this ViewController
  * @var $model BannerViewHistory
  * version: 1.3.0
@@ -14,7 +14,7 @@
  */
 
 	$this->breadcrumbs=array(
-		'Banner View Details'=>array('manage'),
+		'Banner View Histories'=>array('manage'),
 		'Manage',
 	);
 	$this->menu=array(
@@ -46,11 +46,12 @@
 <div class="grid-form">
 <?php $this->renderPartial('_option_form',array(
 	'model'=>$model,
+	'gridColumns'=>Utility::getActiveDefaultColumns($columns), 
 )); ?>
 </div>
 <?php //end.Grid Option ?>
 
-<div id="partial-banner-view-detail">
+<div id="partial-banner-view-history">
 	<?php //begin.Messages ?>
 	<div id="ajax-message">
 	<?php
@@ -66,39 +67,37 @@
 		<?php //begin.Grid Item ?>
 		<?php 
 			$columnData   = $columns;
-			/*
 			array_push($columnData, array(
 				'header' => Yii::t('phrase', 'Options'),
 				'class'=>'CButtonColumn',
 				'buttons' => array(
 					'view' => array(
-						'label' => 'view',
+						'label' => Yii::t('phrase', 'View Banner View'),
 						'imageUrl' => false,
-						'options' => array(							
+						'options' => array(
 							'class' => 'view',
 						),
-						'url' => 'Yii::app()->controller->createUrl("view",array("id"=>$data->primaryKey))'),
+						'url' => 'Yii::app()->controller->createUrl(\'view\',array(\'id\'=>$data->primaryKey))'),
 					'update' => array(
-						'label' => 'update',
+						'label' => Yii::t('phrase', 'Update Banner View'),
 						'imageUrl' => false,
 						'options' => array(
 							'class' => 'update'
 						),
-						'url' => 'Yii::app()->controller->createUrl("edit",array("id"=>$data->primaryKey))'),
+						'url' => 'Yii::app()->controller->createUrl(\'edit\',array(\'id\'=>$data->primaryKey))'),
 					'delete' => array(
-						'label' => 'delete',
+						'label' => Yii::t('phrase', 'Delete Banner View'),
 						'imageUrl' => false,
 						'options' => array(
 							'class' => 'delete'
 						),
-						'url' => 'Yii::app()->controller->createUrl("delete",array("id"=>$data->primaryKey))')
+						'url' => 'Yii::app()->controller->createUrl(\'delete\',array(\'id\'=>$data->primaryKey))'),
 				),
-				'template' => '{view}|{update}|{delete}',
+				'template' => '{delete}',
 			));
-			*/
 
 			$this->widget('application.components.system.OGridView', array(
-				'id'=>'banner-view-detail-grid',
+				'id'=>'banner-view-history-grid',
 				'dataProvider'=>$model->search(),
 				'filter'=>$model,
 				'afterAjaxUpdate' => 'reinstallDatePicker',
