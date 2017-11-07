@@ -267,7 +267,10 @@ class BannerCategory extends CActiveRecord
 
 		array_unshift($this->defaultColumns, array(
 			'header' => Yii::t('app', 'No'),
-			'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
+			'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1',
+			'htmlOptions' => array(
+				'class' => 'center',
+			),
 		));
 
 		array_unshift($this->defaultColumns, array(
@@ -313,7 +316,10 @@ class BannerCategory extends CActiveRecord
 			);
 			$this->templateColumns['_no'] = array(
 				'header' => Yii::t('app', 'No'),
-				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
+				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
 			);
 			$this->templateColumns['name_i'] = array(
 				'name' => 'name_i',
@@ -366,7 +372,7 @@ class BannerCategory extends CActiveRecord
 			if(!isset($_GET['creation'])) {
 				$this->templateColumns['creation_search'] = array(
 					'name' => 'creation_search',
-					'value' => '$data->creation->displayname',
+					'value' => '$data->creation->displayname ? $data->creation->displayname : \'-\'',
 				);
 			}
 			$this->templateColumns['modified_date'] = array(
@@ -398,7 +404,7 @@ class BannerCategory extends CActiveRecord
 			if(!isset($_GET['modified'])) {
 				$this->templateColumns['modified_search'] = array(
 					'name' => 'modified_search',
-					'value' => '$data->modified->displayname',
+					'value' => '$data->modified->displayname ? $data->modified->displayname : \'-\'',
 				);
 			}
 			$this->templateColumns['slug'] = array(

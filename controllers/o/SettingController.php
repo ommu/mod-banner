@@ -152,17 +152,17 @@ class SettingController extends Controller
 						print_r($model->getErrors());
 				}
 			}
-			
-		} else {
-			$this->pageTitle = Yii::t('phrase', 'Banner Settings');
-			$this->pageDescription = '';
-			$this->pageMeta = '';
-			$this->render('admin_edit',array(
-				'model'=>$model,
-				'category'=>$category,
-				'columns' => $columns,
-			));
+			Yii::app()->end();
 		}
+
+		$this->pageTitle = Yii::t('phrase', 'Banner Settings');
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('admin_edit',array(
+			'model'=>$model,
+			'category'=>$category,
+			'columns' => $columns,
+		));
 	}
 	
 	/**

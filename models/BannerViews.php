@@ -9,17 +9,6 @@
  * @link https://github.com/ommu/mod-banner
  * @contact (+62)856-299-4114
  *
- * This is the template for generating the model class of a specified table.
- * - $this: the ModelCode object
- * - $tableName: the table name for this class (prefix is already removed if necessary)
- * - $modelClass: the model class name
- * - $columns: list of table columns (name=>CDbColumnSchema)
- * - $labels: list of attribute labels (name=>label)
- * - $rules: list of validation rules
- * - $relations: list of relations (name=>relation declaration)
- *
- * --------------------------------------------------------------------------------------
- *
  * This is the model class for table "ommu_banner_views".
  *
  * The followings are the available columns in table 'ommu_banner_views':
@@ -31,13 +20,16 @@
  * @property string $view_ip
  *
  * The followings are the available model relations:
- * @property BannerViewHistory[] $BannerViewHistory
+ * @property BannerViewHistory[] $histories
  * @property Banners $banner
+ * @property Users $user;
  */
 class BannerViews extends CActiveRecord
 {
 	public $defaultColumns = array();
-	
+	public $templateColumns = array();
+	public $gridForbiddenColumn = array();
+
 	// Variable Search
 	public $category_search;
 	public $banner_search;
@@ -59,7 +51,8 @@ class BannerViews extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'ommu_banner_views';
+		preg_match("/dbname=([^;]+)/i", $this->dbConnection->connectionString, $matches);
+		return $matches[1].'.ommu_banner_views';
 	}
 
 	/**
@@ -89,9 +82,9 @@ class BannerViews extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'histories' => array(self::HAS_MANY, 'BannerViewHistory', 'view_id'),
 			'banner' => array(self::BELONGS_TO, 'Banners', 'banner_id'),
 			'user' => array(self::BELONGS_TO, 'Users', 'user_id'),
-			'details' => array(self::HAS_MANY, 'BannerViewHistory', 'view_id'),
 		);
 	}
 
@@ -130,7 +123,7 @@ class BannerViews extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
-		
+
 		// Custom Search
 		$criteria->with = array(
 			'banner' => array(
@@ -142,26 +135,20 @@ class BannerViews extends CActiveRecord
 				'select'=>'displayname'
 			),
 		);
-
-		$criteria->compare('t.view_id', $this->view_id);
-		if(isset($_GET['banner']))
-			$criteria->compare('t.banner_id',$_GET['banner']);
-		else
-			$criteria->compare('t.banner_id',$this->banner_id);
-		if(isset($_GET['user']))
-			$criteria->compare('t.user_id',$_GET['user']);
-		else
-			$criteria->compare('t.user_id',$this->user_id);
-		$criteria->compare('t.views',$this->views);
-		if($this->view_date != null && !in_array($this->view_date, array('0000-00-00 00:00:00', '0000-00-00')))
-			$criteria->compare('date(t.view_date)',date('Y-m-d', strtotime($this->view_date)));
-		$criteria->compare('t.view_ip',strtolower($this->view_ip),true);
 		
-		$criteria->compare('banner.cat_id',$this->category_search);
-		$criteria->compare('banner.title',strtolower($this->banner_search),true);
+		$criteria->compare('t.view_id', $this->view_id);
+		$criteria->compare('t.banner_id', isset($_GET['banner']) ? $_GET['banner'] : $this->banner_id);
+		$criteria->compare('t.user_id', isset($_GET['user']) ? $_GET['user'] : $this->user_id);
+		$criteria->compare('t.views', $this->views);
+		if($this->view_date != null && !in_array($this->view_date, array('0000-00-00 00:00:00', '1970-01-01 00:00:00')))
+			$criteria->compare('date(t.view_date)', date('Y-m-d', strtotime($this->view_date)));
+		$criteria->compare('t.view_ip', strtolower($this->view_ip), true);
+
+		$criteria->compare('banner.cat_id', $this->category_search);
+		$criteria->compare('banner.title', strtolower($this->banner_search), true);
 		if(isset($_GET['banner']) && isset($_GET['publish']))
-			$criteria->compare('banner.publish',$_GET['publish']);
-		$criteria->compare('user.displayname',strtolower($this->user_search),true);
+			$criteria->compare('banner.publish', $_GET['publish']);
+		$criteria->compare('user.displayname',strtolower($this->user_search), true);
 
 		if(!isset($_GET['BannerViews_sort']))
 			$criteria->order = 't.view_id DESC';
@@ -174,73 +161,109 @@ class BannerViews extends CActiveRecord
 		));
 	}
 
-
 	/**
-	 * Get column for CGrid View
+	 * Get kolom untuk Grid View
+	 *
+	 * @param array $columns kolom dari view
+	 * @return array dari grid yang aktif
 	 */
-	public function getGridColumn($columns=null) {
-		if($columns !== null) {
-			foreach($columns as $val) {
-				/*
-				if(trim($val) == 'enabled') {
-					$this->defaultColumns[] = array(
-						'name'  => 'enabled',
-						'value' => '$data->enabled == 1? "Ya": "Tidak"',
-					);
-				}
-				*/
-				$this->defaultColumns[] = $val;
+	public function getGridColumn($columns=null) 
+	{
+		// Jika $columns kosong maka isi defaultColumns dg templateColumns
+		if(empty($columns) || $columns == null) {
+			array_splice($this->defaultColumns, 0);
+			foreach($this->templateColumns as $key => $val) {
+				if(!in_array($key, $this->gridForbiddenColumn) && !in_array($key, $this->defaultColumns))
+					$this->defaultColumns[] = $val;
 			}
-		} else {
-			//$this->defaultColumns[] = 'view_id';
-			$this->defaultColumns[] = 'banner_id';
-			$this->defaultColumns[] = 'user_id';
-			$this->defaultColumns[] = 'views';
-			$this->defaultColumns[] = 'view_date';
-			$this->defaultColumns[] = 'view_ip';
+			return $this->defaultColumns;
 		}
 
+		foreach($columns as $val) {
+			if(!in_array($val, $this->gridForbiddenColumn) && !in_array($val, $this->defaultColumns)) {
+				$col = $this->getTemplateColumn($val);
+				if($col != null)
+					$this->defaultColumns[] = $col;
+			}
+		}
+
+		array_unshift($this->defaultColumns, array(
+			'header' => Yii::t('app', 'No'),
+			'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1',
+			'htmlOptions' => array(
+				'class' => 'center',
+			),
+		));
+
+		array_unshift($this->defaultColumns, array(
+			'class' => 'CCheckBoxColumn',
+			'name' => 'id',
+			'selectableRows' => 2,
+			'checkBoxHtmlOptions' => array('name' => 'trash_id[]')
+		));
+
 		return $this->defaultColumns;
+	}
+
+	/**
+	 * Get kolom template berdasarkan id pengenal
+	 *
+	 * @param string $name nama pengenal
+	 * @return mixed
+	 */
+	public function getTemplateColumn($name) 
+	{
+		$data = null;
+		if(trim($name) == '') return $data;
+
+		foreach($this->templateColumns as $key => $item) {
+			if($name == $key) {
+				$data = $item;
+				break;
+			}
+		}
+		return $data;
 	}
 
 	/**
 	 * Set default columns to display
 	 */
 	protected function afterConstruct() {
-		if(count($this->defaultColumns) == 0) {
-			$this->defaultColumns[] = array(
-				'header' => 'No',
-				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
+		if(count($this->templateColumns) == 0) {
+			$this->templateColumns['_option'] = array(
+				'class' => 'CCheckBoxColumn',
+				'name' => 'id',
+				'selectableRows' => 2,
+				'checkBoxHtmlOptions' => array('name' => 'trash_id[]')
+			);
+			$this->templateColumns['_no'] = array(
+				'header' => Yii::t('app', 'No'),
+				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
 			);
 			if(!isset($_GET['banner'])) {
-				$this->defaultColumns[] = array(
+				$this->templateColumns['category_search'] = array(
 					'name' => 'category_search',
 					'value' => '$data->banner->category->title->message',
 					'filter'=> BannerCategory::getCategory(),
 					'type' => 'raw',
 				);
-				$this->defaultColumns[] = array(
+				$this->templateColumns['banner_search'] = array(
 					'name' => 'banner_search',
 					'value' => '$data->banner->title',
 				);
 			}
 			if(!isset($_GET['user'])) {
-				$this->defaultColumns[] = array(
+				$this->templateColumns['user_search'] = array(
 					'name' => 'user_search',
-					'value' => '$data->user_id != 0 ? $data->user->displayname : "-"',
+					'value' => '$data->user->displayname ? $data->user->displayname : \'-\'',
 				);
 			}
-			$this->defaultColumns[] = array(
-				'name' => 'views',
-				'value' => 'CHtml::link($data->views, Yii::app()->controller->createUrl("history/view/manage",array(\'view\'=>$data->view_id)))',
-				'htmlOptions' => array(
-					'class' => 'center',
-				),
-				'type' => 'raw',
-			);
-			$this->defaultColumns[] = array(
+			$this->templateColumns['view_date'] = array(
 				'name' => 'view_date',
-				'value' => 'Utility::dateFormat($data->view_date, true)',
+				'value' => '!in_array($data->view_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\')) ? Utility::dateFormat($data->view_date, true) : \'-\'',
 				'htmlOptions' => array(
 					//'class' => 'center',
 				),
@@ -264,12 +287,20 @@ class BannerViews extends CActiveRecord
 					),
 				), true),
 			);
-			$this->defaultColumns[] = array(
+			$this->templateColumns['view_ip'] = array(
 				'name' => 'view_ip',
 				'value' => '$data->view_ip',
 				'htmlOptions' => array(
 					//'class' => 'center',
 				),
+			);
+			$this->templateColumns['views'] = array(
+				'name' => 'views',
+				'value' => 'CHtml::link($data->views, Yii::app()->controller->createUrl("history/view/manage",array(\'view\'=>$data->view_id)))',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'type' => 'raw',
 			);
 		}
 		parent::afterConstruct();
@@ -288,7 +319,7 @@ class BannerViews extends CActiveRecord
 			
 		} else {
 			$model = self::model()->findByPk($id);
-			return $model;			
+			return $model;
 		}
 	}
 

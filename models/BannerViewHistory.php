@@ -9,17 +9,6 @@
  * @link https://github.com/ommu/mod-banner
  * @contact (+62)856-299-4114
  *
- * This is the template for generating the model class of a specified table.
- * - $this: the ModelCode object
- * - $tableName: the table name for this class (prefix is already removed if necessary)
- * - $modelClass: the model class name
- * - $columns: list of table columns (name=>CDbColumnSchema)
- * - $labels: list of attribute labels (name=>label)
- * - $rules: list of validation rules
- * - $relations: list of relations (name=>relation declaration)
- *
- * --------------------------------------------------------------------------------------
- *
  * This is the model class for table "ommu_banner_view_history".
  *
  * The followings are the available columns in table 'ommu_banner_view_history':
@@ -34,7 +23,9 @@
 class BannerViewHistory extends CActiveRecord
 {
 	public $defaultColumns = array();
-	
+	public $templateColumns = array();
+	public $gridForbiddenColumn = array();
+
 	// Variable Search
 	public $category_search;
 	public $banner_search;
@@ -56,7 +47,8 @@ class BannerViewHistory extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'ommu_banner_view_history';
+		preg_match("/dbname=([^;]+)/i", $this->dbConnection->connectionString, $matches);
+		return $matches[1].'.ommu_banner_view_history';
 	}
 
 	/**
@@ -123,7 +115,7 @@ class BannerViewHistory extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
-		
+
 		// Custom Search
 		$criteria->with = array(
 			'view' => array(
@@ -139,19 +131,16 @@ class BannerViewHistory extends CActiveRecord
 				'select'=>'displayname'
 			),
 		);
-
-		$criteria->compare('t.id',$this->id);
-		if(isset($_GET['view']))
-			$criteria->compare('t.view_id',$_GET['view']);
-		else
-			$criteria->compare('t.view_id',$this->view_id);
-		if($this->view_date != null && !in_array($this->view_date, array('0000-00-00 00:00:00', '0000-00-00')))
-			$criteria->compare('date(t.view_date)',date('Y-m-d', strtotime($this->view_date)));
-		$criteria->compare('t.view_ip',strtolower($this->view_ip),true);
 		
-		$criteria->compare('view_banner.cat_id',$this->category_search);
-		$criteria->compare('view_banner.title',strtolower($this->banner_search),true);
-		$criteria->compare('view_user.displayname',strtolower($this->user_search),true);
+		$criteria->compare('t.id', $this->id);
+		$criteria->compare('t.view_id', isset($_GET['view']) ? $_GET['view'] : $this->view_id);
+		if($this->view_date != null && !in_array($this->view_date, array('0000-00-00 00:00:00', '1970-01-01 00:00:00')))
+			$criteria->compare('date(t.view_date)', date('Y-m-d', strtotime($this->view_date)));
+		$criteria->compare('t.view_ip', strtolower($this->view_ip), true);
+
+		$criteria->compare('view_banner.cat_id', $this->category_search);
+		$criteria->compare('view_banner.title', strtolower($this->banner_search), true);
+		$criteria->compare('view_user.displayname', strtolower($this->user_search), true);
 
 		if(!isset($_GET['BannerViewHistory_sort']))
 			$criteria->order = 't.id DESC';
@@ -164,61 +153,101 @@ class BannerViewHistory extends CActiveRecord
 		));
 	}
 
-
 	/**
-	 * Get column for CGrid View
+	 * Get kolom untuk Grid View
+	 *
+	 * @param array $columns kolom dari view
+	 * @return array dari grid yang aktif
 	 */
-	public function getGridColumn($columns=null) {
-		if($columns !== null) {
-			foreach($columns as $val) {
-				/*
-				if(trim($val) == 'enabled') {
-					$this->defaultColumns[] = array(
-						'name'  => 'enabled',
-						'value' => '$data->enabled == 1? "Ya": "Tidak"',
-					);
-				}
-				*/
-				$this->defaultColumns[] = $val;
+	public function getGridColumn($columns=null) 
+	{
+		// Jika $columns kosong maka isi defaultColumns dg templateColumns
+		if(empty($columns) || $columns == null) {
+			array_splice($this->defaultColumns, 0);
+			foreach($this->templateColumns as $key => $val) {
+				if(!in_array($key, $this->gridForbiddenColumn) && !in_array($key, $this->defaultColumns))
+					$this->defaultColumns[] = $val;
 			}
-		} else {
-			//$this->defaultColumns[] = 'id';
-			$this->defaultColumns[] = 'view_id';
-			$this->defaultColumns[] = 'view_date';
-			$this->defaultColumns[] = 'view_ip';
+			return $this->defaultColumns;
 		}
 
+		foreach($columns as $val) {
+			if(!in_array($val, $this->gridForbiddenColumn) && !in_array($val, $this->defaultColumns)) {
+				$col = $this->getTemplateColumn($val);
+				if($col != null)
+					$this->defaultColumns[] = $col;
+			}
+		}
+
+		array_unshift($this->defaultColumns, array(
+			'header' => Yii::t('app', 'No'),
+			'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
+		));
+
+		array_unshift($this->defaultColumns, array(
+			'class' => 'CCheckBoxColumn',
+			'name' => 'id',
+			'selectableRows' => 2,
+			'checkBoxHtmlOptions' => array('name' => 'trash_id[]')
+		));
+
 		return $this->defaultColumns;
+	}
+
+	/**
+	 * Get kolom template berdasarkan id pengenal
+	 *
+	 * @param string $name nama pengenal
+	 * @return mixed
+	 */
+	public function getTemplateColumn($name) 
+	{
+		$data = null;
+		if(trim($name) == '') return $data;
+
+		foreach($this->templateColumns as $key => $item) {
+			if($name == $key) {
+				$data = $item;
+				break;
+			}
+		}
+		return $data;
 	}
 
 	/**
 	 * Set default columns to display
 	 */
 	protected function afterConstruct() {
-		if(count($this->defaultColumns) == 0) {
-			$this->defaultColumns[] = array(
-				'header' => 'No',
+		if(count($this->templateColumns) == 0) {
+			$this->templateColumns['_option'] = array(
+				'class' => 'CCheckBoxColumn',
+				'name' => 'id',
+				'selectableRows' => 2,
+				'checkBoxHtmlOptions' => array('name' => 'trash_id[]')
+			);
+			$this->templateColumns['_no'] = array(
+				'header' => Yii::t('app', 'No'),
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
 			if(!isset($_GET['view'])) {
-				$this->defaultColumns[] = array(
+				$this->templateColumns['category_search'] = array(
 					'name' => 'category_search',
 					'value' => '$data->view->banner->category->title->message',
 					'filter'=> BannerCategory::getCategory(),
 					'type' => 'raw',
 				);
-				$this->defaultColumns[] = array(
+				$this->templateColumns['banner_search'] = array(
 					'name' => 'banner_search',
 					'value' => '$data->view->banner->title',
 				);
-				$this->defaultColumns[] = array(
+				$this->templateColumns['user_search'] = array(
 					'name' => 'user_search',
 					'value' => '$data->view->user->displayname ? $data->view->user->displayname : \'-\'',
 				);
 			}
-			$this->defaultColumns[] = array(
+			$this->templateColumns['view_date'] = array(
 				'name' => 'view_date',
-				'value' => 'Utility::dateFormat($data->view_date, true)',
+				'value' => '!in_array($data->view_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\')) ? Utility::dateFormat($data->view_date) : \'-\'',
 				'htmlOptions' => array(
 					//'class' => 'center',
 				),
@@ -242,7 +271,7 @@ class BannerViewHistory extends CActiveRecord
 					),
 				), true),
 			);
-			$this->defaultColumns[] = array(
+			$this->templateColumns['view_ip'] = array(
 				'name' => 'view_ip',
 				'value' => '$data->view_ip',
 				'htmlOptions' => array(
@@ -266,7 +295,7 @@ class BannerViewHistory extends CActiveRecord
 			
 		} else {
 			$model = self::model()->findByPk($id);
-			return $model;			
+			return $model;
 		}
 	}
 

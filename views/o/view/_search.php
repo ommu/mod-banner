@@ -21,32 +21,43 @@
 )); ?>
 	<ul>
 		<li>
-			<?php echo $model->getAttributeLabel('view_id'); ?><br/>
-			<?php echo $form->textField($model,'view_id'); ?>
+			<?php echo $model->getAttributeLabel('category_search'); ?>
+			<?php echo $form->textField($model,'category_search'); ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('banner_id'); ?><br/>
-			<?php echo $form->textField($model,'banner_id'); ?>
+			<?php echo $model->getAttributeLabel('banner_search'); ?>
+			<?php echo $form->textField($model,'banner_search'); ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('user_id'); ?><br/>
-			<?php echo $form->textField($model,'user_id'); ?>
+			<?php echo $model->getAttributeLabel('user_search'); ?>
+			<?php echo $form->textField($model,'user_search'); ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('views'); ?><br/>
+			<?php echo $model->getAttributeLabel('views'); ?>
 			<?php echo $form->textField($model,'views'); ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('view_date'); ?><br/>
-			<?php echo $form->textField($model,'view_date'); ?>
+			<?php echo $model->getAttributeLabel('view_date'); ?>
+			<?php //echo $form->textField($model,'view_date');
+			$this->widget('application.components.system.CJuiDatePicker',array(
+				'model'=>$model,
+				'attribute'=>'view_date',
+				//'mode'=>'datetime',
+				'options'=>array(
+					'dateFormat' => 'dd-mm-yy',
+				),
+				'htmlOptions'=>array(
+					'class' => 'span-4',
+				 ),
+			));; ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('view_ip'); ?><br/>
+			<?php echo $model->getAttributeLabel('view_ip'); ?>
 			<?php echo $form->textField($model,'view_ip'); ?>
 		</li>
 
