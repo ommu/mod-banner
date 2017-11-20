@@ -51,7 +51,7 @@
 				'template' => '{view}|{update}|{delete}',
 			));
 
-			$this->widget('application.components.system.OGridView', array(
+			$this->widget('application.libraries.core.components.system.OGridView', array(
 				'id'=>'banner-category-grid',
 				'dataProvider'=>$category->search(),
 				'filter'=>$category,

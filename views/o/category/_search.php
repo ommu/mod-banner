@@ -42,7 +42,7 @@
 		<li>
 			<?php echo $model->getAttributeLabel('creation_date'); ?>
 			<?php //echo $form->textField($model,'creation_date');
-			$this->widget('application.components.system.CJuiDatePicker',array(
+			$this->widget('application.libraries.core.components.system.CJuiDatePicker',array(
 				'model'=>$model,
 				'attribute'=>'creation_date',
 				//'mode'=>'datetime',
@@ -63,7 +63,7 @@
 		<li>
 			<?php echo $model->getAttributeLabel('modified_date'); ?>
 			<?php //echo $form->textField($model,'modified_date');
-			$this->widget('application.components.system.CJuiDatePicker',array(
+			$this->widget('application.libraries.core.components.system.CJuiDatePicker',array(
 				'model'=>$model,
 				'attribute'=>'modified_date',
 				//'mode'=>'datetime',

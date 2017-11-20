@@ -267,7 +267,7 @@ class BannerViews extends CActiveRecord
 				'htmlOptions' => array(
 					//'class' => 'center',
 				),
-				'filter' => Yii::app()->controller->widget('application.components.system.CJuiDatePicker', array(
+				'filter' => Yii::app()->controller->widget('application.libraries.core.components.system.CJuiDatePicker', array(
 					'model'=>$this,
 					'attribute'=>'view_date',
 					'language' => 'en',

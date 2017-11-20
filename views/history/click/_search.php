@@ -38,7 +38,7 @@
 		<li>
 			<?php echo $model->getAttributeLabel('click_date'); ?>
 			<?php //echo $form->textField($model,'click_date');
-			$this->widget('application.components.system.CJuiDatePicker',array(
+			$this->widget('application.libraries.core.components.system.CJuiDatePicker',array(
 				'model'=>$model,
 				'attribute'=>'click_date',
 				//'mode'=>'datetime',

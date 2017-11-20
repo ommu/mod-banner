@@ -38,7 +38,7 @@
 		<li>
 			<?php echo $model->getAttributeLabel('view_date'); ?>
 			<?php //echo $form->textField($model,'view_date');
-			$this->widget('application.components.system.CJuiDatePicker',array(
+			$this->widget('application.libraries.core.components.system.CJuiDatePicker',array(
 				'model'=>$model,
 				'attribute'=>'view_date',
 				//'mode'=>'datetime',
