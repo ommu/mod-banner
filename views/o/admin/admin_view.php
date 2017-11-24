@@ -6,9 +6,9 @@
  * version: 1.3.0
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
+ * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2014 Ommu Platform (opensource.ommu.co)
  * @link https://github.com/ommu/mod-banner
- * @contact (+62)856-299-4114
  *
  */
 
@@ -29,29 +29,30 @@
 			array(
 				'name'=>'publish',
 				'value'=>$model->publish == '1' ? CHtml::image(Yii::app()->theme->baseUrl.'/images/icons/publish.png') : CHtml::image(Yii::app()->theme->baseUrl.'/images/icons/unpublish.png'),
-				'type' => 'raw',
+				'type'=>'raw',
 			),
 			array(
 				'name'=>'cat_id',
-				'value'=>$model->category->title->message,
+				'value'=>$model->cat_id ? $model->category->title->message : '-',
 			),
 			array(
 				'name'=>'title',
-				'value'=>$model->title,
+				'value'=>$model->title ? $model->title : '-',
 			),
 			array(
 				'name'=>'url',
-				'value'=>CHtml::link($model->url, $model->url, array('target' => '_blank')),
-				'type' => 'raw',
+				'value'=>$model->url ? CHtml::link($model->url, $model->url, array('target' => '_blank')) : '-',
+				'type'=>'raw',
 			),
 			array(
 				'name'=>'banner_filename',
-				'value'=>CHtml::link($model->banner_filename, Yii::app()->request->baseUrl.'/public/banner/'.$model->banner_filename, array('target' => '_blank')),
-				'type' => 'raw',
+				'value'=>$model->banner_filename ? CHtml::link($model->banner_filename, Yii::app()->request->baseUrl.'/public/banner/'.$model->banner_filename, array('target' => '_blank')) : '-',
+				'type'=>'raw',
 			),
 			array(
 				'name'=>'banner_desc',
 				'value'=>$model->banner_desc ? $model->banner_desc : '-',
+				'type'=>'raw',
 			),
 			array(
 				'name'=>'published_date',
@@ -67,7 +68,7 @@
 			),
 			array(
 				'name'=>'creation_id',
-				'value'=>$model->creation->displayname ? $model->creation->displayname : '-',
+				'value'=>$model->creation_id ? $model->creation->displayname : '-',
 			),
 			array(
 				'name'=>'modified_date',
@@ -75,7 +76,7 @@
 			),
 			array(
 				'name'=>'modified_id',
-				'value'=>$model->modified->displayname ? $model->modified->displayname : '-',
+				'value'=>$model->modified_id ? $model->modified->displayname : '-',
 			),
 			array(
 				'name'=>'slug',

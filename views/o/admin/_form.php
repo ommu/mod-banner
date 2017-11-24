@@ -7,12 +7,12 @@
  * version: 1.3.0
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
+ * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2014 Ommu Platform (opensource.ommu.co)
  * @link https://github.com/ommu/mod-banner
- * @contact (+62)856-299-4114
  *
  */
-	
+
 	$cs = Yii::app()->getClientScript();
 $js=<<<EOP
 	$('#Banners_permanent_i').on('change', function() {
@@ -50,14 +50,14 @@ EOP;
 <fieldset>
 
 	<div class="clearfix">
-		<?php echo $form->labelEx($model,'cat_id'); ?>
+		<?php echo $form->labelEx($model, 'cat_id'); ?>
 		<div class="desc">
 			<?php 
 			$category = BannerCategory::getCategory(1);
 			if($category != null)
 				echo $form->dropDownList($model,'cat_id', $category);
 			else
-				echo $form->dropDownList($model,'cat_id', array('prompt'=>'No Parent'));
+				echo $form->dropDownList($model,'cat_id', array('prompt'=>'Select Category'));
 			echo $form->error($model,'cat_id');?>
 		</div>
 	</div>

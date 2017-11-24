@@ -108,12 +108,12 @@ class AdminController extends Controller
 			$model->attributes=$_GET['Banners'];
 		}
 
+		$gridColumn = $_GET['GridColumn'];
 		$columnTemp = array();
-		if(isset($_GET['GridColumn'])) {
-			foreach($_GET['GridColumn'] as $key => $val) {
-				if($_GET['GridColumn'][$key] == 1) {
+		if(isset($gridColumn)) {
+			foreach($gridColumn as $key => $val) {
+				if($gridColumn[$key] == 1)
 					$columnTemp[] = $key;
-				}
 			}
 		}
 		$columns = $model->getGridColumn($columnTemp);
@@ -191,7 +191,7 @@ class AdminController extends Controller
 			}
 		}
 
-		$this->pageTitle = Yii::t('phrase', 'Update Banner: {banner_title}', array('{banner_title}'=>$model->title));
+		$this->pageTitle = Yii::t('phrase', 'Update Banner: {title}', array('{title}'=>$model->title));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_edit',array(
@@ -208,7 +208,7 @@ class AdminController extends Controller
 	{
 		$model=$this->loadModel($id);
 
-		$this->pageTitle = Yii::t('phrase', 'View Banner: {banner_title}', array('{banner_title}'=>$model->title));		
+		$this->pageTitle = Yii::t('phrase', 'View Banner: {title}', array('{title}'=>$model->title));		
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_view',array(
@@ -227,7 +227,7 @@ class AdminController extends Controller
 
 		if(count($id) > 0) {
 			$criteria = new CDbCriteria;
-			$criteria->addInCondition('id', $id);
+			$criteria->addInCondition('banner_id', $id);
 
 			if($actions == 'publish') {
 				Banners::model()->updateAll(array(
@@ -263,27 +263,32 @@ class AdminController extends Controller
 		
 		if(Yii::app()->request->isPostRequest) {
 			// we only allow deletion via POST request
-			if(isset($id)) {
-				if($model->delete()) {
-					echo CJSON::encode(array(
-						'type' => 5,
-						'get' => Yii::app()->controller->createUrl('manage'),
-						'id' => 'partial-banners',
-						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Banner success deleted.').'</strong></div>',
-					));
-				}
+			$model->publish = 2;
+			$model->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
+			
+			if($model->update()) {
+				echo CJSON::encode(array(
+					'type' => 5,
+					'get' => Yii::app()->controller->createUrl('manage'),
+					'id' => 'partial-banners',
+					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Banner success deleted.').'</strong></div>',
+				));
+				/*
+				Yii::app()->user->setFlash('success', Yii::t('phrase', 'Banner success deleted.'));
+				$this->redirect(array('manage'));
+				*/
 			}
-
-		} else {
-			$this->dialogDetail = true;
-			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
-			$this->dialogWidth = 350;
-
-			$this->pageTitle = Yii::t('phrase', 'Delete Banner: {banner_title}', array('{banner_title}'=>$model->title));
-			$this->pageDescription = '';
-			$this->pageMeta = '';
-			$this->render('admin_delete');
+			Yii::app()->end();
 		}
+
+		$this->dialogDetail = true;
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+		$this->dialogWidth = 350;
+
+		$this->pageTitle = Yii::t('phrase', 'Delete Banner: {title}', array('{title}'=>$model->title));
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('admin_delete');
 	}
 
 	/**
@@ -295,44 +300,41 @@ class AdminController extends Controller
 	{
 		$model=$this->loadModel($id);
 		
-		if($model->publish == 1) {
-			$title = Yii::t('phrase', 'Unpublish');
-			$replace = 0;
-		} else {
-			$title = Yii::t('phrase', 'Publish');
-			$replace = 1;
-		}
-		$pageTitle = Yii::t('phrase', '{title}: {banner_title}', array('{title}'=>$title, '{banner_title}'=>$model->title));
+		$title = $model->publish == 1 ? Yii::t('phrase', 'Unpublish') : Yii::t('phrase', 'Publish');
+		$replace = $model->publish == 1 ? 0 : 1;
 
 		if(Yii::app()->request->isPostRequest) {
 			// we only allow deletion via POST request
-			if(isset($id)) {
-				//change value active or publish
-				$model->publish = $replace;
+			//change value active or publish
+			$model->publish = $replace;
+			$model->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
 
-				if($model->update()) {
-					echo CJSON::encode(array(
-						'type' => 5,
-						'get' => Yii::app()->controller->createUrl('manage'),
-						'id' => 'partial-banners',
-						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Banner success updated.').'</strong></div>',
-					));
-				}
+			if($model->update()) {
+				echo CJSON::encode(array(
+					'type' => 5,
+					'get' => Yii::app()->controller->createUrl('manage'),
+					'id' => 'partial-banners',
+					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Banner success updated.').'</strong></div>',
+				));
+				/*
+				Yii::app()->user->setFlash('success', Yii::t('phrase', 'Banner success updated.'));
+				$this->redirect(array('manage'));
+				*/
 			}
-
-		} else {
-			$this->dialogDetail = true;
-			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
-			$this->dialogWidth = 350;
-
-			$this->pageTitle = $pageTitle;
-			$this->pageDescription = '';
-			$this->pageMeta = '';
-			$this->render('admin_publish',array(
-				'title'=>$title,
-				'model'=>$model,
-			));
+			Yii::app()->end();
 		}
+
+		$this->dialogDetail = true;
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+		$this->dialogWidth = 350;
+
+		$this->pageTitle = Yii::t('phrase', '{title} Banner: {title}', array('{title}'=>$title, '{title}'=>$model->title));
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('admin_publish',array(
+			'title'=>$title,
+			'model'=>$model,
+		));
 	}
 
 	/**
