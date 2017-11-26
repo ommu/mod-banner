@@ -17,7 +17,7 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @copyright Copyright (c) 2016 Ommu Platform (opensource.ommu.co)
  * @created date 23 Juni 2016, 14:46 WIB
- * @link https://github.com/ommu/mod-banner
+ * @link https://github.com/ommu/ommu-banner
  * @contact (+62)856-299-4114
  *
  *----------------------------------------------------------------------------------------------------------

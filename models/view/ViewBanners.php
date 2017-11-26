@@ -6,7 +6,7 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
  * @created date 8 January 2017, 19:20 WIB
- * @link https://github.com/ommu/mod-banner
+ * @link https://github.com/ommu/ommu-banner
  * @contact (+62)856-299-4114
  *
  * This is the model class for table "_view_banners".
