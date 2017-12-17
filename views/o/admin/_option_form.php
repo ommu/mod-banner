@@ -43,7 +43,7 @@ foreach($model->templateColumns as $key => $val) {
 }
 ?>
 <ul>
-	<?php foreach($columns as $val): ?>
+	<?php foreach($columns as $key => $val): ?>
 	<li>
 		<?php echo CHtml::checkBox('GridColumn['.$val.']', in_array($key, $gridColumns) ? true : false); ?>
 		<?php echo CHtml::label($model->getAttributeLabel($val), 'GridColumn_'.$val); ?>
