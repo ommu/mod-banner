@@ -49,31 +49,31 @@ EOP;
 
 <fieldset>
 
-	<div class="clearfix">
-		<?php echo $form->labelEx($model, 'cat_id'); ?>
-		<div class="desc">
+	<div class="form-group row">
+		<?php echo $form->labelEx($model, 'cat_id', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+		<div class="col-lg-8 col-md-9 col-sm-12">
 			<?php 
 			$category = BannerCategory::getCategory(1);
 			if($category != null)
-				echo $form->dropDownList($model,'cat_id', $category);
+				echo $form->dropDownList($model,'cat_id', $category, array('class'=>'form-control'));
 			else
-				echo $form->dropDownList($model,'cat_id', array('prompt'=>'Select Category'));
+				echo $form->dropDownList($model,'cat_id', array('prompt'=>'Select Category', 'class'=>'form-control'));
 			echo $form->error($model,'cat_id');?>
 		</div>
 	</div>
 
-	<div class="clearfix">
-		<?php echo $form->labelEx($model,'title'); ?>
-		<div class="desc">
-			<?php echo $form->textField($model,'title',array('class'=>'span-7', 'maxlength'=>64)); ?>
+	<div class="form-group row">
+		<?php echo $form->labelEx($model,'title', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+		<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->textField($model,'title',array('class'=>'form-control', 'maxlength'=>64)); ?>
 			<?php echo $form->error($model,'title'); ?>
 		</div>
 	</div>
 
-	<div class="clearfix">
-		<?php echo $form->labelEx($model,'banner_desc'); ?>
-		<div class="desc">
-			<?php echo $form->textArea($model,'banner_desc',array('class'=>'span-10 smaller', 'rows'=>6, 'cols'=>50)); ?>
+	<div class="form-group row">
+		<?php echo $form->labelEx($model,'banner_desc', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+		<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->textArea($model,'banner_desc',array('class'=>'form-control smaller', 'rows'=>6, 'cols'=>50)); ?>
 			<?php echo $form->error($model,'banner_desc'); ?>
 		</div>
 	</div>
@@ -85,26 +85,26 @@ EOP;
 			$model->linked_i = 1;
 	}?>
 	
-	<div class="clearfix">
-		<?php echo $form->labelEx($model,'linked_i'); ?>
-		<div class="desc">
-			<?php echo $form->checkBox($model,'linked_i'); ?>
+	<div class="form-group row">
+		<?php echo $form->labelEx($model,'linked_i', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+		<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->checkBox($model,'linked_i', array('class'=>'form-control')); ?>
 			<?php echo $form->error($model,'linked_i'); ?>
 		</div>
 	</div>
 
 	<div id="url" class="<?php echo $model->linked_i == 0 ? 'hide' : ''?> clearfix">
-		<?php echo $form->labelEx($model,'url'); ?>
-		<div class="desc">
-			<?php echo $form->textArea($model,'url',array('class'=>'span-10 smaller', 'rows'=>6, 'cols'=>50)); ?>
+		<?php echo $form->labelEx($model,'url', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+		<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->textArea($model,'url',array('class'=>'form-control smaller', 'rows'=>6, 'cols'=>50)); ?>
 			<?php echo $form->error($model,'url'); ?>
 			<div class="small-px silent">example: http://opensource.ommu.co</div>
 		</div>
 	</div>
 
-	<div class="clearfix">
-		<?php echo $form->labelEx($model,'banner_filename'); ?>
-		<div class="desc">
+	<div class="form-group row">
+		<?php echo $form->labelEx($model,'banner_filename', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+		<div class="col-lg-8 col-md-9 col-sm-12">
 			<?php 
 			if(!$model->isNewRecord) {
 				if(!$model->getErrors())
@@ -116,15 +116,15 @@ EOP;
 					<img class="mb-15" src="<?php echo Utility::getTimThumb($banner, $bannerSize['width'], $bannerSize['height'], 3);?>" alt="">
 			<?php }
 			}?>
-			<?php echo $form->fileField($model,'banner_filename'); ?>
+			<?php echo $form->fileField($model,'banner_filename', array('class'=>'form-control')); ?>
 			<?php echo $form->error($model,'banner_filename'); ?>
 			<span class="small-px">extensions are allowed: <?php echo Utility::formatFileType($banner_file_type, false);?></span>
 		</div>
 	</div>
 
-	<div class="clearfix">
-		<?php echo $form->labelEx($model,'published_date'); ?>
-		<div class="desc">
+	<div class="form-group row">
+		<?php echo $form->labelEx($model,'published_date', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+		<div class="col-lg-8 col-md-9 col-sm-12">
 			<?php
 			!$model->isNewRecord ? ($model->published_date != '0000-00-00' ? $model->published_date = date('d-m-Y', strtotime($model->published_date)) : '') : '';
 			//echo $form->textField($model,'published_date');
@@ -136,7 +136,7 @@ EOP;
 					'dateFormat' => 'dd-mm-yy',
 				),
 				'htmlOptions'=>array(
-					'class' => 'span-4',
+					'class' => 'form-control',
 				 ),
 			)); ?>
 			<?php echo $form->error($model,'published_date'); ?>
@@ -150,17 +150,17 @@ EOP;
 			$model->permanent_i = 1;
 	}?>
 	
-	<div class="clearfix">
-		<?php echo $form->labelEx($model,'permanent_i'); ?>
-		<div class="desc">
-			<?php echo $form->checkBox($model,'permanent_i'); ?>
+	<div class="form-group row">
+		<?php echo $form->labelEx($model,'permanent_i', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+		<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->checkBox($model,'permanent_i', array('class'=>'form-control')); ?>
 			<?php echo $form->error($model,'permanent_i'); ?>
 		</div>
 	</div>
 	
 	<div id="expired-date" class="<?php echo $model->permanent_i == 1 ? 'hide' : ''?> clearfix">
-		<?php echo $form->labelEx($model,'expired_date'); ?>
-		<div class="desc">
+		<?php echo $form->labelEx($model,'expired_date', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+		<div class="col-lg-8 col-md-9 col-sm-12">
 			<?php
 			if(!$model->getErrors())
 				$model->expired_date = !$model->isNewRecord ? (!in_array(date('Y-m-d', strtotime($model->expired_date)), array('0000-00-00','1970-01-01')) ? date('d-m-Y', strtotime($model->expired_date)) : '00-00-0000') : '';
@@ -173,24 +173,24 @@ EOP;
 					'dateFormat' => 'dd-mm-yy',
 				),
 				'htmlOptions'=>array(
-					'class' => 'span-4',
+					'class' => 'form-control',
 				 ),
 			)); ?>
 			<?php echo $form->error($model,'expired_date'); ?>
 		</div>
 	</div>
 
-	<div class="clearfix">
-		<?php echo $form->labelEx($model,'publish'); ?>
-		<div class="desc">
-			<?php echo $form->checkBox($model,'publish'); ?>
+	<div class="form-group row">
+		<?php echo $form->labelEx($model,'publish', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+		<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->checkBox($model,'publish', array('class'=>'form-control')); ?>
 			<?php echo $form->error($model,'publish'); ?>
 		</div>
 	</div>
 
-	<div class="submit clearfix">
-		<label>&nbsp;</label>
-		<div class="desc">
+	<div class="form-group row submit">
+		<label class="col-form-label col-lg-4 col-md-3 col-sm-12">&nbsp;</label>
+		<div class="col-lg-8 col-md-9 col-sm-12">
 			<?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('phrase', 'Create') : Yii::t('phrase', 'Save'), array('onclick' => 'setEnableSave()')); ?>
 		</div>
 	</div>

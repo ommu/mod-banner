@@ -28,47 +28,46 @@
 		</div>
 		<?php //begin.Messages ?>
 
-		<div class="clearfix">
-			<?php echo $form->labelEx($model,'name_i'); ?>
-			<div class="desc">
-				<?php echo $form->textField($model,'name_i',array('maxlength'=>32,'class'=>'span-8')); ?>
+		<div class="form-group row">
+			<?php echo $form->labelEx($model,'name_i', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-9 col-sm-12">
+				<?php echo $form->textField($model,'name_i',array('maxlength'=>32,'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'name_i'); ?>
 			</div>
 		</div>
 
-		<div class="clearfix">
-			<?php echo $form->labelEx($model,'desc_i'); ?>
-			<div class="desc">
-				<?php echo $form->textArea($model,'desc_i',array('maxlength'=>64,'class'=>'span-11 smaller')); ?>
+		<div class="form-group row">
+			<?php echo $form->labelEx($model,'desc_i', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-9 col-sm-12">
+				<?php echo $form->textArea($model,'desc_i',array('maxlength'=>64,'class'=>'form-control smaller')); ?>
 				<?php echo $form->error($model,'desc_i'); ?>
 			</div>
 		</div>
 
-		<div class="clearfix">
-			<?php echo $form->labelEx($model,'banner_limit'); ?>
-			<div class="desc">
-				<?php echo $form->textField($model,'banner_limit',array('class'=>'span-3', 'maxlength'=>2)); ?>
+		<div class="form-group row">
+			<?php echo $form->labelEx($model,'banner_limit', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-9 col-sm-12">
+				<?php echo $form->textField($model,'banner_limit',array('class'=>'form-control', 'maxlength'=>2)); ?>
 				<?php echo $form->error($model,'banner_limit'); ?>
 			</div>
 		</div>
 		
-		<div class="clearfix">
-			<label><?php echo $model->getAttributeLabel('banner_size');?> <span class="required">*</span></label>
-			<div class="desc">
+		<div class="form-group row">
+			<label class="col-form-label col-lg-4 col-md-3 col-sm-12"><?php echo $model->getAttributeLabel('banner_size');?> <span class="required">*</span></label>
+			<div class="col-lg-8 col-md-9 col-sm-12">
 				<?php 
 				if(!$model->getErrors())
 					$model->banner_size = unserialize($model->banner_size);
-				echo Yii::t('phrase', 'Width').': ';?><?php echo $form->textField($model,'banner_size[width]',array('maxlength'=>4,'class'=>'span-3')); ?>&nbsp;&nbsp;&nbsp;
-				<?php echo Yii::t('phrase', 'Height').': ';?><?php echo $form->textField($model,'banner_size[height]',array('maxlength'=>4,'class'=>'span-3')); ?>
+				echo Yii::t('phrase', 'Width').': ';?><?php echo $form->textField($model,'banner_size[width]',array('maxlength'=>4,'class'=>'form-control')); ?>&nbsp;&nbsp;&nbsp;
+				<?php echo Yii::t('phrase', 'Height').': ';?><?php echo $form->textField($model,'banner_size[height]',array('maxlength'=>4,'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'banner_size'); ?>
 			</div>
 		</div>
 
-		<div class="clearfix publish">
-			<?php echo $form->labelEx($model,'publish'); ?>
-			<div class="desc">
-				<?php echo $form->checkBox($model,'publish'); ?>
-				<?php echo $form->labelEx($model,'publish'); ?>
+		<div class="form-group row">
+			<?php echo $form->labelEx($model,'publish', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-9 col-sm-12">
+				<?php echo $form->checkBox($model,'publish', array('class'=>'form-control')); ?>
 				<?php echo $form->error($model,'publish'); ?>
 			</div>
 		</div>
