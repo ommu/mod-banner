@@ -1,13 +1,12 @@
 <?php
 /**
  * BannerClicks
- * version: 1.3.0
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
+ * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
  * @created date 8 January 2017, 19:18 WIB
  * @link https://github.com/ommu/ommu-banner
- * @contact (+62)856-299-4114
  *
  * This is the model class for table "ommu_banner_clicks".
  *

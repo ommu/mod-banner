@@ -3,7 +3,6 @@
  * Banners (banners)
  * @var $this AdminController
  * @var $model Banners
- * version: 1.3.0
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
