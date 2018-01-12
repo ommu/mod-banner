@@ -139,7 +139,7 @@ class BannerClicks extends CActiveRecord
 		$criteria->compare('t.banner_id', isset($_GET['banner']) ? $_GET['banner'] : $this->banner_id);
 		$criteria->compare('t.user_id', isset($_GET['user']) ? $_GET['user'] : $this->user_id);
 		$criteria->compare('t.clicks', $this->clicks);
-		if($this->click_date != null && !in_array($this->click_date, array('0000-00-00 00:00:00', '1970-01-01 00:00:00')))
+		if($this->click_date != null && !in_array($this->click_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00')))
 			$criteria->compare('date(t.click_date)', date('Y-m-d', strtotime($this->click_date)));
 		$criteria->compare('t.click_ip', strtolower($this->click_ip), true);
 

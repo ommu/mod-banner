@@ -135,7 +135,7 @@ class BannerSetting extends CActiveRecord
 		$criteria->compare('t.banner_validation', $this->banner_validation);
 		$criteria->compare('t.banner_resize', $this->banner_resize);
 		$criteria->compare('t.banner_file_type', strtolower($this->banner_file_type), true);
-		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00', '1970-01-01 00:00:00')))
+		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00')))
 			$criteria->compare('date(t.modified_date)', date('Y-m-d', strtotime($this->modified_date)));
 		$criteria->compare('t.modified_id', isset($_GET['modified']) ? $_GET['modified'] : $this->modified_id);
 		

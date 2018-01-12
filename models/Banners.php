@@ -202,14 +202,14 @@ class Banners extends CActiveRecord
 		$criteria->compare('t.url', strtolower($this->url), true);
 		$criteria->compare('t.banner_filename', strtolower($this->banner_filename), true);
 		$criteria->compare('t.banner_desc', strtolower($this->banner_desc), true);
-		if($this->published_date != null && !in_array($this->published_date, array('0000-00-00', '1970-01-01')))
+		if($this->published_date != null && !in_array($this->published_date, array('0000-00-00','1970-01-01')))
 			$criteria->compare('date(t.published_date)', date('Y-m-d', strtotime($this->published_date)));
-		if($this->expired_date != null && !in_array($this->expired_date, array('0000-00-00', '1970-01-01')))
+		if($this->expired_date != null && !in_array($this->expired_date, array('0000-00-00','1970-01-01')))
 			$criteria->compare('date(t.expired_date)', date('Y-m-d', strtotime($this->expired_date)));
-		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00', '1970-01-01 00:00:00')))
+		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00')))
 			$criteria->compare('date(t.creation_date)', date('Y-m-d', strtotime($this->creation_date)));
 		$criteria->compare('t.creation_id', isset($_GET['creation']) ? $_GET['creation'] : $this->creation_id);
-		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00', '1970-01-01 00:00:00')))
+		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00')))
 			$criteria->compare('date(t.modified_date)', date('Y-m-d', strtotime($this->modified_date)));
 		$criteria->compare('t.modified_id', isset($_GET['modified']) ? $_GET['modified'] : $this->modified_id);
 		$criteria->compare('t.slug', strtolower($this->slug), true);

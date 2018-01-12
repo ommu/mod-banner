@@ -133,7 +133,7 @@ class BannerClickHistory extends CActiveRecord
 		
 		$criteria->compare('t.id', $this->id);
 		$criteria->compare('t.click_id', isset($_GET['click']) ? $_GET['click'] : $this->click_id);
-		if($this->click_date != null && !in_array($this->click_date, array('0000-00-00 00:00:00', '1970-01-01 00:00:00')))
+		if($this->click_date != null && !in_array($this->click_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00')))
 			$criteria->compare('date(t.click_date)', date('Y-m-d', strtotime($this->click_date)));
 		$criteria->compare('t.click_ip', strtolower($this->click_ip), true);
 

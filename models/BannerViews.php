@@ -139,7 +139,7 @@ class BannerViews extends CActiveRecord
 		$criteria->compare('t.banner_id', isset($_GET['banner']) ? $_GET['banner'] : $this->banner_id);
 		$criteria->compare('t.user_id', isset($_GET['user']) ? $_GET['user'] : $this->user_id);
 		$criteria->compare('t.views', $this->views);
-		if($this->view_date != null && !in_array($this->view_date, array('0000-00-00 00:00:00', '1970-01-01 00:00:00')))
+		if($this->view_date != null && !in_array($this->view_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00')))
 			$criteria->compare('date(t.view_date)', date('Y-m-d', strtotime($this->view_date)));
 		$criteria->compare('t.view_ip', strtolower($this->view_ip), true);
 
