@@ -34,5 +34,9 @@
 		"yiisoft/yii": ">=1.1.14",
 		"ommu/yii-behavior-sluggable": "^1.0.1",
 		"ommu/phpthumb": "^1.0.1"
+	},
+	"require-dev": {
+		"ommu/yii-behavior-sluggable": "dev-master",
+		"ommu/phpthumb": "dev-master"
 	}
 }
