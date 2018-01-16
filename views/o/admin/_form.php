@@ -56,7 +56,7 @@ EOP;
 			if($category != null)
 				echo $form->dropDownList($model,'cat_id', $category, array('class'=>'form-control'));
 			else
-				echo $form->dropDownList($model,'cat_id', array('prompt'=>'Select Category', 'class'=>'form-control'));
+				echo $form->dropDownList($model,'cat_id', array('prompt'=>'Select Category'), array('class'=>'form-control'));
 			echo $form->error($model,'cat_id');?>
 		</div>
 	</div>
