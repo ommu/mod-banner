@@ -93,7 +93,7 @@ EOP;
 		</div>
 	</div>
 
-	<div id="url" class="<?php echo $model->linked_i == 0 ? 'hide' : ''?> clearfix">
+	<div id="url" class="form-group row <?php echo $model->linked_i == 0 ? 'hide' : ''?>">
 		<?php echo $form->labelEx($model,'url', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 		<div class="col-lg-8 col-md-9 col-sm-12">
 			<?php echo $form->textArea($model,'url',array('class'=>'form-control smaller', 'rows'=>6, 'cols'=>50)); ?>
@@ -159,7 +159,7 @@ EOP;
 		</div>
 	</div>
 	
-	<div id="expired-date" class="<?php echo $model->permanent_i == 1 ? 'hide' : ''?> clearfix">
+	<div id="expired-date" class="form-group row <?php echo $model->permanent_i == 1 ? 'hide' : ''?>">
 		<?php echo $form->labelEx($model,'expired_date', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 		<div class="col-lg-8 col-md-9 col-sm-12">
 			<?php

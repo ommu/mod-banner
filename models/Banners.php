@@ -578,7 +578,7 @@ class Banners extends CActiveRecord
 							'{file_size}'=>$fileSize[0].' x '.$fileSize[1],
 							'{banner_size}'=>$bannerSize['width'].' x '.$bannerSize['height'],
 						)));
-				}				
+				}
 			} else {
 				if($this->isNewRecord && $controller == 'o/admin')
 					$this->addError('banner_filename', Yii::t('phrase', 'Banner (File) cannot be blank.'));

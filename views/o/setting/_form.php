@@ -59,7 +59,7 @@ EOP;
 		</div>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'permission'); ?>
+			<?php echo $form->labelEx($model,'permission', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-9 col-sm-12">
 				<span class="small-px"><?php echo Yii::t('phrase', 'Select whether or not you want to let the public (visitors that are not logged-in) to view the following sections of your social network. In some cases (such as Profiles, Blogs, and Albums), if you have given them the option, your users will be able to make their pages private even though you have made them publically viewable here. For more permissions settings, please visit the General Settings page.');?></span>
 				<?php echo $form->radioButtonList($model, 'permission', array(
@@ -71,7 +71,7 @@ EOP;
 		</div>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'meta_keyword'); ?>
+			<?php echo $form->labelEx($model,'meta_keyword', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-9 col-sm-12">
 				<?php echo $form->textArea($model,'meta_keyword',array('rows'=>6, 'cols'=>50, 'class'=>'form-control smaller')); ?>
 				<?php echo $form->error($model,'meta_keyword'); ?>
@@ -79,7 +79,7 @@ EOP;
 		</div>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'meta_description'); ?>
+			<?php echo $form->labelEx($model,'meta_description', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-9 col-sm-12">
 				<?php echo $form->textArea($model,'meta_description',array('rows'=>6, 'cols'=>50, 'class'=>'form-control smaller')); ?>
 				<?php echo $form->error($model,'meta_description'); ?>
@@ -87,18 +87,18 @@ EOP;
 		</div>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'banner_validation'); ?>
+			<?php echo $form->labelEx($model,'banner_validation', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-9 col-sm-12">
 				<?php echo $form->radioButtonList($model, 'banner_validation', array(
 					1 => 'Yes, validation banner size before upload.',
 					0 => 'No, not validation banner size before upload.',
 				), array('class'=>'form-control')); ?>
-				<?php echo $form->error($model,'banner_validation'); ?>
+				<?php echo $form->error($model,'banner_validation', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			</div>
 		</div>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'banner_resize'); ?>
+			<?php echo $form->labelEx($model,'banner_resize', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-9 col-sm-12">
 				<?php echo $form->radioButtonList($model, 'banner_resize', array(
 					1 => 'Yes, resize banner after upload.',
@@ -109,7 +109,7 @@ EOP;
 		</div>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'banner_file_type'); ?>
+			<?php echo $form->labelEx($model,'banner_file_type', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-9 col-sm-12">
 				<?php				
 				if(!$model->getErrors()) {
