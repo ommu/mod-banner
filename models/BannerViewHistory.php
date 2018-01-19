@@ -6,6 +6,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
  * @created date 8 January 2017, 19:18 WIB
+ * @modified date 19 January 2018, 17:03 WIB
  * @link https://github.com/ommu/ommu-banner
  *
  * This is the model class for table "ommu_banner_view_history".
@@ -19,10 +20,8 @@
  * The followings are the available model relations:
  * @property BannerViews $view
  */
-class BannerViewHistory extends CActiveRecord
+class BannerViewHistory extends OActiveRecord
 {
-	public $defaultColumns = array();
-	public $templateColumns = array();
 	public $gridForbiddenColumn = array();
 
 	// Variable Search
@@ -132,8 +131,8 @@ class BannerViewHistory extends CActiveRecord
 		);
 		
 		$criteria->compare('t.id', $this->id);
-		$criteria->compare('t.view_id', isset($_GET['view']) ? $_GET['view'] : $this->view_id);
-		if($this->view_date != null && !in_array($this->view_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00')))
+		$criteria->compare('t.view_id', Yii::app()->getRequest()->getParam('view') ? Yii::app()->getRequest()->getParam('view') : $this->view_id);
+		if($this->view_date != null && !in_array($this->view_date, array('0000-00-00 00:00:00', '1970-01-01 00:00:00')))
 			$criteria->compare('date(t.view_date)', date('Y-m-d', strtotime($this->view_date)));
 		$criteria->compare('t.view_ip', strtolower($this->view_ip), true);
 
@@ -141,76 +140,15 @@ class BannerViewHistory extends CActiveRecord
 		$criteria->compare('view_banner.title', strtolower($this->banner_search), true);
 		$criteria->compare('view_user.displayname', strtolower($this->user_search), true);
 
-		if(!isset($_GET['BannerViewHistory_sort']))
+		if(!Yii::app()->getRequest()->getParam('BannerViewHistory_sort'))
 			$criteria->order = 't.id DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 			'pagination'=>array(
-				'pageSize'=>30,
+				'pageSize'=>Yii::app()->params['grid-view'] ? Yii::app()->params['grid-view']['pageSize'] : 20,
 			),
 		));
-	}
-
-	/**
-	 * Get kolom untuk Grid View
-	 *
-	 * @param array $columns kolom dari view
-	 * @return array dari grid yang aktif
-	 */
-	public function getGridColumn($columns=null) 
-	{
-		// Jika $columns kosong maka isi defaultColumns dg templateColumns
-		if(empty($columns) || $columns == null) {
-			array_splice($this->defaultColumns, 0);
-			foreach($this->templateColumns as $key => $val) {
-				if(!in_array($key, $this->gridForbiddenColumn) && !in_array($key, $this->defaultColumns))
-					$this->defaultColumns[] = $val;
-			}
-			return $this->defaultColumns;
-		}
-
-		foreach($columns as $val) {
-			if(!in_array($val, $this->gridForbiddenColumn) && !in_array($val, $this->defaultColumns)) {
-				$col = $this->getTemplateColumn($val);
-				if($col != null)
-					$this->defaultColumns[] = $col;
-			}
-		}
-
-		array_unshift($this->defaultColumns, array(
-			'header' => Yii::t('app', 'No'),
-			'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
-		));
-
-		array_unshift($this->defaultColumns, array(
-			'class' => 'CCheckBoxColumn',
-			'name' => 'id',
-			'selectableRows' => 2,
-			'checkBoxHtmlOptions' => array('name' => 'trash_id[]')
-		));
-
-		return $this->defaultColumns;
-	}
-
-	/**
-	 * Get kolom template berdasarkan id pengenal
-	 *
-	 * @param string $name nama pengenal
-	 * @return mixed
-	 */
-	public function getTemplateColumn($name) 
-	{
-		$data = null;
-		if(trim($name) == '') return $data;
-
-		foreach($this->templateColumns as $key => $item) {
-			if($name == $key) {
-				$data = $item;
-				break;
-			}
-		}
-		return $data;
 	}
 
 	/**
@@ -226,9 +164,12 @@ class BannerViewHistory extends CActiveRecord
 			);
 			$this->templateColumns['_no'] = array(
 				'header' => Yii::t('app', 'No'),
-				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
+				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
 			);
-			if(!isset($_GET['view'])) {
+			if(!Yii::app()->getRequest()->getParam('view')) {
 				$this->templateColumns['category_search'] = array(
 					'name' => 'category_search',
 					'value' => '$data->view->banner->category->title->message',

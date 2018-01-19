@@ -6,6 +6,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
  * @created date 8 January 2017, 19:18 WIB
+ * @modified date 19 January 2018, 17:03 WIB
  * @link https://github.com/ommu/ommu-banner
  *
  * This is the model class for table "ommu_banner_clicks".
@@ -23,12 +24,10 @@
  * @property Banners $banner
  * @property Users $user;
  */
-class BannerClicks extends CActiveRecord
+class BannerClicks extends OActiveRecord
 {
-	public $defaultColumns = array();
-	public $templateColumns = array();
 	public $gridForbiddenColumn = array();
-	
+
 	// Variable Search
 	public $category_search;
 	public $banner_search;
@@ -131,97 +130,33 @@ class BannerClicks extends CActiveRecord
 			),
 			'user' => array(
 				'alias'=>'user',
-				'select'=>'displayname'
+				'select'=>'displayname',
 			),
 		);
 		
 		$criteria->compare('t.click_id', $this->click_id);
-		$criteria->compare('t.banner_id', isset($_GET['banner']) ? $_GET['banner'] : $this->banner_id);
-		$criteria->compare('t.user_id', isset($_GET['user']) ? $_GET['user'] : $this->user_id);
+		$criteria->compare('t.banner_id', Yii::app()->getRequest()->getParam('banner') ? Yii::app()->getRequest()->getParam('banner') : $this->banner_id);
+		$criteria->compare('t.user_id', Yii::app()->getRequest()->getParam('user') ? Yii::app()->getRequest()->getParam('user') : $this->user_id);
 		$criteria->compare('t.clicks', $this->clicks);
-		if($this->click_date != null && !in_array($this->click_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00')))
+		if($this->click_date != null && !in_array($this->click_date, array('0000-00-00 00:00:00', '1970-01-01 00:00:00')))
 			$criteria->compare('date(t.click_date)', date('Y-m-d', strtotime($this->click_date)));
 		$criteria->compare('t.click_ip', strtolower($this->click_ip), true);
 
 		$criteria->compare('banner.cat_id', $this->category_search);
 		$criteria->compare('banner.title', strtolower($this->banner_search), true);
-		if(isset($_GET['banner']) && isset($_GET['publish']))
-			$criteria->compare('banner.publish', $_GET['publish']);
+		if(Yii::app()->getRequest()->getParam('banner') && Yii::app()->getRequest()->getParam('publish'))
+			$criteria->compare('banner.publish', Yii::app()->getRequest()->getParam('publish'));
 		$criteria->compare('user.displayname', strtolower($this->user_search), true);
 
-		if(!isset($_GET['BannerClicks_sort']))
+		if(!Yii::app()->getRequest()->getParam('BannerClicks_sort'))
 			$criteria->order = 't.click_id DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 			'pagination'=>array(
-				'pageSize'=>30,
+				'pageSize'=>Yii::app()->params['grid-view'] ? Yii::app()->params['grid-view']['pageSize'] : 20,
 			),
 		));
-	}
-
-	/**
-	 * Get kolom untuk Grid View
-	 *
-	 * @param array $columns kolom dari view
-	 * @return array dari grid yang aktif
-	 */
-	public function getGridColumn($columns=null) 
-	{
-		// Jika $columns kosong maka isi defaultColumns dg templateColumns
-		if(empty($columns) || $columns == null) {
-			array_splice($this->defaultColumns, 0);
-			foreach($this->templateColumns as $key => $val) {
-				if(!in_array($key, $this->gridForbiddenColumn) && !in_array($key, $this->defaultColumns))
-					$this->defaultColumns[] = $val;
-			}
-			return $this->defaultColumns;
-		}
-
-		foreach($columns as $val) {
-			if(!in_array($val, $this->gridForbiddenColumn) && !in_array($val, $this->defaultColumns)) {
-				$col = $this->getTemplateColumn($val);
-				if($col != null)
-					$this->defaultColumns[] = $col;
-			}
-		}
-
-		array_unshift($this->defaultColumns, array(
-			'header' => Yii::t('app', 'No'),
-			'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1',
-			'htmlOptions' => array(
-				'class' => 'center',
-			),
-		));
-
-		array_unshift($this->defaultColumns, array(
-			'class' => 'CCheckBoxColumn',
-			'name' => 'id',
-			'selectableRows' => 2,
-			'checkBoxHtmlOptions' => array('name' => 'trash_id[]')
-		));
-
-		return $this->defaultColumns;
-	}
-
-	/**
-	 * Get kolom template berdasarkan id pengenal
-	 *
-	 * @param string $name nama pengenal
-	 * @return mixed
-	 */
-	public function getTemplateColumn($name) 
-	{
-		$data = null;
-		if(trim($name) == '') return $data;
-
-		foreach($this->templateColumns as $key => $item) {
-			if($name == $key) {
-				$data = $item;
-				break;
-			}
-		}
-		return $data;
 	}
 
 	/**
@@ -242,7 +177,7 @@ class BannerClicks extends CActiveRecord
 					'class' => 'center',
 				),
 			);
-			if(!isset($_GET['banner'])) {
+			if(!Yii::app()->getRequest()->getParam('banner')) {
 				$this->templateColumns['category_search'] = array(
 					'name' => 'category_search',
 					'value' => '$data->banner->category->title->message',
@@ -251,14 +186,13 @@ class BannerClicks extends CActiveRecord
 				);
 				$this->templateColumns['banner_search'] = array(
 					'name' => 'banner_search',
-					'value' => '$data->banner->title',
+					'value' => '$data->banner->title ? $data->banner->title : \'-\'',
 				);
 			}
-			if(!isset($_GET['user'])) {
-				$this->defaultColumns[] = array(
+			if(!Yii::app()->getRequest()->getParam('user')) {
+				$this->templateColumns['user_search'] = array(
 					'name' => 'user_search',
 					'value' => '$data->user->displayname ? $data->user->displayname : \'-\'',
-					
 				);
 			}
 			$this->templateColumns['click_date'] = array(
@@ -324,7 +258,7 @@ class BannerClicks extends CActiveRecord
 	}
 
 	/**
-	 * User get information
+	 * insertClick
 	 */
 	public static function insertClick($banner_id)
 	{
@@ -347,7 +281,8 @@ class BannerClicks extends CActiveRecord
 	/**
 	 * before validate attributes
 	 */
-	protected function beforeValidate() {
+	protected function beforeValidate() 
+	{
 		if(parent::beforeValidate()) {
 			if($this->isNewRecord)
 				$this->user_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;

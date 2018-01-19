@@ -6,6 +6,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
  * @created date 8 January 2017, 19:18 WIB
+ * @modified date 19 January 2018, 17:04 WIB
  * @link https://github.com/ommu/ommu-banner
  *
  * This is the model class for table "ommu_banner_views".
@@ -23,10 +24,8 @@
  * @property Banners $banner
  * @property Users $user;
  */
-class BannerViews extends CActiveRecord
+class BannerViews extends OActiveRecord
 {
-	public $defaultColumns = array();
-	public $templateColumns = array();
 	public $gridForbiddenColumn = array();
 
 	// Variable Search
@@ -131,97 +130,33 @@ class BannerViews extends CActiveRecord
 			),
 			'user' => array(
 				'alias'=>'user',
-				'select'=>'displayname'
+				'select'=>'displayname',
 			),
 		);
 		
 		$criteria->compare('t.view_id', $this->view_id);
-		$criteria->compare('t.banner_id', isset($_GET['banner']) ? $_GET['banner'] : $this->banner_id);
-		$criteria->compare('t.user_id', isset($_GET['user']) ? $_GET['user'] : $this->user_id);
+		$criteria->compare('t.banner_id', Yii::app()->getRequest()->getParam('banner') ? Yii::app()->getRequest()->getParam('banner') : $this->banner_id);
+		$criteria->compare('t.user_id', Yii::app()->getRequest()->getParam('user') ? Yii::app()->getRequest()->getParam('user') : $this->user_id);
 		$criteria->compare('t.views', $this->views);
-		if($this->view_date != null && !in_array($this->view_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00')))
+		if($this->view_date != null && !in_array($this->view_date, array('0000-00-00 00:00:00', '1970-01-01 00:00:00')))
 			$criteria->compare('date(t.view_date)', date('Y-m-d', strtotime($this->view_date)));
 		$criteria->compare('t.view_ip', strtolower($this->view_ip), true);
 
 		$criteria->compare('banner.cat_id', $this->category_search);
 		$criteria->compare('banner.title', strtolower($this->banner_search), true);
-		if(isset($_GET['banner']) && isset($_GET['publish']))
-			$criteria->compare('banner.publish', $_GET['publish']);
-		$criteria->compare('user.displayname',strtolower($this->user_search), true);
+		if(Yii::app()->getRequest()->getParam('banner') && Yii::app()->getRequest()->getParam('publish'))
+			$criteria->compare('banner.publish', Yii::app()->getRequest()->getParam('publish'));
+		$criteria->compare('user.displayname', strtolower($this->user_search), true);
 
-		if(!isset($_GET['BannerViews_sort']))
+		if(!Yii::app()->getRequest()->getParam('BannerViews_sort'))
 			$criteria->order = 't.view_id DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 			'pagination'=>array(
-				'pageSize'=>30,
+				'pageSize'=>Yii::app()->params['grid-view'] ? Yii::app()->params['grid-view']['pageSize'] : 20,
 			),
 		));
-	}
-
-	/**
-	 * Get kolom untuk Grid View
-	 *
-	 * @param array $columns kolom dari view
-	 * @return array dari grid yang aktif
-	 */
-	public function getGridColumn($columns=null) 
-	{
-		// Jika $columns kosong maka isi defaultColumns dg templateColumns
-		if(empty($columns) || $columns == null) {
-			array_splice($this->defaultColumns, 0);
-			foreach($this->templateColumns as $key => $val) {
-				if(!in_array($key, $this->gridForbiddenColumn) && !in_array($key, $this->defaultColumns))
-					$this->defaultColumns[] = $val;
-			}
-			return $this->defaultColumns;
-		}
-
-		foreach($columns as $val) {
-			if(!in_array($val, $this->gridForbiddenColumn) && !in_array($val, $this->defaultColumns)) {
-				$col = $this->getTemplateColumn($val);
-				if($col != null)
-					$this->defaultColumns[] = $col;
-			}
-		}
-
-		array_unshift($this->defaultColumns, array(
-			'header' => Yii::t('app', 'No'),
-			'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1',
-			'htmlOptions' => array(
-				'class' => 'center',
-			),
-		));
-
-		array_unshift($this->defaultColumns, array(
-			'class' => 'CCheckBoxColumn',
-			'name' => 'id',
-			'selectableRows' => 2,
-			'checkBoxHtmlOptions' => array('name' => 'trash_id[]')
-		));
-
-		return $this->defaultColumns;
-	}
-
-	/**
-	 * Get kolom template berdasarkan id pengenal
-	 *
-	 * @param string $name nama pengenal
-	 * @return mixed
-	 */
-	public function getTemplateColumn($name) 
-	{
-		$data = null;
-		if(trim($name) == '') return $data;
-
-		foreach($this->templateColumns as $key => $item) {
-			if($name == $key) {
-				$data = $item;
-				break;
-			}
-		}
-		return $data;
 	}
 
 	/**
@@ -242,7 +177,7 @@ class BannerViews extends CActiveRecord
 					'class' => 'center',
 				),
 			);
-			if(!isset($_GET['banner'])) {
+			if(!Yii::app()->getRequest()->getParam('banner')) {
 				$this->templateColumns['category_search'] = array(
 					'name' => 'category_search',
 					'value' => '$data->banner->category->title->message',
@@ -251,18 +186,26 @@ class BannerViews extends CActiveRecord
 				);
 				$this->templateColumns['banner_search'] = array(
 					'name' => 'banner_search',
-					'value' => '$data->banner->title',
+					'value' => '$data->banner->title ? $data->banner->title : \'-\'',
 				);
 			}
-			if(!isset($_GET['user'])) {
+			if(!Yii::app()->getRequest()->getParam('user')) {
 				$this->templateColumns['user_search'] = array(
 					'name' => 'user_search',
 					'value' => '$data->user->displayname ? $data->user->displayname : \'-\'',
 				);
 			}
+			$this->templateColumns['views'] = array(
+				'name' => 'views',
+				'value' => 'CHtml::link($data->views, Yii::app()->controller->createUrl("history/view/manage",array(\'view\'=>$data->view_id)))',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'type' => 'raw',
+			);
 			$this->templateColumns['view_date'] = array(
 				'name' => 'view_date',
-				'value' => '!in_array($data->view_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\')) ? Utility::dateFormat($data->view_date, true) : \'-\'',
+				'value' => '!in_array($data->view_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\')) ? Utility::dateFormat($data->view_date) : \'-\'',
 				'htmlOptions' => array(
 					//'class' => 'center',
 				),
@@ -292,14 +235,6 @@ class BannerViews extends CActiveRecord
 				'htmlOptions' => array(
 					//'class' => 'center',
 				),
-			);
-			$this->templateColumns['views'] = array(
-				'name' => 'views',
-				'value' => 'CHtml::link($data->views, Yii::app()->controller->createUrl("history/view/manage",array(\'view\'=>$data->view_id)))',
-				'htmlOptions' => array(
-					'class' => 'center',
-				),
-				'type' => 'raw',
 			);
 		}
 		parent::afterConstruct();
@@ -346,7 +281,8 @@ class BannerViews extends CActiveRecord
 	/**
 	 * before validate attributes
 	 */
-	protected function beforeValidate() {
+	protected function beforeValidate() 
+	{
 		if(parent::beforeValidate()) {
 			if($this->isNewRecord)
 				$this->user_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;

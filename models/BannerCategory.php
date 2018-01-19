@@ -5,6 +5,7 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2014 Ommu Platform (opensource.ommu.co)
+ * @modified date 19 January 2018, 17:03 WIB
  * @link https://github.com/ommu/ommu-banner
  *
  * This is the model class for table "ommu_banner_category".
@@ -28,14 +29,12 @@
  * @property Users $creation;
  * @property Users $modified;
  */
-class BannerCategory extends CActiveRecord
+class BannerCategory extends OActiveRecord
 {
-	public $defaultColumns = array();
-	public $templateColumns = array();
 	public $gridForbiddenColumn = array('desc_i','cat_code','banner_size','creation_date','creation_search','modified_date','modified_search','slug');
 	public $name_i;
 	public $desc_i;
-	
+
 	// Variable Search
 	public $publish_search;
 	public $pending_search;
@@ -95,9 +94,8 @@ class BannerCategory extends CActiveRecord
 			array('name, desc, creation_id, modified_id', 'length', 'max'=>11),
 			array('cat_code, slug,
 				name_i', 'length', 'max'=>32),
-			array('
-				desc_i', 'length', 'max'=>64),
 			array('cat_code, banner_size, banner_limit', 'safe'),
+			array('desc_i', 'length', 'max'=>128),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('cat_id, publish, name, desc, cat_code, banner_size, banner_limit, creation_date, creation_id, modified_date, modified_id, slug, 
@@ -114,11 +112,11 @@ class BannerCategory extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'view' => array(self::BELONGS_TO, 'ViewBannerCategory', 'cat_id'),
+			'banners' => array(self::HAS_MANY, 'Banners', 'cat_id'),
 			'title' => array(self::BELONGS_TO, 'SourceMessage', 'name'),
 			'description' => array(self::BELONGS_TO, 'SourceMessage', 'desc'),
 			'creation' => array(self::BELONGS_TO, 'Users', 'creation_id'),
 			'modified' => array(self::BELONGS_TO, 'Users', 'modified_id'),
-			'banners' => array(self::HAS_MANY, 'Banners', 'cat_id'),
 		);
 	}
 
@@ -185,20 +183,20 @@ class BannerCategory extends CActiveRecord
 			),
 			'creation' => array(
 				'alias'=>'creation',
-				'select'=>'displayname'
+				'select'=>'displayname',
 			),
 			'modified' => array(
 				'alias'=>'modified',
-				'select'=>'displayname'
+				'select'=>'displayname',
 			),
 		);
 
 		$criteria->compare('t.cat_id', $this->cat_id);
-		if(isset($_GET['type']) && $_GET['type'] == 'publish')
+		if(Yii::app()->getRequest()->getParam('type') == 'publish')
 			$criteria->compare('t.publish', 1);
-		elseif(isset($_GET['type']) && $_GET['type'] == 'unpublish')
+		elseif(Yii::app()->getRequest()->getParam('type') == 'unpublish')
 			$criteria->compare('t.publish', 0);
-		elseif(isset($_GET['type']) && $_GET['type'] == 'trash')
+		elseif(Yii::app()->getRequest()->getParam('type') == 'trash')
 			$criteria->compare('t.publish', 2);
 		else {
 			$criteria->addInCondition('t.publish', array(0,1));
@@ -209,12 +207,12 @@ class BannerCategory extends CActiveRecord
 		$criteria->compare('t.cat_code', strtolower($this->cat_code), true);
 		$criteria->compare('t.banner_size', $this->banner_size, true);
 		$criteria->compare('t.banner_limit', $this->banner_limit);
-		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00')))
+		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00', '1970-01-01 00:00:00')))
 			$criteria->compare('date(t.creation_date)', date('Y-m-d', strtotime($this->creation_date)));
-		$criteria->compare('t.creation_id', isset($_GET['creation']) ? $_GET['creation'] : $this->creation_id);
-		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00')))
+		$criteria->compare('t.creation_id', Yii::app()->getRequest()->getParam('creation') ? Yii::app()->getRequest()->getParam('creation') : $this->creation_id);
+		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00', '1970-01-01 00:00:00')))
 			$criteria->compare('date(t.modified_date)', date('Y-m-d', strtotime($this->modified_date)));
-		$criteria->compare('t.modified_id', isset($_GET['modified']) ? $_GET['modified'] : $this->modified_id);
+		$criteria->compare('t.modified_id', Yii::app()->getRequest()->getParam('modified') ? Yii::app()->getRequest()->getParam('modified') : $this->modified_id);
 		$criteria->compare('t.slug', strtolower($this->slug), true);
 
 		$criteria->compare('title.message', strtolower($this->name_i), true);
@@ -227,79 +225,15 @@ class BannerCategory extends CActiveRecord
 		$criteria->compare('creation.displayname', strtolower($this->creation_search), true);
 		$criteria->compare('modified.displayname', strtolower($this->modified_search), true);
 
-		if(!isset($_GET['BannerCategory_sort']))
+		if(!Yii::app()->getRequest()->getParam('BannerCategory_sort'))
 			$criteria->order = 't.cat_id DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 			'pagination'=>array(
-				'pageSize'=>30,
+				'pageSize'=>Yii::app()->params['grid-view'] ? Yii::app()->params['grid-view']['pageSize'] : 20,
 			),
 		));
-	}
-
-	/**
-	 * Get kolom untuk Grid View
-	 *
-	 * @param array $columns kolom dari view
-	 * @return array dari grid yang aktif
-	 */
-	public function getGridColumn($columns=null) 
-	{
-		// Jika $columns kosong maka isi defaultColumns dg templateColumns
-		if(empty($columns) || $columns == null) {
-			array_splice($this->defaultColumns, 0);
-			foreach($this->templateColumns as $key => $val) {
-				if(!in_array($key, $this->gridForbiddenColumn) && !in_array($key, $this->defaultColumns))
-					$this->defaultColumns[] = $val;
-			}
-			return $this->defaultColumns;
-		}
-
-		foreach($columns as $val) {
-			if(!in_array($val, $this->gridForbiddenColumn) && !in_array($val, $this->defaultColumns)) {
-				$col = $this->getTemplateColumn($val);
-				if($col != null)
-					$this->defaultColumns[] = $col;
-			}
-		}
-
-		array_unshift($this->defaultColumns, array(
-			'header' => Yii::t('app', 'No'),
-			'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1',
-			'htmlOptions' => array(
-				'class' => 'center',
-			),
-		));
-
-		array_unshift($this->defaultColumns, array(
-			'class' => 'CCheckBoxColumn',
-			'name' => 'id',
-			'selectableRows' => 2,
-			'checkBoxHtmlOptions' => array('name' => 'trash_id[]')
-		));
-
-		return $this->defaultColumns;
-	}
-
-	/**
-	 * Get kolom template berdasarkan id pengenal
-	 *
-	 * @param string $name nama pengenal
-	 * @return mixed
-	 */
-	public function getTemplateColumn($name) 
-	{
-		$data = null;
-		if(trim($name) == '') return $data;
-
-		foreach($this->templateColumns as $key => $item) {
-			if($name == $key) {
-				$data = $item;
-				break;
-			}
-		}
-		return $data;
 	}
 
 	/**
@@ -342,6 +276,13 @@ class BannerCategory extends CActiveRecord
 					'class' => 'center',
 				),
 			);
+			$this->templateColumns['banner_limit'] = array(
+				'name' => 'banner_limit',
+				'value' => '$data->banner_limit ? $data->banner_limit : \'-\'',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+			);
 			$this->templateColumns['creation_date'] = array(
 				'name' => 'creation_date',
 				'value' => '!in_array($data->creation_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\')) ? Utility::dateFormat($data->creation_date) : \'-\'',
@@ -368,7 +309,7 @@ class BannerCategory extends CActiveRecord
 					),
 				), true),
 			);
-			if(!isset($_GET['creation'])) {
+			if(!Yii::app()->getRequest()->getParam('creation')) {
 				$this->templateColumns['creation_search'] = array(
 					'name' => 'creation_search',
 					'value' => '$data->creation->displayname ? $data->creation->displayname : \'-\'',
@@ -400,7 +341,7 @@ class BannerCategory extends CActiveRecord
 					),
 				), true),
 			);
-			if(!isset($_GET['modified'])) {
+			if(!Yii::app()->getRequest()->getParam('modified')) {
 				$this->templateColumns['modified_search'] = array(
 					'name' => 'modified_search',
 					'value' => '$data->modified->displayname ? $data->modified->displayname : \'-\'',
@@ -409,13 +350,6 @@ class BannerCategory extends CActiveRecord
 			$this->templateColumns['slug'] = array(
 				'name' => 'slug',
 				'value' => '$data->slug',
-			);
-			$this->templateColumns['banner_limit'] = array(
-				'name' => 'banner_limit',
-				'value' => '$data->banner_limit ? $data->banner_limit : \'-\'',
-				'htmlOptions' => array(
-					'class' => 'center',
-				),
 			);
 			$this->templateColumns['publish_search'] = array(
 				'name' => 'publish_search',
@@ -452,7 +386,7 @@ class BannerCategory extends CActiveRecord
 					'class' => 'center',
 				),
 			);
-			if(!isset($_GET['type'])) {
+			if(!Yii::app()->getRequest()->getParam('type')) {
 				$this->templateColumns['publish'] = array(
 					'name' => 'publish',
 					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'o/category/publish\',array(\'id\'=>$data->cat_id)), $data->publish)',
@@ -488,7 +422,7 @@ class BannerCategory extends CActiveRecord
 	}
 
 	/**
-	 * Get category
+	 * getCategory
 	 * 0 = unpublish
 	 * 1 = publish
 	 */
@@ -496,8 +430,8 @@ class BannerCategory extends CActiveRecord
 	{
 		$criteria=new CDbCriteria;
 		if($publish != null)
-			$criteria->compare('publish', $publish);
-		
+			$criteria->compare('t.publish', $publish);
+
 		$model = self::model()->findAll($criteria);
 
 		if($type == null) {
@@ -568,7 +502,7 @@ class BannerCategory extends CActiveRecord
 				$name->location = $location.'_title';
 				if($name->save())
 					$this->name = $name->id;
-				
+
 				$this->slug = Utility::getUrlTitle($this->name_i);
 				
 			} else {
@@ -576,11 +510,11 @@ class BannerCategory extends CActiveRecord
 				$name->message = $this->name_i;
 				$name->save();
 			}
-			
+
 			if($this->isNewRecord || (!$this->isNewRecord && !$this->desc)) {
 				$desc=new SourceMessage;
 				$desc->message = $this->desc_i;
-				$desc->location = $location.'_description';
+				$desc->location = $location.'_desc';
 				if($desc->save())
 					$this->desc = $desc->id;
 				
@@ -589,7 +523,7 @@ class BannerCategory extends CActiveRecord
 				$desc->message = $this->desc_i;
 				$desc->save();
 			}
-			
+
 			if($action != 'publish') {
 				$this->cat_code = Utility::getUrlTitle(strtolower(trim($this->name_i)));
 				//Banner Size

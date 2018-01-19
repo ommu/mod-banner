@@ -5,6 +5,7 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2014 Ommu Platform (opensource.ommu.co)
+ * @modified date 19 January 2018, 17:04 WIB
  * @link https://github.com/ommu/ommu-banner
  *
  * This is the model class for table "ommu_banners".
@@ -32,10 +33,8 @@
  * @property Users $creation;
  * @property Users $modified;
  */
-class Banners extends CActiveRecord
+class Banners extends OActiveRecord
 {
-	public $defaultColumns = array();
-	public $templateColumns = array();
 	public $gridForbiddenColumn = array('banner_filename','banner_desc','creation_date','creation_search','modified_date','modified_search','slug');
 	public $linked_i;
 	public $permanent_i;
@@ -56,7 +55,7 @@ class Banners extends CActiveRecord
 		return array(
 			'sluggable' => array(
 				'class'=>'ext.yii-behavior-sluggable.SluggableBehavior',
-				'columns' => array('title'),
+				'columns' => array('title.message'),
 				'unique' => true,
 				'update' => true,
 			),
@@ -178,40 +177,40 @@ class Banners extends CActiveRecord
 			),
 			'creation' => array(
 				'alias'=>'creation',
-				'select'=>'displayname'
+				'select'=>'displayname',
 			),
 			'modified' => array(
 				'alias'=>'modified',
-				'select'=>'displayname'
+				'select'=>'displayname',
 			),
 		);
 
 		$criteria->compare('t.banner_id', $this->banner_id);
-		if(isset($_GET['type']) && $_GET['type'] == 'publish')
+		if(Yii::app()->getRequest()->getParam('type') == 'publish')
 			$criteria->compare('t.publish', 1);
-		elseif(isset($_GET['type']) && $_GET['type'] == 'unpublish')
+		elseif(Yii::app()->getRequest()->getParam('type') == 'unpublish')
 			$criteria->compare('t.publish', 0);
-		elseif(isset($_GET['type']) && $_GET['type'] == 'trash')
+		elseif(Yii::app()->getRequest()->getParam('type') == 'trash')
 			$criteria->compare('t.publish', 2);
 		else {
 			$criteria->addInCondition('t.publish', array(0,1));
 			$criteria->compare('t.publish', $this->publish);
 		}
-		$criteria->compare('t.cat_id', isset($_GET['category']) ? $_GET['category'] : $this->cat_id);
+		$criteria->compare('t.cat_id', Yii::app()->getRequest()->getParam('category') ? Yii::app()->getRequest()->getParam('category') : $this->cat_id);
 		$criteria->compare('t.title', strtolower($this->title), true);
 		$criteria->compare('t.url', strtolower($this->url), true);
 		$criteria->compare('t.banner_filename', strtolower($this->banner_filename), true);
 		$criteria->compare('t.banner_desc', strtolower($this->banner_desc), true);
-		if($this->published_date != null && !in_array($this->published_date, array('0000-00-00','1970-01-01')))
+		if($this->published_date != null && !in_array($this->published_date, array('0000-00-00', '1970-01-01')))
 			$criteria->compare('date(t.published_date)', date('Y-m-d', strtotime($this->published_date)));
-		if($this->expired_date != null && !in_array($this->expired_date, array('0000-00-00','1970-01-01')))
+		if($this->expired_date != null && !in_array($this->expired_date, array('0000-00-00', '1970-01-01')))
 			$criteria->compare('date(t.expired_date)', date('Y-m-d', strtotime($this->expired_date)));
-		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00')))
+		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00', '1970-01-01 00:00:00')))
 			$criteria->compare('date(t.creation_date)', date('Y-m-d', strtotime($this->creation_date)));
-		$criteria->compare('t.creation_id', isset($_GET['creation']) ? $_GET['creation'] : $this->creation_id);
-		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00')))
+		$criteria->compare('t.creation_id', Yii::app()->getRequest()->getParam('creation') ? Yii::app()->getRequest()->getParam('creation') : $this->creation_id);
+		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00', '1970-01-01 00:00:00')))
 			$criteria->compare('date(t.modified_date)', date('Y-m-d', strtotime($this->modified_date)));
-		$criteria->compare('t.modified_id', isset($_GET['modified']) ? $_GET['modified'] : $this->modified_id);
+		$criteria->compare('t.modified_id', Yii::app()->getRequest()->getParam('modified') ? Yii::app()->getRequest()->getParam('modified') : $this->modified_id);
 		$criteria->compare('t.slug', strtolower($this->slug), true);
 		
 		$criteria->compare('creation.displayname', strtolower($this->creation_search), true);
@@ -220,79 +219,15 @@ class Banners extends CActiveRecord
 		$criteria->compare('view.clicks', $this->view_search);
 		$criteria->compare('view.views', $this->click_search);
 
-		if(!isset($_GET['Banners_sort']))
+		if(!Yii::app()->getRequest()->getParam('Banners_sort'))
 			$criteria->order = 't.banner_id DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 			'pagination'=>array(
-				'pageSize'=>30,
+				'pageSize'=>Yii::app()->params['grid-view'] ? Yii::app()->params['grid-view']['pageSize'] : 20,
 			),
 		));
-	}
-
-	/**
-	 * Get kolom untuk Grid View
-	 *
-	 * @param array $columns kolom dari view
-	 * @return array dari grid yang aktif
-	 */
-	public function getGridColumn($columns=null) 
-	{
-		// Jika $columns kosong maka isi defaultColumns dg templateColumns
-		if(empty($columns) || $columns == null) {
-			array_splice($this->defaultColumns, 0);
-			foreach($this->templateColumns as $key => $val) {
-				if(!in_array($key, $this->gridForbiddenColumn) && !in_array($key, $this->defaultColumns))
-					$this->defaultColumns[] = $val;
-			}
-			return $this->defaultColumns;
-		}
-
-		foreach($columns as $val) {
-			if(!in_array($val, $this->gridForbiddenColumn) && !in_array($val, $this->defaultColumns)) {
-				$col = $this->getTemplateColumn($val);
-				if($col != null)
-					$this->defaultColumns[] = $col;
-			}
-		}
-
-		array_unshift($this->defaultColumns, array(
-			'header' => Yii::t('app', 'No'),
-			'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1',
-			'htmlOptions' => array(
-				'class' => 'center',
-			),
-		));
-
-		array_unshift($this->defaultColumns, array(
-			'class' => 'CCheckBoxColumn',
-			'name' => 'id',
-			'selectableRows' => 2,
-			'checkBoxHtmlOptions' => array('name' => 'trash_id[]')
-		));
-
-		return $this->defaultColumns;
-	}
-
-	/**
-	 * Get kolom template berdasarkan id pengenal
-	 *
-	 * @param string $name nama pengenal
-	 * @return mixed
-	 */
-	public function getTemplateColumn($name) 
-	{
-		$data = null;
-		if(trim($name) == '') return $data;
-
-		foreach($this->templateColumns as $key => $item) {
-			if($name == $key) {
-				$data = $item;
-				break;
-			}
-		}
-		return $data;
 	}
 
 	/**
@@ -313,7 +248,7 @@ class Banners extends CActiveRecord
 					'class' => 'center',
 				),
 			);
-			if(!isset($_GET['category'])) {
+			if(!Yii::app()->getRequest()->getParam('category')) {
 				$this->templateColumns['cat_id'] = array(
 					'name' => 'cat_id',
 					'value' => '$data->category->title->message',
@@ -327,7 +262,7 @@ class Banners extends CActiveRecord
 			);
 			$this->templateColumns['url'] = array(
 				'name' => 'url',
-				'value' => '$data->url != "-" ? CHtml::link($data->url, $data->url, array(\'target\' => \'_blank\')) : \'-\'',
+				'value' => '$data->url && $data->url != "-" ? CHtml::link($data->url, $data->url, array(\'target\' => \'_blank\')) : \'-\'',
 				'type' => 'raw',
 			);
 			$this->templateColumns['banner_filename'] = array(
@@ -417,7 +352,7 @@ class Banners extends CActiveRecord
 					),
 				), true),
 			);
-			if(!isset($_GET['creation'])) {
+			if(!Yii::app()->getRequest()->getParam('creation')) {
 				$this->templateColumns['creation_search'] = array(
 					'name' => 'creation_search',
 					'value' => '$data->creation->displayname ? $data->creation->displayname : \'-\'',
@@ -449,7 +384,7 @@ class Banners extends CActiveRecord
 					),
 				), true),
 			);
-			if(!isset($_GET['modified'])) {
+			if(!Yii::app()->getRequest()->getParam('modified')) {
 				$this->templateColumns['modified_search'] = array(
 					'name' => 'modified_search',
 					'value' => '$data->modified->displayname ? $data->modified->displayname : \'-\'',
@@ -487,7 +422,7 @@ class Banners extends CActiveRecord
 				),
 				'type' => 'raw',
 			);
-			if(!isset($_GET['type'])) {
+			if(!Yii::app()->getRequest()->getParam('type')) {
 				$this->templateColumns['publish'] = array(
 					'name' => 'publish',
 					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'publish\',array(\'id\'=>$data->banner_id)), $data->publish)',
