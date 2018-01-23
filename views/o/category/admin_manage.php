@@ -7,6 +7,7 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2014 Ommu Platform (opensource.ommu.co)
+ * @modified date 23 January 2018, 07:07 WIB
  * @link https://github.com/ommu/ommu-banner
  *
  */
@@ -17,13 +18,13 @@
 	);
 	$this->menu=array(
 		array(
-			'label' => Yii::t('phrase', 'Filter'), 
+			'label' => Yii::t('phrase', 'Filter'),
 			'url' => array('javascript:void(0);'),
 			'itemOptions' => array('class' => 'search-button'),
 			'linkOptions' => array('title' => Yii::t('phrase', 'Filter')),
 		),
 		array(
-			'label' => Yii::t('phrase', 'Grid Options'), 
+			'label' => Yii::t('phrase', 'Grid Options'),
 			'url' => array('javascript:void(0);'),
 			'itemOptions' => array('class' => 'grid-button'),
 			'linkOptions' => array('title' => Yii::t('phrase', 'Grid Options')),
@@ -42,9 +43,9 @@
 
 <?php //begin.Grid Option ?>
 <div class="grid-form">
-<?php $this->renderPartial('_option_form',array( 
-	'model'=>$model, 
-	'gridColumns'=>Utility::getActiveDefaultColumns($columns), 
+<?php $this->renderPartial('_option_form',array(
+	'model'=>$model,
+	'gridColumns'=>Utility::getActiveDefaultColumns($columns),
 )); ?>
 </div>
 <?php //end.Grid Option ?>
@@ -53,10 +54,10 @@
 	<?php //begin.Messages ?>
 	<div id="ajax-message">
 	<?php 
-	if(Yii::app()->user->hasFlash('error')) 
-		echo Utility::flashError(Yii::app()->user->getFlash('error')); 
-	if(Yii::app()->user->hasFlash('success')) 
-		echo Utility::flashSuccess(Yii::app()->user->getFlash('success')); 
+	if(Yii::app()->user->hasFlash('error'))
+		echo Utility::flashError(Yii::app()->user->getFlash('error'));
+	if(Yii::app()->user->hasFlash('success'))
+		echo Utility::flashSuccess(Yii::app()->user->getFlash('success'));
 	?>
 	</div>
 	<?php //begin.Messages ?>

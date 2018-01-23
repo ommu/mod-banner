@@ -8,6 +8,7 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2014 Ommu Platform (opensource.ommu.co)
+ * @modified date 23 January 2018, 07:07 WIB
  * @link https://github.com/ommu/ommu-banner
  *
  */
@@ -16,8 +17,17 @@
 <?php $form=$this->beginWidget('application.libraries.core.components.system.OActiveForm', array(
 	'id'=>'banner-category-form',
 	'enableAjaxValidation'=>true,
-	//'htmlOptions' => array('enctype' => 'multipart/form-data')
+	/*
+	'enableClientValidation'=>true,
+	'clientOptions'=>array(
+		'validateOnSubmit'=>true,
+	),
+	'htmlOptions' => array(
+		'enctype' => 'multipart/form-data',
+	),
+	*/
 )); ?>
+
 <div class="dialog-content">
 	<fieldset>
 
@@ -28,29 +38,29 @@
 		<?php //begin.Messages ?>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'name_i', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+			<?php echo $form->labelEx($model, 'name_i', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-9 col-sm-12">
-				<?php echo $form->textField($model,'name_i',array('maxlength'=>32,'class'=>'form-control')); ?>
-				<?php echo $form->error($model,'name_i'); ?>
+				<?php echo $form->textField($model, 'name_i', array('maxlength'=>32, 'class'=>'form-control')); ?>
+				<?php echo $form->error($model, 'name_i'); ?>
 			</div>
 		</div>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'desc_i', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+			<?php echo $form->labelEx($model, 'desc_i', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-9 col-sm-12">
-				<?php echo $form->textArea($model,'desc_i',array('maxlength'=>64,'class'=>'form-control smaller')); ?>
-				<?php echo $form->error($model,'desc_i'); ?>
+				<?php echo $form->textArea($model, 'desc_i', array('rows'=>6, 'cols'=>50, 'maxlength'=>128, 'class'=>'form-control')); ?>
+				<?php echo $form->error($model, 'desc_i'); ?>
 			</div>
 		</div>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'banner_limit', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+			<?php echo $form->labelEx($model, 'banner_limit', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-9 col-sm-12">
-				<?php echo $form->textField($model,'banner_limit',array('class'=>'form-control', 'maxlength'=>2)); ?>
-				<?php echo $form->error($model,'banner_limit'); ?>
+				<?php echo $form->textField($model, 'banner_limit', array('maxlength'=>2, 'class'=>'form-control')); ?>
+				<?php echo $form->error($model, 'banner_limit'); ?>
 			</div>
 		</div>
-		
+
 		<div class="form-group row">
 			<label class="col-form-label col-lg-4 col-md-3 col-sm-12"><?php echo $model->getAttributeLabel('banner_size');?> <span class="required">*</span></label>
 			<div class="col-lg-8 col-md-9 col-sm-12">
@@ -64,18 +74,18 @@
 		</div>
 
 		<div class="form-group row publish">
-			<?php echo $form->labelEx($model,'publish', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+			<?php echo $form->labelEx($model, 'publish', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-9 col-sm-12">
-				<?php echo $form->checkBox($model,'publish', array('class'=>'form-control')); ?>
+				<?php echo $form->checkBox($model, 'publish', array('class'=>'form-control')); ?>
 				<?php echo $form->labelEx($model, 'publish'); ?>
-				<?php echo $form->error($model,'publish'); ?>
+				<?php echo $form->error($model, 'publish'); ?>
 			</div>
 		</div>
 
 	</fieldset>
 </div>
 <div class="dialog-submit">
-	<?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('phrase', 'Create') : Yii::t('phrase', 'Save') ,array('onclick' => 'setEnableSave()')); ?>
+	<?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('phrase', 'Create') : Yii::t('phrase', 'Save'), array('onclick' => 'setEnableSave()')); ?>
 	<?php echo CHtml::button(Yii::t('phrase', 'Cancel'), array('id'=>'closed')); ?>
 </div>
 <?php $this->endWidget(); ?>

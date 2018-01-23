@@ -22,6 +22,7 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2014 Ommu Platform (opensource.ommu.co)
+ * @modified date 23 January 2018, 07:07 WIB
  * @link https://github.com/ommu/ommu-banner
  *
  *----------------------------------------------------------------------------------------------------------
@@ -158,9 +159,9 @@ class CategoryController extends Controller
 			Yii::app()->end();
 		}
 		
-		$this->dialogDetail = true; 
-		$this->dialogGroundUrl = Yii::app()->controller->createUrl('o/setting/edit'); 
-		$this->dialogWidth = 600; 
+		$this->dialogDetail = true;
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('o/setting/edit');
+		$this->dialogWidth = 600;
 
 		$this->pageTitle = Yii::t('phrase', 'Create Banner Category');
 		$this->pageDescription = '';
@@ -209,9 +210,9 @@ class CategoryController extends Controller
 			Yii::app()->end();
 		}
 		
-		$this->dialogDetail = true; 
-		$this->dialogGroundUrl = Yii::app()->controller->createUrl('o/setting/edit'); 
-		$this->dialogWidth = 600; 
+		$this->dialogDetail = true;
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('o/setting/edit');
+		$this->dialogWidth = 600;
 
 		$this->pageTitle = Yii::t('phrase', 'Update Banner Category: {name}', array('{name}'=>$model->title->message));
 		$this->pageDescription = '';

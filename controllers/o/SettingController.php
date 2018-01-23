@@ -17,6 +17,7 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2014 Ommu Platform (opensource.ommu.co)
+ * @modified date 23 January 2018, 07:08 WIB
  * @link https://github.com/ommu/ommu-banner
  *
  *----------------------------------------------------------------------------------------------------------
@@ -91,7 +92,9 @@ class SettingController extends Controller
 	}
 
 	/**
-	 * Manages all models.
+	 * Updates a particular model.
+	 * If update is successful, the browser will be redirected to the 'view' page.
+	 * @param integer $id the ID of the model to be updated
 	 */
 	public function actionEdit() 
 	{
@@ -120,7 +123,7 @@ class SettingController extends Controller
 
 		if(isset($_POST['BannerSetting'])) {
 			$model->attributes=$_POST['BannerSetting'];
-			
+
 			$jsonError = CActiveForm::validate($model);
 			if(strlen($jsonError) > 2) {
 				$errors = $model->getErrors();

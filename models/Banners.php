@@ -55,7 +55,7 @@ class Banners extends OActiveRecord
 		return array(
 			'sluggable' => array(
 				'class'=>'ext.yii-behavior-sluggable.SluggableBehavior',
-				'columns' => array('title.message'),
+				'columns' => array('title'),
 				'unique' => true,
 				'update' => true,
 			),

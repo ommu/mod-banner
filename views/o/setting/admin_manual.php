@@ -12,7 +12,7 @@
  */
 
 	$this->breadcrumbs=array(
-		'Banner Settings'=>array('manage'),
+		'Banner Settings'=>array('index'),
 		'Manual Book',
 	);
 ?>

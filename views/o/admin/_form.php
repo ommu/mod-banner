@@ -8,6 +8,7 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2014 Ommu Platform (opensource.ommu.co)
+ * @modified date 23 January 2018, 07:07 WIB
  * @link https://github.com/ommu/ommu-banner
  *
  */
@@ -37,7 +38,15 @@ EOP;
 <?php $form=$this->beginWidget('application.libraries.core.components.system.OActiveForm', array(
 	'id'=>'banners-form',
 	'enableAjaxValidation'=>true,
-	'htmlOptions' => array('enctype' => 'multipart/form-data'),
+	/*
+	'enableClientValidation'=>true,
+	'clientOptions'=>array(
+		'validateOnSubmit'=>true,
+	),
+	*/
+	'htmlOptions' => array(
+		'enctype' => 'multipart/form-data',
+	),
 )); ?>
 
 <?php //begin.Messages ?>
@@ -54,25 +63,26 @@ EOP;
 			<?php 
 			$category = BannerCategory::getCategory(1);
 			if($category != null)
-				echo $form->dropDownList($model,'cat_id', $category, array('class'=>'form-control'));
+				echo $form->dropDownList($model,'cat_id', $category, array('prompt'=>'', 'class'=>'form-control'));
 			else
-				echo $form->dropDownList($model,'cat_id', array('prompt'=>'Select Category'), array('class'=>'form-control'));
+				echo $form->dropDownList($model,'cat_id', array('prompt'=>''), array('class'=>'form-control'));
 			echo $form->error($model,'cat_id');?>
 		</div>
 	</div>
 
 	<div class="form-group row">
-		<?php echo $form->labelEx($model,'title', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+		<?php echo $form->labelEx($model, 'title', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 		<div class="col-lg-8 col-md-9 col-sm-12">
-			<?php echo $form->textField($model,'title',array('class'=>'form-control', 'maxlength'=>64)); ?>
-			<?php echo $form->error($model,'title'); ?>
+			<?php echo $form->textField($model, 'title', array('maxlength'=>64, 'class'=>'form-control')); ?>
+			<?php echo $form->error($model, 'title'); ?>
+			<div class="small-px silent"><?php echo Yii::t('phrase', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vitae laoreet metus. Integer eros augue, viverra at lectus vel, dignissim sagittis erat. ');?></div>
 		</div>
 	</div>
 
 	<div class="form-group row">
-		<?php echo $form->labelEx($model,'banner_desc', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+		<?php echo $form->labelEx($model, 'banner_desc', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 		<div class="col-lg-8 col-md-9 col-sm-12">
-			<?php echo $form->textArea($model,'banner_desc',array('class'=>'form-control smaller', 'rows'=>6, 'cols'=>50)); ?>
+			<?php echo $form->textArea($model, 'banner_desc', array('rows'=>6, 'cols'=>50, 'class'=>'form-control smaller')); ?>
 			<?php echo $form->error($model,'banner_desc'); ?>
 		</div>
 	</div>
@@ -87,23 +97,23 @@ EOP;
 	<div class="form-group row publish">
 		<?php echo $form->labelEx($model,'linked_i', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 		<div class="col-lg-8 col-md-9 col-sm-12">
-			<?php echo $form->checkBox($model,'linked_i', array('class'=>'form-control')); ?>
+			<?php echo $form->checkBox($model, 'linked_i', array('class'=>'form-control')); ?>
 			<?php echo $form->labelEx($model, 'linked_i'); ?>
-			<?php echo $form->error($model,'linked_i'); ?>
+			<?php echo $form->error($model, 'linked_i'); ?>
 		</div>
 	</div>
 
 	<div id="url" class="form-group row <?php echo $model->linked_i == 0 ? 'hide' : ''?>">
-		<?php echo $form->labelEx($model,'url', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+		<?php echo $form->labelEx($model, 'url', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 		<div class="col-lg-8 col-md-9 col-sm-12">
-			<?php echo $form->textArea($model,'url',array('class'=>'form-control smaller', 'rows'=>6, 'cols'=>50)); ?>
-			<?php echo $form->error($model,'url'); ?>
+			<?php echo $form->textArea($model, 'url',array('rows'=>6, 'cols'=>50, 'class'=>'form-control smaller')); ?>
+			<?php echo $form->error($model, 'url'); ?>
 			<div class="small-px silent">example: http://opensource.ommu.co</div>
 		</div>
 	</div>
 
 	<div class="form-group row">
-		<?php echo $form->labelEx($model,'banner_filename', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+		<?php echo $form->labelEx($model, 'banner_filename', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 		<div class="col-lg-8 col-md-9 col-sm-12">
 			<?php 
 			if(!$model->isNewRecord) {
@@ -116,18 +126,17 @@ EOP;
 					<img class="mb-15" src="<?php echo Utility::getTimThumb($banner, $bannerSize['width'], $bannerSize['height'], 3);?>" alt="">
 			<?php }
 			}?>
-			<?php echo $form->fileField($model,'banner_filename', array('class'=>'form-control')); ?>
-			<?php echo $form->error($model,'banner_filename'); ?>
+			<?php echo $form->fileField($model, 'banner_filename', array('class'=>'form-control')); ?>
+			<?php echo $form->error($model, 'banner_filename'); ?>
 			<span class="small-px">extensions are allowed: <?php echo Utility::formatFileType($banner_file_type, false);?></span>
 		</div>
 	</div>
 
 	<div class="form-group row">
-		<?php echo $form->labelEx($model,'published_date', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+		<?php echo $form->labelEx($model, 'published_date', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 		<div class="col-lg-8 col-md-9 col-sm-12">
-			<?php
-			!$model->isNewRecord ? ($model->published_date != '0000-00-00' ? $model->published_date = date('d-m-Y', strtotime($model->published_date)) : '') : '';
-			//echo $form->textField($model,'published_date');
+			<?php $model->published_date = !$model->isNewRecord ? (!in_array($model->published_date, array('0000-00-00','1970-01-01')) ? date('d-m-Y', strtotime($model->published_date)) : '') : '';
+			//echo $form->textField($model, 'published_date', array('class'=>'form-control'));
 			$this->widget('application.libraries.core.components.system.CJuiDatePicker',array(
 				'model'=>$model,
 				'attribute'=>'published_date',
@@ -139,7 +148,7 @@ EOP;
 					'class' => 'form-control',
 				 ),
 			)); ?>
-			<?php echo $form->error($model,'published_date'); ?>
+			<?php echo $form->error($model, 'published_date'); ?>
 		</div>
 	</div>
 
@@ -153,19 +162,19 @@ EOP;
 	<div class="form-group row publish">
 		<?php echo $form->labelEx($model,'permanent_i', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 		<div class="col-lg-8 col-md-9 col-sm-12">
-			<?php echo $form->checkBox($model,'permanent_i', array('class'=>'form-control')); ?>
+			<?php echo $form->checkBox($model, 'permanent_i', array('class'=>'form-control')); ?>
 			<?php echo $form->labelEx($model, 'permanent_i'); ?>
-			<?php echo $form->error($model,'permanent_i'); ?>
+			<?php echo $form->error($model, 'permanent_i'); ?>
 		</div>
 	</div>
-	
+
 	<div id="expired-date" class="form-group row <?php echo $model->permanent_i == 1 ? 'hide' : ''?>">
-		<?php echo $form->labelEx($model,'expired_date', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+		<?php echo $form->labelEx($model, 'expired_date', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 		<div class="col-lg-8 col-md-9 col-sm-12">
 			<?php
 			if(!$model->getErrors())
-				$model->expired_date = !$model->isNewRecord ? (!in_array($model->expired_date, array('0000-00-00','1970-01-01')) ? date('d-m-Y', strtotime($model->expired_date)) : '00-00-0000') : '';
-			//echo $form->textField($model,'expired_date');
+				$model->expired_date = !$model->isNewRecord ? (!in_array($model->expired_date, array('0000-00-00','1970-01-01')) ? date('d-m-Y', strtotime($model->expired_date)) : '') : '';
+			//echo $form->textField($model, 'expired_date', array('class'=>'form-control'));
 			$this->widget('application.libraries.core.components.system.CJuiDatePicker',array(
 				'model'=>$model,
 				'attribute'=>'expired_date',
@@ -177,16 +186,16 @@ EOP;
 					'class' => 'form-control',
 				 ),
 			)); ?>
-			<?php echo $form->error($model,'expired_date'); ?>
+			<?php echo $form->error($model, 'expired_date'); ?>
 		</div>
 	</div>
 
 	<div class="form-group row publish">
-		<?php echo $form->labelEx($model,'publish', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+		<?php echo $form->labelEx($model, 'publish', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 		<div class="col-lg-8 col-md-9 col-sm-12">
-			<?php echo $form->checkBox($model,'publish', array('class'=>'form-control')); ?>
+			<?php echo $form->checkBox($model, 'publish', array('class'=>'form-control')); ?>
 			<?php echo $form->labelEx($model, 'publish'); ?>
-			<?php echo $form->error($model,'publish'); ?>
+			<?php echo $form->error($model, 'publish'); ?>
 		</div>
 	</div>
 
@@ -199,5 +208,3 @@ EOP;
 
 </fieldset>
 <?php $this->endWidget(); ?>
-
-

@@ -8,6 +8,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
  * @created date 8 January 2017, 20:54 WIB
+ * @modified date 23 January 2018, 07:07 WIB
  * @link https://github.com/ommu/ommu-banner
  *
  */
@@ -18,13 +19,13 @@
 	);
 	$this->menu=array(
 		array(
-			'label' => Yii::t('phrase', 'Filter'), 
+			'label' => Yii::t('phrase', 'Filter'),
 			'url' => array('javascript:void(0);'),
 			'itemOptions' => array('class' => 'search-button'),
 			'linkOptions' => array('title' => Yii::t('phrase', 'Filter')),
 		),
 		array(
-			'label' => Yii::t('phrase', 'Grid Options'), 
+			'label' => Yii::t('phrase', 'Grid Options'),
 			'url' => array('javascript:void(0);'),
 			'itemOptions' => array('class' => 'grid-button'),
 			'linkOptions' => array('title' => Yii::t('phrase', 'Grid Options')),
@@ -45,7 +46,7 @@
 <div class="grid-form">
 <?php $this->renderPartial('_option_form',array(
 	'model'=>$model,
-	'gridColumns'=>Utility::getActiveDefaultColumns($columns), 
+	'gridColumns'=>Utility::getActiveDefaultColumns($columns),
 )); ?>
 </div>
 <?php //end.Grid Option ?>
@@ -53,7 +54,7 @@
 <div id="partial-banner-clicks">
 	<?php //begin.Messages ?>
 	<div id="ajax-message">
-	<?php
+	<?php 
 	if(Yii::app()->user->hasFlash('error'))
 		echo Utility::flashError(Yii::app()->user->getFlash('error'));
 	if(Yii::app()->user->hasFlash('success'))

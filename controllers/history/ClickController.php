@@ -91,14 +91,6 @@ class ClickController extends Controller
 	 */
 	public function actionManage($click=null)
 	{
-		$pageTitle = Yii::t('phrase', 'Banner Click Datas');
-		if($click != null) {
-			$data = BannerClicks::model()->findByPk($click);
-			$pageTitle = Yii::t('phrase', 'Banner Click Data: {banner_title} from category {category_name} - user Guest', array ('{banner_title}'=>$data->banner->title, '{category_name}'=>$data->banner->category->title->message));	
-			if($data->user->displayname)
-				$pageTitle = Yii::t('phrase', 'Banner Click Data: {banner_title} from category {category_name} - user {user_displayname}', array ('{banner_title}'=>$data->banner->title, '{category_name}'=>$data->banner->category->title->message, '{user_displayname}'=>$data->user->displayname));
-		}
-		
 		$model=new BannerClickHistory('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['BannerClickHistory'])) {
@@ -115,6 +107,14 @@ class ClickController extends Controller
 		}
 		$columns = $model->getGridColumn($columnTemp);
 
+		$pageTitle = Yii::t('phrase', 'Banner Click Datas');
+		if($click != null) {
+			$data = BannerClicks::model()->findByPk($click);
+			$pageTitle = Yii::t('phrase', 'Banner Click Data: {banner_title} from category {category_name} - user Guest', array ('{banner_title}'=>$data->banner->title, '{category_name}'=>$data->banner->category->title->message));	
+			if($data->user->displayname)
+				$pageTitle = Yii::t('phrase', 'Banner Click Data: {banner_title} from category {category_name} - user {user_displayname}', array ('{banner_title}'=>$data->banner->title, '{category_name}'=>$data->banner->category->title->message, '{user_displayname}'=>$data->user->displayname));
+		}
+		
 		$this->pageTitle = $pageTitle;
 		$this->pageDescription = '';
 		$this->pageMeta = '';
@@ -140,8 +140,12 @@ class ClickController extends Controller
 					'type' => 5,
 					'get' => Yii::app()->controller->createUrl('manage'),
 					'id' => 'partial-banner-click-history',
-					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Banner click data success deleted.').'</strong></div>',
+					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Banner click history success deleted.').'</strong></div>',
 				));
+				/*
+				Yii::app()->user->setFlash('success', Yii::t('phrase', 'Banner click history success deleted.'));
+				$this->redirect(array('manage'));
+				*/
 			}
 			Yii::app()->end();
 		}

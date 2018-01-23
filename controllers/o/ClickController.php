@@ -18,6 +18,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
  * @created date 8 January 2017, 20:54 WIB
+ * @modified date 23 January 2018, 07:07 WIB
  * @link https://github.com/ommu/ommu-banner
  *
  *----------------------------------------------------------------------------------------------------------
@@ -91,12 +92,6 @@ class ClickController extends Controller
 	 */
 	public function actionManage($banner=null) 
 	{
-		$pageTitle = Yii::t('phrase', 'Banner Clicks');
-		if($banner != null) {
-			$data = Banners::model()->findByPk($banner);
-			$pageTitle = Yii::t('phrase', 'Banner Clicks: {banner_title} from category {category_name}', array ('{banner_title}'=>$data->title, '{category_name}'=>$data->category->title->message));
-		}
-		
 		$model=new BannerClicks('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['BannerClicks'])) {
@@ -113,6 +108,12 @@ class ClickController extends Controller
 		}
 		$columns = $model->getGridColumn($columnTemp);
 
+		$pageTitle = Yii::t('phrase', 'Banner Clicks');
+		if($banner != null) {
+			$data = Banners::model()->findByPk($banner);
+			$pageTitle = Yii::t('phrase', 'Banner Clicks: {banner_title} from category {category_name}', array ('{banner_title}'=>$data->title, '{category_name}'=>$data->category->title->message));
+		}
+		
 		$this->pageTitle = $pageTitle;
 		$this->pageDescription = '';
 		$this->pageMeta = '';
@@ -140,6 +141,10 @@ class ClickController extends Controller
 					'id' => 'partial-banner-clicks',
 					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Banner click success deleted.').'</strong></div>',
 				));
+				/*
+				Yii::app()->user->setFlash('success', Yii::t('phrase', 'Banner click success deleted.'));
+				$this->redirect(array('manage'));
+				*/
 			}
 			Yii::app()->end();
 		}

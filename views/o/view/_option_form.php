@@ -9,6 +9,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
  * @created date 8 January 2017, 20:54 WIB
+ * @modified date 23 January 2018, 07:07 WIB
  * @link https://github.com/ommu/ommu-banner
  *
  */
@@ -21,7 +22,7 @@ $js=<<<EOP
 			url: url,
 			data: $('form[name="gridoption"] :checked').serialize(),
 			success: function(response) {
-				$.fn.yiiGridView.update('banner-category-grid', {
+				$.fn.yiiGridView.update('banner-views-grid', {
 					data: $('form[name="gridoption"]').serialize()
 				});
 				return false;

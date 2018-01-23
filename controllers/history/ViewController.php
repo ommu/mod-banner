@@ -18,6 +18,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
  * @created date 8 January 2017, 21:21 WIB
+ * @modified date 23 January 2018, 07:09 WIB
  * @link https://github.com/ommu/ommu-banner
  *
  *----------------------------------------------------------------------------------------------------------
@@ -91,14 +92,6 @@ class ViewController extends Controller
 	 */
 	public function actionManage($view=null) 
 	{
-		$pageTitle = Yii::t('phrase', 'Banner View Datas');
-		if($view != null) {
-			$data = BannerViews::model()->findByPk($view);
-			$pageTitle = Yii::t('phrase', 'Banner View Data: {banner_title} from category {category_name} - user Guest', array ('{banner_title}'=>$data->banner->title, '{category_name}'=>$data->banner->category->title->message));	
-			if($data->user->displayname)
-				$pageTitle = Yii::t('phrase', 'Banner View Data: {banner_title} from category {category_name} - user {user_displayname}', array ('{banner_title}'=>$data->banner->title, '{category_name}'=>$data->banner->category->title->message, '{user_displayname}'=>$data->user->displayname));
-		}
-		
 		$model=new BannerViewHistory('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['BannerViewHistory'])) {
@@ -115,6 +108,14 @@ class ViewController extends Controller
 		}
 		$columns = $model->getGridColumn($columnTemp);
 
+		$pageTitle = Yii::t('phrase', 'Banner View Datas');
+		if($view != null) {
+			$data = BannerViews::model()->findByPk($view);
+			$pageTitle = Yii::t('phrase', 'Banner View Data: {banner_title} from category {category_name} - user Guest', array ('{banner_title}'=>$data->banner->title, '{category_name}'=>$data->banner->category->title->message));	
+			if($data->user->displayname)
+				$pageTitle = Yii::t('phrase', 'Banner View Data: {banner_title} from category {category_name} - user {user_displayname}', array ('{banner_title}'=>$data->banner->title, '{category_name}'=>$data->banner->category->title->message, '{user_displayname}'=>$data->user->displayname));
+		}
+		
 		$this->pageTitle = $pageTitle;
 		$this->pageDescription = '';
 		$this->pageMeta = '';
@@ -140,8 +141,12 @@ class ViewController extends Controller
 					'type' => 5,
 					'get' => Yii::app()->controller->createUrl('manage'),
 					'id' => 'partial-banner-view-history',
-					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Banner view data success deleted.').'</strong></div>',
+					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Banner view history success deleted.').'</strong></div>',
 				));
+				/*
+				Yii::app()->user->setFlash('success', Yii::t('phrase', 'Banner view history success deleted.'));
+				$this->redirect(array('manage'));
+				*/
 			}
 			Yii::app()->end();
 		}

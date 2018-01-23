@@ -8,6 +8,7 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2014 Ommu Platform (opensource.ommu.co)
+ * @modified date 23 January 2018, 07:07 WIB
  * @link https://github.com/ommu/ommu-banner
  *
  */
@@ -19,28 +20,33 @@
 )); ?>
 	<ul>
 		<li>
-			<?php echo $model->getAttributeLabel('name'); ?>
-			<?php echo $form->textField($model,'name'); ?>
+			<?php echo $model->getAttributeLabel('name_i'); ?>
+			<?php echo $form->textField($model, 'name_i', array('class'=>'form-control')); ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('desc'); ?>
-			<?php echo $form->textField($model,'desc'); ?>
+			<?php echo $model->getAttributeLabel('desc_i'); ?>
+			<?php echo $form->textField($model, 'desc_i', array('class'=>'form-control')); ?>
 		</li>
 
 		<li>
 			<?php echo $model->getAttributeLabel('cat_code'); ?>
-			<?php echo $form->textField($model,'cat_code'); ?>
+			<?php echo $form->textField($model, 'cat_code', array('class'=>'form-control')); ?>
 		</li>
 
 		<li>
 			<?php echo $model->getAttributeLabel('banner_size'); ?>
-			<?php echo $form->textField($model,'banner_size'); ?>
+			<?php echo $form->textField($model, 'banner_size', array('class'=>'form-control')); ?>
+		</li>
+
+		<li>
+			<?php echo $model->getAttributeLabel('banner_limit'); ?>
+			<?php echo $form->textField($model, 'banner_limit', array('class'=>'form-control')); ?>
 		</li>
 
 		<li>
 			<?php echo $model->getAttributeLabel('creation_date'); ?>
-			<?php //echo $form->textField($model,'creation_date');
+			<?php //echo $form->textField($model, 'creation_date', array('class'=>'form-control'));
 			$this->widget('application.libraries.core.components.system.CJuiDatePicker',array(
 				'model'=>$model,
 				'attribute'=>'creation_date',
@@ -49,19 +55,19 @@
 					'dateFormat' => 'dd-mm-yy',
 				),
 				'htmlOptions'=>array(
-					'class' => 'span-4',
+					'class' => 'form-control',
 				 ),
-			));; ?>
+			)); ?>
 		</li>
 
 		<li>
 			<?php echo $model->getAttributeLabel('creation_search'); ?>
-			<?php echo $form->textField($model,'creation_search'); ?>
+			<?php echo $form->textField($model, 'creation_search', array('class'=>'form-control')); ?>
 		</li>
 
 		<li>
 			<?php echo $model->getAttributeLabel('modified_date'); ?>
-			<?php //echo $form->textField($model,'modified_date');
+			<?php //echo $form->textField($model, 'modified_date', array('class'=>'form-control'));
 			$this->widget('application.libraries.core.components.system.CJuiDatePicker',array(
 				'model'=>$model,
 				'attribute'=>'modified_date',
@@ -70,29 +76,24 @@
 					'dateFormat' => 'dd-mm-yy',
 				),
 				'htmlOptions'=>array(
-					'class' => 'span-4',
+					'class' => 'form-control',
 				 ),
-			));; ?>
+			)); ?>
 		</li>
 
 		<li>
 			<?php echo $model->getAttributeLabel('modified_search'); ?>
-			<?php echo $form->textField($model,'modified_search'); ?>
+			<?php echo $form->textField($model, 'modified_search', array('class'=>'form-control')); ?>
 		</li>
 
 		<li>
 			<?php echo $model->getAttributeLabel('slug'); ?>
-			<?php echo $form->textField($model,'slug'); ?>
-		</li>
-
-		<li>
-			<?php echo $model->getAttributeLabel('banner_limit'); ?>
-			<?php echo $form->textField($model,'banner_limit'); ?>
+			<?php echo $form->textField($model, 'slug', array('class'=>'form-control')); ?>
 		</li>
 
 		<li>
 			<?php echo $model->getAttributeLabel('publish'); ?>
-			<?php echo $form->dropDownList($model,'publish', array('0'=>Yii::t('phrase', 'No'), '1'=>Yii::t('phrase', 'Yes'))); ?>
+			<?php echo $form->dropDownList($model, 'publish', array('0'=>Yii::t('phrase', 'No'), '1'=>Yii::t('phrase', 'Yes')), array('class'=>'form-control')); ?>
 		</li>
 
 		<li class="submit">

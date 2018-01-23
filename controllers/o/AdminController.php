@@ -22,6 +22,7 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2014 Ommu Platform (opensource.ommu.co)
+ * @modified date 23 January 2018, 07:07 WIB
  * @link https://github.com/ommu/ommu-banner
  *
  *----------------------------------------------------------------------------------------------------------
@@ -95,12 +96,6 @@ class AdminController extends Controller
 	 */
 	public function actionManage($category=null) 
 	{
-		$pageTitle = Yii::t('phrase', 'Banners');
-		if($category != null) {
-			$data = BannerCategory::model()->findByPk($category);
-			$pageTitle = Yii::t('phrase', 'Banners: Category {category_name}', array ('{category_name}'=>$data->title->message));
-		}
-		
 		$model=new Banners('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['Banners'])) {
@@ -117,6 +112,12 @@ class AdminController extends Controller
 		}
 		$columns = $model->getGridColumn($columnTemp);
 
+		$pageTitle = Yii::t('phrase', 'Banners');
+		if($category != null) {
+			$data = BannerCategory::model()->findByPk($category);
+			$pageTitle = Yii::t('phrase', 'Banners: Category {category_name}', array ('{category_name}'=>$data->title->message));
+		}
+		
 		$this->pageTitle = $pageTitle;
 		$this->pageDescription = '';
 		$this->pageMeta = '';
@@ -146,7 +147,7 @@ class AdminController extends Controller
 
 		if(isset($_POST['Banners'])) {
 			$model->attributes=$_POST['Banners'];
-			
+
 			if($model->save()) {
 				Yii::app()->user->setFlash('success', Yii::t('phrase', 'Banner success created.'));
 				$this->redirect(array('manage'));
@@ -183,7 +184,7 @@ class AdminController extends Controller
 
 		if(isset($_POST['Banners'])) {
 			$model->attributes=$_POST['Banners'];
-			
+
 			if($model->save()) {
 				Yii::app()->user->setFlash('success', Yii::t('phrase', 'Banner success updated.'));
 				$this->redirect(array('manage'));
@@ -207,7 +208,7 @@ class AdminController extends Controller
 	{
 		$model=$this->loadModel($id);
 
-		$this->pageTitle = Yii::t('phrase', 'View Banner: {title}', array('{title}'=>$model->title));		
+		$this->pageTitle = Yii::t('phrase', 'View Banner: {title}', array('{title}'=>$model->title));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_view',array(
