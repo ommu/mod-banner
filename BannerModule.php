@@ -29,7 +29,6 @@ class BannerModule extends CWebModule
 		// import the module-level models and components
 		$this->setImport(array(
 			'banner.models.*',
-			'banner.models.view.*',
 			'banner.components.*',
 		));
 

@@ -288,6 +288,8 @@ class Banners extends OActiveRecord
 					//'mode'=>'datetime',
 					'htmlOptions' => array(
 						'id' => 'published_date_filter',
+						'on_datepicker' => 'on',
+						'placeholder' => Yii::t('phrase', 'filter'),
 					),
 					'options'=>array(
 						'showOn' => 'focus',
@@ -314,6 +316,8 @@ class Banners extends OActiveRecord
 					//'mode'=>'datetime',
 					'htmlOptions' => array(
 						'id' => 'expired_date_filter',
+						'on_datepicker' => 'on',
+						'placeholder' => Yii::t('phrase', 'filter'),
 					),
 					'options'=>array(
 						'showOn' => 'focus',
@@ -340,6 +344,8 @@ class Banners extends OActiveRecord
 					//'mode'=>'datetime',
 					'htmlOptions' => array(
 						'id' => 'creation_date_filter',
+						'on_datepicker' => 'on',
+						'placeholder' => Yii::t('phrase', 'filter'),
 					),
 					'options'=>array(
 						'showOn' => 'focus',
@@ -372,6 +378,8 @@ class Banners extends OActiveRecord
 					//'mode'=>'datetime',
 					'htmlOptions' => array(
 						'id' => 'modified_date_filter',
+						'on_datepicker' => 'on',
+						'placeholder' => Yii::t('phrase', 'filter'),
 					),
 					'options'=>array(
 						'showOn' => 'focus',
