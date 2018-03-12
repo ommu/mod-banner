@@ -191,6 +191,8 @@ class BannerViewHistory extends OActiveRecord
 				'htmlOptions' => array(
 					//'class' => 'center',
 				),
+				'filter' => 'native-datepicker',
+				/*
 				'filter' => Yii::app()->controller->widget('application.libraries.core.components.system.CJuiDatePicker', array(
 					'model'=>$this,
 					'attribute'=>'view_date',
@@ -210,6 +212,7 @@ class BannerViewHistory extends OActiveRecord
 						'showButtonPanel' => true,
 					),
 				), true),
+				*/
 			);
 			$this->templateColumns['view_ip'] = array(
 				'name' => 'view_ip',
