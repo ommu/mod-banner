@@ -299,6 +299,8 @@ class BannerCategory extends OActiveRecord
 					//'mode'=>'datetime',
 					'htmlOptions' => array(
 						'id' => 'creation_date_filter',
+						'on_datepicker' => 'on',
+						'placeholder' => Yii::t('phrase', 'filter'),
 					),
 					'options'=>array(
 						'showOn' => 'focus',
@@ -334,6 +336,8 @@ class BannerCategory extends OActiveRecord
 					//'mode'=>'datetime',
 					'htmlOptions' => array(
 						'id' => 'modified_date_filter',
+						'on_datepicker' => 'on',
+						'placeholder' => Yii::t('phrase', 'filter'),
 					),
 					'options'=>array(
 						'showOn' => 'focus',

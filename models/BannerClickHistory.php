@@ -201,6 +201,8 @@ class BannerClickHistory extends OActiveRecord
 					//'mode'=>'datetime',
 					'htmlOptions' => array(
 						'id' => 'click_date_filter',
+						'on_datepicker' => 'on',
+						'placeholder' => Yii::t('phrase', 'filter'),
 					),
 					'options'=>array(
 						'showOn' => 'focus',
