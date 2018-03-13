@@ -136,8 +136,7 @@ EOP;
 		<?php echo $form->labelEx($model, 'published_date', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 		<div class="col-lg-8 col-md-9 col-sm-12">
 			<?php $model->published_date = !$model->isNewRecord ? (!in_array($model->published_date, array('0000-00-00','1970-01-01')) ? date('d-m-Y', strtotime($model->published_date)) : '') : '';
-			//echo $form->textField($model, 'published_date', array('class'=>'form-control'));
-			$this->widget('application.libraries.core.components.system.CJuiDatePicker',array(
+			/* $this->widget('application.libraries.core.components.system.CJuiDatePicker',array(
 				'model'=>$model,
 				'attribute'=>'published_date',
 				//'mode'=>'datetime',
@@ -147,7 +146,8 @@ EOP;
 				'htmlOptions'=>array(
 					'class' => 'form-control',
 				 ),
-			)); ?>
+			)); */
+			echo $form->dateField($model, 'published_date', array('class'=>'form-control')); ?>
 			<?php echo $form->error($model, 'published_date'); ?>
 		</div>
 	</div>
@@ -174,8 +174,7 @@ EOP;
 			<?php
 			if(!$model->getErrors())
 				$model->expired_date = !$model->isNewRecord ? (!in_array($model->expired_date, array('0000-00-00','1970-01-01')) ? date('d-m-Y', strtotime($model->expired_date)) : '') : '';
-			//echo $form->textField($model, 'expired_date', array('class'=>'form-control'));
-			$this->widget('application.libraries.core.components.system.CJuiDatePicker',array(
+			/* $this->widget('application.libraries.core.components.system.CJuiDatePicker',array(
 				'model'=>$model,
 				'attribute'=>'expired_date',
 				//'mode'=>'datetime',
@@ -185,7 +184,8 @@ EOP;
 				'htmlOptions'=>array(
 					'class' => 'form-control',
 				 ),
-			)); ?>
+			)); */
+			echo $form->dateField($model, 'expired_date', array('class'=>'form-control')); ?>
 			<?php echo $form->error($model, 'expired_date'); ?>
 		</div>
 	</div>

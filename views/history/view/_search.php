@@ -41,8 +41,7 @@
 
 		<li>
 			<?php echo $model->getAttributeLabel('view_date'); ?>
-			<?php //echo $form->textField($model, 'view_date', array('class'=>'form-control'));
-			$this->widget('application.libraries.core.components.system.CJuiDatePicker',array(
+			<?php /* $this->widget('application.libraries.core.components.system.CJuiDatePicker',array(
 				'model'=>$model,
 				'attribute'=>'view_date',
 				//'mode'=>'datetime',
@@ -52,7 +51,8 @@
 				'htmlOptions'=>array(
 					'class' => 'form-control',
 				 ),
-			)); ?>
+			)); */
+			echo $form->dateField($model, 'view_date', array('class'=>'form-control')); ?>
 		</li>
 
 		<li>
