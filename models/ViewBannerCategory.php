@@ -8,9 +8,9 @@
  * @modified date 19 January 2018, 21:09 WIB
  * @link https://github.com/ommu/ommu-banner
  *
- * This is the model class for table "_view_banner_category".
+ * This is the model class for table "_banner_category".
  *
- * The followings are the available columns in table '_view_banner_category':
+ * The followings are the available columns in table '_banner_category':
  * @property integer $cat_id
  * @property string $banners
  * @property string $banner_pending
@@ -39,7 +39,7 @@ class ViewBannerCategory extends OActiveRecord
 	public function tableName()
 	{
 		preg_match("/dbname=([^;]+)/i", $this->dbConnection->connectionString, $matches);
-		return $matches[1].'._view_banner_category';
+		return $matches[1].'._banner_category';
 	}
 
 	/**
