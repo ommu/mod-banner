@@ -484,9 +484,9 @@ class BannerCategory extends OActiveRecord
 	{
 		if(parent::beforeValidate()) {
 			if($this->isNewRecord)
-				$this->creation_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
+				$this->creation_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : null;
 			else
-				$this->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
+				$this->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : null;
 			
 			if($this->banner_size['width'] == '' || $this->banner_size['height'] == '')
 				$this->addError('banner_size', Yii::t('phrase', 'Banner Size cannot be blank.'));

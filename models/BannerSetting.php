@@ -313,7 +313,7 @@ class BannerSetting extends OActiveRecord
 	protected function beforeValidate() 
 	{
 		if(parent::beforeValidate()) {
-			$this->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
+			$this->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : null;
 		}
 		return true;
 	}
