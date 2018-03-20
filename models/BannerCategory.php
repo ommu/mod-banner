@@ -26,8 +26,8 @@
  *
  * The followings are the available model relations:
  * @property Banners[] $banners
- * @property Users $creation;
- * @property Users $modified;
+ * @property Users $creation
+ * @property Users $modified
  */
 class BannerCategory extends OActiveRecord
 {

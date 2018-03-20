@@ -30,8 +30,8 @@
  * @property BannerClicks[] $clicks
  * @property BannerViews[] $views
  * @property BannerCategory $category
- * @property Users $creation;
- * @property Users $modified;
+ * @property Users $creation
+ * @property Users $modified
  */
 class Banners extends OActiveRecord
 {

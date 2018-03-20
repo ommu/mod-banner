@@ -22,7 +22,7 @@
  * The followings are the available model relations:
  * @property BannerViewHistory[] $histories
  * @property Banners $banner
- * @property Users $user;
+ * @property Users $user
  */
 class BannerViews extends OActiveRecord
 {
