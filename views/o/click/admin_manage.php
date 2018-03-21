@@ -72,7 +72,7 @@
 				'class'=>'CButtonColumn',
 				'buttons' => array(
 					'view' => array(
-						'label' => Yii::t('phrase', 'View Banner Click'),
+						'label' => Yii::t('phrase', 'Detail Banner Click'),
 						'imageUrl' => false,
 						'options' => array(
 							'class' => 'view',

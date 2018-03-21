@@ -207,7 +207,7 @@ class AdminController extends Controller
 	{
 		$model=$this->loadModel($id);
 
-		$this->pageTitle = Yii::t('phrase', 'View Banner: {title}', array('{title}'=>$model->title));
+		$this->pageTitle = Yii::t('phrase', 'Detail Banner: {title}', array('{title}'=>$model->title));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_view',array(

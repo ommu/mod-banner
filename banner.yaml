@@ -48,7 +48,7 @@ content_menu  :
   - urlTitle: Back to Manage
     urlRules: {banner, o/admin, "add,edit,view", siteType: "0,1", userLevel: "1,2"}
     urlPath: {url: manage, attr: -, icon: -}
-  - urlTitle: View Banner
+  - urlTitle: Detail Banner
     urlRules: {banner, o/admin, edit, siteType: "0,1", userLevel: "1,2"}
     urlPath: {url: view, attr: id=$_GET*id, icon: -}
   - urlTitle: Update Banner

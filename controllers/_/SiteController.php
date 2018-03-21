@@ -115,7 +115,7 @@ class SiteController extends Controller
 	 */
 	public function actionView($id) 
 	{
-		$siteType = OmmuSettings::getInfo('site_type');		
+		$siteType = OmmuSettings::getInfo('site_type');
 		if($this->permission == 0)
 			$this->redirect($siteType == 0 ? Yii::app()->createUrl('site/index') : Yii::app()->createUrl('site/login'));
 		
@@ -126,7 +126,7 @@ class SiteController extends Controller
 		$model=$this->loadModel($id);
 		BannerViews::insertView($model->banner_id);
 
-		$this->pageTitle =  Yii::t('phrase', 'View Banners');
+		$this->pageTitle =  Yii::t('phrase', 'Detail Banners');
 		$this->pageDescription = $model->banner_desc;
 		$this->pageMeta = $setting->meta_keyword;
 		$this->render('front_view',array(
