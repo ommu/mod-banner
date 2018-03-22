@@ -270,7 +270,7 @@ class BannerViews extends OActiveRecord
 		$criteria=new CDbCriteria;
 		$criteria->select = 'view_id, banner_id, user_id, views';
 		$criteria->compare('banner_id', $banner_id);
-		$criteria->compare('user_id', !Yii::app()->user->isGuest ? Yii::app()->user->id : '0');
+		$criteria->compare('user_id', !Yii::app()->user->isGuest ? Yii::app()->user->id : null);
 		$findView = self::model()->find($criteria);
 		
 		if($findView != null)
