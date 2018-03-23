@@ -99,13 +99,13 @@ class SettingController extends Controller
 	{
 		$category=new BannerCategory('search');
 		$category->unsetAttributes();  // clear any default values
-		if(isset($_GET['BannerCategory'])) {
-			$category->attributes=$_GET['BannerCategory'];
+		if(Yii::app()->getRequest()->getParam('BannerCategory')) {
+			$category->attributes=Yii::app()->getRequest()->getParam('BannerCategory');
 		}
 
-		$gridColumn = $_GET['GridColumn'];
+		$gridColumn = Yii::app()->getRequest()->getParam('GridColumn');
 		$columnTemp = array();
-		if(isset($gridColumn)) {
+		if($gridColumn) {
 			foreach($gridColumn as $key => $val) {
 				if($gridColumn[$key] == 1)
 					$columnTemp[] = $key;
@@ -139,7 +139,7 @@ class SettingController extends Controller
 				echo $encode;
 
 			} else {
-				if(isset($_GET['enablesave']) && $_GET['enablesave'] == 1) {
+				if(Yii::app()->getRequest()->getParam('enablesave') == 1) {
 					if($model->save()) {
 						echo CJSON::encode(array(
 							'type' => 0,

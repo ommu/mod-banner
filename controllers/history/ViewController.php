@@ -93,13 +93,13 @@ class ViewController extends Controller
 	{
 		$model=new BannerViewHistory('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['BannerViewHistory'])) {
-			$model->attributes=$_GET['BannerViewHistory'];
+		if(Yii::app()->getRequest()->getParam('BannerViewHistory')) {
+			$model->attributes=Yii::app()->getRequest()->getParam('BannerViewHistory');
 		}
 
-		$gridColumn = $_GET['GridColumn'];
+		$gridColumn = Yii::app()->getRequest()->getParam('GridColumn');
 		$columnTemp = array();
-		if(isset($gridColumn)) {
+		if($gridColumn) {
 			foreach($gridColumn as $key => $val) {
 				if($gridColumn[$key] == 1)
 					$columnTemp[] = $key;

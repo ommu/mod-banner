@@ -25,7 +25,7 @@
 			if($category != null)
 				echo $form->dropDownList($model, 'cat_id', $category, array('prompt'=>'', 'class'=>'form-control'));
 			else
-				echo $form->dropDownList($model, 'cat_id', array('prompt'=>'Select Category'), array('class'=>'form-control')); ?>
+				echo $form->dropDownList($model, 'cat_id', array('prompt'=>''), array('class'=>'form-control')); ?>
 		</li>
 
 		<li>

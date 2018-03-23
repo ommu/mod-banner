@@ -93,13 +93,13 @@ class ClickController extends Controller
 	{
 		$model=new BannerClicks('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['BannerClicks'])) {
-			$model->attributes=$_GET['BannerClicks'];
+		if(Yii::app()->getRequest()->getParam('BannerClicks')) {
+			$model->attributes=Yii::app()->getRequest()->getParam('BannerClicks');
 		}
 
-		$gridColumn = $_GET['GridColumn'];
+		$gridColumn = Yii::app()->getRequest()->getParam('GridColumn');
 		$columnTemp = array();
-		if(isset($gridColumn)) {
+		if($gridColumn) {
 			foreach($gridColumn as $key => $val) {
 				if($gridColumn[$key] == 1)
 					$columnTemp[] = $key;
