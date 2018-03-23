@@ -144,7 +144,7 @@ class BannerViews extends OActiveRecord
 
 		$criteria->compare('banner.cat_id', $this->category_search);
 		$criteria->compare('banner.title', strtolower($this->banner_search), true);
-		if(Yii::app()->getRequest()->getParam('banner') && Yii::app()->getRequest()->getParam('publish'))
+		if(isset(Yii::app()->getRequest()->getParam('banner')) && isset(Yii::app()->getRequest()->getParam('publish')))
 			$criteria->compare('banner.publish', Yii::app()->getRequest()->getParam('publish'));
 		$criteria->compare('user.displayname', strtolower($this->user_search), true);
 
