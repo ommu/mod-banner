@@ -56,7 +56,6 @@
 				'id'=>'banner-category-grid',
 				'dataProvider'=>$category->search(),
 				'filter'=>$category,
-				'afterAjaxUpdate' => 'reinstallDatePicker',
 				'columns' => $columnData,
 				'pager' => array('header' => ''),
 			));
