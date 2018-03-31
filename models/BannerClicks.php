@@ -61,10 +61,11 @@ class BannerClicks extends OActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('banner_id, user_id', 'required'),
+			array('banner_id', 'required'),
 			array('clicks', 'numerical', 'integerOnly'=>true),
 			array('banner_id, user_id', 'length', 'max'=>11),
 			array('click_ip', 'length', 'max'=>20),
+			array('user_id', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('click_id, banner_id, user_id, clicks, click_date, click_ip,
@@ -270,7 +271,10 @@ class BannerClicks extends OActiveRecord
 		$criteria=new CDbCriteria;
 		$criteria->select = 'click_id, banner_id, user_id, clicks';
 		$criteria->compare('banner_id', $banner_id);
-		$criteria->compare('user_id', !Yii::app()->user->isGuest ? Yii::app()->user->id : null);
+		if(!Yii::app()->user->isGuest)
+			$criteria->compare('user_id', Yii::app()->user->id);
+		else
+			$criteria->addCondition('user_id IS NULL');
 		$findClick = self::model()->find($criteria);
 		
 		if($findClick != null)
