@@ -6,7 +6,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2014 Ommu Platform (opensource.ommu.co)
  * @modified date 19 January 2018, 17:03 WIB
- * @link https://github.com/ommu/ommu-banner
+ * @link https://github.com/ommu/mod-banner
  *
  * This is the model class for table "ommu_banner_category".
  *

@@ -19,7 +19,7 @@
  * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
  * @created date 8 January 2017, 21:21 WIB
  * @modified date 23 January 2018, 07:09 WIB
- * @link https://github.com/ommu/ommu-banner
+ * @link https://github.com/ommu/mod-banner
  *
  *----------------------------------------------------------------------------------------------------------
  */
