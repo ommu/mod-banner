@@ -1,24 +1,24 @@
 {
 	"name": "ommu/banner",
-	"description": "Banner Module for Ommu Platform",
+	"description": "Banner Module from Ommu Platform",
 	"keywords": [
 		"module",
 		"banner",
+		"slider",
 		"ommu",
-		"platform",
 		"ommu platform"
 	],
-	"homepage": "https://github.com/ommu/ommu-banner",
+	"homepage": "https://github.com/ommu/mod-banner",
 	"type": "ommu-module",
 	"license": "Apache-2.0",
 	"support": {
-		"issues": "https://github.com/ommu/ommu-banner/issues",
-		"wiki": "https://github.com/ommu/ommu-banner/wiki",
-		"source": "https://github.com/ommu/ommu-banner"
+		"issues": "https://github.com/ommu/mod-banner/issues",
+		"wiki": "https://github.com/ommu/mod-banner/wiki",
+		"source": "https://github.com/ommu/mod-banner"
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/ommu/ommu-banner.git"
+		"url": "https://github.com/ommu/mod-banner.git"
 	},
 	"authors": [
 		{
