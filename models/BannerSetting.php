@@ -1,7 +1,13 @@
 <?php
 /**
  * BannerSetting
- * version: 0.0.1
+ * 
+ * @author Putra Sudaryanto <putra@sudaryanto.id>
+ * @contact (+62)856-299-4114
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 6 October 2017, 06:21 WIB
+ * @modified date 30 April 2018, 12:38 WIB
+ * @link https://ecc.ft.ugm.ac.id
  *
  * This is the model class for table "ommu_banner_setting".
  *
@@ -16,12 +22,9 @@
  * @property string $banner_file_type
  * @property string $modified_date
  * @property integer $modified_id
-
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
- * @author Putra Sudaryanto <putra@sudaryanto.id>
- * @created date 6 October 2017, 06:21 WIB
- * @contact (+62)856-299-4114
+ *
+ * The followings are the available model relations:
+ * @property Users $modified
  *
  */
 
@@ -29,11 +32,14 @@ namespace app\modules\banner\models;
 
 use Yii;
 use yii\helpers\Url;
+use yii\helpers\Html;
 use app\coremodules\user\models\Users;
-use app\components\Utility;
 
 class BannerSetting extends \app\components\ActiveRecord
 {
+	use \app\components\traits\FileSystem;
+	use \app\components\traits\GridViewSystem;
+
 	public $gridForbiddenColumn = [];
 
 	// Variable Search
@@ -70,14 +76,6 @@ class BannerSetting extends \app\components\ActiveRecord
 	}
 
 	/**
-	 * @return \yii\db\ActiveQuery
-	 */
-	public function getModified()
-	{
-		return $this->hasOne(Users::className(), ['user_id' => 'modified_id']);
-	}
-
-	/**
 	 * @return array customized attribute labels (name=>label)
 	 */
 	public function attributeLabels()
@@ -96,7 +94,15 @@ class BannerSetting extends \app\components\ActiveRecord
 			'modified_search' => Yii::t('app', 'Modified'),
 		];
 	}
-	
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getModified()
+	{
+		return $this->hasOne(Users::className(), ['user_id' => 'modified_id']);
+	}
+
 	/**
 	 * Set default columns to display
 	 */
@@ -107,22 +113,39 @@ class BannerSetting extends \app\components\ActiveRecord
 		$this->templateColumns['_no'] = [
 			'header' => Yii::t('app', 'No'),
 			'class'  => 'yii\grid\SerialColumn',
+			'contentOptions' => ['class'=>'center'],
 		];
-		$this->templateColumns['license'] = 'license';
-		$this->templateColumns['meta_keyword'] = 'meta_keyword';
-		$this->templateColumns['meta_description'] = 'meta_description';
-		$this->templateColumns['banner_file_type'] = 'banner_file_type';
+		$this->templateColumns['license'] = [
+			'attribute' => 'license',
+			'value' => function($model, $key, $index, $column) {
+				return $model->license;
+			},
+		];
+		$this->templateColumns['meta_keyword'] = [
+			'attribute' => 'meta_keyword',
+			'value' => function($model, $key, $index, $column) {
+				return $model->meta_keyword;
+			},
+		];
+		$this->templateColumns['meta_description'] = [
+			'attribute' => 'meta_description',
+			'value' => function($model, $key, $index, $column) {
+				return $model->meta_description;
+			},
+		];
+		$this->templateColumns['banner_file_type'] = [
+			'attribute' => 'banner_file_type',
+			'value' => function($model, $key, $index, $column) {
+				return $model->banner_file_type;
+			},
+		];
 		$this->templateColumns['modified_date'] = [
 			'attribute' => 'modified_date',
-			'filter'	=> \yii\jui\DatePicker::widget([
-				'dateFormat' => 'yyyy-MM-dd',
-				'attribute' => 'modified_date',
-				'model'	 => $this,
-			]),
+			'filter' => Html::input('date', 'modified_date', Yii::$app->request->get('modified_date'), ['class'=>'form-control']),
 			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->modified_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00']) ? Yii::$app->formatter->format($model->modified_date, 'datetime') : '-';
+				return !in_array($model->modified_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->modified_date, 'datetime') : '-';
 			},
-			'format'	=> 'html',
+			'format' => 'html',
 		];
 		if(!Yii::$app->request->get('modified')) {
 			$this->templateColumns['modified_search'] = [
@@ -134,25 +157,46 @@ class BannerSetting extends \app\components\ActiveRecord
 		}
 		$this->templateColumns['permission'] = [
 			'attribute' => 'permission',
+			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
-				return $model->permission;
+				return $model->permission ? Yii::t('app', 'Yes') : Yii::t('app', 'No');
 			},
 			'contentOptions' => ['class'=>'center'],
 		];
 		$this->templateColumns['banner_validation'] = [
 			'attribute' => 'banner_validation',
+			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
-				return $model->banner_validation;
+				return $model->banner_validation ? Yii::t('app', 'Yes') : Yii::t('app', 'No');
 			},
 			'contentOptions' => ['class'=>'center'],
 		];
 		$this->templateColumns['banner_resize'] = [
 			'attribute' => 'banner_resize',
+			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
-				return $model->banner_resize;
+				return $model->banner_resize ? Yii::t('app', 'Yes') : Yii::t('app', 'No');
 			},
 			'contentOptions' => ['class'=>'center'],
 		];
+	}
+
+	/**
+	 * User get information
+	 */
+	public static function getInfo($column=null)
+	{
+		if($column != null) {
+			$model = self::find()
+				->select([$column])
+				->where(['id' => 1])
+				->one();
+			return $model->$column;
+			
+		} else {
+			$model = self::findOne(1);
+			return $model;
+		}
 	}
 
 	/**
@@ -189,7 +233,7 @@ class BannerSetting extends \app\components\ActiveRecord
 	{
 		if(parent::beforeValidate()) {
 			if(!$this->isNewRecord)
-				$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : '0';
+				$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
 		}
 		return true;
 	}
@@ -197,11 +241,11 @@ class BannerSetting extends \app\components\ActiveRecord
 	/**
 	 * before save attributes
 	 */
-	public function beforeSave($insert) 
+	public function beforeSave($insert)
 	{
 		if(parent::beforeSave($insert)) {
-			$this->banner_file_type = serialize(Utility::formatFileType($this->banner_file_type));
+			$this->banner_file_type = serialize($this->formatFileType($this->banner_file_type));
 		}
-		return true;	
+		return true;
 	}
 }
