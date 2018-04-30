@@ -30,6 +30,7 @@ use yii\web\NotFoundHttpException;
 use app\components\Controller;
 use mdm\admin\components\AccessControl;
 use app\modules\banner\models\BannerSetting;
+use app\modules\banner\models\search\BannerCategory as BannerCategorySearch;
 
 class SettingController extends Controller
 {
@@ -68,6 +69,21 @@ class SettingController extends Controller
 	 */
 	public function actionUpdate()
 	{
+		$this->layout = 'admin_default';
+		
+		$searchModel = new BannerCategorySearch();
+		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+		$gridColumn = Yii::$app->request->get('GridColumn', null);
+		$cols = [];
+		if($gridColumn != null && count($gridColumn) > 0) {
+			foreach($gridColumn as $key => $val) {
+				if($gridColumn[$key] == 1)
+					$cols[] = $key;
+			}
+		}
+		$columns = $searchModel->getGridColumn($cols);
+
 		$model = BannerSetting::findOne(1);
 		if ($model === null) 
 			$model = new BannerSetting();
@@ -86,6 +102,9 @@ class SettingController extends Controller
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_update', [
+			'searchModel' => $searchModel,
+			'dataProvider' => $dataProvider,
+			'columns' => $columns,
 			'model' => $model,
 		]);
 	}
