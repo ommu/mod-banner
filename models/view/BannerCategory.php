@@ -1,7 +1,15 @@
 <?php
 /**
  * BannerCategory
- * version: 0.0.1
+ * 
+ * @author Aziz Masruhan <aziz.masruhan@gmail.com>
+ * @contact (+62)857-4115-5177
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 11 October 2017, 10:32 WIB
+ * @modified date 30 April 2018, 11:53 WIB
+ * @modified by Putra Sudaryanto <putra@sudaryanto.id>
+ * @contact (+62)856-299-4114
+ * @link https://ecc.ft.ugm.ac.id
  *
  * This is the model class for table "_banner_category".
  *
@@ -11,13 +19,7 @@
  * @property string $banner_pending
  * @property string $banner_expired
  * @property string $banner_unpublish
- * @property string $banner_all
-
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
- * @author Aziz Masruhan <aziz.masruhan@gmail.com>
- * @created date 11 October 2017, 10:32 WIB
- * @contact (+62)857-4115-5177
+ * @property integer $banner_all
  *
  */
 
@@ -25,6 +27,7 @@ namespace app\modules\banner\models\view;
 
 use Yii;
 use yii\helpers\Url;
+use yii\helpers\Html;
 
 class BannerCategory extends \app\components\ActiveRecord
 {
@@ -71,7 +74,7 @@ class BannerCategory extends \app\components\ActiveRecord
 	public function attributeLabels()
 	{
 		return [
-			'cat_id' => Yii::t('app', 'Cat'),
+			'cat_id' => Yii::t('app', 'Category'),
 			'banners' => Yii::t('app', 'Banners'),
 			'banner_pending' => Yii::t('app', 'Banner Pending'),
 			'banner_expired' => Yii::t('app', 'Banner Expired'),
@@ -79,7 +82,7 @@ class BannerCategory extends \app\components\ActiveRecord
 			'banner_all' => Yii::t('app', 'Banner All'),
 		];
 	}
-	
+
 	/**
 	 * Set default columns to display
 	 */
@@ -92,11 +95,59 @@ class BannerCategory extends \app\components\ActiveRecord
 			'class'  => 'yii\grid\SerialColumn',
 			'contentOptions' => ['class'=>'center'],
 		];
-		$this->templateColumns['cat_id'] = 'cat_id';
-		$this->templateColumns['banners'] = 'banners';
-		$this->templateColumns['banner_pending'] = 'banner_pending';
-		$this->templateColumns['banner_expired'] = 'banner_expired';
-		$this->templateColumns['banner_unpublish'] = 'banner_unpublish';
-		$this->templateColumns['banner_all'] = 'banner_all';
+		$this->templateColumns['cat_id'] = [
+			'attribute' => 'cat_id',
+			'value' => function($model, $key, $index, $column) {
+				return $model->cat_id;
+			},
+		];
+		$this->templateColumns['banners'] = [
+			'attribute' => 'banners',
+			'value' => function($model, $key, $index, $column) {
+				return $model->banners;
+			},
+		];
+		$this->templateColumns['banner_pending'] = [
+			'attribute' => 'banner_pending',
+			'value' => function($model, $key, $index, $column) {
+				return $model->banner_pending;
+			},
+		];
+		$this->templateColumns['banner_expired'] = [
+			'attribute' => 'banner_expired',
+			'value' => function($model, $key, $index, $column) {
+				return $model->banner_expired;
+			},
+		];
+		$this->templateColumns['banner_unpublish'] = [
+			'attribute' => 'banner_unpublish',
+			'value' => function($model, $key, $index, $column) {
+				return $model->banner_unpublish;
+			},
+		];
+		$this->templateColumns['banner_all'] = [
+			'attribute' => 'banner_all',
+			'value' => function($model, $key, $index, $column) {
+				return $model->banner_all;
+			},
+		];
+	}
+
+	/**
+	 * User get information
+	 */
+	public static function getInfo($id, $column=null)
+	{
+		if($column != null) {
+			$model = self::find()
+				->select([$column])
+				->where(['cat_id' => $id])
+				->one();
+			return $model->$column;
+			
+		} else {
+			$model = self::findOne($id);
+			return $model;
+		}
 	}
 }

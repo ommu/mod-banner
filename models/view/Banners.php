@@ -1,20 +1,24 @@
 <?php
 /**
  * Banners
- * version: 0.0.1
+ * 
+ * @author Aziz Masruhan <aziz.masruhan@gmail.com>
+ * @contact (+62)857-4115-5177
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 11 October 2017, 10:31 WIB
+ * @modified date 30 April 2018, 11:53 WIB
+ * @modified by Putra Sudaryanto <putra@sudaryanto.id>
+ * @contact (+62)856-299-4114
+ * @link https://ecc.ft.ugm.ac.id
  *
  * This is the model class for table "_banners".
  *
  * The followings are the available columns in table "_banners":
- * @property string $banner_id
- * @property string $clicks
+ * @property integer $banner_id
+ * @property integer $publish
+ * @property integer $permanent
  * @property string $views
-
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
- * @author Aziz Masruhan <aziz.masruhan@gmail.com>
- * @created date 11 October 2017, 10:31 WIB
- * @contact (+62)857-4115-5177
+ * @property string $clicks
  *
  */
 
@@ -22,7 +26,7 @@ namespace app\modules\banner\models\view;
 
 use Yii;
 use yii\helpers\Url;
-use app\libraries\grid\GridView;
+use yii\helpers\Html;
 
 class Banners extends \app\components\ActiveRecord
 {
@@ -58,8 +62,8 @@ class Banners extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['banner_id', 'publish'], 'integer'],
-			[['clicks', 'views'], 'number'],
+			[['banner_id', 'publish', 'permanent'], 'integer'],
+			[['views', 'clicks'], 'number'],
 		];
 	}
 
@@ -71,11 +75,12 @@ class Banners extends \app\components\ActiveRecord
 		return [
 			'banner_id' => Yii::t('app', 'Banner'),
 			'publish' => Yii::t('app', 'Publish'),
-			'clicks' => Yii::t('app', 'Clicks'),
+			'permanent' => Yii::t('app', 'Permanent'),
 			'views' => Yii::t('app', 'Views'),
+			'clicks' => Yii::t('app', 'Clicks'),
 		];
 	}
-	
+
 	/**
 	 * Set default columns to display
 	 */
@@ -88,19 +93,53 @@ class Banners extends \app\components\ActiveRecord
 			'class'  => 'yii\grid\SerialColumn',
 			'contentOptions' => ['class'=>'center'],
 		];
-		$this->templateColumns['banner_id'] = 'banner_id';
-		$this->templateColumns['clicks'] = 'clicks';
-		$this->templateColumns['views'] = 'views';
-		if(!Yii::$app->request->get('trash')) {
-			$this->templateColumns['publish'] = [
-				'attribute' => 'publish',
-				'filter' => GridView::getFilterYesNo(),
-				'value' => function($model, $key, $index, $column) {
-					return $model->publish == 1 ? Yii::t('app', 'Yes') : Yii::t('app', 'No');
-				},
-				'contentOptions' => ['class'=>'center'],
-				'format'	=> 'raw',
-			];
+		$this->templateColumns['banner_id'] = [
+			'attribute' => 'banner_id',
+			'value' => function($model, $key, $index, $column) {
+				return $model->banner_id;
+			},
+		];
+		$this->templateColumns['publish'] = [
+			'attribute' => 'publish',
+			'value' => function($model, $key, $index, $column) {
+				return $model->publish;
+			},
+		];
+		$this->templateColumns['permanent'] = [
+			'attribute' => 'permanent',
+			'value' => function($model, $key, $index, $column) {
+				return $model->permanent;
+			},
+		];
+		$this->templateColumns['views'] = [
+			'attribute' => 'views',
+			'value' => function($model, $key, $index, $column) {
+				return $model->views;
+			},
+		];
+		$this->templateColumns['clicks'] = [
+			'attribute' => 'clicks',
+			'value' => function($model, $key, $index, $column) {
+				return $model->clicks;
+			},
+		];
+	}
+
+	/**
+	 * User get information
+	 */
+	public static function getInfo($id, $column=null)
+	{
+		if($column != null) {
+			$model = self::find()
+				->select([$column])
+				->where(['banner_id' => $id])
+				->one();
+			return $model->$column;
+			
+		} else {
+			$model = self::findOne($id);
+			return $model;
 		}
 	}
 }
