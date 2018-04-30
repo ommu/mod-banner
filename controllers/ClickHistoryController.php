@@ -39,9 +39,9 @@ class ClickHistoryController extends Controller
 	public function behaviors()
 	{
 		return [
-            'access' => [
-                'class' => AccessControl::className(),
-            ],
+			'access' => [
+				'class' => AccessControl::className(),
+			],
 			'verbs' => [
 				'class' => VerbFilter::className(),
 				'actions' => [

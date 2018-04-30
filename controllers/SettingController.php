@@ -33,18 +33,18 @@ use mdm\admin\components\AccessControl;
 
 class SettingController extends Controller
 {
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' => AccessControl::className(),
-            ],
-        ];
-    }
-    
+	/**
+	 * @inheritdoc
+	 */
+	public function behaviors()
+	{
+		return [
+			'access' => [
+				'class' => AccessControl::className(),
+			],
+		];
+	}
+	
 	/**
 	 * Lists all BannerSetting models.
 	 * @return mixed

@@ -67,14 +67,14 @@ $this->params['menu']['content'] = [
 						'value' => $model->banner_filename ? $model->banner_filename : '-',
 					],
 					[
-                         'attribute' => 'banner_filename',
-                         'format' => 'raw',
-                         'value' => function ($model) {
-                                    return Html::img(url::Base().'/public/banner/'.$model->banner_filename,
-                                    ['width' => '400',
-                                     'height' => '300']);
-                                   },
-                    ],	
+						 'attribute' => 'banner_filename',
+						 'format' => 'raw',
+						 'value' => function ($model) {
+									return Html::img(url::Base().'/public/banner/'.$model->banner_filename,
+									['width' => '400',
+									 'height' => '300']);
+								   },
+					],	
 					[
 						'attribute' => 'banner_desc',
 						'value' => $model->banner_desc ? $model->banner_desc : '-',
