@@ -5,13 +5,13 @@
  * @var $this app\modules\banner\controllers\CategoryController
  * @var $model app\modules\banner\models\search\BannerCategory
  * @var $form yii\widgets\ActiveForm
- * version: 0.0.1
  *
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
  * @author Putra Sudaryanto <putra@sudaryanto.id>
- * @created date 5 October 2017, 15:43 WIB
  * @contact (+62)856-299-4114
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 5 October 2017, 15:43 WIB
+ * @modified date 30 April 2018, 13:27 WIB
+ * @link http://ecc.ft.ugm.ac.id
  *
  */
 
@@ -24,29 +24,33 @@ use yii\widgets\ActiveForm;
 		'action' => ['index'],
 		'method' => 'get',
 	]); ?>
-		<?= $form->field($model, 'cat_id') ?>
+		<?php echo $form->field($model, 'publish')
+			->checkbox();?>
 
-		<?= $form->field($model, 'publish') ?>
+		<?php echo $form->field($model, 'name_i');?>
 
-		<?= $form->field($model, 'name') ?>
+		<?php echo $form->field($model, 'desc_i');?>
 
-		<?= $form->field($model, 'desc') ?>
+		<?php echo $form->field($model, 'cat_code');?>
 
-		<?= $form->field($model, 'cat_code') ?>
+		<?php echo $form->field($model, 'banner_size');?>
 
-		<?= $form->field($model, 'banner_size') ?>
+		<?php echo $form->field($model, 'banner_limit');?>
 
-		<?= $form->field($model, 'banner_limit') ?>
+		<?php echo $form->field($model, 'creation_date')
+			->input('date');?>
 
-		<?= $form->field($model, 'creation_date') ?>
+		<?php echo $form->field($model, 'creation_search');?>
 
-		<?= $form->field($model, 'creation_id') ?>
+		<?php echo $form->field($model, 'modified_date')
+			->input('date');?>
 
-		<?= $form->field($model, 'modified_date') ?>
+		<?php echo $form->field($model, 'modified_search');?>
 
-		<?= $form->field($model, 'modified_id') ?>
+		<?php echo $form->field($model, 'updated_date')
+			->input('date');?>
 
-		<?= $form->field($model, 'slug') ?>
+		<?php echo $form->field($model, 'slug');?>
 
 		<div class="form-group">
 			<?php echo Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>

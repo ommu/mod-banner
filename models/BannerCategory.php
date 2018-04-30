@@ -50,12 +50,11 @@ class BannerCategory extends \app\components\ActiveRecord
 	use \app\components\traits\GridViewSystem;
 	use \app\components\traits\FileSystem;
 
-	public $gridForbiddenColumn = ['modified_date','modified_search','slug','desc_i',
-		'creation_date','creation_search'];
-
-	// Variable Search
+	public $gridForbiddenColumn = ['creation_date','creation_search','modified_date','modified_search','updated_date','slug','desc_i'];
 	public $name_i;
 	public $desc_i;
+
+	// Variable Search
 	public $creation_search;
 	public $modified_search;
 	public $banner_search;
@@ -86,7 +85,7 @@ class BannerCategory extends \app\components\ActiveRecord
 		return [
 			[
 				'class'	 => SluggableBehavior::className(),
-				'attribute' => 'name',
+				'attribute' => 'title.message',
 				'immutable' => true,
 				'ensureUnique' => true,
 			],
@@ -99,13 +98,46 @@ class BannerCategory extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
+			[['name_i', 'desc_i', 'banner_limit'], 'required'],
 			[['publish', 'name', 'desc', 'banner_limit', 'creation_id', 'modified_id'], 'integer'],
-			[['name_i', 'desc_i', 'cat_code', 'banner_size', 'banner_limit'], 'required'],
-			[[], 'string'],
-			[['creation_date', 'modified_date'], 'safe'],
-			[['cat_code', 'slug', 'name_i'], 'string', 'max' => 32],
+			[['name_i', 'desc_i', 'cat_code'], 'string'],
+			[['cat_code', 'banner_size', 'creation_date', 'modified_date', 'updated_date'], 'safe'],
+			[['cat_code', 'slug', 'name_i'], 'string', 'max' => 64],
 			[['desc_i'], 'string', 'max' => 256],
-			[['banner_limit'], 'string', 'max' => 3],
+			[['banner_limit'], 'string', 'max' => 2],
+		];
+	}
+
+	/**
+	 * @return array customized attribute labels (name=>label)
+	 */
+	public function attributeLabels()
+	{
+		return [
+			'cat_id' => Yii::t('app', 'Category'),
+			'publish' => Yii::t('app', 'Publish'),
+			'name' => Yii::t('app', 'Category'),
+			'desc' => Yii::t('app', 'Description'),
+			'cat_code' => Yii::t('app', 'Code'),
+			'banner_size' => Yii::t('app', 'Size'),
+			'banner_size[i]' => Yii::t('app', 'Banner Size'),
+			'banner_size[width]' => Yii::t('app', 'Width'),
+			'banner_size[height]' => Yii::t('app', 'Height'),
+			'banner_limit' => Yii::t('app', 'Limit'),
+			'creation_date' => Yii::t('app', 'Creation Date'),
+			'creation_id' => Yii::t('app', 'Creation'),
+			'modified_date' => Yii::t('app', 'Modified Date'),
+			'modified_id' => Yii::t('app', 'Modified'),
+			'updated_date' => Yii::t('app', 'Updated Date'),
+			'slug' => Yii::t('app', 'Slug'),
+			'name_i' => Yii::t('app', 'Category'),
+			'desc_i' => Yii::t('app', 'Description'),
+			'creation_search' => Yii::t('app', 'Creation'),
+			'modified_search' => Yii::t('app', 'Modified'),
+			'banner_search'	=> Yii::t('app', 'Banners'),
+			'pending_search'   => Yii::t('app', 'Pending'),
+			'expired_search'   => Yii::t('app', 'Expired'),
+			'unpublish_search' => Yii::t('app', 'Unpublish'),
 		];
 	}
 
@@ -158,34 +190,14 @@ class BannerCategory extends \app\components\ActiveRecord
 	}
 
 	/**
-	 * @return array customized attribute labels (name=>label)
+	 * @inheritdoc
+	 * @return \app\modules\banner\models\query\BannerCategoryQuery the active query used by this AR class.
 	 */
-	public function attributeLabels()
+	public static function find()
 	{
-		return [
-			'cat_id'		   => Yii::t('app', 'Category'),
-			'publish'		  => Yii::t('app', 'Publish'),
-			'name'			 => Yii::t('app', 'Name'),
-			'desc'			 => Yii::t('app', 'Description'),
-			'cat_code'		 => Yii::t('app', 'Code'),
-			'banner_size'	  => Yii::t('app', ' Size'),
-			'banner_limit'	 => Yii::t('app', ' Limit'),
-			'creation_date'	=> Yii::t('app', 'Creation Date'),
-			'creation_id'	  => Yii::t('app', 'Creation'),
-			'modified_date'	=> Yii::t('app', 'Modified Date'),
-			'modified_id'	  => Yii::t('app', 'Modified'),
-			'slug'			 => Yii::t('app', 'Slug'),
-			'creation_search'  => Yii::t('app', 'Creation'),
-			'modified_search'  => Yii::t('app', 'Modified'),
-			'name_i'		   => Yii::t('app', 'Name'),
-			'desc_i'		   => Yii::t('app', 'Description'),
-			'banner_search'	=> Yii::t('app', 'Banners'),
-			'pending_search'   => Yii::t('app', 'Pending'),
-			'expired_search'   => Yii::t('app', 'Expired'),
-			'unpublish_search' => Yii::t('app', 'Unpublish'),
-		];
+		return new \app\modules\banner\models\query\BannerCategoryQuery(get_called_class());
 	}
-	
+
 	/**
 	 * Set default columns to display
 	 */
@@ -196,17 +208,18 @@ class BannerCategory extends \app\components\ActiveRecord
 		$this->templateColumns['_no'] = [
 			'header' => Yii::t('app', 'No'),
 			'class'  => 'yii\grid\SerialColumn',
+			'contentOptions' => ['class'=>'center'],
 		];
 		$this->templateColumns['name_i'] = [
 			'attribute' => 'name_i',
 			'value' => function($model, $key, $index, $column) {
-				return (isset($model->name) && isset($model->title))? $model->title->message : '-';
+				return isset($model->title) ? $model->title->message : '-';
 			},
 		];
 		$this->templateColumns['desc_i'] = [
 			'attribute' => 'desc_i',
 			'value' => function($model, $key, $index, $column) {
-				return $model->desc ? $model->description->message : '-';
+				return isset($model->description) ? $model->description->message : '-';
 			},
 		];
 		$this->templateColumns['cat_code'] = [
@@ -224,15 +237,11 @@ class BannerCategory extends \app\components\ActiveRecord
 		];
 		$this->templateColumns['creation_date'] = [
 			'attribute' => 'creation_date',
-			'filter'	=> \yii\jui\DatePicker::widget([
-				'dateFormat' => 'yyyy-MM-dd',
-				'attribute' => 'creation_date',
-				'model'  => $this,
-			]),
+			'filter' => Html::input('date', 'creation_date', Yii::$app->request->get('creation_date'), ['class'=>'form-control']),
 			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->creation_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00']) ? Yii::$app->formatter->format($model->creation_date, 'date'/*datetime*/) : '-';
+				return !in_array($model->creation_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->creation_date, 'datetime') : '-';
 			},
-			'format'	=> 'html',
+			'format' => 'html',
 		];
 		if(!Yii::$app->request->get('creation')) {
 			$this->templateColumns['creation_search'] = [
@@ -244,15 +253,11 @@ class BannerCategory extends \app\components\ActiveRecord
 		}
 		$this->templateColumns['modified_date'] = [
 			'attribute' => 'modified_date',
-			'filter'	=> \yii\jui\DatePicker::widget([
-				'dateFormat' => 'yyyy-MM-dd',
-				'attribute' => 'modified_date',
-				'model'  => $this,
-			]),
+			'filter' => Html::input('date', 'modified_date', Yii::$app->request->get('modified_date'), ['class'=>'form-control']),
 			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->modified_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00']) ? Yii::$app->formatter->format($model->modified_date, 'date'/*datetime*/) : '-';
+				return !in_array($model->modified_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->modified_date, 'datetime') : '-';
 			},
-			'format'	=> 'html',
+			'format' => 'html',
 		];
 		if(!Yii::$app->request->get('modified')) {
 			$this->templateColumns['modified_search'] = [
@@ -262,9 +267,23 @@ class BannerCategory extends \app\components\ActiveRecord
 				},
 			];
 		}
-		$this->templateColumns['slug'] = 'slug';
+		$this->templateColumns['updated_date'] = [
+			'attribute' => 'updated_date',
+			'filter' => Html::input('date', 'updated_date', Yii::$app->request->get('updated_date'), ['class'=>'form-control']),
+			'value' => function($model, $key, $index, $column) {
+				return !in_array($model->updated_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->updated_date, 'datetime') : '-';
+			},
+			'format' => 'html',
+		];
+		$this->templateColumns['slug'] = [
+			'attribute' => 'slug',
+			'value' => function($model, $key, $index, $column) {
+				return $model->slug;
+			},
+		];
 		$this->templateColumns['banner_limit'] = [
 			'attribute' => 'banner_limit',
+			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
 				return $model->banner_limit;
 			},
@@ -272,8 +291,9 @@ class BannerCategory extends \app\components\ActiveRecord
 		];
 		$this->templateColumns['banner_search'] = [
 			'attribute' => 'banner_search',
+			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['admin/index', 'category' => $model->primaryKey, 'publish' => 'true']);
+				$url = Url::to(['admin/index', 'category' => $model->primaryKey, 'publish' => 1]);
 				return Html::a($model->view->banners ? $model->view->banners : 0, $url);
 			},
 			'contentOptions' => ['class'=>'center'],
@@ -281,8 +301,9 @@ class BannerCategory extends \app\components\ActiveRecord
 		];
 		$this->templateColumns['pending_search'] = [
 			'attribute' => 'pending_search',
+			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['admin/index', 'category' => $model->primaryKey, 'pending' => 'true']);
+				$url = Url::to(['admin/index', 'category' => $model->primaryKey, 'publish' => 1]);
 				return Html::a($model->view->banner_pending ? $model->view->banner_pending : 0, $url);
 			},
 			'contentOptions' => ['class'=>'center'],
@@ -290,8 +311,9 @@ class BannerCategory extends \app\components\ActiveRecord
 		];
 		$this->templateColumns['expired_search'] = [
 			'attribute' => 'expired_search',
+			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['admin/index', 'category' => $model->primaryKey, 'expired' => 'true']);
+				$url = Url::to(['admin/index', 'category' => $model->primaryKey, 'publish' => 1]);
 				return Html::a($model->view->banner_expired ? $model->view->banner_expired : 0, $url);
 			},
 			'contentOptions' => ['class'=>'center'],
@@ -299,8 +321,9 @@ class BannerCategory extends \app\components\ActiveRecord
 		];
 		$this->templateColumns['unpublish_search'] = [
 			'attribute' => 'unpublish_search',
+			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['admin/index', 'category' => $model->primaryKey, 'unpublish' => 'true']);
+				$url = Url::to(['admin/index', 'category' => $model->primaryKey, 'publish' => 0]);
 				return Html::a($model->view->banner_unpublish ? $model->view->banner_unpublish : 0, $url);
 			},
 			'contentOptions' => ['class'=>'center'],
@@ -309,10 +332,10 @@ class BannerCategory extends \app\components\ActiveRecord
 		if(!Yii::$app->request->get('trash')) {
 			$this->templateColumns['publish'] = [
 				'attribute' => 'publish',
-				'filter' => GridView::getFilterYesNo(),
+				'filter' => $this->filterYesNo(),
 				'value' => function($model, $key, $index, $column) {
 					$url = Url::to(['category/publish', 'id' => $model->primaryKey]);
-					return GridView::getPublish($url, $model->publish);
+					return $this->quickAction($url, $model->publish);
 				},
 				'contentOptions' => ['class'=>'center'],
 				'format'	=> 'raw',
@@ -321,23 +344,46 @@ class BannerCategory extends \app\components\ActiveRecord
 	}
 
 	/**
+	 * User get information
+	 */
+	public static function getInfo($id, $column=null)
+	{
+		if($column != null) {
+			$model = self::find()
+				->select([$column])
+				->where(['cat_id' => $id])
+				->one();
+			return $model->$column;
+			
+		} else {
+			$model = self::findOne($id);
+			return $model;
+		}
+	}
+
+	/**
 	 * function getCategory
 	 */
-	public static function getCategory($publish = null) {
-		$items = []; 
-		$model = self::find();
-		if($publish != null) { 
-			$model = $model->andWhere(['publish' => $publish]);
-		}
-		$model = $model->orderBy('name ASC')->all();
+	public static function getCategory($publish=null, $array=true) 
+	{
+		$model = self::find()->alias('t');
+		$model->leftJoin(sprintf('%s title', SourceMessage::tableName()), 't.name=title.id');
+		if($publish != null)
+			$model->andWhere(['t.publish' => $publish]);
 
-		if($model !== null) {
-			foreach($model as $val) {
-				$items[$val->cat_id] = isset($val->title)? $val->title->message: '-';
-			}
-		}
-		
-		return $items;
+		$model = $model->orderBy('title.message ASC')->all();
+
+		if($array == true) {
+			$items = [];
+			if($model !== null) {
+				foreach($model as $val) {
+					$items[$val->cat_id] = $val->title->message;
+				}
+				return $items;
+			} else
+				return false;
+		} else 
+			return $model;
 	}
 
 	/**
@@ -346,18 +392,16 @@ class BannerCategory extends \app\components\ActiveRecord
 	public static function getSize($banner_size)
 	{
 		$bannerSize = unserialize($banner_size);
-		return $bannerSize['width'].' x '.$bannerSize['height'];
+		return $bannerSize['width'].'x'.$bannerSize['height'];
 	}
 
 	/**
-	 * afterFind
-	 *
-	 * Simpan nama banner lama untuk keperluan jikalau kondisi update tp bannernya tidak diupdate.
+	 * after find attributes
 	 */
 	public function afterFind() 
 	{
-		$this->name_i = $this->getTitle()->one() != null? $this->getTitle()->one()->message: '';
-		$this->desc_i = $this->getDescription()->one() != null? $this->getDescription()->one()->message: '';
+		$this->name_i = isset($this->title) ? $this->title->message : '';
+		$this->desc_i = isset($this->description) ? $this->description->message : '';
 	}
 
 	/**
@@ -366,12 +410,13 @@ class BannerCategory extends \app\components\ActiveRecord
 	public function beforeValidate() 
 	{
 		if(parent::beforeValidate()) {
-			if($this->isNewRecord) {
-				$this->creation_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : '0';
-				$this->modified_id = 0;
-
-			}else
-				$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : '0';
+			if($this->isNewRecord)
+				$this->creation_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+			else
+				$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+			
+			if($this->banner_size['width'] == '' || $this->banner_size['height'] == '')
+				$this->addError('banner_size', Yii::t('phrase', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('banner_size')]));
 		}
 		return true;
 	}
@@ -379,104 +424,45 @@ class BannerCategory extends \app\components\ActiveRecord
 	/**
 	 * before save attributes
 	 */
-	public function beforeSave($insert) 
+	public function beforeSave($insert)
 	{
 		$module = strtolower(Yii::$app->controller->module->id);
 		$controller = strtolower(Yii::$app->controller->id);
 		$action = strtolower(Yii::$app->controller->action->id);
-		$location = Utility::getUrlTitle($module.' '.$controller);
+
+		$location = $this->getUrlTitle($module.' '.$controller);
 
 		if(parent::beforeSave($insert)) {
+			$this->cat_code = $this->getUrlTitle(trim($this->name_i));
+			$this->banner_size = serialize($this->banner_size);
 
-			$transaction = SourceMessage::getDb()->beginTransaction();
-			try {
-				if($insert) {
-					$name = new SourceMessage();
-					$name->location = $location . '_name';
-					$name->message  = $this->name_i;
-					if(!$name->save()) {
-						throw new \Exception('Tidak dapat menyimpan nama kategori!.');						
-					}
+			if($insert || (!$insert && !$this->name)) {
+				$name = new SourceMessage();
+				$name->location = $location.'_title';
+				$name->message = $this->name_i;
+				if($name->save())
 					$this->name = $name->id;
-
-					$desc = new SourceMessage();
-					$desc->location = $location . '_desc';
-					$desc->message  = $this->desc_i;
-					if(!$desc->save()) {
-						throw new \Exception('Tidak dapat menyimpan deskripsi kategori!.');						
-					}
-					$this->desc = $desc->id;
 				
-				}else {
-					// nama
-					$name = null;
-					if((int)$this->name < 1) {
-						$name = new SourceMessage();
-						$name->message = $this->name_i;
-					
-					}else {
-						$name = SourceMessage::findOne($this->name);
-						$name->message = $this->name_i;
-					}
-					if(!$name->save()) {
-						throw new \Exception('Tidak dapat menyimpan nama kategori!.');
-					}
-
-					// deskripsi
-					$desc = null;
-					if((int)$this->desc < 1) {
-						$desc = new SourceMessage();
-						$desc->message = $this->desc_i;
-					
-					}else {
-						$desc = SourceMessage::findOne($this->desc);
-						$desc->message = $this->desc_i;
-					}
-					if(!$desc->save()) {
-						throw new \Exception('Tidak dapat menyimpan deskripsi kategori!.');
-					}
-				}
-				$transaction->commit();
-
-			}catch(\Exception $e) {
-				$transaction->rollBack();
-				Yii::error('## BannerCategory.beforeSave() exception: ' . $e->getMessage());
+			} else {
+				$name = SourceMessage::findOne($this->name);
+				$name->message = $this->name_i;
+				$name->save();
 			}
 
-			// TODO: hapus kode dibawah jika tidak ada error.
-			// if($this->isNewRecord || (!$this->isNewRecord && !$this->name)) {
-			//	 $name = new SourceMessage();
-			//	 $name->location = $location.'_name';
-			//	 $name->message = $this->name_i;
-			//	 if($name->save())
-			//		 $this->name = $name->id;
+			if($insert || (!$insert && !$this->desc)) {
+				$desc = new SourceMessage();
+				$desc->location = $location.'_description';
+				$desc->message = $this->desc_i;
+				if($desc->save())
+					$this->desc = $desc->id;
 				
-			// } else {
-			//	 if($action == 'update') {
-			//		 $name = SourceMessage::findOne($this->name);
-			//		 $name->message = $this->name_i;
-			//		 $name->save();
-			//	 }
-			// }
-
-			// if($this->isNewRecord || (!$this->isNewRecord && !$this->desc)) {
-			//	 $desc = new SourceMessage();
-			//	 $desc->location = $location.'_desc';
-			//	 $desc->message = $this->desc_i;
-			//	 if($desc->save())
-			//		 $this->desc = $desc->id;
-				
-			// } else {
-			//	 if($action == 'update') {
-			//		 $desc = SourceMessage::findOne($this->desc);
-			//		 $desc->message = $this->desc_i;
-			//		 $desc->save();
-			//	 }
-			// }
-			
-			if(in_array($action, ['create','update']))
-				$this->banner_size = serialize($this->banner_size);				
+			} else {
+				$desc = SourceMessage::findOne($this->desc);
+				$desc->message = $this->desc_i;
+				$desc->save();
+			}
 		}
-		return true;	
+		return true;
 	}
+
 }

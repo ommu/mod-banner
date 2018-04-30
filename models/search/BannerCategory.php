@@ -1,15 +1,15 @@
 <?php
 /**
  * BannerCategory
- * version: 0.0.1
  *
  * BannerCategory represents the model behind the search form about `app\modules\banner\models\BannerCategory`.
  *
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
  * @author Putra Sudaryanto <putra@sudaryanto.id>
- * @created date 5 October 2017, 15:43 WIB
  * @contact (+62)856-299-4114
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 5 October 2017, 15:43 WIB
+ * @modified date 30 April 2018, 13:27 WIB
+ * @link http://ecc.ft.ugm.ac.id
  *
  */
 
@@ -19,7 +19,6 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\modules\banner\models\BannerCategory as BannerCategoryModel;
-//use app\coremodules\user\models\Users;
 
 class BannerCategory extends BannerCategoryModel
 {
@@ -29,8 +28,9 @@ class BannerCategory extends BannerCategoryModel
 	public function rules()
 	{
 		return [
-			[['cat_id', 'publish', 'name', 'desc', 'banner_limit', 'creation_id', 'modified_id'], 'integer'],
-			[['cat_code', 'creation_date', 'modified_date', 'slug', 'creation_search', 'modified_search', 'name_i', 'desc_i'], 'safe'],
+			[['publish', 'cat_id', 'name', 'desc', 'banner_limit', 'creation_id', 'modified_id'], 'integer'],
+			[['cat_code', 'banner_size', 'creation_date', 'modified_date', 'updated_date', 'slug',
+				'name_i', 'desc_i', 'creation_search', 'modified_search'], 'safe'],
 		];
 	}
 
@@ -62,7 +62,13 @@ class BannerCategory extends BannerCategoryModel
 	public function search($params)
 	{
 		$query = BannerCategoryModel::find()->alias('t');
-		$query->joinWith(['creation creation', 'modified modified', 'title title', 'description description', 'view view']);
+		$query->joinWith([
+			'view view', 
+			'title title', 
+			'description description', 
+			'creation creation', 
+			'modified modified'
+		]);
 
 		// add conditions that should always apply here
 		$dataProvider = new ActiveDataProvider([
@@ -71,14 +77,6 @@ class BannerCategory extends BannerCategoryModel
 
 		$attributes = array_keys($this->getTableSchema()->columns);
 		$attributes = array_diff($attributes, ['banner_size']);
-		$attributes['creation_search'] = [
-			'asc' => ['creation.displayname' => SORT_ASC],
-			'desc' => ['creation.displayname' => SORT_DESC],
-		];
-		$attributes['modified_search'] = [
-			'asc' => ['modified.displayname' => SORT_ASC],
-			'desc' => ['modified.displayname' => SORT_DESC],
-		];
 		$attributes['name_i'] = [
 			'asc' => ['title.message' => SORT_ASC],
 			'desc' => ['title.message' => SORT_DESC],
@@ -86,6 +84,14 @@ class BannerCategory extends BannerCategoryModel
 		$attributes['desc_i'] = [
 			'asc' => ['description.message' => SORT_ASC],
 			'desc' => ['description.message' => SORT_DESC],
+		];
+		$attributes['creation_search'] = [
+			'asc' => ['creation.displayname' => SORT_ASC],
+			'desc' => ['creation.displayname' => SORT_DESC],
+		];
+		$attributes['modified_search'] = [
+			'asc' => ['modified.displayname' => SORT_ASC],
+			'desc' => ['modified.displayname' => SORT_DESC],
 		];
 		$attributes['banner_search'] = [
 			'asc' => ['view.banners' => SORT_ASC],
@@ -110,7 +116,7 @@ class BannerCategory extends BannerCategoryModel
 
 		$this->load($params);
 
-		if (!$this->validate()) {
+		if(!$this->validate()) {
 			// uncomment the following line if you do not want to return any records when validation fails
 			// $query->where('0=1');
 			return $dataProvider;
@@ -126,6 +132,7 @@ class BannerCategory extends BannerCategoryModel
 			't.creation_id' => isset($params['creation']) ? $params['creation'] : $this->creation_id,
 			'cast(t.modified_date as date)' => $this->modified_date,
 			't.modified_id' => isset($params['modified']) ? $params['modified'] : $this->modified_id,
+			'cast(t.updated_date as date)' => $this->updated_date,
 		]);
 
 		if(isset($params['trash']))
@@ -140,10 +147,10 @@ class BannerCategory extends BannerCategoryModel
 		$query->andFilterWhere(['like', 't.cat_code', $this->cat_code])
 			->andFilterWhere(['like', 't.banner_size', $this->banner_size])
 			->andFilterWhere(['like', 't.slug', $this->slug])
-			->andFilterWhere(['like', 'creation.displayname', $this->creation_search])
-			->andFilterWhere(['like', 'modified.displayname', $this->modified_search])
 			->andFilterWhere(['like', 'title.message', $this->name_i])
-			->andFilterWhere(['like', 'description.message', $this->desc_i]);
+			->andFilterWhere(['like', 'description.message', $this->desc_i])
+			->andFilterWhere(['like', 'creation.displayname', $this->creation_search])
+			->andFilterWhere(['like', 'modified.displayname', $this->modified_search]);
 
 		return $dataProvider;
 	}
