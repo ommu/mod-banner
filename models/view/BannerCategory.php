@@ -3,9 +3,9 @@
  * BannerCategory
  * version: 0.0.1
  *
- * This is the model class for table "_view_banner_category".
+ * This is the model class for table "_banner_category".
  *
- * The followings are the available columns in table "_view_banner_category":
+ * The followings are the available columns in table "_banner_category":
  * @property integer $cat_id
  * @property string $banners
  * @property string $banner_pending
@@ -35,7 +35,7 @@ class BannerCategory extends \app\components\ActiveRecord
 	 */
 	public static function tableName()
 	{
-		return '_view_banner_category';
+		return '_banner_category';
 	}
 
 	/**

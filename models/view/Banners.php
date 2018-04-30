@@ -3,9 +3,9 @@
  * Banners
  * version: 0.0.1
  *
- * This is the model class for table "_view_banners".
+ * This is the model class for table "_banners".
  *
- * The followings are the available columns in table "_view_banners":
+ * The followings are the available columns in table "_banners":
  * @property string $banner_id
  * @property string $clicks
  * @property string $views
@@ -33,7 +33,7 @@ class Banners extends \app\components\ActiveRecord
 	 */
 	public static function tableName()
 	{
-		return '_view_banners';
+		return '_banners';
 	}
 
 	/**
