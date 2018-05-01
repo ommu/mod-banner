@@ -84,13 +84,7 @@ echo $form->field($model, 'banner_resize', ['template' => '{label}<div class="co
 	->radioList($banner_resize, ['class'=>'desc pt-10', 'separator' => '<br />'])
 	->label($model->getAttributeLabel('banner_resize'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 
-<?php
-if(!$model->getErrors()) {
-	$banner_file_type = unserialize($model->banner_file_type);
-	if(!empty($banner_file_type))
-		$model->banner_file_type = Utility::formatFileType($banner_file_type, false);
-}
-echo $form->field($model, 'banner_file_type', ['template' => '{label}<div class="col-md-6 col-sm-6 col-xs-12">{input}{error}<span class="small-px">'.Yii::t('app', 'pisahkan jenis file dengan koma (,). example: "jpg, jpeg, png, bmp, gif"').'</span></div>'])
+<?php echo $form->field($model, 'banner_file_type', ['template' => '{label}<div class="col-md-6 col-sm-6 col-xs-12">{input}{error}<span class="small-px">'.Yii::t('app', 'pisahkan jenis file dengan koma (,). example: "jpg, jpeg, png, bmp, gif"').'</span></div>'])
 	->textInput()
 	->label($model->getAttributeLabel('banner_file_type'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 

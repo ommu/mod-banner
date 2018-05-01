@@ -227,6 +227,16 @@ class BannerSetting extends \app\components\ActiveRecord
 	}
 
 	/**
+	 * after find attributes
+	 */
+	public function afterFind() 
+	{
+		$banner_file_type = unserialize($this->banner_file_type);
+		if(!empty($banner_file_type))
+			$this->banner_file_type = $this->formatFileType($banner_file_type, false);
+	}
+
+	/**
 	 * before validate attributes
 	 */
 	public function beforeValidate() 
