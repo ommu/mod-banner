@@ -32,7 +32,7 @@ class Banners extends BannersModel
 		return [
 			[['banner_id', 'publish', 'cat_id', 'creation_id', 'modified_id'], 'integer'],
 			[['title', 'url', 'banner_filename', 'banner_desc', 'published_date', 'expired_date', 'creation_date', 'modified_date', 'updated_date', 'slug',
-				'category_search', 'creation_search', 'modified_search'], 'safe'],
+				'category_search', 'creation_search', 'modified_search', 'permanent_search', 'view_search', 'click_search'], 'safe'],
 		];
 	}
 
@@ -89,6 +89,10 @@ class Banners extends BannersModel
 			'asc' => ['modified.displayname' => SORT_ASC],
 			'desc' => ['modified.displayname' => SORT_DESC],
 		];
+		$attributes['permanent_search'] = [
+			'asc' => ['view.permanent' => SORT_ASC],
+			'desc' => ['view.permanent' => SORT_DESC],
+		];
 		$attributes['view_search'] = [
 			'asc' => ['view.views' => SORT_ASC],
 			'desc' => ['view.views' => SORT_DESC],
@@ -121,6 +125,7 @@ class Banners extends BannersModel
 			'cast(t.modified_date as date)' => $this->modified_date,
 			't.modified_id' => isset($params['modified']) ? $params['modified'] : $this->modified_id,
 			'cast(t.updated_date as date)' => $this->updated_date,
+			'view.permanent' => $this->permanent_search,
 		]);
 
 		if(isset($params['expired'])) {

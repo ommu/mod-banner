@@ -63,8 +63,9 @@ class Banners extends \app\components\ActiveRecord
 	public $category_search;
 	public $creation_search;
 	public $modified_search;
-	public $click_search;
+	public $permanent_search;
 	public $view_search;
+	public $click_search;
 
 	/**
 	 * @return string the associated database table name
@@ -142,8 +143,9 @@ class Banners extends \app\components\ActiveRecord
 			'category_search' => Yii::t('app', 'Category'),
 			'creation_search' => Yii::t('app', 'Creation'),
 			'modified_search' => Yii::t('app', 'Modified'),
-			'click_search' => Yii::t('app', 'Clicks'),
+			'permanent_search' => Yii::t('attribute', 'Permanent'),
 			'view_search' => Yii::t('app', 'Views'),
+			'click_search' => Yii::t('app', 'Clicks'),
 		];
 	}
 
@@ -261,7 +263,7 @@ class Banners extends \app\components\ActiveRecord
 			'attribute' => 'expired_date',
 			'filter' => Html::input('date', 'expired_date', Yii::$app->request->get('expired_date'), ['class'=>'form-control']),
 			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->expired_date, ['0000-00-00','1970-01-01','0002-12-02','-0001-11-30']) ? Yii::$app->formatter->format($model->expired_date, 'date') : '-';
+				return !in_array($model->expired_date, ['0000-00-00','1970-01-01','0002-12-02','-0001-11-30']) ? Yii::$app->formatter->format($model->expired_date, 'date') : 'Permanent';
 			},
 			'format' => 'html',
 		];
@@ -311,23 +313,34 @@ class Banners extends \app\components\ActiveRecord
 				return $model->slug;
 			},
 		];
-		$this->templateColumns['click_search'] = [
-			'attribute' => 'click_search',
-			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['clicks/index', 'banner'=>$model->primaryKey]);
-				return Html::a($model->view->clicks ? $model->view->clicks : 0, $url);
-			},
-			'contentOptions' => ['class'=>'center'],
-			'format'	=> 'raw',
-		];
 		$this->templateColumns['view_search'] = [
 			'attribute' => 'view_search',
+			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
 				$url = Url::to(['views/index', 'banner'=>$model->primaryKey]);
 				return Html::a($model->view->views ? $model->view->views : 0, $url);
 			},
 			'contentOptions' => ['class'=>'center'],
-			'format'	=> 'raw',
+			'format' => 'raw',
+		];
+		$this->templateColumns['click_search'] = [
+			'attribute' => 'click_search',
+			'filter' => false,
+			'value' => function($model, $key, $index, $column) {
+				$url = Url::to(['clicks/index', 'banner'=>$model->primaryKey]);
+				return Html::a($model->view->clicks ? $model->view->clicks : 0, $url);
+			},
+			'contentOptions' => ['class'=>'center'],
+			'format' => 'raw',
+		];
+		$this->templateColumns['permanent_search'] = [
+			'attribute' => 'permanent_search',
+			'filter' => $this->filterYesNo(),
+			'value' => function($model, $key, $index, $column) {
+				return $model->view->permanent ? Yii::t('app', 'Yes') : Yii::t('app', 'No');
+			},
+			'contentOptions' => ['class'=>'center'],
+			'format' => 'raw',
 		];
 		if(!Yii::$app->request->get('trash')) {
 			$this->templateColumns['publish'] = [
@@ -338,7 +351,7 @@ class Banners extends \app\components\ActiveRecord
 					return $this->quickAction($url, $model->publish);
 				},
 				'contentOptions' => ['class'=>'center'],
-				'format'	=> 'raw',
+				'format' => 'raw',
 			];
 		}
 	}
