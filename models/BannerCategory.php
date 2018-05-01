@@ -391,8 +391,7 @@ class BannerCategory extends \app\components\ActiveRecord
 	 */
 	public static function getSize($banner_size)
 	{
-		$bannerSize = unserialize($banner_size);
-		return $bannerSize['width'].'x'.$bannerSize['height'];
+		return $banner_size['width'].'x'.$banner_size['height'];
 	}
 
 	/**
@@ -402,6 +401,7 @@ class BannerCategory extends \app\components\ActiveRecord
 	{
 		$this->name_i = isset($this->title) ? $this->title->message : '';
 		$this->desc_i = isset($this->description) ? $this->description->message : '';
+		$this->banner_size = unserialize($this->banner_size);
 	}
 
 	/**

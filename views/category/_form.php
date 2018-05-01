@@ -44,10 +44,7 @@ use yii\widgets\ActiveForm;
 		->label($model->getAttributeLabel('banner_size[i]'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 	<div class="col-md-9 col-sm-9 col-xs-12 row">
 		<div class="col-md-6 col-sm-6 col-xs-12">
-			<?php 
-			if(!$model->isNewRecord && !$model->getErrors())
-				$model->banner_size = unserialize($model->banner_size);
-			echo $form->field($model, 'banner_size[width]', ['template' => '{input}{error}'])
+			<?php echo $form->field($model, 'banner_size[width]', ['template' => '{input}{error}'])
 				->textInput(['type'=>'number', 'min'=>1, 'maxlength'=>'3', 'placeholder'=>$model->getAttributeLabel('banner_size[width]')])
 				->label($model->getAttributeLabel('banner_size[width]'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 		</div>
