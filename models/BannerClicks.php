@@ -168,7 +168,7 @@ class BannerClicks extends \app\components\ActiveRecord
 				return Html::a($model->clicks ? $model->clicks : 0, $url);
 			},
 			'contentOptions' => ['class'=>'center'],
-			'format'	=> 'raw',
+			'format' => 'raw',
 		];
 	}
 

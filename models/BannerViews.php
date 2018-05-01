@@ -168,7 +168,7 @@ class BannerViews extends \app\components\ActiveRecord
 				return Html::a($model->views ? $model->views : 0, $url);
 			},
 			'contentOptions' => ['class'=>'center'],
-			'format'	=> 'raw',
+			'format' => 'raw',
 		];
 	}
 
