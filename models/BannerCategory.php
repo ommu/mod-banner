@@ -293,7 +293,7 @@ class BannerCategory extends \app\components\ActiveRecord
 			'attribute' => 'banner_search',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['admin/index', 'category' => $model->primaryKey, 'publish' => 1]);
+				$url = Url::to(['admin/index', 'category'=>$model->primaryKey, 'expired'=>'publish']);
 				return Html::a($model->view->banners ? $model->view->banners : 0, $url);
 			},
 			'contentOptions' => ['class'=>'center'],
@@ -303,7 +303,7 @@ class BannerCategory extends \app\components\ActiveRecord
 			'attribute' => 'pending_search',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['admin/index', 'category' => $model->primaryKey, 'publish' => 1]);
+				$url = Url::to(['admin/index', 'category'=>$model->primaryKey, 'expired'=>'pending']);
 				return Html::a($model->view->banner_pending ? $model->view->banner_pending : 0, $url);
 			},
 			'contentOptions' => ['class'=>'center'],
@@ -313,7 +313,7 @@ class BannerCategory extends \app\components\ActiveRecord
 			'attribute' => 'expired_search',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['admin/index', 'category' => $model->primaryKey, 'publish' => 1]);
+				$url = Url::to(['admin/index', 'category'=>$model->primaryKey, 'expired'=>'expired']);
 				return Html::a($model->view->banner_expired ? $model->view->banner_expired : 0, $url);
 			},
 			'contentOptions' => ['class'=>'center'],
@@ -323,7 +323,7 @@ class BannerCategory extends \app\components\ActiveRecord
 			'attribute' => 'unpublish_search',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['admin/index', 'category' => $model->primaryKey, 'publish' => 0]);
+				$url = Url::to(['admin/index', 'category'=>$model->primaryKey, 'expired'=>'unpublish']);
 				return Html::a($model->view->banner_unpublish ? $model->view->banner_unpublish : 0, $url);
 			},
 			'contentOptions' => ['class'=>'center'],
@@ -334,7 +334,7 @@ class BannerCategory extends \app\components\ActiveRecord
 				'attribute' => 'publish',
 				'filter' => $this->filterYesNo(),
 				'value' => function($model, $key, $index, $column) {
-					$url = Url::to(['category/publish', 'id' => $model->primaryKey]);
+					$url = Url::to(['category/publish', 'id'=>$model->primaryKey]);
 					return $this->quickAction($url, $model->publish);
 				},
 				'contentOptions' => ['class'=>'center'],

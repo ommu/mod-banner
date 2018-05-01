@@ -164,7 +164,7 @@ class BannerViews extends \app\components\ActiveRecord
 		$this->templateColumns['views'] = [
 			'attribute' => 'views',
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['view-history/index', 'view' => $model->primaryKey]);
+				$url = Url::to(['view-history/index', 'view'=>$model->primaryKey]);
 				return Html::a($model->views ? $model->views : 0, $url);
 			},
 			'contentOptions' => ['class'=>'center'],

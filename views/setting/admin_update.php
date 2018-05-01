@@ -70,15 +70,15 @@ array_push($columnData, [
 	],
 	'buttons' => [
 		'view' => function ($url, $model, $key) {
-			$url = Url::to(['category/view', 'id' => $model->primaryKey]);
+			$url = Url::to(['category/view', 'id'=>$model->primaryKey]);
 			return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, ['title' => Yii::t('app', 'Detail Banner Category')]);
 		},
 		'update' => function ($url, $model, $key) {
-			$url = Url::to(['category/update', 'id' => $model->primaryKey]);
+			$url = Url::to(['category/update', 'id'=>$model->primaryKey]);
 			return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, ['title' => Yii::t('app', 'Update Banner Category')]);
 		},
 		'delete' => function ($url, $model, $key) {
-			$url = Url::to(['category/delete', 'id' => $model->primaryKey]);
+			$url = Url::to(['category/delete', 'id'=>$model->primaryKey]);
 			return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
 				'title' => Yii::t('app', 'Delete Banner Category'),
 				'data-confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),

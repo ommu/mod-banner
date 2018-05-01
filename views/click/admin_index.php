@@ -75,15 +75,15 @@ $this->params['menu']['option'] = [
 				],
 				'buttons' => [
 					'view' => function ($url, $model, $key) {
-						$url = Url::to(['view', 'id' => $model->primaryKey]);
+						$url = Url::to(['view', 'id'=>$model->primaryKey]);
 						return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, ['title' => Yii::t('app', 'View Banner Clicks')]);
 					},
 					'update' => function ($url, $model, $key) {
-						$url = Url::to(['update', 'id' => $model->primaryKey]);
+						$url = Url::to(['update', 'id'=>$model->primaryKey]);
 						return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, ['title' => Yii::t('app', 'Update Banner Clicks')]);
 					},
 					'delete' => function ($url, $model, $key) {
-						$url = Url::to(['delete', 'id' => $model->primaryKey]);
+						$url = Url::to(['delete', 'id'=>$model->primaryKey]);
 						return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
 							'title' => Yii::t('app', 'Delete Banner Clicks'),
 							'data-confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),

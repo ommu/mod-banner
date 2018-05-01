@@ -164,7 +164,7 @@ class BannerClicks extends \app\components\ActiveRecord
 		$this->templateColumns['clicks'] = [
 			'attribute' => 'clicks',
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['click-history/index', 'click' => $model->primaryKey]);
+				$url = Url::to(['click-history/index', 'click'=>$model->primaryKey]);
 				return Html::a($model->clicks ? $model->clicks : 0, $url);
 			},
 			'contentOptions' => ['class'=>'center'],
