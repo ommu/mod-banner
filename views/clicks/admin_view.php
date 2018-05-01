@@ -1,15 +1,15 @@
 <?php
 /**
- * Banner Views (banner-views)
+ * Banner Clicks (banner-clicks)
  * @var $this yii\web\View
- * @var $this app\modules\banner\controllers\ViewController
- * @var $model app\modules\banner\models\BannerViews
+ * @var $this app\modules\banner\controllers\ClicksController
+ * @var $model app\modules\banner\models\BannerClicks
  * version: 0.0.1
  *
  * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
  * @link http://ecc.ft.ugm.ac.id
  * @author Aziz Masruhan <aziz.masruhan@gmail.com>
- * @created date 6 October 2017, 13:24 WIB
+ * @created date 6 October 2017, 13:06 WIB
  * @contact (+62)857-4115-5177
  *
  */
@@ -19,12 +19,12 @@ use yii\helpers\Url;
 use app\libraries\MenuContent;
 use yii\widgets\DetailView;
 
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Banner Views'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Banner Clicks'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
 $this->params['menu']['content'] = [
 	['label' => Yii::t('app', 'Back To Manage'), 'url' => Url::to(['index']), 'icon' => 'table'],
-	['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id' => $model->view_id]), 'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'), 'method' => 'post', 'icon' => 'trash'],
+	['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id' => $model->click_id]), 'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'), 'method' => 'post', 'icon' => 'trash'],
 ];
 ?>
 
@@ -47,7 +47,7 @@ $this->params['menu']['content'] = [
 					'class'=>'table table-striped detail-view',
 				],
 				'attributes' => [
-					'view_id',
+					'click_id',
 					[
 						'attribute' => 'banner_search',
 						'value' => $model->banner->title,
@@ -56,12 +56,12 @@ $this->params['menu']['content'] = [
 						'attribute' => 'user_search',
 						'value' => $model->user_id ? $model->user->displayname : '-',
 					],
-					'views',
+					'clicks',
 					[
-						'attribute' => 'view_date',
-						'value' => !in_array($model->view_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00']) ? Yii::$app->formatter->format($model->view_date, 'datetime') : '-',
+						'attribute' => 'click_date',
+						'value' => !in_array($model->click_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00']) ? Yii::$app->formatter->format($model->click_date, 'datetime') : '-',
 					],
-					'view_ip',
+					'click_ip',
 				],
 			]) ?>
 		</div>

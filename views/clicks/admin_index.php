@@ -2,7 +2,7 @@
 /**
  * Banner Clicks (banner-clicks)
  * @var $this yii\web\View
- * @var $this app\modules\banner\controllers\ClickController
+ * @var $this app\modules\banner\controllers\ClicksController
  * @var $model app\modules\banner\models\BannerClicks
  * version: 0.0.1
  *

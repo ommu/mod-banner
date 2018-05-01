@@ -1,11 +1,11 @@
 <?php
 /**
- * ClickController
+ * ClicksController
  * @var $this yii\web\View
  * @var $model app\modules\banner\models\BannerClicks
  * version: 0.0.1
  *
- * ClickController implements the CRUD actions for BannerClicks model.
+ * ClicksController implements the CRUD actions for BannerClicks model.
  * Reference start
  * TOC :
  *	Index
@@ -32,7 +32,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use mdm\admin\components\AccessControl;
 
-class ClickController extends Controller
+class ClicksController extends Controller
 {
 	/**
 	 * @inheritdoc

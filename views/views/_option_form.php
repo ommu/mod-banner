@@ -2,7 +2,7 @@
 /**
  * Banner Views (banner-views)
  * @var $this yii\web\View
- * @var $this app\modules\banner\controllers\ViewController
+ * @var $this app\modules\banner\controllers\ViewsController
  * @var $model app\modules\banner\models\search\BannerViews
  * @var $form yii\widgets\ActiveForm
  * version: 0.0.1

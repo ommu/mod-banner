@@ -1,11 +1,11 @@
 <?php
 /**
- * ViewController
+ * ViewsController
  * @var $this yii\web\View
  * @var $model app\modules\banner\models\BannerViews
  * version: 0.0.1
  *
- * ViewController implements the CRUD actions for BannerViews model.
+ * ViewsController implements the CRUD actions for BannerViews model.
  * Reference start
  * TOC :
  *	Index
@@ -32,7 +32,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use mdm\admin\components\AccessControl;
 
-class ViewController extends Controller
+class ViewsController extends Controller
 {
 	/**
 	 * @inheritdoc
