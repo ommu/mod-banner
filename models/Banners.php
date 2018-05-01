@@ -387,7 +387,7 @@ class Banners extends \app\components\ActiveRecord
 			->select(['banner_validation','banner_file_type'])
 			->where(['id' => 1])->one();
 
-		$banner_file_type = unserialize($setting->banner_file_type);
+		$banner_file_type = $this->formatFileType($setting->banner_file_type);
 		if(empty($banner_file_type))
 			$banner_file_type = [];
 
@@ -399,7 +399,7 @@ class Banners extends \app\components\ActiveRecord
 
 			if($this->linked_i) {
 				if($this->url == '-')
-					$this->addError('url', Yii::t('app', '{attribute} harus dalam format hyperlink', ['attribute'=>$this->getAttributeLabel('url')]));	
+					$this->addError('url', Yii::t('app', '{attribute} harus dalam format hyperlink', ['attribute'=>$this->getAttributeLabel('url')]));
 			} else
 				$this->url = '-';
 
@@ -418,22 +418,22 @@ class Banners extends \app\components\ActiveRecord
 				if(!in_array(strtolower($banner_filename->getExtension()), $banner_file_type)) {
 					$this->addError('banner_filename', Yii::t('app', 'The file {name} cannot be uploaded. Only files with these extensions are allowed: {extensions}', array(
 						'name'=>$banner_filename->name,
-						'extensions'=>$this->formatFileType($banner_file_type, false),
+						'extensions'=>$setting->banner_file_type,
 					)));
 
 				} else {
 					$fileSize = getimagesize($banner_filename->tempName);
-					$banner_size = unserialize($this->category->banner_size);
-					if($setting->banner_validation) {
+					if($this->cat_id && $setting->banner_validation) {
+						$banner_size = $this->category->banner_size;
 						if(empty($banner_size))
-							$this->addError('cat_id', Yii::t('app', '{attribute} belum memiliki size.', array('{attribute}'=>$this->getAttributeLabel('cat_id'))));
+							$this->addError('cat_id', Yii::t('app', 'Validate and resize banner is enable. {attribute} belum memiliki ukuran.', array('{attribute}'=>$this->getAttributeLabel('cat_id'))));
 
 						else {
-							if($fileSize[0] == $banner_size['width'] && $fileSize[1] == $banner_size['height']) {
+							if(!($fileSize[0] == $banner_size['width'] && $fileSize[1] == $banner_size['height'])) {
 								$this->addError('banner_filename', Yii::t('app', 'The file {name} cannot be uploaded. ukuran banner ({file_size}) tidak sesuai dengan kategori ({banner_size})', array(
 									'name'=>$banner_filename->name,
 									'file_size'=>$fileSize[0].'x'.$fileSize[1],
-									'banner_size'=>$banner_size['width'].'x'.$banner_size['height'],
+									'banner_size'=>BannerCategory::getSize($banner_size),
 								)));
 							}
 						}
