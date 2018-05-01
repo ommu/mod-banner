@@ -1,7 +1,15 @@
 <?php
 /**
  * Banners
- * version: 0.0.1
+ * 
+ * @author Aziz Masruhan <aziz.masruhan@gmail.com>
+ * @contact (+62)857-4115-5177
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 5 October 2017, 16:51 WIB
+ * @modified date 30 April 2018, 12:39 WIB
+ * @modified by Putra Sudaryanto <putra@sudaryanto.id>
+ * @contact (+62)856-299-4114
+ * @link https://ecc.ft.ugm.ac.id
  *
  * This is the model class for table "ommu_banners".
  *
@@ -19,18 +27,15 @@
  * @property integer $creation_id
  * @property string $modified_date
  * @property integer $modified_id
+ * @property string $updated_date
  * @property string $slug
  *
  * The followings are the available model relations:
  * @property BannerClicks[] $clicks
  * @property BannerViews[] $views
  * @property BannerCategory $category
-
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
- * @author Aziz Masruhan <aziz.masruhan@gmail.com>
- * @created date 5 October 2017, 16:51 WIB
- * @contact (+62)857-4115-5177
+ * @property Users $creation
+ * @property Users $modified
  *
  */
 
@@ -39,23 +44,23 @@ namespace app\modules\banner\models;
 use Yii;
 use yii\helpers\Url;
 use yii\helpers\Html;
+use yii\web\UploadedFile;
 use yii\behaviors\SluggableBehavior;
 use app\coremodules\user\models\Users;
-use app\libraries\grid\GridView;
 use app\modules\banner\models\view\Banners as BannersView;
 
 class Banners extends \app\components\ActiveRecord
 {
-	// Include semua fungsi yang ada pada traits FileSystem;
+	use \app\components\traits\GridViewSystem;
 	use \app\components\traits\FileSystem;
 
-	public $gridForbiddenColumn = ['creation_date', 'creation_search', 'modified_date', 'modified_search', 
-		'slug', 'url', 'banner_filename', 'banner_desc'];
-
-	// Variable Search
+	public $gridForbiddenColumn = ['url','banner_filename','banner_desc','creation_date','creation_search','modified_date','modified_search','updated_date','slug'];
 	public $linked_i;
 	public $permanent_i;
 	public $old_banner_filename_i;
+
+	// Variable Search
+	public $category_search;
 	public $creation_search;
 	public $modified_search;
 	public $click_search;
@@ -97,17 +102,48 @@ class Banners extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['publish', 'cat_id', 'creation_id', 'modified_id', 'linked_i', 'permanent_i'], 'integer'],
-			[['cat_id', 'title', 'url', 'banner_desc', 'published_date', 'linked_i', 'permanent_i'], 'required'],
-			[['banner_filename'], 'required', 'on' => 'formCreate'],
-			[['url', 'banner_desc', 'slug'], 'string'],
-			[['published_date', 'expired_date', 'creation_date', 'modified_date', 'banner_filename', 
-				'url', 'old_banner_filename_i'], 'safe'],
+			[['cat_id', 'title', 'url', 'published_date', 'expired_date',
+				'linked_i', 'permanent_i'], 'required'],
+			[['publish', 'cat_id', 'creation_id', 'modified_id',
+				'linked_i', 'permanent_i'], 'integer'],
+			[['url', 'banner_filename', 'banner_desc', 'slug',
+				'old_banner_filename_i'], 'string'],
+			[['banner_filename', 'banner_desc', 'published_date', 'expired_date', 'creation_date', 'modified_date', 'updated_date',
+				'old_banner_filename_i'], 'safe'],
 			[['title'], 'string', 'max' => 64],
-			[['cat_id'], 'exist', 'skipOnError' => true, 'targetClass' => BannerCategory::className(), 
-				'targetAttribute' => ['cat_id' => 'cat_id']],
-			[['banner_filename'], 'file', 'extensions' => 'jpeg, jpg, png, bmp, gif'],
-			[['url'], 'filter', 'filter' => 'trim'],
+			[['cat_id'], 'exist', 'skipOnError' => true, 'targetClass' => BannerCategory::className(), 'targetAttribute' => ['cat_id' => 'cat_id']],
+		];
+	}
+
+	/**
+	 * @return array customized attribute labels (name=>label)
+	 */
+	public function attributeLabels()
+	{
+		return [
+			'banner_id' => Yii::t('app', 'Banner'),
+			'publish' => Yii::t('app', 'Publish'),
+			'cat_id' => Yii::t('app', 'Category'),
+			'title' => Yii::t('app', 'Title'),
+			'url' => Yii::t('app', 'URL'),
+			'banner_filename' => Yii::t('app', 'Filename'),
+			'banner_desc' => Yii::t('app', 'Description'),
+			'published_date' => Yii::t('app', 'Published Date'),
+			'expired_date' => Yii::t('app', 'Expired Date'),
+			'creation_date' => Yii::t('app', 'Creation Date'),
+			'creation_id' => Yii::t('app', 'Creation'),
+			'modified_date' => Yii::t('app', 'Modified Date'),
+			'modified_id' => Yii::t('app', 'Modified'),
+			'updated_date' => Yii::t('app', 'Updated Date'),
+			'slug' => Yii::t('app', 'Slug'),
+			'linked_i' => Yii::t('app', 'Linked'),
+			'permanent_i' => Yii::t('app', 'Permanent'),
+			'old_banner_filename_i' => Yii::t('app', 'Old Filename'),
+			'category_search' => Yii::t('app', 'Category'),
+			'creation_search' => Yii::t('app', 'Creation'),
+			'modified_search' => Yii::t('app', 'Modified'),
+			'click_search' => Yii::t('app', 'Clicks'),
+			'view_search' => Yii::t('app', 'Views'),
 		];
 	}
 
@@ -160,35 +196,14 @@ class Banners extends \app\components\ActiveRecord
 	}
 
 	/**
-	 * @return array customized attribute labels (name=>label)
+	 * @inheritdoc
+	 * @return \app\modules\banner\models\query\BannersQuery the active query used by this AR class.
 	 */
-	public function attributeLabels()
+	public static function find()
 	{
-		return [
-			'banner_id' => Yii::t('app', 'Banner'),
-			'publish' => Yii::t('app', 'Publish'),
-			'cat_id' => Yii::t('app', 'Category'),
-			'title' => Yii::t('app', 'Title'),
-			'url' => Yii::t('app', 'URL'),
-			'banner_filename' => Yii::t('app', 'Filename'),
-			'banner_desc' => Yii::t('app', 'Description'),
-			'published_date' => Yii::t('app', 'Published Date'),
-			'expired_date' => Yii::t('app', 'Expired Date'),
-			'creation_date' => Yii::t('app', 'Creation Date'),
-			'creation_id' => Yii::t('app', 'Creation'),
-			'modified_date' => Yii::t('app', 'Modified Date'),
-			'modified_id' => Yii::t('app', 'Modified'),
-			'slug' => Yii::t('app', 'Slug'),
-			'linked_i' => Yii::t('app', 'Linked'),
-			'permanent_i' => Yii::t('app', 'Permanent'),
-			'old_banner_filename_i' => Yii::t('app', 'Old Filename'),
-			'creation_search' => Yii::t('app', 'Creation'),
-			'modified_search' => Yii::t('app', 'Modified'),
-			'click_search' => Yii::t('app', 'Clicks'),
-			'view_search' => Yii::t('app', 'Views'),
-		];
+		return new \app\modules\banner\models\query\BannersQuery(get_called_class());
 	}
-	
+
 	/**
 	 * Set default columns to display
 	 */
@@ -201,54 +216,62 @@ class Banners extends \app\components\ActiveRecord
 			'class'  => 'yii\grid\SerialColumn',
 			'contentOptions' => ['class'=>'center'],
 		];
-		if(!isset($_GET['category'])) {
+		if(!Yii::$app->request->get('category')) {
 			$this->templateColumns['cat_id'] = [
 				'attribute' => 'cat_id',
 				'filter' => BannerCategory::getCategory(),
 				'value' => function($model, $key, $index, $column) {
-					return isset($model->category->title)? $model->category->title->message: '-';
+					return isset($model->category) ? $model->category->title->message : '-';
 				},
 			];
 		}
-		$this->templateColumns['title'] = 'title';
-		$this->templateColumns['url'] = 'url';
-		$this->templateColumns['banner_filename'] = 'banner_filename';
-		$this->templateColumns['banner_desc'] = 'banner_desc';
+		$this->templateColumns['title'] = [
+			'attribute' => 'title',
+			'value' => function($model, $key, $index, $column) {
+				return $model->title;
+			},
+		];
+		$this->templateColumns['url'] = [
+			'attribute' => 'url',
+			'value' => function($model, $key, $index, $column) {
+				return $model->url;
+			},
+		];
+		$this->templateColumns['banner_filename'] = [
+			'attribute' => 'banner_filename',
+			'value' => function($model, $key, $index, $column) {
+				return $model->banner_filename;
+			},
+		];
+		$this->templateColumns['banner_desc'] = [
+			'attribute' => 'banner_desc',
+			'value' => function($model, $key, $index, $column) {
+				return $model->banner_desc;
+			},
+		];
 		$this->templateColumns['published_date'] = [
 			'attribute' => 'published_date',
-			'filter'	=> \yii\jui\DatePicker::widget([
-				'dateFormat' => 'yyyy-MM-dd',
-				'attribute' => 'published_date',
-				'model'  => $this,
-			]),
+			'filter' => Html::input('date', 'published_date', Yii::$app->request->get('published_date'), ['class'=>'form-control']),
 			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->published_date, ['0000-00-00','1970-01-01']) ? Yii::$app->formatter->format($model->published_date, 'date') : '-';
+				return !in_array($model->published_date, ['0000-00-00','1970-01-01','0002-12-02','-0001-11-30']) ? Yii::$app->formatter->format($model->published_date, 'date') : '-';
 			},
-			'format'	=> 'html',
+			'format' => 'html',
 		];
 		$this->templateColumns['expired_date'] = [
 			'attribute' => 'expired_date',
-			'filter'	=> \yii\jui\DatePicker::widget([
-				'dateFormat' => 'yyyy-MM-dd',
-				'attribute' => 'expired_date',
-				'model'  => $this,
-			]),
+			'filter' => Html::input('date', 'expired_date', Yii::$app->request->get('expired_date'), ['class'=>'form-control']),
 			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->expired_date, ['0000-00-00','1970-01-01']) ? Yii::$app->formatter->format($model->expired_date, 'date') : '-';
+				return !in_array($model->expired_date, ['0000-00-00','1970-01-01','0002-12-02','-0001-11-30']) ? Yii::$app->formatter->format($model->expired_date, 'date') : '-';
 			},
 			'format' => 'html',
 		];
 		$this->templateColumns['creation_date'] = [
 			'attribute' => 'creation_date',
-			'filter'	=> \yii\jui\DatePicker::widget([
-				'dateFormat' => 'yyyy-MM-dd',
-				'attribute' => 'creation_date',
-				'model'  => $this,
-			]),
+			'filter' => Html::input('date', 'creation_date', Yii::$app->request->get('creation_date'), ['class'=>'form-control']),
 			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->creation_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00']) ? Yii::$app->formatter->format($model->creation_date, 'datetime') : '-';
+				return !in_array($model->creation_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 00:00:00','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->creation_date, 'datetime') : '-';
 			},
-			'format'	=> 'html',
+			'format' => 'html',
 		];
 		if(!Yii::$app->request->get('creation')) {
 			$this->templateColumns['creation_search'] = [
@@ -260,15 +283,11 @@ class Banners extends \app\components\ActiveRecord
 		}
 		$this->templateColumns['modified_date'] = [
 			'attribute' => 'modified_date',
-			'filter'	=> \yii\jui\DatePicker::widget([
-				'dateFormat' => 'yyyy-MM-dd',
-				'attribute' => 'modified_date',
-				'model'  => $this,
-			]),
+			'filter' => Html::input('date', 'modified_date', Yii::$app->request->get('modified_date'), ['class'=>'form-control']),
 			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->modified_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00']) ? Yii::$app->formatter->format($model->modified_date, 'datetime') : '-';
+				return !in_array($model->modified_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 00:00:00','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->modified_date, 'datetime') : '-';
 			},
-			'format'	=> 'html',
+			'format' => 'html',
 		];
 		if(!Yii::$app->request->get('modified')) {
 			$this->templateColumns['modified_search'] = [
@@ -278,11 +297,24 @@ class Banners extends \app\components\ActiveRecord
 				},
 			];
 		}
-		$this->templateColumns['slug'] = 'slug';
+		$this->templateColumns['updated_date'] = [
+			'attribute' => 'updated_date',
+			'filter' => Html::input('date', 'updated_date', Yii::$app->request->get('updated_date'), ['class'=>'form-control']),
+			'value' => function($model, $key, $index, $column) {
+				return !in_array($model->updated_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 00:00:00','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->updated_date, 'datetime') : '-';
+			},
+			'format' => 'html',
+		];
+		$this->templateColumns['slug'] = [
+			'attribute' => 'slug',
+			'value' => function($model, $key, $index, $column) {
+				return $model->slug;
+			},
+		];
 		$this->templateColumns['click_search'] = [
 			'attribute' => 'click_search',
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['click/index', 'banner' => $model->primaryKey]);
+				$url = Url::to(['clicks/index', 'banner'=>$model->primaryKey]);
 				return Html::a($model->view->clicks ? $model->view->clicks : 0, $url);
 			},
 			'contentOptions' => ['class'=>'center'],
@@ -291,7 +323,7 @@ class Banners extends \app\components\ActiveRecord
 		$this->templateColumns['view_search'] = [
 			'attribute' => 'view_search',
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['view/index', 'banner' => $model->primaryKey]);
+				$url = Url::to(['views/index', 'banner'=>$model->primaryKey]);
 				return Html::a($model->view->views ? $model->view->views : 0, $url);
 			},
 			'contentOptions' => ['class'=>'center'],
@@ -300,42 +332,50 @@ class Banners extends \app\components\ActiveRecord
 		if(!Yii::$app->request->get('trash')) {
 			$this->templateColumns['publish'] = [
 				'attribute' => 'publish',
-				'filter' => GridView::getFilterYesNo(),
+				'filter' => $this->filterYesNo(),
 				'value' => function($model, $key, $index, $column) {
-					$url = Url::to(['publish', 'id' => $model->primaryKey]);
-					return GridView::getPublish($url, $model->publish);
+					$url = Url::to(['publish', 'id'=>$model->primaryKey]);
+					return $this->quickAction($url, $model->publish);
 				},
 				'contentOptions' => ['class'=>'center'],
 				'format'	=> 'raw',
 			];
 		}
 	}
-	
+
 	/**
-	 * Mengembalikan lokasi banner
-	 *
+	 * User get information
+	 */
+	public static function getInfo($id, $column=null)
+	{
+		if($column != null) {
+			$model = self::find()
+				->select([$column])
+				->where(['banner_id' => $id])
+				->one();
+			return $model->$column;
+			
+		} else {
+			$model = self::findOne($id);
+			return $model;
+		}
+	}
+
+	/**
 	 * @param returnAlias set true jika ingin kembaliannya path alias atau false jika ingin string
 	 * relative path. default true.
 	 */
-	public static function getBannerPath($returnAlias=true) 
+	public static function getUploadPath($returnAlias=true) 
 	{
 		return ($returnAlias ? Yii::getAlias('@webroot/public/banner') : 'public/banner');
 	}
 
 	/**
-	 * afterFind
-	 *
-	 * Simpan nama banner lama untuk keperluan jikalau kondisi update tp bannernya tidak diupdate.
+	 * after find attributes
 	 */
 	public function afterFind() 
 	{
 		$this->old_banner_filename_i = $this->banner_filename;
-		if($this->expired_date == '0000-00-00')
-			$this->permanent_i = 1;
-
-		$this->linked_i = 1;
-		if($this->url == '-' || $this->url == '')
-			$this->linked_i = 0;		
 	}
 
 	/**
@@ -343,26 +383,66 @@ class Banners extends \app\components\ActiveRecord
 	 */
 	public function beforeValidate() 
 	{
+		$setting = BannerSetting::find()
+			->select(['banner_validation','banner_file_type'])
+			->where(['id' => 1])->one();
+
+		$banner_file_type = unserialize($setting->banner_file_type);
+		if(empty($banner_file_type))
+			$banner_file_type = [];
+
 		if(parent::beforeValidate()) {
 			if($this->isNewRecord)
-				$this->creation_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : '0';
+				$this->creation_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
 			else
-				$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : '0';
-			
-			if($this->linked_i == 0)
+				$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+
+			if($this->linked_i) {
+				if($this->url == '-')
+					$this->addError('url', Yii::t('app', '{attribute} harus dalam format hyperlink', ['attribute'=>$this->getAttributeLabel('url')]));	
+			} else
 				$this->url = '-';
-			
-			if($this->linked_i == 1 && $this->url == '-')
-				$this->addError('url', Yii::t('app', 'URL harus dalam format hyperlink'));
 
-			if($this->permanent_i == 1)
+			if($this->permanent_i)
 				$this->expired_date = '0000-00-00';
+			else {
+				if(in_array(Yii::$app->formatter->asDate($this->expired_date, 'php:Y-m-d'), ['0000-00-00','1970-01-01','0002-12-02','-0001-11-30']))
+					$this->addError('expired_date', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('expired_date')]));
 
-			if($this->permanent_i != 1 && in_array(Yii::$app->formatter->asDate($this->expired_date, 'php:Y-m-d'), ['0000-00-00','1970-01-01','-0001-11-30']))
-				$this->addError('expired_date', Yii::t('app', 'Expired Date cannot be blank.'));
-			
-			if($this->permanent_i != 1 && ($this->published_date != '' && $this->expired_date != '') && (Yii::$app->formatter->asDate($this->published_date, 'php:Y-m-d') >= Yii::$app->formatter->asDate($this->expired_date, 'php:Y-m-d')))
-				$this->addError('expired_date', Yii::t('app', 'Expired Date harus lebih besar dari Publish Date'));
+				if(Yii::$app->formatter->asDate($this->published_date, 'php:Y-m-d') >= Yii::$app->formatter->asDate($this->expired_date, 'php:Y-m-d'))
+					$this->addError('expired_date', Yii::t('app', '{expired-date} harus lebih besar dari {published-date}', ['expired-date'=>$this->getAttributeLabel('expired_date'), 'published-date'=>$this->getAttributeLabel('published_date')]));
+			}
+
+			$banner_filename = UploadedFile::getInstance($this, 'banner_filename');
+			if($banner_filename instanceof UploadedFile && !$banner_filename->getHasError()) {
+				if(!in_array(strtolower($banner_filename->getExtension()), $banner_file_type)) {
+					$this->addError('banner_filename', Yii::t('app', 'The file {name} cannot be uploaded. Only files with these extensions are allowed: {extensions}', array(
+						'name'=>$banner_filename->name,
+						'extensions'=>$this->formatFileType($banner_file_type, false),
+					)));
+
+				} else {
+					$fileSize = getimagesize($banner_filename->tempName);
+					$banner_size = unserialize($this->category->banner_size);
+					if($setting->banner_validation) {
+						if(empty($banner_size))
+							$this->addError('cat_id', Yii::t('app', '{attribute} belum memiliki size.', array('{attribute}'=>$this->getAttributeLabel('cat_id'))));
+
+						else {
+							if($fileSize[0] == $banner_size['width'] && $fileSize[1] == $banner_size['height']) {
+								$this->addError('banner_filename', Yii::t('app', 'The file {name} cannot be uploaded. ukuran banner ({file_size}) tidak sesuai dengan kategori ({banner_size})', array(
+									'name'=>$banner_filename->name,
+									'file_size'=>$fileSize[0].'x'.$fileSize[1],
+									'banner_size'=>$banner_size['width'].'x'.$banner_size['height'],
+								)));
+							}
+						}
+					}
+				}
+			} else {
+				if($this->isNewRecord)
+					$this->addError('banner_filename', Yii::t('app', '{attribute} cannot be blank.', array('{attribute}'=>$this->getAttributeLabel('banner_filename'))));
+			}
 		}
 		return true;
 	}
@@ -370,41 +450,40 @@ class Banners extends \app\components\ActiveRecord
 	/**
 	 * before save attributes
 	 */
-	public function beforeSave($insert) 
+	public function beforeSave($insert)
 	{
-		if(parent::beforeSave($insert)) {
-			$bannerPath = Yii::getAlias('@webroot/public/banner');
+		$setting = BannerSetting::find()
+			->select(['banner_validation','banner_resize'])
+			->where(['id' => 1])->one();
 			
-			// Add directory
-			if(!file_exists($bannerPath)) {
-				@mkdir($bannerPath, 0755,true);
+		if(parent::beforeSave($insert)) {
+			if(!$insert) {
+				$uploadPath = self::getUploadPath();
+				$verwijderenPath = join('/', [self::getUploadPath(), 'verwijderen']);
+				$this->createUploadDirectory(self::getUploadPath());
 
-				// Add file in directory (index.php)
-				$indexFile = join('/', [$bannerPath, 'index.php']);
-				if(!file_exists($indexFile)) {
-					file_put_contents($indexFile, "<?php\n");
-				}
+				$this->banner_filename = UploadedFile::getInstance($this, 'banner_filename');
+				if($this->banner_filename instanceof UploadedFile && !$this->banner_filename->getHasError()) {
+					$fileName = time().'_'.$this->banner_id.'.'.strtolower($this->banner_filename->getExtension()); 
+					if($this->banner_filename->saveAs(join('/', [$uploadPath, $fileName]))) {
+						if($this->old_banner_filename_i != '' && file_exists(join('/', [$uploadPath, $this->old_banner_filename_i])))
+							rename(join('/', [$uploadPath, $this->old_banner_filename_i]), join('/', [$verwijderenPath, time().'_change_'.$this->old_banner_filename_i]));
+						$this->banner_filename = $fileName;
 
-			}else {
-				@chmod($bannerPath, 0755,true);
-			}
-
-			$this->published_date = date('Y-m-d', strtotime($this->published_date));
-			if($this->permanent_i != 1)
-				$this->expired_date = date('Y-m-d', strtotime($this->published_date));
-
-			// Upload banner
-			if($this->banner_filename instanceof \yii\web\UploadedFile) {
-				$imageName = time().'_'.$this->sanitizeFileName($this->title).'.'. $this->banner_filename->extension; 
-				if($this->banner_filename->saveAs($bannerPath.'/'.$imageName)) {
-					$this->banner_filename = $imageName;
-					@chmod($imageName, 0777);
+						//if(!$setting->banner_validation && $setting->banner_resize)
+						//	self::resizeBanner(join('/', [$uploadPath, $fileName]), unserialize($this->category->banner_size));
+					}
+				} else {
+					if($this->banner_filename == '')
+						$this->banner_filename = $this->old_banner_filename_i;
 				}
 			}
+			$this->published_date = Yii::$app->formatter->asDate($this->published_date, 'php:Y-m-d');
+			$this->expired_date = Yii::$app->formatter->asDate($this->expired_date, 'php:Y-m-d');
 		}
 		return true;
 	}
-	
+
 	/**
 	 * After save attributes
 	 */
@@ -412,11 +491,24 @@ class Banners extends \app\components\ActiveRecord
 	{
 		parent::afterSave($insert, $changedAttributes);
 
-		// jika banner file diperbarui, hapus banner yg lama.
-		if(!$insert && $this->banner_filename != $this->old_banner_filename_i) {
-			$fname = join('/', [self::getBannerPath(), $this->old_banner_filename_i]);
-			if(file_exists($fname)) {
-				@unlink($fname);
+		$setting = BannerSetting::find()
+			->select(['banner_validation','banner_resize'])
+			->where(['id' => 1])->one();
+			
+		$uploadPath = self::getUploadPath();
+		$verwijderenPath = join('/', [self::getUploadPath(), 'verwijderen']);
+		$this->createUploadDirectory(self::getUploadPath());
+
+		if($insert) {
+			$this->banner_filename = UploadedFile::getInstance($this, 'banner_filename');
+			if($this->banner_filename instanceof UploadedFile && !$this->banner_filename->getHasError()) {
+				$fileName = time().'_'.$this->banner_id.'.'.strtolower($this->banner_filename->getExtension()); 
+				if($this->banner_filename->saveAs(join('/', [$uploadPath, $fileName]))) {
+					self::updateAll(['banner_filename' => $fileName], ['banner_id' => $this->banner_id]);
+
+					//if(!$setting->banner_validation && $setting->banner_resize)
+					//	self::resizeBanner(join('/', [$uploadPath, $fileName]), unserialize($this->category->banner_size));
+				}
 			}
 		}
 	}
@@ -428,9 +520,10 @@ class Banners extends \app\components\ActiveRecord
 	{
 		parent::afterDelete();
 
-		$fname = join('/', [self::getBannerPath(), $this->banner_filename]);
-		if(file_exists($fname)) {
-			@unlink($fname);
-		}
+		$uploadPath = self::getUploadPath();
+		$verwijderenPath = join('/', [self::getUploadPath(), 'verwijderen']);
+
+		if($this->banner_filename != '' && file_exists(join('/', [$uploadPath, $this->banner_filename])))
+			rename(join('/', [$uploadPath, $this->banner_filename]), join('/', [$verwijderenPath, time().'_deleted_'.$this->banner_filename]));
 	}
 }

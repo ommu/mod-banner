@@ -3,39 +3,40 @@
  * AdminController
  * @var $this yii\web\View
  * @var $model app\modules\banner\models\Banners
- * version: 0.0.1
  *
  * AdminController implements the CRUD actions for Banners model.
  * Reference start
  * TOC :
- *  Index
- *  Create
- *  Update
- *  View
- *  Delete
- *  RunAction
- *  Publish
+ *	Index
+ *	Create
+ *	Update
+ *	View
+ *	Delete
+ *	RunAction
+ *	Publish
  *
- *  findModel
+ *	findModel
  *
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
  * @author Aziz Masruhan <aziz.masruhan@gmail.com>
- * @created date 6 October 2017, 08:14 WIB
  * @contact (+62)857-4115-5177
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 6 October 2017, 08:14 WIB
+ * @modified date 30 April 2018, 21:22 WIB
+ * @modified by Putra Sudaryanto <putra@sudaryanto.id>
+ * @contact (+62)856-299-4114
+ * @link http://ecc.ft.ugm.ac.id
  *
  */
  
 namespace app\modules\banner\controllers;
 
 use Yii;
+use yii\filters\VerbFilter;
+use yii\web\NotFoundHttpException;
+use app\components\Controller;
+use mdm\admin\components\AccessControl;
 use app\modules\banner\models\Banners;
 use app\modules\banner\models\search\Banners as BannersSearch;
-use app\components\Controller;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
-use yii\web\UploadedFile;
-use mdm\admin\components\AccessControl;
 
 class AdminController extends Controller
 {
@@ -65,8 +66,8 @@ class AdminController extends Controller
 	public function actionIndex()
 	{
 		$searchModel = new BannersSearch();
-
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
 		$gridColumn = Yii::$app->request->get('GridColumn', null);
 		$cols = [];
 		if($gridColumn != null && count($gridColumn) > 0) {
@@ -83,7 +84,7 @@ class AdminController extends Controller
 		return $this->render('admin_index', [
 			'searchModel' => $searchModel,
 			'dataProvider' => $dataProvider,
-			'columns'	 => $columns,
+			'columns' => $columns,
 		]);
 	}
 
@@ -95,19 +96,17 @@ class AdminController extends Controller
 	public function actionCreate()
 	{
 		$model = new Banners();
-		$model->scenario = 'formCreate';
 
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
-			$model->banner_filename = UploadedFile::getInstance($model, 'banner_filename');
-
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'Banner success created.'));
 				return $this->redirect(['index']);
-			}
+				//return $this->redirect(['view', 'id' => $model->banner_id]);
+			} 
 		}
 
-		$this->view->title = Yii::t('app', 'Create Banners');
+		$this->view->title = Yii::t('app', 'Create Banner');
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_create', [
@@ -124,21 +123,17 @@ class AdminController extends Controller
 	public function actionUpdate($id)
 	{
 		$model = $this->findModel($id);
-		
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
-			$model->banner_filename = UploadedFile::getInstance($model, 'banner_filename');
-			if(!($model->banner_filename instanceof UploadedFile)) {
-				$model->banner_filename = $model->old_banner_filename_i;
-			}
 
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'Banner success updated.'));
 				return $this->redirect(['index']);
+				//return $this->redirect(['view', 'id' => $model->banner_id]);
 			}
 		}
 
-		$this->view->title = Yii::t('app', 'Update {modelClass}: {title}', ['modelClass' => 'Banners', 'title' => $model->title]);
+		$this->view->title = Yii::t('app', 'Update {model-class}: {title}', ['model-class' => 'Banner', 'title' => $model->title]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_update', [
@@ -155,7 +150,7 @@ class AdminController extends Controller
 	{
 		$model = $this->findModel($id);
 
-		$this->view->title = Yii::t('app', 'View {modelClass}: {title}', ['modelClass' => 'Banners', 'title' => $model->title]);
+		$this->view->title = Yii::t('app', 'Detail {model-class}: {title}', ['model-class' => 'Banner', 'title' => $model->title]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_view', [
@@ -174,16 +169,16 @@ class AdminController extends Controller
 		$model = $this->findModel($id);
 		$model->publish = 2;
 
-		if ($model->save(false, ['publish'])) {
-			//return $this->redirect(['view', 'id' => $model->banner_id]);
-			Yii::$app->session->setFlash('success', Yii::t('app', 'Banners success deleted.'));
+		if($model->save(false, ['publish'])) {
+			Yii::$app->session->setFlash('success', Yii::t('app', 'Banner success deleted.'));
 			return $this->redirect(['index']);
+			//return $this->redirect(['view', 'id' => $model->banner_id]);
 		}
 	}
 
 	/**
-	 * Publish/Unpublish an existing Banners model.
-	 * If publish/unpublish is successful, the browser will be redirected to the 'index' page.
+	 * actionPublish an existing Banners model.
+	 * If publish is successful, the browser will be redirected to the 'index' page.
 	 * @param integer $id
 	 * @return mixed
 	 */
@@ -193,8 +188,8 @@ class AdminController extends Controller
 		$replace = $model->publish == 1 ? 0 : 1;
 		$model->publish = $replace;
 
-		if ($model->save(false, ['publish'])) {
-			Yii::$app->session->setFlash('success', Yii::t('app', 'Banners success updated.'));
+		if($model->save(false, ['publish'])) {
+			Yii::$app->session->setFlash('success', Yii::t('app', 'Banner success updated.'));
 			return $this->redirect(['index']);
 		}
 	}
@@ -208,7 +203,7 @@ class AdminController extends Controller
 	 */
 	protected function findModel($id)
 	{
-		if (($model = Banners::findOne($id)) !== null) 
+		if(($model = Banners::findOne($id)) !== null) 
 			return $model;
 		else
 			throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
