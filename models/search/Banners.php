@@ -122,13 +122,19 @@ class Banners extends BannersModel
 			't.modified_id' => isset($params['modified']) ? $params['modified'] : $this->modified_id,
 			'cast(t.updated_date as date)' => $this->updated_date,
 		]);
-		
+
 		if(isset($params['expired'])) {
 			if($params['expired'] == 'unpublish')
 				$query->andFilterCompare('t.publish', 0);
 			else {
-				//if(in_array($params['expired'], ['publish','pending','expired']))
 				$query->andFilterCompare('t.publish', 1);
+				if($params['expired'] == 'publish') {
+					$query->andFilterWhere(['>=', 'cast(t.expired_date as date)', Yii::$app->formatter->asDate('now', 'php:Y-m-d')])
+						->orFilterWhere(['>=', 'cast(t.published_date as date)', Yii::$app->formatter->asDate('now', 'php:Y-m-d')]);
+				} else if($params['expired'] == 'pending')
+					$query->andFilterWhere(['>', 'cast(t.published_date as date)', Yii::$app->formatter->asDate('now', 'php:Y-m-d')]);
+				else if($params['expired'] == 'expired')
+					$query->andFilterWhere('<', 'cast(t.expired_date as date)', Yii::$app->formatter->asDate('now', 'php:Y-m-d')]);
 			}
 		} else {
 			if(isset($params['trash']))
@@ -140,24 +146,6 @@ class Banners extends BannersModel
 					$query->andFilterWhere(['t.publish' => $this->publish]);
 			}
 		}
-		/*
-		if(isset($_GET['publish'])) {
-			$query->andFilterCompare('t.publish', 1);
-			$query->andFilterCompare('cast(t.expired_date as date)', '>='.Yii::$app->formatter->asDate('now', 'php:Y-m-d'));
-			$query->andFilterCompare('cast(t.published_date as date)', '>='.Yii::$app->formatter->asDate('now', 'php:Y-m-d'));
-		} elseif(isset($_GET['pending'])) {
-			$query->andFilterCompare('t.publish', 1);
-			$query->andFilterCompare('cast(t.published_date as date)', '>'.Yii::$app->formatter->asDate('now', 'php:Y-m-d'));
-		} elseif(isset($_GET['expired'])) {
-			$query->andFilterCompare('t.publish', 1);
-			$query->andFilterCompare('cast(t.expired_date as date)', '<'.Yii::$app->formatter->asDate('now', 'php:Y-m-d'));
-		} else {
-			if(!isset($_GET['trash']))
-				$query->andFilterWhere(['IN', 't.publish', [0,1]]);
-			else
-				$query->andFilterWhere(['NOT IN', 't.publish', [0,1]]);
-		}
-		*/
 
 		$query->andFilterWhere(['like', 't.title', $this->title])
 			->andFilterWhere(['like', 't.url', $this->url])

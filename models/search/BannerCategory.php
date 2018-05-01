@@ -76,7 +76,6 @@ class BannerCategory extends BannerCategoryModel
 		]);
 
 		$attributes = array_keys($this->getTableSchema()->columns);
-		$attributes = array_diff($attributes, ['banner_size']);
 		$attributes['name_i'] = [
 			'asc' => ['title.message' => SORT_ASC],
 			'desc' => ['title.message' => SORT_DESC],
