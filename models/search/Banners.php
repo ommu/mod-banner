@@ -134,7 +134,7 @@ class Banners extends BannersModel
 				} else if($params['expired'] == 'pending')
 					$query->andFilterWhere(['>', 'cast(t.published_date as date)', Yii::$app->formatter->asDate('now', 'php:Y-m-d')]);
 				else if($params['expired'] == 'expired')
-					$query->andFilterWhere('<', 'cast(t.expired_date as date)', Yii::$app->formatter->asDate('now', 'php:Y-m-d')]);
+					$query->andFilterWhere(['<', 'cast(t.expired_date as date)', Yii::$app->formatter->asDate('now', 'php:Y-m-d')]);
 			}
 		} else {
 			if(isset($params['trash']))
