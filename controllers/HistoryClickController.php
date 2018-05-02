@@ -3,33 +3,36 @@
  * HistoryClickController
  * @var $this yii\web\View
  * @var $model app\modules\banner\models\BannerClickHistory
- * version: 0.0.1
  *
  * HistoryClickController implements the CRUD actions for BannerClickHistory model.
  * Reference start
  * TOC :
  *	Index
+ *	View
  *	Delete
  *
  *	findModel
  *
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
  * @author Aziz Masruhan <aziz.masruhan@gmail.com>
- * @created date 6 October 2017, 13:29 WIB
  * @contact (+62)857-4115-5177
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 6 October 2017, 13:29 WIB
+ * @modified date 2 May 2018, 11:10 WIB
+ * @modified by Putra Sudaryanto <putra@sudaryanto.id>
+ * @contact (+62)856-299-4114
+ * @link http://ecc.ft.ugm.ac.id
  *
  */
  
 namespace app\modules\banner\controllers;
 
 use Yii;
+use yii\filters\VerbFilter;
+use yii\web\NotFoundHttpException;
+use app\components\Controller;
+use mdm\admin\components\AccessControl;
 use app\modules\banner\models\BannerClickHistory;
 use app\modules\banner\models\search\BannerClickHistory as BannerClickHistorySearch;
-use app\components\Controller;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
-use mdm\admin\components\AccessControl;
 
 class HistoryClickController extends Controller
 {
@@ -76,7 +79,24 @@ class HistoryClickController extends Controller
 		return $this->render('admin_index', [
 			'searchModel' => $searchModel,
 			'dataProvider' => $dataProvider,
-			'columns'	  => $columns,
+			'columns' => $columns,
+		]);
+	}
+
+	/**
+	 * Displays a single BannerClickHistory model.
+	 * @param integer $id
+	 * @return mixed
+	 */
+	public function actionView($id)
+	{
+		$model = $this->findModel($id);
+
+		$this->view->title = Yii::t('app', 'Detail {model-class}: {click-id}', ['model-class' => 'Banner Click History', 'click-id' => $model->click->banner->title]);
+		$this->view->description = '';
+		$this->view->keywords = '';
+		return $this->render('admin_view', [
+			'model' => $model,
 		]);
 	}
 
@@ -90,7 +110,7 @@ class HistoryClickController extends Controller
 	{
 		$this->findModel($id)->delete();
 		
-		Yii::$app->session->setFlash('success', Yii::t('app', 'Banner Click History success deleted.'));
+		Yii::$app->session->setFlash('success', Yii::t('app', 'Banner click history success deleted.'));
 		return $this->redirect(['index']);
 	}
 
@@ -103,7 +123,7 @@ class HistoryClickController extends Controller
 	 */
 	protected function findModel($id)
 	{
-		if (($model = BannerClickHistory::findOne($id)) !== null) 
+		if(($model = BannerClickHistory::findOne($id)) !== null) 
 			return $model;
 		else
 			throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));

@@ -1,7 +1,15 @@
 <?php
 /**
  * BannerViewHistory
- * version: 0.0.1
+ * 
+ * @author Aziz Masruhan <aziz.masruhan@gmail.com>
+ * @contact (+62)857-4115-5177
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 6 October 2017, 13:17 WIB
+ * @modified date 30 April 2018, 12:42 WIB
+ * @modified by Putra Sudaryanto <putra@sudaryanto.id>
+ * @contact (+62)856-299-4114
+ * @link https://ecc.ft.ugm.ac.id
  *
  * This is the model class for table "ommu_banner_view_history".
  *
@@ -13,12 +21,6 @@
  *
  * The followings are the available model relations:
  * @property BannerViews $view
-
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
- * @author Aziz Masruhan <aziz.masruhan@gmail.com>
- * @created date 6 October 2017, 13:17 WIB
- * @contact (+62)857-4115-5177
  *
  */
 
@@ -26,6 +28,7 @@ namespace app\modules\banner\models;
 
 use Yii;
 use yii\helpers\Url;
+use yii\helpers\Html;
 
 class BannerViewHistory extends \app\components\ActiveRecord
 {
@@ -67,14 +70,6 @@ class BannerViewHistory extends \app\components\ActiveRecord
 	}
 
 	/**
-	 * @return \yii\db\ActiveQuery
-	 */
-	public function getView()
-	{
-		return $this->hasOne(BannerViews::className(), ['view_id' => 'view_id']);
-	}
-
-	/**
 	 * @return array customized attribute labels (name=>label)
 	 */
 	public function attributeLabels()
@@ -89,7 +84,24 @@ class BannerViewHistory extends \app\components\ActiveRecord
 			'user_search' => Yii::t('app', 'User'),
 		];
 	}
-	
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getView()
+	{
+		return $this->hasOne(BannerViews::className(), ['view_id' => 'view_id']);
+	}
+
+	/**
+	 * @inheritdoc
+	 * @return \app\modules\banner\models\query\BannerViewHistoryQuery the active query used by this AR class.
+	 */
+	public static function find()
+	{
+		return new \app\modules\banner\models\query\BannerViewHistoryQuery(get_called_class());
+	}
+
 	/**
 	 * Set default columns to display
 	 */
@@ -102,40 +114,82 @@ class BannerViewHistory extends \app\components\ActiveRecord
 			'class'  => 'yii\grid\SerialColumn',
 			'contentOptions' => ['class'=>'center'],
 		];
-		if(!isset($_GET['view'])) {
+		if(!Yii::$app->request->get('view')) {
 			$this->templateColumns['category_search'] = [
 				'attribute' => 'category_search',
 				'filter' => BannerCategory::getCategory(),
 				'value' => function($model, $key, $index, $column) {
-					return $model->view->banner->category->title->message;
+					return isset($model->view->banner->category) ? $model->view->banner->category->title->message : '-';
 				},
 			];
 			$this->templateColumns['banner_search'] = [
 				'attribute' => 'banner_search',
 				'value' => function($model, $key, $index, $column) {
-					return $model->view->banner->title;
+					return isset($model->view->banner) ? $model->view->banner->title : '-';
 				},
 			];
 			$this->templateColumns['user_search'] = [
 				'attribute' => 'user_search',
 				'value' => function($model, $key, $index, $column) {
-					return $model->view->user->displayname ? $model->view->user->displayname : '-';
+					return isset($model->view->user) ? $model->view->user->displayname : '-';
 				},
 			];
 		}
 		$this->templateColumns['view_date'] = [
 			'attribute' => 'view_date',
-			'filter'	=> \yii\jui\DatePicker::widget([
-				'dateFormat' => 'yyyy-MM-dd',
-				'attribute' => 'view_date',
-				'model'	 => $this,
-			]),
+			'filter' => Html::input('date', 'view_date', Yii::$app->request->get('view_date'), ['class'=>'form-control']),
 			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->view_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00']) ? Yii::$app->formatter->format($model->view_date, 'datetime') : '-';
+				return !in_array($model->view_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 00:00:00','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->view_date, 'datetime') : '-';
 			},
-			'format'	=> 'html',
+			'format' => 'html',
 		];
-		$this->templateColumns['view_ip'] = 'view_ip';
+		$this->templateColumns['view_ip'] = [
+			'attribute' => 'view_ip',
+			'value' => function($model, $key, $index, $column) {
+				return $model->view_ip;
+			},
+		];
 	}
 
+	/**
+	 * User get information
+	 */
+	public static function getInfo($id, $column=null)
+	{
+		if($column != null) {
+			$model = self::find()
+				->select([$column])
+				->where(['id' => $id])
+				->one();
+			return $model->$column;
+			
+		} else {
+			$model = self::findOne($id);
+			return $model;
+		}
+	}
+
+	/**
+	 * before validate attributes
+	 */
+	public function beforeValidate() 
+	{
+		if(parent::beforeValidate()) {
+			if($this->isNewRecord)
+				$this->view_ip = $_SERVER['REMOTE_ADDR'];
+		}
+		return true;
+	}
+
+	/**
+	 * before save attributes
+	 */
+	public function beforeSave($insert)
+	{
+		if(parent::beforeSave($insert)) {
+			if($insert)
+				$this->view_date = Yii::$app->formatter->asDate($this->view_date, 'php:Y-m-d');
+		}
+		return true;
+	}
 }

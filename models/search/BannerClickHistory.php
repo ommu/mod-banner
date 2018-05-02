@@ -1,15 +1,17 @@
 <?php
 /**
  * BannerClickHistory
- * version: 0.0.1
  *
  * BannerClickHistory represents the model behind the search form about `app\modules\banner\models\BannerClickHistory`.
  *
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
  * @author Aziz Masruhan <aziz.masruhan@gmail.com>
- * @created date 6 October 2017, 13:29 WIB
  * @contact (+62)857-4115-5177
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 6 October 2017, 13:29 WIB
+ * @modified date 2 May 2018, 11:10 WIB
+ * @modified by Putra Sudaryanto <putra@sudaryanto.id>
+ * @contact (+62)856-299-4114
+ * @link http://ecc.ft.ugm.ac.id
  *
  */
 
@@ -19,7 +21,6 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\modules\banner\models\BannerClickHistory as BannerClickHistoryModel;
-//use app\modules\banner\models\BannerClicks;
 
 class BannerClickHistory extends BannerClickHistoryModel
 {
@@ -30,7 +31,8 @@ class BannerClickHistory extends BannerClickHistoryModel
 	{
 		return [
 			[['id', 'click_id'], 'integer'],
-			[['click_date', 'click_ip', 'banner_search', 'user_search', 'category_search'], 'safe'],
+			[['click_date', 'click_ip',
+				'category_search', 'banner_search', 'user_search'], 'safe'],
 		];
 	}
 
@@ -62,7 +64,12 @@ class BannerClickHistory extends BannerClickHistoryModel
 	public function search($params)
 	{
 		$query = BannerClickHistoryModel::find()->alias('t');
-		$query->joinWith(['click click', 'click.banner banner', 'click.user user', 'click.banner.category.title category_title']);
+		$query->joinWith([
+			'click click',
+			'click.banner banner',
+			'click.banner.category.title category',
+			'click.user user',
+		]);
 
 		// add conditions that should always apply here
 		$dataProvider = new ActiveDataProvider([
@@ -70,6 +77,10 @@ class BannerClickHistory extends BannerClickHistoryModel
 		]);
 
 		$attributes = array_keys($this->getTableSchema()->columns);
+		$attributes['category_search'] = [
+			'asc' => ['category.message' => SORT_ASC],
+			'desc' => ['category.message' => SORT_DESC],
+		];
 		$attributes['banner_search'] = [
 			'asc' => ['banner.title' => SORT_ASC],
 			'desc' => ['banner.title' => SORT_DESC],
@@ -78,10 +89,6 @@ class BannerClickHistory extends BannerClickHistoryModel
 			'asc' => ['user.displayname' => SORT_ASC],
 			'desc' => ['user.displayname' => SORT_DESC],
 		];
-		$attributes['category_search'] = [
-			'asc' => ['category_title.message' => SORT_ASC],
-			'desc' => ['category_title.message' => SORT_DESC],
-		];
 		$dataProvider->setSort([
 			'attributes' => $attributes,
 			'defaultOrder' => ['id' => SORT_DESC],
@@ -89,7 +96,7 @@ class BannerClickHistory extends BannerClickHistoryModel
 
 		$this->load($params);
 
-		if (!$this->validate()) {
+		if(!$this->validate()) {
 			// uncomment the following line if you do not want to return any records when validation fails
 			// $query->where('0=1');
 			return $dataProvider;
@@ -100,9 +107,9 @@ class BannerClickHistory extends BannerClickHistoryModel
 			't.id' => $this->id,
 			't.click_id' => isset($params['click']) ? $params['click'] : $this->click_id,
 			'cast(t.click_date as date)' => $this->click_date,
-			'banner.cat_id' => $this->category_search,
+			'banner.cat_id' => isset($params['category']) ? $params['category'] : $this->category_search,
 		]);
-		
+
 		$query->andFilterWhere(['like', 't.click_ip', $this->click_ip])
 			->andFilterWhere(['like', 'banner.title', $this->banner_search])
 			->andFilterWhere(['like', 'user.displayname', $this->user_search]);
