@@ -342,7 +342,7 @@ class Banners extends \app\components\ActiveRecord
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',
 		];
-		if(!Yii::$app->request->get('trash')) {
+		if(!Yii::$app->request->get('trash') && !Yii::$app->request->get('expired')) {
 			$this->templateColumns['publish'] = [
 				'attribute' => 'publish',
 				'filter' => $this->filterYesNo(),

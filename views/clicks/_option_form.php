@@ -5,13 +5,15 @@
  * @var $this app\modules\banner\controllers\ClicksController
  * @var $model app\modules\banner\models\search\BannerClicks
  * @var $form yii\widgets\ActiveForm
- * version: 0.0.1
  *
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
  * @author Aziz Masruhan <aziz.masruhan@gmail.com>
- * @created date 6 October 2017, 13:06 WIB
  * @contact (+62)857-4115-5177
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 6 October 2017, 13:06 WIB
+ * @modified date 1 May 2018, 20:45 WIB
+ * @modified by Putra Sudaryanto <putra@sudaryanto.id>
+ * @contact (+62)856-299-4114
+ * @link http://ecc.ft.ugm.ac.id
  *
  */
 
@@ -39,11 +41,9 @@ JS;
 <div class="grid-form">
 	<?php echo Html::beginForm(Url::to(['/'.$route]), 'get', ['name' => 'gridoption']);
 		$columns = [];
-
 		foreach($model->templateColumns as $key => $column) {
 			if($key == '_no')
 				continue;
-			
 			$columns[$key] = $key;
 		}
 	?>
@@ -55,6 +55,5 @@ JS;
 			</li>
 			<?php endforeach; ?>
 		</ul>
-		<div class="clear"></div>
 	<?php echo Html::endForm(); ?>
 </div>

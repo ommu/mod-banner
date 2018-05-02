@@ -1,15 +1,15 @@
 <?php
 /**
  * BannerClicks
- * version: 0.0.1
  *
  * BannerClicks represents the model behind the search form about `app\modules\banner\models\BannerClicks`.
  *
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
  * @author Putra Sudaryanto <putra@sudaryanto.id>
- * @created date 14 October 2017, 08:11 WIB
  * @contact (+62)856-299-4114
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 14 October 2017, 08:11 WIB
+ * @modified date 1 May 2018, 20:45 WIB
+ * @link http://ecc.ft.ugm.ac.id
  *
  */
 
@@ -19,8 +19,6 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\modules\banner\models\BannerClicks as BannerClicksModel;
-//use app\modules\banner\models\Banners;
-//use app\coremodules\user\models\Users;
 
 class BannerClicks extends BannerClicksModel
 {
@@ -31,7 +29,8 @@ class BannerClicks extends BannerClicksModel
 	{
 		return [
 			[['click_id', 'banner_id', 'user_id', 'clicks'], 'integer'],
-			[['click_date', 'click_ip', 'banner_search', 'user_search', 'category_search'], 'safe'],
+			[['click_date', 'click_ip',
+				'category_search', 'banner_search', 'user_search'], 'safe'],
 		];
 	}
 
@@ -43,7 +42,7 @@ class BannerClicks extends BannerClicksModel
 		// bypass scenarios() implementation in the parent class
 		return Model::scenarios();
 	}
-	
+
 	/**
 	 * Tambahkan fungsi beforeValidate ini pada model search untuk menumpuk validasi pd model induk. 
 	 * dan "jangan" tambahkan parent::beforeValidate, cukup "return true" saja.
@@ -63,7 +62,11 @@ class BannerClicks extends BannerClicksModel
 	public function search($params)
 	{
 		$query = BannerClicksModel::find()->alias('t');
-		$query->joinWith(['banner banner', 'user user', 'banner.category.title category_title']);
+		$query->joinWith([
+			'banner banner',
+			'banner.category.title category',
+			'user user'
+		]);
 
 		// add conditions that should always apply here
 		$dataProvider = new ActiveDataProvider([
@@ -71,6 +74,10 @@ class BannerClicks extends BannerClicksModel
 		]);
 
 		$attributes = array_keys($this->getTableSchema()->columns);
+		$attributes['category_search'] = [
+			'asc' => ['category.message' => SORT_ASC],
+			'desc' => ['category.message' => SORT_DESC],
+		];
 		$attributes['banner_search'] = [
 			'asc' => ['banner.title' => SORT_ASC],
 			'desc' => ['banner.title' => SORT_DESC],
@@ -79,10 +86,6 @@ class BannerClicks extends BannerClicksModel
 			'asc' => ['user.displayname' => SORT_ASC],
 			'desc' => ['user.displayname' => SORT_DESC],
 		];
-		$attributes['category_search'] = [
-			'asc' => ['category_title.message' => SORT_ASC],
-			'desc' => ['category_title.message' => SORT_DESC],
-		];
 		$dataProvider->setSort([
 			'attributes' => $attributes,
 			'defaultOrder' => ['click_id' => SORT_DESC],
@@ -90,7 +93,7 @@ class BannerClicks extends BannerClicksModel
 
 		$this->load($params);
 
-		if (!$this->validate()) {
+		if(!$this->validate()) {
 			// uncomment the following line if you do not want to return any records when validation fails
 			// $query->where('0=1');
 			return $dataProvider;
@@ -103,7 +106,7 @@ class BannerClicks extends BannerClicksModel
 			't.user_id' => isset($params['user']) ? $params['user'] : $this->user_id,
 			't.clicks' => $this->clicks,
 			'cast(t.click_date as date)' => $this->click_date,
-			'banner.cat_id' => $this->category_search,
+			'banner.cat_id' => isset($params['category']) ? $params['category'] : $this->category_search,
 		]);
 
 		$query->andFilterWhere(['like', 't.click_ip', $this->click_ip])

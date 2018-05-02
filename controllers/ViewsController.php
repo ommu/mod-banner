@@ -3,7 +3,6 @@
  * ViewsController
  * @var $this yii\web\View
  * @var $model app\modules\banner\models\BannerViews
- * version: 0.0.1
  *
  * ViewsController implements the CRUD actions for BannerViews model.
  * Reference start
@@ -14,23 +13,25 @@
  *
  *	findModel
  *
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
- * @author Aziz Masruhan <aziz.masruhan@gmail.com>
  * @created date 6 October 2017, 13:24 WIB
- * @contact (+62)857-4115-5177
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 6 October 2017, 13:24 WIB
+ * @modified date 1 May 2018, 20:44 WIB
+ * @modified by Putra Sudaryanto <putra@sudaryanto.id>
+ * @contact (+62)856-299-4114
+ * @link http://ecc.ft.ugm.ac.id
  *
  */
  
 namespace app\modules\banner\controllers;
 
 use Yii;
+use yii\filters\VerbFilter;
+use yii\web\NotFoundHttpException;
+use app\components\Controller;
+use mdm\admin\components\AccessControl;
 use app\modules\banner\models\BannerViews;
 use app\modules\banner\models\search\BannerViews as BannerViewsSearch;
-use app\components\Controller;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
-use mdm\admin\components\AccessControl;
 
 class ViewsController extends Controller
 {
@@ -77,7 +78,7 @@ class ViewsController extends Controller
 		return $this->render('admin_index', [
 			'searchModel' => $searchModel,
 			'dataProvider' => $dataProvider,
-			'columns'	  => $columns,
+			'columns' => $columns,
 		]);
 	}
 
@@ -90,7 +91,7 @@ class ViewsController extends Controller
 	{
 		$model = $this->findModel($id);
 
-		$this->view->title = Yii::t('app', 'View {modelClass}: {view_id}', ['modelClass' => 'Banner Views', 'view_id' => $model->view_id]);
+		$this->view->title = Yii::t('app', 'Detail {model-class}: {banner-id}', ['model-class' => 'Banner View', 'banner-id' => $model->banner->title]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_view', [
@@ -108,7 +109,7 @@ class ViewsController extends Controller
 	{
 		$this->findModel($id)->delete();
 		
-		Yii::$app->session->setFlash('success', Yii::t('app', 'Banner Views success deleted.'));
+		Yii::$app->session->setFlash('success', Yii::t('app', 'Banner view success deleted.'));
 		return $this->redirect(['index']);
 	}
 
@@ -121,7 +122,7 @@ class ViewsController extends Controller
 	 */
 	protected function findModel($id)
 	{
-		if (($model = BannerViews::findOne($id)) !== null) 
+		if(($model = BannerViews::findOne($id)) !== null) 
 			return $model;
 		else
 			throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));

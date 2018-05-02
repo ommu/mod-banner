@@ -1,15 +1,17 @@
 <?php
 /**
  * BannerViews
- * version: 0.0.1
  *
  * BannerViews represents the model behind the search form about `app\modules\banner\models\BannerViews`.
  *
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
  * @author Aziz Masruhan <aziz.masruhan@gmail.com>
- * @created date 6 October 2017, 13:16 WIB
  * @contact (+62)857-4115-5177
+ * @copyright Copyright (c) 2018 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 6 October 2017, 13:16 WIB
+ * @modified date 1 May 2018, 20:44 WIB
+ * @modified by Putra Sudaryanto <putra@sudaryanto.id>
+ * @contact (+62)856-299-4114
+ * @link http://ecc.ft.ugm.ac.id
  *
  */
 
@@ -19,8 +21,6 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\modules\banner\models\BannerViews as BannerViewsModel;
-//use app\modules\banner\models\Banners;
-//use app\coremodules\user\models\Users;
 
 class BannerViews extends BannerViewsModel
 {
@@ -31,7 +31,8 @@ class BannerViews extends BannerViewsModel
 	{
 		return [
 			[['view_id', 'banner_id', 'user_id', 'views'], 'integer'],
-			[['view_date', 'view_ip', 'banner_search', 'user_search', 'category_search'], 'safe'],
+			[['view_date', 'view_ip',
+				'category_search', 'banner_search', 'user_search'], 'safe'],
 		];
 	}
 
@@ -63,7 +64,11 @@ class BannerViews extends BannerViewsModel
 	public function search($params)
 	{
 		$query = BannerViewsModel::find()->alias('t');
-		$query->joinWith(['banner banner', 'user user', 'banner.category.title category_title']);
+		$query->joinWith([
+			'banner banner',
+			'banner.category.title category',
+			'user user'
+		]);
 
 		// add conditions that should always apply here
 		$dataProvider = new ActiveDataProvider([
@@ -71,6 +76,10 @@ class BannerViews extends BannerViewsModel
 		]);
 
 		$attributes = array_keys($this->getTableSchema()->columns);
+		$attributes['category_search'] = [
+			'asc' => ['category.message' => SORT_ASC],
+			'desc' => ['category.message' => SORT_DESC],
+		];
 		$attributes['banner_search'] = [
 			'asc' => ['banner.title' => SORT_ASC],
 			'desc' => ['banner.title' => SORT_DESC],
@@ -79,10 +88,6 @@ class BannerViews extends BannerViewsModel
 			'asc' => ['user.displayname' => SORT_ASC],
 			'desc' => ['user.displayname' => SORT_DESC],
 		];
-		$attributes['category_search'] = [
-			'asc' => ['category_title.message' => SORT_ASC],
-			'desc' => ['category_title.message' => SORT_DESC],
-		];
 		$dataProvider->setSort([
 			'attributes' => $attributes,
 			'defaultOrder' => ['view_id' => SORT_DESC],
@@ -90,7 +95,7 @@ class BannerViews extends BannerViewsModel
 
 		$this->load($params);
 
-		if (!$this->validate()) {
+		if(!$this->validate()) {
 			// uncomment the following line if you do not want to return any records when validation fails
 			// $query->where('0=1');
 			return $dataProvider;
@@ -103,7 +108,7 @@ class BannerViews extends BannerViewsModel
 			't.user_id' => isset($params['user']) ? $params['user'] : $this->user_id,
 			't.views' => $this->views,
 			'cast(t.view_date as date)' => $this->view_date,
-			'banner.cat_id' => $this->category_search,
+			'banner.cat_id' => isset($params['category']) ? $params['category'] : $this->category_search,
 		]);
 
 		$query->andFilterWhere(['like', 't.view_ip', $this->view_ip])
