@@ -46,7 +46,7 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\web\UploadedFile;
 use yii\behaviors\SluggableBehavior;
-use app\coremodules\user\models\Users;
+use app\modules\user\models\Users;
 use app\modules\banner\models\view\Banners as BannersView;
 
 class Banners extends \app\components\ActiveRecord

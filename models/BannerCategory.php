@@ -42,7 +42,7 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\behaviors\SluggableBehavior;
 use app\models\SourceMessage;
-use app\coremodules\user\models\Users;
+use app\modules\user\models\Users;
 use app\modules\banner\models\view\BannerCategory as BannerCategoryView;
 
 class BannerCategory extends \app\components\ActiveRecord
