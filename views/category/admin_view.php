@@ -51,7 +51,7 @@ $this->params['menu']['content'] = [
 		'cat_code',
 		[
 			'attribute' => 'banner_size',
-			'value' => $model->banner_size ? BannerCategory::getSize($model->banner_size) : '-',
+			'value' => BannerCategory::getSize($model->banner_size),
 		],
 		[
 			'attribute' => 'banner_limit',

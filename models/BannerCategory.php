@@ -392,6 +392,9 @@ class BannerCategory extends \app\components\ActiveRecord
 	 */
 	public static function getSize($banner_size)
 	{
+		if(empty($banner_size))
+			return '-';
+
 		return $banner_size['width'].'x'.$banner_size['height'];
 	}
 
