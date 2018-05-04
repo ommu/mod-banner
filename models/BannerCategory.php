@@ -98,9 +98,10 @@ class BannerCategory extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['name_i', 'desc_i', 'banner_limit'], 'required'],
+			[['name_i', 'desc_i', 'banner_limit', 'banner_size'], 'required'],
 			[['publish', 'name', 'desc', 'banner_limit', 'creation_id', 'modified_id'], 'integer'],
 			[['name_i', 'desc_i', 'cat_code'], 'string'],
+			//[['banner_size'], 'serialize'],
 			[['cat_code', 'banner_size', 'creation_date', 'modified_date', 'updated_date'], 'safe'],
 			[['cat_code', 'slug', 'name_i'], 'string', 'max' => 64],
 			[['desc_i'], 'string', 'max' => 256],
@@ -414,9 +415,6 @@ class BannerCategory extends \app\components\ActiveRecord
 				$this->creation_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
 			else
 				$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
-			
-			if($this->banner_size['width'] == '' || $this->banner_size['height'] == '')
-				$this->addError('banner_size', Yii::t('phrase', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('banner_size')]));
 		}
 		return true;
 	}
@@ -433,9 +431,6 @@ class BannerCategory extends \app\components\ActiveRecord
 		$location = $this->getUrlTitle($module.' '.$controller);
 
 		if(parent::beforeSave($insert)) {
-			$this->cat_code = $this->getUrlTitle(trim($this->name_i));
-			$this->banner_size = serialize($this->banner_size);
-
 			if($insert || (!$insert && !$this->name)) {
 				$name = new SourceMessage();
 				$name->location = $location.'_title';
@@ -461,6 +456,9 @@ class BannerCategory extends \app\components\ActiveRecord
 				$desc->message = $this->desc_i;
 				$desc->save();
 			}
+
+			$this->cat_code = $this->getUrlTitle(trim($this->name_i));
+			$this->banner_size = serialize($this->banner_size);
 		}
 		return true;
 	}

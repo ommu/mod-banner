@@ -70,6 +70,7 @@ class BannerSetting extends \app\components\ActiveRecord
 			[['license', 'permission', 'meta_keyword', 'meta_description', 'banner_validation', 'banner_resize', 'banner_file_type'], 'required'],
 			[['permission', 'banner_validation', 'banner_resize', 'modified_id'], 'integer'],
 			[['meta_keyword', 'meta_description', 'banner_file_type'], 'string'],
+			//[['banner_file_type'], 'serialize'],
 			[['modified_date'], 'safe'],
 			[['license'], 'string', 'max' => 32],
 		];
