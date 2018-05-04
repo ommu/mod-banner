@@ -367,8 +367,8 @@ class BannerCategory extends \app\components\ActiveRecord
 	 */
 	public static function getCategory($publish=null, $array=true) 
 	{
-		$model = self::find()->alias('t');
-		$model->leftJoin(sprintf('%s title', SourceMessage::tableName()), 't.name=title.id');
+		$model = self::find()->alias('t')
+			->leftJoin(sprintf('%s title', SourceMessage::tableName()), 't.name=title.id');
 		if($publish != null)
 			$model->andWhere(['t.publish' => $publish]);
 
