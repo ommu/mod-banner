@@ -51,8 +51,8 @@ use app\modules\banner\models\view\Banners as BannersView;
 
 class Banners extends \app\components\ActiveRecord
 {
-	use \app\components\traits\GridViewSystem;
-	use \app\components\traits\FileSystem;
+	use \ommu\traits\GridViewTrait;
+	use \ommu\traits\FileTrait;
 
 	public $gridForbiddenColumn = ['url','banner_filename','banner_desc','creation_date','creation_search','modified_date','modified_search','updated_date','slug'];
 	public $linked_i;

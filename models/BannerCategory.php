@@ -47,8 +47,8 @@ use app\modules\banner\models\view\BannerCategory as BannerCategoryView;
 
 class BannerCategory extends \app\components\ActiveRecord
 {
-	use \app\components\traits\GridViewSystem;
-	use \app\components\traits\FileSystem;
+	use \ommu\traits\GridViewTrait;
+	use \ommu\traits\FileTrait;
 
 	public $gridForbiddenColumn = ['creation_date','creation_search','modified_date','modified_search','updated_date','slug','desc_i'];
 	public $name_i;
@@ -431,7 +431,7 @@ class BannerCategory extends \app\components\ActiveRecord
 		$controller = strtolower(Yii::$app->controller->id);
 		$action = strtolower(Yii::$app->controller->action->id);
 
-		$location = $this->getUrlTitle($module.' '.$controller);
+		$location = $this->urlTitle($module.' '.$controller);
 
 		if(parent::beforeSave($insert)) {
 			if($insert || (!$insert && !$this->name)) {
@@ -460,7 +460,7 @@ class BannerCategory extends \app\components\ActiveRecord
 				$desc->save();
 			}
 
-			$this->cat_code = $this->getUrlTitle(trim($this->name_i));
+			$this->cat_code = $this->urlTitle(trim($this->name_i));
 			$this->banner_size = serialize($this->banner_size);
 		}
 		return true;

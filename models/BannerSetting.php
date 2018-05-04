@@ -37,8 +37,8 @@ use app\modules\user\models\Users;
 
 class BannerSetting extends \app\components\ActiveRecord
 {
-	use \app\components\traits\FileSystem;
-	use \app\components\traits\GridViewSystem;
+	use \ommu\traits\FileTrait;
+	use \ommu\traits\GridViewTrait;
 
 	public $gridForbiddenColumn = [];
 
