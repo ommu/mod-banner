@@ -89,7 +89,7 @@ class Banners extends \app\components\ActiveRecord
 	public function behaviors() {
 		return [
 			[
-				'class'	 => SluggableBehavior::className(),
+				'class' => SluggableBehavior::className(),
 				'attribute' => 'title',
 				'immutable' => true,
 				'ensureUnique' => true,
