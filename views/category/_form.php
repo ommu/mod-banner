@@ -43,11 +43,11 @@ use yii\widgets\ActiveForm;
 	<?php echo $form->field($model, 'banner_size[i]', ['template' => '{label}', 'options' => ['tag' => null]])
 		->label($model->getAttributeLabel('banner_size[i]'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 	<div class="col-md-9 col-sm-9 col-xs-12 row">
-		<?php echo $form->field($model, 'banner_size[width]', ['template' => '{input}{error}', 'options' => ['class' => 'col-md-6 col-sm-6 col-xs-12']])
+		<?php echo $form->field($model, 'banner_size[width]', ['template' => '{input}{error}', 'options' => ['class' => 'col-md-9 col-sm-9 col-xs-12']])
 			->textInput(['type'=>'number', 'min'=>0, 'maxlength'=>'3', 'placeholder'=>$model->getAttributeLabel('banner_size[width]')])
 			->label($model->getAttributeLabel('banner_size[width]'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 			
-		<?php echo $form->field($model, 'banner_size[height]', ['template' => '{input}{error}', 'options' => ['class' => 'col-md-6 col-sm-6 col-xs-12']])
+		<?php echo $form->field($model, 'banner_size[height]', ['template' => '{input}{error}', 'options' => ['class' => 'col-md-9 col-sm-9 col-xs-12']])
 			->textInput(['type'=>'number', 'min'=>0, 'maxlength'=>'3', 'placeholder'=>$model->getAttributeLabel('banner_size[height]')])
 			->label($model->getAttributeLabel('banner_size[height]'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 	</div>
