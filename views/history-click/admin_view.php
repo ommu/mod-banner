@@ -2,7 +2,7 @@
 /**
  * Banner Click Histories (banner-click-history)
  * @var $this yii\web\View
- * @var $this app\modules\banner\controllers\__\HistoryClickController
+ * @var $this app\modules\banner\controllers\HistoryClickController
  * @var $model app\modules\banner\models\BannerClickHistory
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>

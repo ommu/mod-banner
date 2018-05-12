@@ -2,7 +2,7 @@
 /**
  * Banner View Histories (banner-view-history)
  * @var $this yii\web\View
- * @var $this app\modules\banner\controllers\__\HistoryViewController
+ * @var $this app\modules\banner\controllers\HistoryViewController
  * @var $model app\modules\banner\models\BannerViewHistory
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>

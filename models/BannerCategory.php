@@ -460,7 +460,7 @@ class BannerCategory extends \app\components\ActiveRecord
 				$desc->save();
 			}
 
-			$this->cat_code = $this->urlTitle(trim($this->name_i));
+			$this->cat_code = $this->urlTitle($this->name_i);
 			$this->banner_size = serialize($this->banner_size);
 		}
 		return true;
