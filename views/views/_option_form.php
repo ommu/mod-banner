@@ -2,8 +2,8 @@
 /**
  * Banner Views (banner-views)
  * @var $this yii\web\View
- * @var $this app\modules\banner\controllers\ViewsController
- * @var $model app\modules\banner\models\search\BannerViews
+ * @var $this ommu\banner\controllers\ViewsController
+ * @var $model ommu\banner\models\search\BannerViews
  * @var $form yii\widgets\ActiveForm
  *
  * @author Aziz Masruhan <aziz.masruhan@gmail.com>

@@ -2,7 +2,7 @@
 /**
  * ClicksController
  * @var $this yii\web\View
- * @var $model app\modules\banner\models\BannerClicks
+ * @var $model ommu\banner\models\BannerClicks
  *
  * ClicksController implements the CRUD actions for BannerClicks model.
  * Reference start
@@ -24,15 +24,15 @@
  *
  */
  
-namespace app\modules\banner\controllers;
+namespace ommu\banner\controllers;
 
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\NotFoundHttpException;
 use app\components\Controller;
 use mdm\admin\components\AccessControl;
-use app\modules\banner\models\BannerClicks;
-use app\modules\banner\models\search\BannerClicks as BannerClicksSearch;
+use ommu\banner\models\BannerClicks;
+use ommu\banner\models\search\BannerClicks as BannerClicksSearch;
 
 class ClicksController extends Controller
 {

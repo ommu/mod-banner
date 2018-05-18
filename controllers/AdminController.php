@@ -2,7 +2,7 @@
 /**
  * AdminController
  * @var $this yii\web\View
- * @var $model app\modules\banner\models\Banners
+ * @var $model ommu\banner\models\Banners
  *
  * AdminController implements the CRUD actions for Banners model.
  * Reference start
@@ -28,15 +28,15 @@
  *
  */
  
-namespace app\modules\banner\controllers;
+namespace ommu\banner\controllers;
 
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\NotFoundHttpException;
 use app\components\Controller;
 use mdm\admin\components\AccessControl;
-use app\modules\banner\models\Banners;
-use app\modules\banner\models\search\Banners as BannersSearch;
+use ommu\banner\models\Banners;
+use ommu\banner\models\search\Banners as BannersSearch;
 
 class AdminController extends Controller
 {

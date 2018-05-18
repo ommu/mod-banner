@@ -39,7 +39,7 @@
  *
  */
 
-namespace app\modules\banner\models;
+namespace ommu\banner\models;
 
 use Yii;
 use yii\helpers\Url;
@@ -47,7 +47,7 @@ use yii\helpers\Html;
 use yii\web\UploadedFile;
 use yii\behaviors\SluggableBehavior;
 use app\modules\user\models\Users;
-use app\modules\banner\models\view\Banners as BannersView;
+use ommu\banner\models\view\Banners as BannersView;
 
 class Banners extends \app\components\ActiveRecord
 {
@@ -199,11 +199,11 @@ class Banners extends \app\components\ActiveRecord
 
 	/**
 	 * @inheritdoc
-	 * @return \app\modules\banner\models\query\BannersQuery the active query used by this AR class.
+	 * @return \ommu\banner\models\query\BannersQuery the active query used by this AR class.
 	 */
 	public static function find()
 	{
-		return new \app\modules\banner\models\query\BannersQuery(get_called_class());
+		return new \ommu\banner\models\query\BannersQuery(get_called_class());
 	}
 
 	/**

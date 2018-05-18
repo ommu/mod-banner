@@ -23,7 +23,7 @@
  *
  */
 
-namespace app\modules\banner\models\view;
+namespace ommu\banner\models\view;
 
 use Yii;
 use yii\helpers\Url;

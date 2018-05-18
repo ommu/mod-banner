@@ -2,7 +2,7 @@
 /**
  * BannerViews
  *
- * BannerViews represents the model behind the search form about `app\modules\banner\models\BannerViews`.
+ * BannerViews represents the model behind the search form about `ommu\banner\models\BannerViews`.
  *
  * @author Aziz Masruhan <aziz.masruhan@gmail.com>
  * @contact (+62)857-4115-5177
@@ -15,12 +15,12 @@
  *
  */
 
-namespace app\modules\banner\models\search;
+namespace ommu\banner\models\search;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\modules\banner\models\BannerViews as BannerViewsModel;
+use ommu\banner\models\BannerViews as BannerViewsModel;
 
 class BannerViews extends BannerViewsModel
 {

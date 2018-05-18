@@ -2,8 +2,8 @@
 /**
  * Banner View Histories (banner-view-history)
  * @var $this yii\web\View
- * @var $this app\modules\banner\controllers\HistoryViewController
- * @var $model app\modules\banner\models\BannerViewHistory
+ * @var $this ommu\banner\controllers\HistoryViewController
+ * @var $model ommu\banner\models\BannerViewHistory
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114

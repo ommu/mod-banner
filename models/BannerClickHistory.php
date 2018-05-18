@@ -24,7 +24,7 @@
  *
  */
 
-namespace app\modules\banner\models;
+namespace ommu\banner\models;
 
 use Yii;
 use yii\helpers\Url;
@@ -95,11 +95,11 @@ class BannerClickHistory extends \app\components\ActiveRecord
 
 	/**
 	 * @inheritdoc
-	 * @return \app\modules\banner\models\query\BannerClickHistoryQuery the active query used by this AR class.
+	 * @return \ommu\banner\models\query\BannerClickHistoryQuery the active query used by this AR class.
 	 */
 	public static function find()
 	{
-		return new \app\modules\banner\models\query\BannerClickHistoryQuery(get_called_class());
+		return new \ommu\banner\models\query\BannerClickHistoryQuery(get_called_class());
 	}
 
 	/**

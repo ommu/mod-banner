@@ -2,7 +2,7 @@
 /**
  * CategoryController
  * @var $this yii\web\View
- * @var $model app\modules\banner\models\BannerCategory
+ * @var $model ommu\banner\models\BannerCategory
  *
  * CategoryController implements the CRUD actions for BannerCategory model.
  * Reference start
@@ -26,15 +26,15 @@
  *
  */
  
-namespace app\modules\banner\controllers;
+namespace ommu\banner\controllers;
 
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\NotFoundHttpException;
 use app\components\Controller;
 use mdm\admin\components\AccessControl;
-use app\modules\banner\models\BannerCategory;
-use app\modules\banner\models\search\BannerCategory as BannerCategorySearch;
+use ommu\banner\models\BannerCategory;
+use ommu\banner\models\search\BannerCategory as BannerCategorySearch;
 
 class CategoryController extends Controller
 {

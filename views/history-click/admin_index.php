@@ -2,8 +2,8 @@
 /**
  * Banner Click Histories (banner-click-history)
  * @var $this yii\web\View
- * @var $this app\modules\banner\controllers\HistoryClickController
- * @var $model app\modules\banner\models\BannerClickHistory
+ * @var $this ommu\banner\controllers\HistoryClickController
+ * @var $model ommu\banner\models\BannerClickHistory
  *
  * @author Aziz Masruhan <aziz.masruhan@gmail.com>
  * @contact (+62)857-4115-5177

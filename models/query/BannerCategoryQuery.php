@@ -2,8 +2,8 @@
 /**
  * BannerCategoryQuery
  *
- * This is the ActiveQuery class for [[\app\modules\banner\models\BannerCategory]].
- * @see \app\modules\banner\models\BannerCategory
+ * This is the ActiveQuery class for [[\ommu\banner\models\BannerCategory]].
+ * @see \ommu\banner\models\BannerCategory
  * 
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
@@ -13,7 +13,7 @@
  *
  */
 
-namespace app\modules\banner\models\query;
+namespace ommu\banner\models\query;
 
 class BannerCategoryQuery extends \yii\db\ActiveQuery
 {
@@ -42,7 +42,7 @@ class BannerCategoryQuery extends \yii\db\ActiveQuery
 
 	/**
 	 * @inheritdoc
-	 * @return \app\modules\banner\models\BannerCategory[]|array
+	 * @return \ommu\banner\models\BannerCategory[]|array
 	 */
 	public function all($db = null)
 	{
@@ -51,7 +51,7 @@ class BannerCategoryQuery extends \yii\db\ActiveQuery
 
 	/**
 	 * @inheritdoc
-	 * @return \app\modules\banner\models\BannerCategory|array|null
+	 * @return \ommu\banner\models\BannerCategory|array|null
 	 */
 	public function one($db = null)
 	{

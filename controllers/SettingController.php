@@ -2,7 +2,7 @@
 /**
  * SettingController
  * @var $this yii\web\View
- * @var $model app\modules\banner\models\BannerSetting
+ * @var $model ommu\banner\models\BannerSetting
  *
  * SettingController implements the CRUD actions for BannerSetting model.
  * Reference start
@@ -22,15 +22,15 @@
  *
  */
  
-namespace app\modules\banner\controllers;
+namespace ommu\banner\controllers;
 
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\NotFoundHttpException;
 use app\components\Controller;
 use mdm\admin\components\AccessControl;
-use app\modules\banner\models\BannerSetting;
-use app\modules\banner\models\search\BannerCategory as BannerCategorySearch;
+use ommu\banner\models\BannerSetting;
+use ommu\banner\models\search\BannerCategory as BannerCategorySearch;
 
 class SettingController extends Controller
 {

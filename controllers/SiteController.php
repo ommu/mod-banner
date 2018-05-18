@@ -2,7 +2,7 @@
 /**
  * SiteController
  * @var $this yii\web\View
- * @var $model app\modules\banner\models\Banners
+ * @var $model ommu\banner\models\Banners
  * version: 0.0.1
  *
  * SiteController implements the CRUD actions for Banners model.
@@ -21,10 +21,10 @@
  *
  */
  
-namespace app\modules\banner\controllers;
+namespace ommu\banner\controllers;
 
 use Yii;
-use app\modules\banner\models\Banners;
+use ommu\banner\models\Banners;
 use app\components\Controller;
 use yii\web\NotFoundHttpException;
 use mdm\admin\components\AccessControl;

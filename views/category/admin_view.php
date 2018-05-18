@@ -2,8 +2,8 @@
 /**
  * Banner Categories (banner-category)
  * @var $this yii\web\View
- * @var $this app\modules\banner\controllers\CategoryController
- * @var $model app\modules\banner\models\BannerCategory
+ * @var $this ommu\banner\controllers\CategoryController
+ * @var $model ommu\banner\models\BannerCategory
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
@@ -17,7 +17,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\DetailView;
-use app\modules\banner\models\BannerCategory;
+use ommu\banner\models\BannerCategory;
 
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Banner Categories'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;

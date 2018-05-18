@@ -2,7 +2,7 @@
 /**
  * ViewsController
  * @var $this yii\web\View
- * @var $model app\modules\banner\models\BannerViews
+ * @var $model ommu\banner\models\BannerViews
  *
  * ViewsController implements the CRUD actions for BannerViews model.
  * Reference start
@@ -23,15 +23,15 @@
  *
  */
  
-namespace app\modules\banner\controllers;
+namespace ommu\banner\controllers;
 
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\NotFoundHttpException;
 use app\components\Controller;
 use mdm\admin\components\AccessControl;
-use app\modules\banner\models\BannerViews;
-use app\modules\banner\models\search\BannerViews as BannerViewsSearch;
+use ommu\banner\models\BannerViews;
+use ommu\banner\models\search\BannerViews as BannerViewsSearch;
 
 class ViewsController extends Controller
 {

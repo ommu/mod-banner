@@ -2,8 +2,8 @@
 /**
  * BannerClicksQuery
  *
- * This is the ActiveQuery class for [[\app\modules\banner\models\BannerClicks]].
- * @see \app\modules\banner\models\BannerClicks
+ * This is the ActiveQuery class for [[\ommu\banner\models\BannerClicks]].
+ * @see \ommu\banner\models\BannerClicks
  * 
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
@@ -13,7 +13,7 @@
  *
  */
 
-namespace app\modules\banner\models\query;
+namespace ommu\banner\models\query;
 
 class BannerClicksQuery extends \yii\db\ActiveQuery
 {
@@ -26,7 +26,7 @@ class BannerClicksQuery extends \yii\db\ActiveQuery
 
 	/**
 	 * @inheritdoc
-	 * @return \app\modules\banner\models\BannerClicks[]|array
+	 * @return \ommu\banner\models\BannerClicks[]|array
 	 */
 	public function all($db = null)
 	{
@@ -35,7 +35,7 @@ class BannerClicksQuery extends \yii\db\ActiveQuery
 
 	/**
 	 * @inheritdoc
-	 * @return \app\modules\banner\models\BannerClicks|array|null
+	 * @return \ommu\banner\models\BannerClicks|array|null
 	 */
 	public function one($db = null)
 	{

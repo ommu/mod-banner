@@ -2,8 +2,8 @@
 /**
  * Banner Settings (banner-setting)
  * @var $this yii\web\View
- * @var $this app\modules\banner\controllers\SettingController
- * @var $model app\modules\banner\models\BannerSetting
+ * @var $this ommu\banner\controllers\SettingController
+ * @var $model ommu\banner\models\BannerSetting
  * @var $form yii\widgets\ActiveForm
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
@@ -17,7 +17,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use app\modules\banner\models\BannerSetting;
+use ommu\banner\models\BannerSetting;
 use app\components\Utility;
 
 $js = <<<JS

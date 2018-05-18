@@ -35,7 +35,7 @@
  *
  */
 
-namespace app\modules\banner\models;
+namespace ommu\banner\models;
 
 use Yii;
 use yii\helpers\Url;
@@ -43,7 +43,7 @@ use yii\helpers\Html;
 use yii\behaviors\SluggableBehavior;
 use app\models\SourceMessage;
 use app\modules\user\models\Users;
-use app\modules\banner\models\view\BannerCategory as BannerCategoryView;
+use ommu\banner\models\view\BannerCategory as BannerCategoryView;
 
 class BannerCategory extends \app\components\ActiveRecord
 {
@@ -192,11 +192,11 @@ class BannerCategory extends \app\components\ActiveRecord
 
 	/**
 	 * @inheritdoc
-	 * @return \app\modules\banner\models\query\BannerCategoryQuery the active query used by this AR class.
+	 * @return \ommu\banner\models\query\BannerCategoryQuery the active query used by this AR class.
 	 */
 	public static function find()
 	{
-		return new \app\modules\banner\models\query\BannerCategoryQuery(get_called_class());
+		return new \ommu\banner\models\query\BannerCategoryQuery(get_called_class());
 	}
 
 	/**

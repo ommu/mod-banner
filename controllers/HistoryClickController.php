@@ -2,7 +2,7 @@
 /**
  * HistoryClickController
  * @var $this yii\web\View
- * @var $model app\modules\banner\models\BannerClickHistory
+ * @var $model ommu\banner\models\BannerClickHistory
  *
  * HistoryClickController implements the CRUD actions for BannerClickHistory model.
  * Reference start
@@ -24,15 +24,15 @@
  *
  */
  
-namespace app\modules\banner\controllers;
+namespace ommu\banner\controllers;
 
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\NotFoundHttpException;
 use app\components\Controller;
 use mdm\admin\components\AccessControl;
-use app\modules\banner\models\BannerClickHistory;
-use app\modules\banner\models\search\BannerClickHistory as BannerClickHistorySearch;
+use ommu\banner\models\BannerClickHistory;
+use ommu\banner\models\search\BannerClickHistory as BannerClickHistorySearch;
 
 class HistoryClickController extends Controller
 {

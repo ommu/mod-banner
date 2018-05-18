@@ -2,8 +2,8 @@
 /**
  * Banners (banners)
  * @var $this yii\web\View
- * @var $this app\modules\banner\controllers\AdminController
- * @var $model app\modules\banner\models\Banners
+ * @var $this ommu\banner\controllers\AdminController
+ * @var $model ommu\banner\models\Banners
  * @var $form yii\widgets\ActiveForm
  *
  * @author Aziz Masruhan <aziz.masruhan@gmail.com>
@@ -20,8 +20,8 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
-use app\modules\banner\models\Banners;
-use app\modules\banner\models\BannerCategory;
+use ommu\banner\models\Banners;
+use ommu\banner\models\BannerCategory;
 
 $js = <<<JS
 	$('.field-linked_i input[name="linked_i"]').on('change', function() {

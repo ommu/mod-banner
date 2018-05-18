@@ -2,8 +2,8 @@
 /**
  * Banners (banners)
  * @var $this yii\web\View
- * @var $this app\modules\banner\controllers\AdminController
- * @var $model app\modules\banner\models\Banners
+ * @var $this ommu\banner\controllers\AdminController
+ * @var $model ommu\banner\models\Banners
  *
  * @author Aziz Masruhan <aziz.masruhan@gmail.com>
  * @contact (+62)857-4115-5177

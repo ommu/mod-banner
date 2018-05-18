@@ -2,8 +2,8 @@
 /**
  * Banner Clicks (banner-clicks)
  * @var $this yii\web\View
- * @var $this app\modules\banner\controllers\ClicksController
- * @var $model app\modules\banner\models\BannerClicks
+ * @var $this ommu\banner\controllers\ClicksController
+ * @var $model ommu\banner\models\BannerClicks
  *
  * @author Aziz Masruhan <aziz.masruhan@gmail.com>
  * @contact (+62)857-4115-5177

@@ -2,7 +2,7 @@
 /**
  * BannerCategory
  *
- * BannerCategory represents the model behind the search form about `app\modules\banner\models\BannerCategory`.
+ * BannerCategory represents the model behind the search form about `ommu\banner\models\BannerCategory`.
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
@@ -13,12 +13,12 @@
  *
  */
 
-namespace app\modules\banner\models\search;
+namespace ommu\banner\models\search;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\modules\banner\models\BannerCategory as BannerCategoryModel;
+use ommu\banner\models\BannerCategory as BannerCategoryModel;
 
 class BannerCategory extends BannerCategoryModel
 {

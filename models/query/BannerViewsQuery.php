@@ -2,8 +2,8 @@
 /**
  * BannerViewsQuery
  *
- * This is the ActiveQuery class for [[\app\modules\banner\models\BannerViews]].
- * @see \app\modules\banner\models\BannerViews
+ * This is the ActiveQuery class for [[\ommu\banner\models\BannerViews]].
+ * @see \ommu\banner\models\BannerViews
  * 
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
@@ -16,7 +16,7 @@
  *
  */
 
-namespace app\modules\banner\models\query;
+namespace ommu\banner\models\query;
 
 class BannerViewsQuery extends \yii\db\ActiveQuery
 {
@@ -29,7 +29,7 @@ class BannerViewsQuery extends \yii\db\ActiveQuery
 
 	/**
 	 * @inheritdoc
-	 * @return \app\modules\banner\models\BannerViews[]|array
+	 * @return \ommu\banner\models\BannerViews[]|array
 	 */
 	public function all($db = null)
 	{
@@ -38,7 +38,7 @@ class BannerViewsQuery extends \yii\db\ActiveQuery
 
 	/**
 	 * @inheritdoc
-	 * @return \app\modules\banner\models\BannerViews|array|null
+	 * @return \ommu\banner\models\BannerViews|array|null
 	 */
 	public function one($db = null)
 	{

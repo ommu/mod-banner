@@ -2,8 +2,8 @@
 /**
  * Banner View Histories (banner-view-history)
  * @var $this yii\web\View
- * @var $this app\modules\banner\controllers\HistoryViewController
- * @var $model app\modules\banner\models\search\BannerViewHistory
+ * @var $this ommu\banner\controllers\HistoryViewController
+ * @var $model ommu\banner\models\search\BannerViewHistory
  * @var $form yii\widgets\ActiveForm
  *
  * @author Aziz Masruhan <aziz.masruhan@gmail.com>

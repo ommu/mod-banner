@@ -2,8 +2,8 @@
 /**
  * Banner Categories (banner-category)
  * @var $this yii\web\View
- * @var $this app\modules\banner\controllers\CategoryController
- * @var $model app\modules\banner\models\search\BannerCategory
+ * @var $this ommu\banner\controllers\CategoryController
+ * @var $model ommu\banner\models\search\BannerCategory
  * @var $form yii\widgets\ActiveForm
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>

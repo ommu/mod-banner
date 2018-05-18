@@ -2,7 +2,7 @@
 /**
  * BannerViewHistory
  *
- * BannerViewHistory represents the model behind the search form about `app\modules\banner\models\BannerViewHistory`.
+ * BannerViewHistory represents the model behind the search form about `ommu\banner\models\BannerViewHistory`.
  *
  * @author Aziz Masruhan <aziz.masruhan@gmail.com>
  * @contact (+62)857-4115-5177
@@ -15,12 +15,12 @@
  *
  */
 
-namespace app\modules\banner\models\search;
+namespace ommu\banner\models\search;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\modules\banner\models\BannerViewHistory as BannerViewHistoryModel;
+use ommu\banner\models\BannerViewHistory as BannerViewHistoryModel;
 
 class BannerViewHistory extends BannerViewHistoryModel
 {

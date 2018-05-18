@@ -1,5 +1,5 @@
 <?php
-namespace app\modules\banner;
+namespace ommu\banner;
 
 /**
  * banner module definition class
@@ -19,7 +19,7 @@ class Module extends \app\components\Module
 	/**
 	 * @inheritdoc
 	 */
-	public $controllerNamespace = 'app\modules\banner\controllers';
+	public $controllerNamespace = 'ommu\banner\controllers';
 
 	/**
 	 * @inheritdoc
