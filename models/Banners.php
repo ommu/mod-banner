@@ -201,15 +201,15 @@ class Banners extends OActiveRecord
 		$criteria->compare('t.url', strtolower($this->url), true);
 		$criteria->compare('t.banner_filename', strtolower($this->banner_filename), true);
 		$criteria->compare('t.banner_desc', strtolower($this->banner_desc), true);
-		if($this->published_date != null && !in_array($this->published_date, array('0000-00-00', '1970-01-01')))
-			$criteria->compare('date(t.published_date)', date('Y-m-d', strtotime($this->published_date)));
-		if($this->expired_date != null && !in_array($this->expired_date, array('0000-00-00', '1970-01-01')))
-			$criteria->compare('date(t.expired_date)', date('Y-m-d', strtotime($this->expired_date)));
-		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00', '1970-01-01 00:00:00')))
-			$criteria->compare('date(t.creation_date)', date('Y-m-d', strtotime($this->creation_date)));
+		if($this->published_date != null && !in_array($this->published_date, array('0000-00-00','1970-01-01')))
+			$criteria->compare('date(t.published_date)', Yii::$app->formatter->asDate($this->published_date, 'php:Y-m-d'));
+		if($this->expired_date != null && !in_array($this->expired_date, array('0000-00-00','1970-01-01')))
+			$criteria->compare('date(t.expired_date)', Yii::$app->formatter->asDate($this->expired_date, 'php:Y-m-d'));
+		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00')))
+			$criteria->compare('date(t.creation_date)', Yii::$app->formatter->asDate($this->creation_date, 'php:Y-m-d'));
 		$criteria->compare('t.creation_id', Yii::app()->getRequest()->getParam('creation') ? Yii::app()->getRequest()->getParam('creation') : $this->creation_id);
-		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00', '1970-01-01 00:00:00')))
-			$criteria->compare('date(t.modified_date)', date('Y-m-d', strtotime($this->modified_date)));
+		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00')))
+			$criteria->compare('date(t.modified_date)', Yii::$app->formatter->asDate($this->modified_date, 'php:Y-m-d'));
 		$criteria->compare('t.modified_id', Yii::app()->getRequest()->getParam('modified') ? Yii::app()->getRequest()->getParam('modified') : $this->modified_id);
 		$criteria->compare('t.slug', strtolower($this->slug), true);
 		
@@ -542,7 +542,7 @@ class Banners extends OActiveRecord
 			if($this->linked_i == 0)
 				$this->url = '-';
 			
-			if(in_array(date('Y-m-d', strtotime($this->expired_date)), array('00-00-0000','01-01-1970')))
+			if(in_array(Yii::$app->formatter->asDate($this->expired_date, 'php:Y-m-d'), array('00-00-0000','01-01-1970')))
 				$this->permanent_i = 1;
 			
 			if($this->permanent_i == 1)
@@ -606,8 +606,8 @@ class Banners extends OActiveRecord
 				}
 			}
 			
-			$this->published_date = date('Y-m-d', strtotime($this->published_date));
-			$this->expired_date = date('Y-m-d', strtotime($this->expired_date));
+			$this->published_date = Yii::$app->formatter->asDate($this->published_date, 'php:Y-m-d');
+			$this->expired_date = Yii::$app->formatter->asDate($this->expired_date, 'php:Y-m-d');
 		}
 		return true;
 	}

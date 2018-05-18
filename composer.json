@@ -1,12 +1,12 @@
 {
-	"name": "ommu/banner",
+	"name": "ommu/mod-banner",
 	"description": "Banner Module from Ommu Platform",
 	"keywords": [
 		"module",
 		"banner",
-		"slider",
 		"ommu",
-		"ommu platform"
+		"ommu-platform",
+		"yii"
 	],
 	"homepage": "https://github.com/ommu/mod-banner",
 	"type": "ommu-module",
@@ -34,7 +34,5 @@
 		"yiisoft/yii": ">=1.1.14",
 		"ommu/yii-behavior-sluggable": "~1.0",
 		"ommu/phpthumb": "~1.0"
-	},
-	"require-dev": {
 	}
 }
