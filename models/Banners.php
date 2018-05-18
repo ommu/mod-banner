@@ -46,7 +46,7 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\web\UploadedFile;
 use yii\behaviors\SluggableBehavior;
-use app\modules\user\models\Users;
+use ommu\users\models\Users;
 use ommu\banner\models\view\Banners as BannersView;
 
 class Banners extends \app\components\ActiveRecord
