@@ -475,16 +475,17 @@ class Banners extends \app\components\ActiveRecord
 				$verwijderenPath = join('/', [self::getUploadPath(), 'verwijderen']);
 				$this->createUploadDirectory(self::getUploadPath());
 
+				$banner_size = $this->category->banner_size;
 				$this->banner_filename = UploadedFile::getInstance($this, 'banner_filename');
 				if($this->banner_filename instanceof UploadedFile && !$this->banner_filename->getHasError()) {
 					$fileName = time().'_'.$this->banner_id.'.'.strtolower($this->banner_filename->getExtension()); 
 					if($this->banner_filename->saveAs(join('/', [$uploadPath, $fileName]))) {
 						if($this->old_banner_filename_i != '' && file_exists(join('/', [$uploadPath, $this->old_banner_filename_i])))
-							rename(join('/', [$uploadPath, $this->old_banner_filename_i]), join('/', [$verwijderenPath, time().'_change_'.$this->old_banner_filename_i]));
+							rename(join('/', [$uploadPath, $this->old_banner_filename_i]), join('/', [$verwijderenPath, $this->banner_id.'_'.time().'_change_'.$this->old_banner_filename_i]));
 						$this->banner_filename = $fileName;
 
-						//if(!$setting->banner_validation && $setting->banner_resize)
-						//	self::resizeBanner(join('/', [$uploadPath, $fileName]), unserialize($this->category->banner_size));
+						if(!$setting->banner_validation && $setting->banner_resize)
+							$this->resizeImage(join('/', [$uploadPath, $fileName]), $banner_size['width'], $banner_size['height']);
 					}
 				} else {
 					if($this->banner_filename == '')
@@ -513,14 +514,15 @@ class Banners extends \app\components\ActiveRecord
 		$this->createUploadDirectory(self::getUploadPath());
 
 		if($insert) {
+			$banner_size = $this->category->banner_size;
 			$this->banner_filename = UploadedFile::getInstance($this, 'banner_filename');
 			if($this->banner_filename instanceof UploadedFile && !$this->banner_filename->getHasError()) {
 				$fileName = time().'_'.$this->banner_id.'.'.strtolower($this->banner_filename->getExtension()); 
 				if($this->banner_filename->saveAs(join('/', [$uploadPath, $fileName]))) {
 					self::updateAll(['banner_filename' => $fileName], ['banner_id' => $this->banner_id]);
 
-					//if(!$setting->banner_validation && $setting->banner_resize)
-					//	self::resizeBanner(join('/', [$uploadPath, $fileName]), unserialize($this->category->banner_size));
+					if(!$setting->banner_validation && $setting->banner_resize)
+						$this->resizeImage(join('/', [$uploadPath, $fileName]), $banner_size['width'], $banner_size['height']);
 				}
 			}
 		}
@@ -537,6 +539,6 @@ class Banners extends \app\components\ActiveRecord
 		$verwijderenPath = join('/', [self::getUploadPath(), 'verwijderen']);
 
 		if($this->banner_filename != '' && file_exists(join('/', [$uploadPath, $this->banner_filename])))
-			rename(join('/', [$uploadPath, $this->banner_filename]), join('/', [$verwijderenPath, time().'_deleted_'.$this->banner_filename]));
+			rename(join('/', [$uploadPath, $this->banner_filename]), join('/', [$verwijderenPath, $this->banner_id.'_'.time().'_deleted_'.$this->banner_filename]));
 	}
 }

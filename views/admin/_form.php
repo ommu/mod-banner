@@ -83,7 +83,7 @@ echo $form->field($model, 'linked_i', ['template' => '{label}<div class="col-md-
 <div class="form-group field-banner_filename">
 	<?php echo $form->field($model, 'banner_filename', ['template' => '{label}', 'options' => ['tag' => null]])
 		->label($model->getAttributeLabel('banner_filename'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
-	<div class="col-md-9 col-sm-9 col-xs-12">
+	<div class="col-md-9 col-sm-9 col-xs-12 checkbox">
 		<?php echo !$model->isNewRecord && $model->old_banner_filename_i != '' ? Html::img(join('/', [Url::Base(), Banners::getUploadPath(false), $model->old_banner_filename_i]), ['class'=>'mb-15', 'width'=>'100%']) : '';?>
 		<?php echo $form->field($model, 'banner_filename', ['template' => '{input}{error}'])
 			->fileInput()

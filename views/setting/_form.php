@@ -27,6 +27,12 @@ $js = <<<JS
 			$('.field-banner_resize input[name="banner_resize"][value="0"]').prop('checked', true);
 		}
 	});
+	$('.field-banner_resize input[name="banner_resize"]').on('change', function() {
+		var id = $(this).val();
+		if(id == '1') {
+			$('.field-banner_validation input[name="banner_validation"][value="0"]').prop('checked', true);
+		}
+	});
 JS;
 	$this->registerJs($js, \yii\web\View::POS_READY);
 ?>
