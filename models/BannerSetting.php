@@ -135,7 +135,7 @@ class BannerSetting extends OActiveRecord
 		$criteria->compare('t.banner_validation', $this->banner_validation);
 		$criteria->compare('t.banner_resize', $this->banner_resize);
 		$criteria->compare('t.banner_file_type', strtolower($this->banner_file_type), true);
-		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00', '1970-01-01 00:00:00')))
+		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
 			$criteria->compare('date(t.modified_date)', date('Y-m-d', strtotime($this->modified_date)));
 		$criteria->compare('t.modified_id', Yii::app()->getRequest()->getParam('modified') ? Yii::app()->getRequest()->getParam('modified') : $this->modified_id);
 
@@ -188,7 +188,7 @@ class BannerSetting extends OActiveRecord
 			);
 			$this->templateColumns['modified_date'] = array(
 				'name' => 'modified_date',
-				'value' => '!in_array($data->modified_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\')) ? Utility::dateFormat($data->modified_date) : \'-\'',
+				'value' => '!in_array($data->modified_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\', \'0002-12-02 07:07:12\', \'-0001-11-30 00:00:00\')) ? Utility::dateFormat($data->modified_date) : \'-\'',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),

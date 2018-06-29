@@ -201,14 +201,14 @@ class Banners extends OActiveRecord
 		$criteria->compare('t.url', strtolower($this->url), true);
 		$criteria->compare('t.banner_filename', strtolower($this->banner_filename), true);
 		$criteria->compare('t.banner_desc', strtolower($this->banner_desc), true);
-		if($this->published_date != null && !in_array($this->published_date, array('0000-00-00','1970-01-01')))
+		if($this->published_date != null && !in_array($this->published_date, array('0000-00-00','1970-01-01','0002-12-02','-0001-11-30')))
 			$criteria->compare('date(t.published_date)', Yii::$app->formatter->asDate($this->published_date, 'php:Y-m-d'));
-		if($this->expired_date != null && !in_array($this->expired_date, array('0000-00-00','1970-01-01')))
+		if($this->expired_date != null && !in_array($this->expired_date, array('0000-00-00','1970-01-01','0002-12-02','-0001-11-30')))
 			$criteria->compare('date(t.expired_date)', Yii::$app->formatter->asDate($this->expired_date, 'php:Y-m-d'));
-		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00')))
+		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
 			$criteria->compare('date(t.creation_date)', Yii::$app->formatter->asDate($this->creation_date, 'php:Y-m-d'));
 		$criteria->compare('t.creation_id', Yii::app()->getRequest()->getParam('creation') ? Yii::app()->getRequest()->getParam('creation') : $this->creation_id);
-		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00')))
+		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
 			$criteria->compare('date(t.modified_date)', Yii::$app->formatter->asDate($this->modified_date, 'php:Y-m-d'));
 		$criteria->compare('t.modified_id', Yii::app()->getRequest()->getParam('modified') ? Yii::app()->getRequest()->getParam('modified') : $this->modified_id);
 		$criteria->compare('t.slug', strtolower($this->slug), true);
@@ -338,7 +338,7 @@ class Banners extends OActiveRecord
 			);
 			$this->templateColumns['creation_date'] = array(
 				'name' => 'creation_date',
-				'value' => '!in_array($data->creation_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\')) ? Utility::dateFormat($data->creation_date) : \'-\'',
+				'value' => '!in_array($data->creation_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\', \'0002-12-02 07:07:12\', \'-0001-11-30 00:00:00\')) ? Utility::dateFormat($data->creation_date) : \'-\'',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -375,7 +375,7 @@ class Banners extends OActiveRecord
 			}
 			$this->templateColumns['modified_date'] = array(
 				'name' => 'modified_date',
-				'value' => '!in_array($data->modified_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\')) ? Utility::dateFormat($data->modified_date) : \'-\'',
+				'value' => '!in_array($data->modified_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\', \'0002-12-02 07:07:12\', \'-0001-11-30 00:00:00\')) ? Utility::dateFormat($data->modified_date) : \'-\'',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),

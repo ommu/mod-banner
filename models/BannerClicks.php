@@ -139,7 +139,7 @@ class BannerClicks extends OActiveRecord
 		$criteria->compare('t.banner_id', Yii::app()->getRequest()->getParam('banner') ? Yii::app()->getRequest()->getParam('banner') : $this->banner_id);
 		$criteria->compare('t.user_id', Yii::app()->getRequest()->getParam('user') ? Yii::app()->getRequest()->getParam('user') : $this->user_id);
 		$criteria->compare('t.clicks', $this->clicks);
-		if($this->click_date != null && !in_array($this->click_date, array('0000-00-00 00:00:00', '1970-01-01 00:00:00')))
+		if($this->click_date != null && !in_array($this->click_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
 			$criteria->compare('date(t.click_date)', date('Y-m-d', strtotime($this->click_date)));
 		$criteria->compare('t.click_ip', strtolower($this->click_ip), true);
 
@@ -198,7 +198,7 @@ class BannerClicks extends OActiveRecord
 			}
 			$this->templateColumns['click_date'] = array(
 				'name' => 'click_date',
-				'value' => '!in_array($data->click_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\')) ? Utility::dateFormat($data->click_date, true) : \'-\'',
+				'value' => '!in_array($data->click_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\', \'0002-12-02 07:07:12\', \'-0001-11-30 00:00:00\')) ? Utility::dateFormat($data->click_date, true) : \'-\'',
 				'htmlOptions' => array(
 					//'class' => 'center',
 				),
