@@ -7,7 +7,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2014 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2014 Ommu Platform (www.ommu.co)
  * @modified date 23 January 2018, 07:07 WIB
  * @link https://github.com/ommu/mod-banner
  *
@@ -67,8 +67,8 @@
 				<?php 
 				if(!$model->getErrors())
 					$model->banner_size = unserialize($model->banner_size);
-				echo Yii::t('phrase', 'Width').': ';?><?php echo $form->textField($model,'banner_size[width]',array('maxlength'=>4,'class'=>'form-control')); ?>&nbsp;&nbsp;&nbsp;
-				<?php echo Yii::t('phrase', 'Height').': ';?><?php echo $form->textField($model,'banner_size[height]',array('maxlength'=>4,'class'=>'form-control')); ?>
+				echo Yii::t('phrase', 'Width').': ';?><?php echo $form->textField($model,'banner_size[width]', array('maxlength'=>4,'class'=>'form-control')); ?>&nbsp;&nbsp;&nbsp;
+				<?php echo Yii::t('phrase', 'Height').': ';?><?php echo $form->textField($model,'banner_size[height]', array('maxlength'=>4,'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'banner_size'); ?>
 			</div>
 		</div>

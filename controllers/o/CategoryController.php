@@ -21,7 +21,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2014 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2014 Ommu Platform (www.ommu.co)
  * @modified date 23 January 2018, 07:07 WIB
  * @link https://github.com/ommu/mod-banner
  *
@@ -114,7 +114,7 @@ class CategoryController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'Banner Categories');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_manage',array(
+		$this->render('admin_manage', array(
 			'model'=>$model,
 			'columns' => $columns,
 		));
@@ -165,7 +165,7 @@ class CategoryController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'Create Banner Category');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_add',array(
+		$this->render('admin_add', array(
 			'model'=>$model,
 		));
 	}
@@ -216,7 +216,7 @@ class CategoryController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'Update Banner Category: {name}', array('{name}'=>$model->title->message));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_edit',array(
+		$this->render('admin_edit', array(
 			'model'=>$model,
 		));
 	}
@@ -236,7 +236,7 @@ class CategoryController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'Detail Banner Category: {name}', array('{name}'=>$model->title->message));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_view',array(
+		$this->render('admin_view', array(
 			'model'=>$model,
 		));
 	}
@@ -272,7 +272,7 @@ class CategoryController extends Controller
 		}
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-		if(!(Yii::app()->getRequest()->getParam('ajax'))) {
+		if(!Yii::app()->getRequest()->getParam('ajax')) {
 			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('manage'));
 		}
 	}
@@ -356,7 +356,7 @@ class CategoryController extends Controller
 		$this->pageTitle = Yii::t('phrase', '{title} Banner Category: {name}', array('{title}'=>$title, '{name}'=>$model->title->message));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_publish',array(
+		$this->render('admin_publish', array(
 			'title'=>$title,
 			'model'=>$model,
 		));

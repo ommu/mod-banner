@@ -16,7 +16,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2015 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2015 Ommu Platform (www.ommu.co)
  * @link https://github.com/ommu/mod-banner
  *
  *----------------------------------------------------------------------------------------------------------
@@ -85,7 +85,7 @@ class SiteController extends Controller
 		if($this->permission == 0)
 			$this->redirect($siteType == 0 ? Yii::app()->createUrl('site/index') : Yii::app()->createUrl('site/login'));
 		
-		$setting = BannerSetting::model()->findByPk(1,array(
+		$setting = BannerSetting::model()->findByPk(1, array(
 			'select' => 'meta_description, meta_keyword',
 		));
 
@@ -104,7 +104,7 @@ class SiteController extends Controller
 		$this->pageTitle =  Yii::t('phrase', 'Banners');
 		$this->pageDescription = $setting->meta_description;
 		$this->pageMeta = $setting->meta_keyword;
-		$this->render('front_index',array(
+		$this->render('front_index', array(
 			'dataProvider'=>$dataProvider,
 		));
 	}
@@ -119,7 +119,7 @@ class SiteController extends Controller
 		if($this->permission == 0)
 			$this->redirect($siteType == 0 ? Yii::app()->createUrl('site/index') : Yii::app()->createUrl('site/login'));
 		
-		$setting = BannerSetting::model()->findByPk(1,array(
+		$setting = BannerSetting::model()->findByPk(1, array(
 			'select' => 'meta_keyword',
 		));
 
@@ -129,7 +129,7 @@ class SiteController extends Controller
 		$this->pageTitle =  Yii::t('phrase', 'Detail Banners');
 		$this->pageDescription = $model->banner_desc;
 		$this->pageMeta = $setting->meta_keyword;
-		$this->render('front_view',array(
+		$this->render('front_view', array(
 			'model'=>$model,
 		));
 	}

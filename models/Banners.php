@@ -4,7 +4,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2014 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2014 Ommu Platform (www.ommu.co)
  * @modified date 19 January 2018, 17:04 WIB
  * @link https://github.com/ommu/mod-banner
  *
@@ -54,7 +54,7 @@ class Banners extends OActiveRecord
 	{
 		return array(
 			'sluggable' => array(
-				'class'=>'ext.yii-behavior-sluggable.SluggableBehavior',
+				'class'=>'ext.yii-sluggable.SluggableBehavior',
 				'columns' => array('title'),
 				'unique' => true,
 				'update' => true,
@@ -416,7 +416,7 @@ class Banners extends OActiveRecord
 			);
 			$this->templateColumns['view_search'] = array(
 				'name' => 'view_search',
-				'value' => 'CHtml::link($data->view->views ? $data->view->views : 0, Yii::app()->controller->createUrl("o/view/manage",array(\'banner\'=>$data->banner_id)))',
+				'value' => 'CHtml::link($data->view->views ? $data->view->views : 0, Yii::app()->controller->createUrl("o/view/manage", array(\'banner\'=>$data->banner_id)))',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -424,7 +424,7 @@ class Banners extends OActiveRecord
 			);
 			$this->templateColumns['click_search'] = array(
 				'name' => 'click_search',
-				'value' => '$data->url != \'-\' ? CHtml::link($data->view->clicks ? $data->view->clicks : 0, Yii::app()->controller->createUrl("o/click/manage",array(\'banner\'=>$data->banner_id))) : \'-\'',
+				'value' => '$data->url != \'-\' ? CHtml::link($data->view->clicks ? $data->view->clicks : 0, Yii::app()->controller->createUrl("o/click/manage", array(\'banner\'=>$data->banner_id))) : \'-\'',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -445,7 +445,7 @@ class Banners extends OActiveRecord
 			if(!Yii::app()->getRequest()->getParam('type')) {
 				$this->templateColumns['publish'] = array(
 					'name' => 'publish',
-					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'publish\',array(\'id\'=>$data->banner_id)), $data->publish)',
+					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'publish\', array(\'id\'=>$data->banner_id)), $data->publish)',
 					'htmlOptions' => array(
 						'class' => 'center',
 					),
@@ -466,7 +466,7 @@ class Banners extends OActiveRecord
 	public static function getInfo($id, $column=null)
 	{
 		if($column != null) {
-			$model = self::model()->findByPk($id,array(
+			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
  			if(count(explode(',', $column)) == 1)

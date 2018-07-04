@@ -4,7 +4,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 8 January 2017, 19:18 WIB
  * @modified date 19 January 2018, 17:03 WIB
  * @link https://github.com/ommu/mod-banner
@@ -236,7 +236,7 @@ class BannerClicks extends OActiveRecord
 			);
 			$this->templateColumns['clicks'] = array(
 				'name' => 'clicks',
-				'value' => 'CHtml::link($data->clicks, Yii::app()->controller->createUrl("history/click/manage",array(\'click\'=>$data->click_id)))',
+				'value' => 'CHtml::link($data->clicks, Yii::app()->controller->createUrl("history/click/manage", array(\'click\'=>$data->click_id)))',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -252,7 +252,7 @@ class BannerClicks extends OActiveRecord
 	public static function getInfo($id, $column=null)
 	{
 		if($column != null) {
-			$model = self::model()->findByPk($id,array(
+			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
  			if(count(explode(',', $column)) == 1)

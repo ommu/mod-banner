@@ -4,7 +4,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2014 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2014 Ommu Platform (www.ommu.co)
  * @modified date 19 January 2018, 17:03 WIB
  * @link https://github.com/ommu/mod-banner
  *
@@ -225,7 +225,7 @@ class BannerSetting extends OActiveRecord
 			}
 			$this->templateColumns['permission'] = array(
 				'name' => 'permission',
-				'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'permission\',array(\'id\'=>$data->id)), $data->permission)',
+				'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'permission\', array(\'id\'=>$data->id)), $data->permission)',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -237,7 +237,7 @@ class BannerSetting extends OActiveRecord
 			);
 			$this->templateColumns['banner_validation'] = array(
 				'name' => 'banner_validation',
-				'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'banner_validation\',array(\'id\'=>$data->id)), $data->banner_validation)',
+				'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'banner_validation\', array(\'id\'=>$data->id)), $data->banner_validation)',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -249,7 +249,7 @@ class BannerSetting extends OActiveRecord
 			);
 			$this->templateColumns['banner_resize'] = array(
 				'name' => 'banner_resize',
-				'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'banner_resize\',array(\'id\'=>$data->id)), $data->banner_resize)',
+				'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'banner_resize\', array(\'id\'=>$data->id)), $data->banner_resize)',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -269,7 +269,7 @@ class BannerSetting extends OActiveRecord
 	public static function getInfo($column=null)
 	{
 		if($column != null) {
-			$model = self::model()->findByPk(1,array(
+			$model = self::model()->findByPk(1, array(
 				'select' => $column,
 			));
 			if(count(explode(',', $column)) == 1)
@@ -281,33 +281,6 @@ class BannerSetting extends OActiveRecord
 			$model = self::model()->findByPk(1);
 			return $model;
 		}
-	}
-
-	/**
-	 * get Module License
-	 */
-	public static function getLicense($source='1234567890', $length=16, $char=4)
-	{
-		$mod = $length%$char;
-		if($mod == 0)
-			$sep = ($length/$char);
-		else
-			$sep = (int)($length/$char)+1;
-		
-		$sourceLength = strlen($source);
-		$random = '';
-		for ($i = 0; $i < $length; $i++)
-			$random .= $source[rand(0, $sourceLength - 1)];
-		
-		$license = '';
-		for ($i = 0; $i < $sep; $i++) {
-			if($i != $sep-1)
-				$license .= substr($random,($i*$char),$char).'-';
-			else
-				$license .= substr($random,($i*$char),$char);
-		}
-
-		return $license;
 	}
 
 	/**

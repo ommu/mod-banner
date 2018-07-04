@@ -7,7 +7,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2014 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2014 Ommu Platform (www.ommu.co)
  * @modified date 23 January 2018, 07:07 WIB
  * @link https://github.com/ommu/mod-banner
  *
@@ -106,9 +106,9 @@ EOP;
 	<div id="url" class="form-group row <?php echo $model->linked_i == 0 ? 'hide' : ''?>">
 		<?php echo $form->labelEx($model, 'url', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 		<div class="col-lg-8 col-md-9 col-sm-12">
-			<?php echo $form->textArea($model, 'url',array('rows'=>6, 'cols'=>50, 'class'=>'form-control smaller')); ?>
+			<?php echo $form->textArea($model, 'url', array('rows'=>6, 'cols'=>50, 'class'=>'form-control smaller')); ?>
 			<?php echo $form->error($model, 'url'); ?>
-			<div class="small-px silent">example: http://opensource.ommu.co</div>
+			<div class="small-px silent">example: https://github.com/ommu</div>
 		</div>
 	</div>
 
@@ -136,7 +136,7 @@ EOP;
 		<?php echo $form->labelEx($model, 'published_date', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 		<div class="col-lg-8 col-md-9 col-sm-12">
 			<?php $model->published_date = !$model->isNewRecord ? (!in_array($model->published_date, array('0000-00-00','1970-01-01','0002-12-02','-0001-11-30')) ? date('Y-m-d', strtotime($model->published_date)) : '') : '';
-			/* $this->widget('application.libraries.core.components.system.CJuiDatePicker',array(
+			/* $this->widget('application.libraries.core.components.system.CJuiDatePicker', array(
 				'model'=>$model,
 				'attribute'=>'published_date',
 				//'mode'=>'datetime',
@@ -174,7 +174,7 @@ EOP;
 			<?php
 			if(!$model->getErrors())
 				$model->expired_date = !$model->isNewRecord ? (!in_array($model->expired_date, array('0000-00-00','1970-01-01','0002-12-02','-0001-11-30')) ? date('Y-m-d', strtotime($model->expired_date)) : '') : '';
-			/* $this->widget('application.libraries.core.components.system.CJuiDatePicker',array(
+			/* $this->widget('application.libraries.core.components.system.CJuiDatePicker', array(
 				'model'=>$model,
 				'attribute'=>'expired_date',
 				//'mode'=>'datetime',

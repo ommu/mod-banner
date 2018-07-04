@@ -4,7 +4,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 8 January 2017, 19:18 WIB
  * @modified date 19 January 2018, 17:04 WIB
  * @link https://github.com/ommu/mod-banner
@@ -198,7 +198,7 @@ class BannerViews extends OActiveRecord
 			}
 			$this->templateColumns['views'] = array(
 				'name' => 'views',
-				'value' => 'CHtml::link($data->views, Yii::app()->controller->createUrl("history/view/manage",array(\'view\'=>$data->view_id)))',
+				'value' => 'CHtml::link($data->views, Yii::app()->controller->createUrl("history/view/manage", array(\'view\'=>$data->view_id)))',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -252,7 +252,7 @@ class BannerViews extends OActiveRecord
 	public static function getInfo($id, $column=null)
 	{
 		if($column != null) {
-			$model = self::model()->findByPk($id,array(
+			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
  			if(count(explode(',', $column)) == 1)

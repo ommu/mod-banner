@@ -4,7 +4,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2014 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2014 Ommu Platform (www.ommu.co)
  * @link https://github.com/ommu/mod-banner
  *
  */
@@ -40,11 +40,11 @@ class BannerRecent extends CWidget
 		);
 		$criteria->order = 'published_date DESC';
 		if($this->category != null)
-			$criteria->compare('cat_id',$this->category);
+			$criteria->compare('cat_id', $this->category);
 			
 		$model = Banners::model()->findAll($criteria);
 
-		$this->render('banner_recent',array(
+		$this->render('banner_recent', array(
 			'model' => $model,
 			'category' => $category,
 			'module'=>$module,

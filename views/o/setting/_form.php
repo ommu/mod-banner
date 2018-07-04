@@ -7,7 +7,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2014 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2014 Ommu Platform (www.ommu.co)
  * @modified date 23 January 2018, 07:08 WIB
  * @link https://github.com/ommu/mod-banner
  *
@@ -55,13 +55,11 @@ EOP;
 		</label>
 		<div class="col-lg-8 col-md-9 col-sm-12">
 			<?php 
-			if($model->isNewRecord || (!$model->isNewRecord && $model->license == ''))
-				$model->license = BannerSetting::getLicense();
-		
-			if($model->isNewRecord || (!$model->isNewRecord && $model->license == ''))
-				echo $form->textField($model, 'license',array('maxlength'=>32, 'class'=>'form-control'));
-			else
-				echo $form->textField($model, 'license',array('maxlength'=>32, 'class'=>'form-control', 'disabled'=>'disabled'));?>
+			if($model->isNewRecord || (!$model->isNewRecord && $model->license == '')) {
+				$model->license = $this->licenseCode();
+				echo $form->textField($model, 'license', array('maxlength'=>32, 'class'=>'form-control'));
+			} else
+				echo $form->textField($model, 'license', array('maxlength'=>32, 'class'=>'form-control', 'disabled'=>'disabled'));?>
 			<?php echo $form->error($model, 'license'); ?>
 			<span class="small-px"><?php echo Yii::t('phrase', 'Format: XXXX-XXXX-XXXX-XXXX');?></span>
 		</div>
