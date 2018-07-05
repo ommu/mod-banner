@@ -31,6 +31,8 @@
  */
 class BannerCategory extends OActiveRecord
 {
+	use UtilityTrait;
+
 	public $gridForbiddenColumn = array('desc_i','cat_code','banner_size','creation_date','creation_search','modified_date','modified_search','slug');
 	public $name_i;
 	public $desc_i;
@@ -516,7 +518,7 @@ class BannerCategory extends OActiveRecord
 				if($name->save())
 					$this->name = $name->id;
 
-				$this->slug = Utility::getUrlTitle($this->name_i);
+				$this->slug = $this->urlTitle($this->name_i);
 				
 			} else {
 				$name = SourceMessage::model()->findByPk($this->name);
@@ -538,7 +540,7 @@ class BannerCategory extends OActiveRecord
 			}
 
 			if($action != 'publish') {
-				$this->cat_code = Utility::getUrlTitle(strtolower(trim($this->name_i)));
+				$this->cat_code = $this->urlTitle($this->name_i);
 				//Banner Size
 				$this->banner_size = serialize($this->banner_size);
 			}

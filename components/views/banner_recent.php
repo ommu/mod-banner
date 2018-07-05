@@ -35,7 +35,7 @@ if($model != null) {?>
 		?>
 		<li>
 			<?php if($val->url != '-') {?>
-				<a href="<?php echo Yii::app()->createUrl('banner/site/click', array('id'=>$val->banner_id, 'slug'=>Utility::getUrlTitle($val->title)))?>" title="<?php echo $val->title?>"><img src="<?php echo $images;?>" alt="<?php echo $val->title?>" /></a>
+				<a href="<?php echo Yii::app()->createUrl('banner/site/click', array('id'=>$val->banner_id, 'slug'=>$this->urlTitle($val->title)))?>" title="<?php echo $val->title?>"><img src="<?php echo $images;?>" alt="<?php echo $val->title?>" /></a>
 			<?php } else {?>
 				<img src="<?php echo $images;?>" alt="<?php echo $val->title?>" />
 			<?php }?>

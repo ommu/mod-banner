@@ -35,6 +35,8 @@
  */
 class Banners extends OActiveRecord
 {
+	use UtilityTrait;
+
 	public $gridForbiddenColumn = array('banner_filename','banner_desc','creation_date','creation_search','modified_date','modified_search','slug');
 	public $linked_i;
 	public $permanent_i;
@@ -593,7 +595,7 @@ class Banners extends OActiveRecord
 				$this->banner_filename = CUploadedFile::getInstance($this, 'banner_filename');
 				if($this->banner_filename != null) {
 					if($this->banner_filename instanceOf CUploadedFile) {
-						$fileName = time().'_'.$this->banner_id.'_'.Utility::getUrlTitle($this->title).'.'.strtolower($this->banner_filename->extensionName);
+						$fileName = time().'_'.$this->banner_id.'_'.$this->urlTitle($this->title).'.'.strtolower($this->banner_filename->extensionName);
 						if($this->banner_filename->saveAs($banner_path.'/'.$fileName)) {
 							if($this->old_banner_filename_i != '' && file_exists($banner_path.'/'.$this->old_banner_filename_i))
 								rename($banner_path.'/'.$this->old_banner_filename_i, 'public/banner/verwijderen/'.$this->banner_id.'_'.$this->old_banner_filename_i);
@@ -649,7 +651,7 @@ class Banners extends OActiveRecord
 			$this->banner_filename = CUploadedFile::getInstance($this, 'banner_filename');
 			if($this->banner_filename != null) {
 				if($this->banner_filename instanceOf CUploadedFile) {
-					$fileName = time().'_'.$this->banner_id.'_'.Utility::getUrlTitle($this->title).'.'.strtolower($this->banner_filename->extensionName);
+					$fileName = time().'_'.$this->banner_id.'_'.$this->urlTitle($this->title).'.'.strtolower($this->banner_filename->extensionName);
 					if($this->banner_filename->saveAs($banner_path.'/'.$fileName)) {
 						if($setting->banner_validation == 0 && $setting->banner_resize == 1)
 							self::resizeBanner($banner_path.'/'.$fileName, unserialize($this->category->banner_size));
