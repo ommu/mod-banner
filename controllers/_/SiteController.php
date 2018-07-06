@@ -43,7 +43,7 @@ class SiteController extends Controller
 		if($permission == 1 || ($permission == 0 && !Yii::app()->user->isGuest))
 			$this->permission = 1;
 			
-		$arrThemes = Utility::getCurrentTemplate('public');
+		$arrThemes = $this->currentTemplate('public');
 		Yii::app()->theme = $arrThemes['folder'];
 		$this->layout = $arrThemes['layout'];
 	}
