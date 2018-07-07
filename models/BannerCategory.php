@@ -32,6 +32,7 @@
 class BannerCategory extends OActiveRecord
 {
 	use UtilityTrait;
+	use GridViewTrait;
 
 	public $gridForbiddenColumn = array('desc_i','cat_code','banner_size','creation_date','creation_search','modified_date','modified_search','slug');
 	public $name_i;
@@ -405,10 +406,7 @@ class BannerCategory extends OActiveRecord
 					'htmlOptions' => array(
 						'class' => 'center',
 					),
-					'filter'=>array(
-						1=>Yii::t('phrase', 'Yes'),
-						0=>Yii::t('phrase', 'No'),
-					),
+					'filter' => $this->filterYesNo(),
 					'type' => 'raw',
 				);
 			}
