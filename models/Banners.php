@@ -283,30 +283,7 @@ class Banners extends OActiveRecord
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
-				'filter' => 'native-datepicker',
-				/*
-				'filter' => Yii::app()->controller->widget('application.libraries.core.components.system.CJuiDatePicker', array(
-					'model'=>$this,
-					'attribute'=>'published_date',
-					'language' => 'en',
-					'i18nScriptFile' => 'jquery-ui-i18n.min.js',
-					//'mode'=>'datetime',
-					'htmlOptions' => array(
-						'id' => 'published_date_filter',
-						'on_datepicker' => 'on',
-						'placeholder' => Yii::t('phrase', 'filter'),
-					),
-					'options'=>array(
-						'showOn' => 'focus',
-						'dateFormat' => 'yy-mm-dd',
-						'showOtherMonths' => true,
-						'selectOtherMonths' => true,
-						'changeMonth' => true,
-						'changeYear' => true,
-						'showButtonPanel' => true,
-					),
-				), true),
-				*/
+				'filter' => $this->filterDatepicker($this, 'published_date'),
 			);
 			$this->templateColumns['expired_date'] = array(
 				'name' => 'expired_date',
@@ -314,30 +291,7 @@ class Banners extends OActiveRecord
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
-				'filter' => 'native-datepicker',
-				/*
-				'filter' => Yii::app()->controller->widget('application.libraries.core.components.system.CJuiDatePicker', array(
-					'model'=>$this,
-					'attribute'=>'expired_date',
-					'language' => 'en',
-					'i18nScriptFile' => 'jquery-ui-i18n.min.js',
-					//'mode'=>'datetime',
-					'htmlOptions' => array(
-						'id' => 'expired_date_filter',
-						'on_datepicker' => 'on',
-						'placeholder' => Yii::t('phrase', 'filter'),
-					),
-					'options'=>array(
-						'showOn' => 'focus',
-						'dateFormat' => 'yy-mm-dd',
-						'showOtherMonths' => true,
-						'selectOtherMonths' => true,
-						'changeMonth' => true,
-						'changeYear' => true,
-						'showButtonPanel' => true,
-					),
-				), true),
-				*/
+				'filter' => $this->filterDatepicker($this, 'expired_date'),
 			);
 			$this->templateColumns['creation_date'] = array(
 				'name' => 'creation_date',
@@ -345,30 +299,7 @@ class Banners extends OActiveRecord
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
-				'filter' => 'native-datepicker',
-				/*
-				'filter' => Yii::app()->controller->widget('application.libraries.core.components.system.CJuiDatePicker', array(
-					'model'=>$this,
-					'attribute'=>'creation_date',
-					'language' => 'en',
-					'i18nScriptFile' => 'jquery-ui-i18n.min.js',
-					//'mode'=>'datetime',
-					'htmlOptions' => array(
-						'id' => 'creation_date_filter',
-						'on_datepicker' => 'on',
-						'placeholder' => Yii::t('phrase', 'filter'),
-					),
-					'options'=>array(
-						'showOn' => 'focus',
-						'dateFormat' => 'yy-mm-dd',
-						'showOtherMonths' => true,
-						'selectOtherMonths' => true,
-						'changeMonth' => true,
-						'changeYear' => true,
-						'showButtonPanel' => true,
-					),
-				), true),
-				*/
+				'filter' => $this->filterDatepicker($this, 'creation_date'),
 			);
 			if(!Yii::app()->getRequest()->getParam('creation')) {
 				$this->templateColumns['creation_search'] = array(
@@ -382,30 +313,7 @@ class Banners extends OActiveRecord
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
-				'filter' => 'native-datepicker',
-				/*
-				'filter' => Yii::app()->controller->widget('application.libraries.core.components.system.CJuiDatePicker', array(
-					'model'=>$this,
-					'attribute'=>'modified_date',
-					'language' => 'en',
-					'i18nScriptFile' => 'jquery-ui-i18n.min.js',
-					//'mode'=>'datetime',
-					'htmlOptions' => array(
-						'id' => 'modified_date_filter',
-						'on_datepicker' => 'on',
-						'placeholder' => Yii::t('phrase', 'filter'),
-					),
-					'options'=>array(
-						'showOn' => 'focus',
-						'dateFormat' => 'yy-mm-dd',
-						'showOtherMonths' => true,
-						'selectOtherMonths' => true,
-						'changeMonth' => true,
-						'changeYear' => true,
-						'showButtonPanel' => true,
-					),
-				), true),
-				*/
+				'filter' => $this->filterDatepicker($this, 'modified_date'),
 			);
 			if(!Yii::app()->getRequest()->getParam('modified')) {
 				$this->templateColumns['modified_search'] = array(
