@@ -52,13 +52,14 @@
 				'template' => '{view}|{update}|{delete}',
 			));
 
-			$this->widget('application.libraries.core.components.system.OGridView', array(
+			$this->widget('application.libraries.yii-traits.system.OGridView', array(
 				'id'=>'banner-category-grid',
 				'dataProvider'=>$category->search(),
 				'filter'=>$category,
 				'columns'=>$columnData,
 				'template'=>Yii::app()->params['grid-view']['gridTemplate'],
 				'pager'=>array('header'=>''),
+				'afterAjaxUpdate'=>'reinstallDatePicker',
 			));
 		?>
 		<?php //end.Grid Item ?>

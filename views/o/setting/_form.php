@@ -25,7 +25,7 @@ EOP;
 	$cs->registerScript('validation', $js, CClientScript::POS_END);
 ?>
 
-<?php $form=$this->beginWidget('application.libraries.core.components.system.OActiveForm', array(
+<?php $form=$this->beginWidget('application.libraries.yii-traits.system.OActiveForm', array(
 	'id'=>'banner-setting-form',
 	'enableAjaxValidation'=>true,
 	/*

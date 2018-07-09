@@ -46,7 +46,7 @@
 
 		<li>
 			<?php echo $model->getAttributeLabel('creation_date'); ?>
-			<?php /* $this->widget('application.libraries.core.components.system.CJuiDatePicker', array(
+			<?php /* $this->widget('zii.widgets.jui.CJuiDatePicker', array(
 				'model'=>$model,
 				'attribute'=>'creation_date',
 				//'mode'=>'datetime',
@@ -67,7 +67,7 @@
 
 		<li>
 			<?php echo $model->getAttributeLabel('modified_date'); ?>
-			<?php /* $this->widget('application.libraries.core.components.system.CJuiDatePicker', array(
+			<?php /* $this->widget('zii.widgets.jui.CJuiDatePicker', array(
 				'model'=>$model,
 				'attribute'=>'modified_date',
 				//'mode'=>'datetime',
