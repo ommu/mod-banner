@@ -393,7 +393,7 @@ class BannerCategory extends OActiveRecord
 	 * 0 = unpublish
 	 * 1 = publish
 	 */
-	public static function getCategory($publish=null, $type=null) 
+	public static function getCategory($publish=null, $array=true) 
 	{
 		$criteria=new CDbCriteria;
 		if($publish != null)
@@ -401,7 +401,7 @@ class BannerCategory extends OActiveRecord
 
 		$model = self::model()->findAll($criteria);
 
-		if($type == null) {
+		if($array == true) {
 			$items = array();
 			if($model != null) {
 				foreach($model as $key => $val) {
