@@ -103,15 +103,7 @@ class SettingController extends Controller
 			$category->attributes=Yii::app()->getRequest()->getParam('BannerCategory');
 		}
 
-		$gridColumn = Yii::app()->getRequest()->getParam('GridColumn');
-		$columnTemp = array();
-		if($gridColumn) {
-			foreach($gridColumn as $key => $val) {
-				if($gridColumn[$key] == 1)
-					$columnTemp[] = $key;
-			}
-		}
-		$columns = $category->getGridColumn($columnTemp);
+		$columns = $category->getGridColumn($this->gridColumnTemp());
 		
 		$model = BannerSetting::model()->findByPk(1);
 		if($model == null)
