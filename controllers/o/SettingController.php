@@ -98,7 +98,7 @@ class SettingController extends Controller
 	public function actionEdit() 
 	{
 		$category=new BannerCategory('search');
-		$category->unsetAttributes();  // clear any default values
+		$category->unsetAttributes();	// clear any default values
 		if(Yii::app()->getRequest()->getParam('BannerCategory')) {
 			$category->attributes=Yii::app()->getRequest()->getParam('BannerCategory');
 		}

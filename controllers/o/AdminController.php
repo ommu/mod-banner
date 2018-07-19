@@ -96,7 +96,7 @@ class AdminController extends Controller
 	public function actionManage($category=null) 
 	{
 		$model=new Banners('search');
-		$model->unsetAttributes();  // clear any default values
+		$model->unsetAttributes();	// clear any default values
 		if(Yii::app()->getRequest()->getParam('Banners')) {
 			$model->attributes=Yii::app()->getRequest()->getParam('Banners');
 		}

@@ -92,7 +92,7 @@ class ClickController extends Controller
 	public function actionManage($banner=null) 
 	{
 		$model=new BannerClicks('search');
-		$model->unsetAttributes();  // clear any default values
+		$model->unsetAttributes();	// clear any default values
 		if(Yii::app()->getRequest()->getParam('BannerClicks')) {
 			$model->attributes=Yii::app()->getRequest()->getParam('BannerClicks');
 		}

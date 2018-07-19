@@ -96,7 +96,7 @@ class CategoryController extends Controller
 	public function actionManage() 
 	{
 		$model=new BannerCategory('search');
-		$model->unsetAttributes();  // clear any default values
+		$model->unsetAttributes();	// clear any default values
 		if(Yii::app()->getRequest()->getParam('BannerCategory')) {
 			$model->attributes=Yii::app()->getRequest()->getParam('BannerCategory');
 		}

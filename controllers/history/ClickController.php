@@ -91,7 +91,7 @@ class ClickController extends Controller
 	public function actionManage($click=null)
 	{
 		$model=new BannerClickHistory('search');
-		$model->unsetAttributes();  // clear any default values
+		$model->unsetAttributes();	// clear any default values
 		if(Yii::app()->getRequest()->getParam('BannerClickHistory')) {
 			$model->attributes=Yii::app()->getRequest()->getParam('BannerClickHistory');
 		}
