@@ -119,16 +119,16 @@ class BannerClickHistory extends OActiveRecord
 		// Custom Search
 		$criteria->with = array(
 			'click' => array(
-				'alias'=>'click',
-				'select'=>'banner_id, user_id'
+				'alias' => 'click',
+				'select' => 'banner_id, user_id'
 			),
 			'click.banner' => array(
-				'alias'=>'click_banner',
-				'select'=>'cat_id, title'
+				'alias' => 'click_banner',
+				'select' => 'cat_id, title'
 			),
 			'click.user' => array(
-				'alias'=>'click_user',
-				'select'=>'displayname'
+				'alias' => 'click_user',
+				'select' => 'displayname'
 			),
 		);
 		
@@ -175,7 +175,7 @@ class BannerClickHistory extends OActiveRecord
 				$this->templateColumns['category_search'] = array(
 					'name' => 'category_search',
 					'value' => '$data->click->banner->category->title->message',
-					'filter'=> BannerCategory::getCategory(),
+					'filter' => BannerCategory::getCategory(),
 					'type' => 'raw',
 				);
 				$this->templateColumns['banner_search'] = array(

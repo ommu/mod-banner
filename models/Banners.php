@@ -176,15 +176,15 @@ class Banners extends OActiveRecord
 		// Custom Search
 		$criteria->with = array(
 			'view' => array(
-				'alias'=>'view',
+				'alias' => 'view',
 			),
 			'creation' => array(
-				'alias'=>'creation',
-				'select'=>'displayname',
+				'alias' => 'creation',
+				'select' => 'displayname',
 			),
 			'modified' => array(
-				'alias'=>'modified',
-				'select'=>'displayname',
+				'alias' => 'modified',
+				'select' => 'displayname',
 			),
 		);
 
@@ -255,7 +255,7 @@ class Banners extends OActiveRecord
 				$this->templateColumns['cat_id'] = array(
 					'name' => 'cat_id',
 					'value' => '$data->category->title->message',
-					'filter'=> BannerCategory::getCategory(),
+					'filter' => BannerCategory::getCategory(),
 					'type' => 'raw',
 				);
 			}

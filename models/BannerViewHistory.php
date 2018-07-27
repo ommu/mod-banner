@@ -119,16 +119,16 @@ class BannerViewHistory extends OActiveRecord
 		// Custom Search
 		$criteria->with = array(
 			'view' => array(
-				'alias'=>'view',
-				'select'=>'banner_id, user_id'
+				'alias' => 'view',
+				'select' => 'banner_id, user_id'
 			),
 			'view.banner' => array(
-				'alias'=>'view_banner',
-				'select'=>'cat_id, title'
+				'alias' => 'view_banner',
+				'select' => 'cat_id, title'
 			),
 			'view.user' => array(
-				'alias'=>'view_user',
-				'select'=>'displayname'
+				'alias' => 'view_user',
+				'select' => 'displayname'
 			),
 		);
 		
@@ -175,7 +175,7 @@ class BannerViewHistory extends OActiveRecord
 				$this->templateColumns['category_search'] = array(
 					'name' => 'category_search',
 					'value' => '$data->view->banner->category->title->message',
-					'filter'=> BannerCategory::getCategory(),
+					'filter' => BannerCategory::getCategory(),
 					'type' => 'raw',
 				);
 				$this->templateColumns['banner_search'] = array(

@@ -128,12 +128,12 @@ class BannerClicks extends OActiveRecord
 		// Custom Search
 		$criteria->with = array(
 			'banner' => array(
-				'alias'=>'banner',
-				'select'=>'publish, cat_id, title'
+				'alias' => 'banner',
+				'select' => 'publish, cat_id, title'
 			),
 			'user' => array(
-				'alias'=>'user',
-				'select'=>'displayname',
+				'alias' => 'user',
+				'select' => 'displayname',
 			),
 		);
 		
@@ -184,7 +184,7 @@ class BannerClicks extends OActiveRecord
 				$this->templateColumns['category_search'] = array(
 					'name' => 'category_search',
 					'value' => '$data->banner->category->title->message',
-					'filter'=> BannerCategory::getCategory(),
+					'filter' => BannerCategory::getCategory(),
 					'type' => 'raw',
 				);
 				$this->templateColumns['banner_search'] = array(

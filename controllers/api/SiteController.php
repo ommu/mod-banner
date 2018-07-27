@@ -72,7 +72,7 @@ class SiteController extends ControllerApi
 			$criteria=new CDbCriteria;
 			$criteria->with = array(
 				'category' => array(
-					'alias'=>'category',
+					'alias' => 'category',
 				),
 			);
 			if($category) {
