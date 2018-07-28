@@ -58,8 +58,8 @@ EOP;
 <fieldset>
 
 	<div class="form-group row">
-		<?php echo $form->labelEx($model, 'cat_id', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-		<div class="col-lg-8 col-md-9 col-sm-12">
+		<?php echo $form->labelEx($model, 'cat_id', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+		<div class="col-lg-6 col-md-9 col-sm-12">
 			<?php 
 			$category = BannerCategory::getCategory(1);
 			if($category != null)
@@ -71,8 +71,8 @@ EOP;
 	</div>
 
 	<div class="form-group row">
-		<?php echo $form->labelEx($model, 'title', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-		<div class="col-lg-8 col-md-9 col-sm-12">
+		<?php echo $form->labelEx($model, 'title', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+		<div class="col-lg-6 col-md-9 col-sm-12">
 			<?php echo $form->textField($model, 'title', array('maxlength'=>64, 'class'=>'form-control')); ?>
 			<?php echo $form->error($model, 'title'); ?>
 			<div class="small-px silent"><?php echo Yii::t('phrase', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vitae laoreet metus. Integer eros augue, viverra at lectus vel, dignissim sagittis erat. ');?></div>
@@ -80,8 +80,8 @@ EOP;
 	</div>
 
 	<div class="form-group row">
-		<?php echo $form->labelEx($model, 'banner_desc', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-		<div class="col-lg-8 col-md-9 col-sm-12">
+		<?php echo $form->labelEx($model, 'banner_desc', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+		<div class="col-lg-6 col-md-9 col-sm-12">
 			<?php echo $form->textArea($model, 'banner_desc', array('rows'=>6, 'cols'=>50, 'class'=>'form-control smaller')); ?>
 			<?php echo $form->error($model,'banner_desc'); ?>
 		</div>
@@ -95,8 +95,8 @@ EOP;
 	}?>
 	
 	<div class="form-group row publish">
-		<?php echo $form->labelEx($model,'linked_i', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-		<div class="col-lg-8 col-md-9 col-sm-12">
+		<?php echo $form->labelEx($model,'linked_i', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+		<div class="col-lg-6 col-md-9 col-sm-12">
 			<?php echo $form->checkBox($model, 'linked_i', array('class'=>'form-control')); ?>
 			<?php echo $form->labelEx($model, 'linked_i'); ?>
 			<?php echo $form->error($model, 'linked_i'); ?>
@@ -104,8 +104,8 @@ EOP;
 	</div>
 
 	<div id="url" class="form-group row <?php echo $model->linked_i == 0 ? 'hide' : ''?>">
-		<?php echo $form->labelEx($model, 'url', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-		<div class="col-lg-8 col-md-9 col-sm-12">
+		<?php echo $form->labelEx($model, 'url', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+		<div class="col-lg-6 col-md-9 col-sm-12">
 			<?php echo $form->textArea($model, 'url', array('rows'=>6, 'cols'=>50, 'class'=>'form-control smaller')); ?>
 			<?php echo $form->error($model, 'url'); ?>
 			<div class="small-px silent">example: https://github.com/ommu</div>
@@ -113,8 +113,8 @@ EOP;
 	</div>
 
 	<div class="form-group row">
-		<?php echo $form->labelEx($model, 'banner_filename', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-		<div class="col-lg-8 col-md-9 col-sm-12">
+		<?php echo $form->labelEx($model, 'banner_filename', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+		<div class="col-lg-6 col-md-9 col-sm-12">
 			<?php 
 			if(!$model->isNewRecord) {
 				if(!$model->getErrors())
@@ -133,8 +133,8 @@ EOP;
 	</div>
 
 	<div class="form-group row">
-		<?php echo $form->labelEx($model, 'published_date', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-		<div class="col-lg-8 col-md-9 col-sm-12">
+		<?php echo $form->labelEx($model, 'published_date', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+		<div class="col-lg-6 col-md-9 col-sm-12">
 			<?php $model->published_date = !$model->isNewRecord ? (!in_array($model->published_date, array('0000-00-00','1970-01-01','0002-12-02','-0001-11-30')) ? date('Y-m-d', strtotime($model->published_date)) : '') : '';
 			/* $this->widget('zii.widgets.jui.CJuiDatePicker', array(
 				'model'=>$model,
@@ -160,8 +160,8 @@ EOP;
 	}?>
 	
 	<div class="form-group row publish">
-		<?php echo $form->labelEx($model,'permanent_i', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-		<div class="col-lg-8 col-md-9 col-sm-12">
+		<?php echo $form->labelEx($model,'permanent_i', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+		<div class="col-lg-6 col-md-9 col-sm-12">
 			<?php echo $form->checkBox($model, 'permanent_i', array('class'=>'form-control')); ?>
 			<?php echo $form->labelEx($model, 'permanent_i'); ?>
 			<?php echo $form->error($model, 'permanent_i'); ?>
@@ -169,8 +169,8 @@ EOP;
 	</div>
 
 	<div id="expired-date" class="form-group row <?php echo $model->permanent_i == 1 ? 'hide' : ''?>">
-		<?php echo $form->labelEx($model, 'expired_date', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-		<div class="col-lg-8 col-md-9 col-sm-12">
+		<?php echo $form->labelEx($model, 'expired_date', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+		<div class="col-lg-6 col-md-9 col-sm-12">
 			<?php
 			if(!$model->getErrors())
 				$model->expired_date = !$model->isNewRecord ? (!in_array($model->expired_date, array('0000-00-00','1970-01-01','0002-12-02','-0001-11-30')) ? date('Y-m-d', strtotime($model->expired_date)) : '') : '';
@@ -191,8 +191,8 @@ EOP;
 	</div>
 
 	<div class="form-group row publish">
-		<?php echo $form->labelEx($model, 'publish', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-		<div class="col-lg-8 col-md-9 col-sm-12">
+		<?php echo $form->labelEx($model, 'publish', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+		<div class="col-lg-6 col-md-9 col-sm-12">
 			<?php echo $form->checkBox($model, 'publish', array('class'=>'form-control')); ?>
 			<?php echo $form->labelEx($model, 'publish'); ?>
 			<?php echo $form->error($model, 'publish'); ?>
@@ -200,8 +200,8 @@ EOP;
 	</div>
 
 	<div class="form-group row submit">
-		<label class="col-form-label col-lg-4 col-md-3 col-sm-12">&nbsp;</label>
-		<div class="col-lg-8 col-md-9 col-sm-12">
+		<label class="col-form-label col-lg-3 col-md-3 col-sm-12">&nbsp;</label>
+		<div class="col-lg-6 col-md-9 col-sm-12">
 			<?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('phrase', 'Create') : Yii::t('phrase', 'Save'), array('onclick' => 'setEnableSave()')); ?>
 		</div>
 	</div>

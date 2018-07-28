@@ -38,32 +38,32 @@
 		<?php //begin.Messages ?>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model, 'name_i', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->labelEx($model, 'name_i', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php echo $form->textField($model, 'name_i', array('maxlength'=>32, 'class'=>'form-control')); ?>
 				<?php echo $form->error($model, 'name_i'); ?>
 			</div>
 		</div>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model, 'desc_i', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->labelEx($model, 'desc_i', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php echo $form->textArea($model, 'desc_i', array('rows'=>6, 'cols'=>50, 'maxlength'=>128, 'class'=>'form-control')); ?>
 				<?php echo $form->error($model, 'desc_i'); ?>
 			</div>
 		</div>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model, 'banner_limit', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->labelEx($model, 'banner_limit', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php echo $form->textField($model, 'banner_limit', array('maxlength'=>2, 'class'=>'form-control')); ?>
 				<?php echo $form->error($model, 'banner_limit'); ?>
 			</div>
 		</div>
 
 		<div class="form-group row">
-			<label class="col-form-label col-lg-4 col-md-3 col-sm-12"><?php echo $model->getAttributeLabel('banner_size');?> <span class="required">*</span></label>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<label class="col-form-label col-lg-3 col-md-3 col-sm-12"><?php echo $model->getAttributeLabel('banner_size');?> <span class="required">*</span></label>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php 
 				if(!$model->getErrors())
 					$model->banner_size = unserialize($model->banner_size);
@@ -74,8 +74,8 @@
 		</div>
 
 		<div class="form-group row publish">
-			<?php echo $form->labelEx($model, 'publish', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->labelEx($model, 'publish', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php echo $form->checkBox($model, 'publish', array('class'=>'form-control')); ?>
 				<?php echo $form->labelEx($model, 'publish'); ?>
 				<?php echo $form->error($model, 'publish'); ?>
