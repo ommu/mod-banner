@@ -4,7 +4,7 @@
  * 
  * @author Aziz Masruhan <aziz.masruhan@gmail.com>
  * @contact (+62)857-4115-5177
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 6 October 2017, 13:09 WIB
  * @modified date 30 April 2018, 12:41 WIB
  * @modified by Putra Sudaryanto <putra@sudaryanto.id>

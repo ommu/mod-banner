@@ -6,12 +6,12 @@
  *
  * @author Aziz Masruhan <aziz.masruhan@gmail.com>
  * @contact (+62)857-4115-5177
- * @copyright Copyright (c) 2018 ECC UGM (ecc.ft.ugm.ac.id)
+ * @copyright Copyright (c) 2018 Ommu Platform (www.ommu.co)
  * @created date 6 October 2017, 13:16 WIB
  * @modified date 1 May 2018, 20:44 WIB
  * @modified by Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @link http://ecc.ft.ugm.ac.id
+ * @link https://github.com/ommu/mod-banner
  *
  */
 
