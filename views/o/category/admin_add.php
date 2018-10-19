@@ -15,7 +15,7 @@
 
 	$this->breadcrumbs=array(
 		'Banner Categories'=>array('manage'),
-		'Create',
+		Yii::t('phrase', 'Create'),
 	);
 ?>
 

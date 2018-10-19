@@ -16,7 +16,7 @@
 	$this->breadcrumbs=array(
 		'Banner Categories'=>array('manage'),
 		$model->name=>array('view','id'=>$model->cat_id),
-		'Update',
+		Yii::t('phrase', 'Update'),
 	);
 ?>
 

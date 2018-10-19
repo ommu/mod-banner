@@ -128,7 +128,7 @@ EOP;
 			}?>
 			<?php echo $form->fileField($model, 'banner_filename', array('class'=>'form-control')); ?>
 			<?php echo $form->error($model, 'banner_filename'); ?>
-			<span class="small-px">extensions are allowed: <?php echo Utility::formatFileType($banner_file_type, false);?></span>
+			<div class="small-px">extensions are allowed: <?php echo Utility::formatFileType($banner_file_type, false);?></div>
 		</div>
 	</div>
 

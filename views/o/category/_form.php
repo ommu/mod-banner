@@ -67,8 +67,8 @@
 				<?php 
 				if(!$model->getErrors())
 					$model->banner_size = unserialize($model->banner_size);
-				echo Yii::t('phrase', 'Width').': ';?><?php echo $form->textField($model,'banner_size[width]', array('maxlength'=>4,'class'=>'form-control')); ?>&nbsp;&nbsp;&nbsp;
-				<?php echo Yii::t('phrase', 'Height').': ';?><?php echo $form->textField($model,'banner_size[height]', array('maxlength'=>4,'class'=>'form-control')); ?>
+				echo Yii::t('phrase', 'Width').': ';?><?php echo $form->textField($model,'banner_size[width]', array('maxlength'=>4, 'class'=>'form-control')); ?>&nbsp;&nbsp;&nbsp;
+				<?php echo Yii::t('phrase', 'Height').': ';?><?php echo $form->textField($model,'banner_size[height]', array('maxlength'=>4, 'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'banner_size'); ?>
 			</div>
 		</div>

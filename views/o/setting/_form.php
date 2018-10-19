@@ -54,21 +54,20 @@ EOP;
 			<span><?php echo Yii::t('phrase', 'Enter the your license key that is provided to you when you purchased this plugin. If you do not know your license key, please contact support team.');?></span>
 		</label>
 		<div class="col-lg-6 col-md-9 col-sm-12">
-			<?php 
-			if($model->isNewRecord || (!$model->isNewRecord && $model->license == '')) {
+			<?php if($model->isNewRecord || (!$model->isNewRecord && $model->license == '')) {
 				$model->license = $this->licenseCode();
 				echo $form->textField($model, 'license', array('maxlength'=>32, 'class'=>'form-control'));
 			} else
 				echo $form->textField($model, 'license', array('maxlength'=>32, 'class'=>'form-control', 'disabled'=>'disabled'));?>
 			<?php echo $form->error($model, 'license'); ?>
-			<span class="small-px"><?php echo Yii::t('phrase', 'Format: XXXX-XXXX-XXXX-XXXX');?></span>
+			<div class="small-px"><?php echo Yii::t('phrase', 'Format: XXXX-XXXX-XXXX-XXXX');?></div>
 		</div>
 	</div>
 
 	<div class="form-group row">
 		<?php echo $form->labelEx($model,'permission', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
 		<div class="col-lg-6 col-md-9 col-sm-12">
-			<span class="small-px"><?php echo Yii::t('phrase', 'Select whether or not you want to let the public (visitors that are not logged-in) to view the following sections of your social network. In some cases (such as Profiles, Blogs, and Albums), if you have given them the option, your users will be able to make their pages private even though you have made them publically viewable here. For more permissions settings, please visit the General Settings page.');?></span>
+			<div class="small-px"><?php echo Yii::t('phrase', 'Select whether or not you want to let the public (visitors that are not logged-in) to view the following sections of your social network. In some cases (such as Profiles, Blogs, and Albums), if you have given them the option, your users will be able to make their pages private even though you have made them publically viewable here. For more permissions settings, please visit the General Settings page.');?></div>
 			<?php echo $form->radioButtonList($model, 'permission', array(
 				1 => Yii::t('phrase', 'Yes, the public can view banner unless they are made private.'),
 				0 => Yii::t('phrase', 'No, the public cannot view banner.'),
@@ -126,7 +125,7 @@ EOP;
 			}
 			echo $form->textField($model, 'banner_file_type', array('class'=>'form-control')); ?>
 			<?php echo $form->error($model, 'banner_file_type'); ?>
-			<span class="small-px">pisahkan jenis file dengan koma (,). example: "jpg, png, bmp"</span>
+			<div class="small-px">pisahkan jenis file dengan koma (,). example: "jpg, png, bmp"</div>
 		</div>
 	</div>
 

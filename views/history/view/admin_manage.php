@@ -15,7 +15,7 @@
 
 	$this->breadcrumbs=array(
 		'Banner View Histories'=>array('manage'),
-		'Manage',
+		Yii::t('phrase', 'Manage'),
 	);
 	$this->menu=array(
 		array(

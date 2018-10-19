@@ -13,7 +13,7 @@
 
 	$this->breadcrumbs=array(
 		'Banner Settings'=>array('index'),
-		'Manual Book',
+		Yii::t('phrase', 'Manual'),
 	);
 ?>
 
