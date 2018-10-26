@@ -48,7 +48,6 @@ use ommu\banner\models\view\BannerCategory as BannerCategoryView;
 class BannerCategory extends \app\components\ActiveRecord
 {
 	use \ommu\traits\UtilityTrait;
-	use \ommu\traits\GridViewTrait;
 
 	public $gridForbiddenColumn = ['creation_date','creation_search','modified_date','modified_search','updated_date','slug','desc_i'];
 	public $name_i;
