@@ -337,7 +337,7 @@ class Banners extends \app\components\ActiveRecord
 			'attribute' => 'permanent_search',
 			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
-				return $model->view->permanent ? Yii::t('app', 'Yes') : Yii::t('app', 'No');
+				return $this->filterYesNo($model->view->permanent);
 			},
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',

@@ -160,7 +160,7 @@ class BannerSetting extends \app\components\ActiveRecord
 			'attribute' => 'permission',
 			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
-				return $model->permission ? Yii::t('app', 'Yes') : Yii::t('app', 'No');
+				return $this->filterYesNo($model->permission);
 			},
 			'contentOptions' => ['class'=>'center'],
 		];
@@ -168,7 +168,7 @@ class BannerSetting extends \app\components\ActiveRecord
 			'attribute' => 'banner_validation',
 			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
-				return $model->banner_validation ? Yii::t('app', 'Yes') : Yii::t('app', 'No');
+				return $this->filterYesNo($model->banner_validation);
 			},
 			'contentOptions' => ['class'=>'center'],
 		];
@@ -176,7 +176,7 @@ class BannerSetting extends \app\components\ActiveRecord
 			'attribute' => 'banner_resize',
 			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
-				return $model->banner_resize ? Yii::t('app', 'Yes') : Yii::t('app', 'No');
+				return $this->filterYesNo($model->banner_resize);
 			},
 			'contentOptions' => ['class'=>'center'],
 		];
