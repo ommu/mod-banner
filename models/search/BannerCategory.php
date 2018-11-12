@@ -23,7 +23,7 @@ use ommu\banner\models\BannerCategory as BannerCategoryModel;
 class BannerCategory extends BannerCategoryModel
 {
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function rules()
 	{
@@ -35,7 +35,7 @@ class BannerCategory extends BannerCategoryModel
 	}
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function scenarios()
 	{

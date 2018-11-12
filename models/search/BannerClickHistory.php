@@ -25,7 +25,7 @@ use ommu\banner\models\BannerClickHistory as BannerClickHistoryModel;
 class BannerClickHistory extends BannerClickHistoryModel
 {
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function rules()
 	{
@@ -37,7 +37,7 @@ class BannerClickHistory extends BannerClickHistoryModel
 	}
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function scenarios()
 	{

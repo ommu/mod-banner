@@ -25,7 +25,7 @@ use ommu\banner\models\Banners as BannersModel;
 class Banners extends BannersModel
 {
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function rules()
 	{
@@ -37,7 +37,7 @@ class Banners extends BannersModel
 	}
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function scenarios()
 	{

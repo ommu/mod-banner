@@ -25,7 +25,7 @@ class BannerClicksQuery extends \yii\db\ActiveQuery
 	*/
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 * @return \ommu\banner\models\BannerClicks[]|array
 	 */
 	public function all($db = null)
@@ -34,7 +34,7 @@ class BannerClicksQuery extends \yii\db\ActiveQuery
 	}
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 * @return \ommu\banner\models\BannerClicks|array|null
 	 */
 	public function one($db = null)

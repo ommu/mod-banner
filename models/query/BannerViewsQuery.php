@@ -28,7 +28,7 @@ class BannerViewsQuery extends \yii\db\ActiveQuery
 	*/
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 * @return \ommu\banner\models\BannerViews[]|array
 	 */
 	public function all($db = null)
@@ -37,7 +37,7 @@ class BannerViewsQuery extends \yii\db\ActiveQuery
 	}
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 * @return \ommu\banner\models\BannerViews|array|null
 	 */
 	public function one($db = null)

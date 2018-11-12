@@ -37,7 +37,7 @@ use ommu\banner\models\search\BannerViewHistory as BannerViewHistorySearch;
 class HistoryViewController extends Controller
 {
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function behaviors()
 	{

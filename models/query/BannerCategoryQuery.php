@@ -25,7 +25,7 @@ class BannerCategoryQuery extends \yii\db\ActiveQuery
 	*/
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function published() 
 	{
@@ -33,7 +33,7 @@ class BannerCategoryQuery extends \yii\db\ActiveQuery
 	}
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function unpublish() 
 	{
@@ -41,7 +41,7 @@ class BannerCategoryQuery extends \yii\db\ActiveQuery
 	}
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 * @return \ommu\banner\models\BannerCategory[]|array
 	 */
 	public function all($db = null)
@@ -50,7 +50,7 @@ class BannerCategoryQuery extends \yii\db\ActiveQuery
 	}
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 * @return \ommu\banner\models\BannerCategory|array|null
 	 */
 	public function one($db = null)

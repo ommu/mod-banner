@@ -25,7 +25,7 @@ class BannerViewHistoryQuery extends \yii\db\ActiveQuery
 	*/
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 * @return \ommu\banner\models\BannerViewHistory[]|array
 	 */
 	public function all($db = null)
@@ -34,7 +34,7 @@ class BannerViewHistoryQuery extends \yii\db\ActiveQuery
 	}
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 * @return \ommu\banner\models\BannerViewHistory|array|null
 	 */
 	public function one($db = null)

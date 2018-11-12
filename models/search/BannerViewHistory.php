@@ -25,7 +25,7 @@ use ommu\banner\models\BannerViewHistory as BannerViewHistoryModel;
 class BannerViewHistory extends BannerViewHistoryModel
 {
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function rules()
 	{
@@ -37,7 +37,7 @@ class BannerViewHistory extends BannerViewHistoryModel
 	}
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function scenarios()
 	{

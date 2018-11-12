@@ -37,7 +37,7 @@ use ommu\banner\models\search\BannerClicks as BannerClicksSearch;
 class ClicksController extends Controller
 {
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function behaviors()
 	{

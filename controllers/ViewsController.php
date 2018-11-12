@@ -36,7 +36,7 @@ use ommu\banner\models\search\BannerViews as BannerViewsSearch;
 class ViewsController extends Controller
 {
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function behaviors()
 	{

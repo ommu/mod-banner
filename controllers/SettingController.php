@@ -35,7 +35,7 @@ use ommu\banner\models\search\BannerCategory as BannerCategorySearch;
 class SettingController extends Controller
 {
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function behaviors()
 	{

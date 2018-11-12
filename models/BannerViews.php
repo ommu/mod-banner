@@ -118,7 +118,7 @@ class BannerViews extends \app\components\ActiveRecord
 	}
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 * @return \ommu\banner\models\query\BannerViewsQuery the active query used by this AR class.
 	 */
 	public static function find()

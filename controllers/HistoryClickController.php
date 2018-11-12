@@ -37,7 +37,7 @@ use ommu\banner\models\search\BannerClickHistory as BannerClickHistorySearch;
 class HistoryClickController extends Controller
 {
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function behaviors()
 	{

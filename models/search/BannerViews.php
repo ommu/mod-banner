@@ -25,7 +25,7 @@ use ommu\banner\models\BannerViews as BannerViewsModel;
 class BannerViews extends BannerViewsModel
 {
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function rules()
 	{
@@ -37,7 +37,7 @@ class BannerViews extends BannerViewsModel
 	}
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function scenarios()
 	{

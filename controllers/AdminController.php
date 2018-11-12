@@ -41,7 +41,7 @@ use ommu\banner\models\search\Banners as BannersSearch;
 class AdminController extends Controller
 {
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function behaviors()
 	{

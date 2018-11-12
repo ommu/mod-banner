@@ -23,7 +23,7 @@ use ommu\banner\models\BannerClicks as BannerClicksModel;
 class BannerClicks extends BannerClicksModel
 {
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function rules()
 	{
@@ -35,7 +35,7 @@ class BannerClicks extends BannerClicksModel
 	}
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function scenarios()
 	{

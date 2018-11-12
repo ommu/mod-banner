@@ -190,7 +190,7 @@ class BannerCategory extends \app\components\ActiveRecord
 	}
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 * @return \ommu\banner\models\query\BannerCategoryQuery the active query used by this AR class.
 	 */
 	public static function find()
