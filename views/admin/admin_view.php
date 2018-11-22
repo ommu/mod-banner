@@ -54,8 +54,8 @@ $this->params['menu']['content'] = [
 		[
 			'attribute' => 'banner_filename',
 			'value' => function ($model) {
-				$image = join('/', [Url::Base(), Banners::getUploadPath(false), $model->banner_filename]);
-				return $model->banner_filename ? Html::img($image, ['width' => '100%']).'<br/><br/>'.$image : '-';
+				$uploadPath = Banners::getUploadPath(false);
+				return $model->banner_filename ? Html::img(join('/', [Url::Base(), $uploadPath, $model->banner_filename]), ['width' => '100%']).'<br/><br/>'.$model->banner_filename : '-';
 			},
 			'format' => 'raw',
 		],
