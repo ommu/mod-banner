@@ -47,7 +47,7 @@ $this->params['menu']['content'] = [
 		'views',
 		[
 			'attribute' => 'view_date',
-			'value' => !in_array($model->view_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->view_date, 'datetime') : '-',
+			'value' => Yii::$app->formatter->asDatetime($model->view_date, 'medium'),
 		],
 		'view_ip',
 	],

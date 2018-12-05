@@ -65,15 +65,15 @@ $this->params['menu']['content'] = [
 		],
 		[
 			'attribute' => 'published_date',
-			'value' => !in_array($model->published_date, ['0000-00-00','1970-01-01','0002-12-02','-0001-11-30']) ? Yii::$app->formatter->format($model->published_date, 'date') : '-',
+			'value' => Yii::$app->formatter->asDate($model->published_date, 'medium'),
 		],
 		[
 			'attribute' => 'expired_date',
-			'value' => !in_array($model->expired_date, ['0000-00-00','1970-01-01','0002-12-02','-0001-11-30']) ? Yii::$app->formatter->format($model->expired_date, 'date') : '-',
+			'value' => Yii::$app->formatter->asDate($model->expired_date, 'medium'),
 		],
 		[
 			'attribute' => 'creation_date',
-			'value' => !in_array($model->creation_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->creation_date, 'datetime') : '-',
+			'value' => Yii::$app->formatter->asDatetime($model->creation_date, 'medium'),
 		],
 		[
 			'attribute' => 'creation_search',
@@ -81,7 +81,7 @@ $this->params['menu']['content'] = [
 		],
 		[
 			'attribute' => 'modified_date',
-			'value' => !in_array($model->modified_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->modified_date, 'datetime') : '-',
+			'value' => Yii::$app->formatter->asDatetime($model->modified_date, 'medium'),
 		],
 		[
 			'attribute' => 'modified_search',
@@ -89,7 +89,7 @@ $this->params['menu']['content'] = [
 		],
 		[
 			'attribute' => 'updated_date',
-			'value' => !in_array($model->updated_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->updated_date, 'datetime') : '-',
+			'value' => Yii::$app->formatter->asDatetime($model->updated_date, 'medium'),
 		],
 		[
 			'attribute' => 'slug',

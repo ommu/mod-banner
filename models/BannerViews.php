@@ -165,11 +165,10 @@ class BannerViews extends \app\components\ActiveRecord
 		}
 		$this->templateColumns['view_date'] = [
 			'attribute' => 'view_date',
-			'filter' => Html::input('date', 'view_date', Yii::$app->request->get('view_date'), ['class'=>'form-control']),
 			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->view_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->view_date, 'datetime') : '-';
+				return Yii::$app->formatter->asDatetime($model->view_date, 'medium');
 			},
-			'format' => 'html',
+			'filter' => $this->filterDatepicker($this, 'view_date'),
 		];
 		$this->templateColumns['view_ip'] = [
 			'attribute' => 'view_ip',
