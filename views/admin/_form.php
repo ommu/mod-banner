@@ -8,7 +8,7 @@
  *
  * @author Aziz Masruhan <aziz.masruhan@gmail.com>
  * @contact (+62)857-4115-5177
- * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
+ * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 6 October 2017, 08:14 WIB
  * @modified date 30 April 2018, 21:22 WIB
  * @modified by Putra Sudaryanto <putra@sudaryanto.id>
@@ -76,7 +76,7 @@ echo $form->field($model, 'linked_i', ['template' => '{label}<div class="col-md-
 	->checkbox(['label'=>''])
 	->label($model->getAttributeLabel('linked_i'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 
-<?php echo $form->field($model, 'url', ['template' => '{label}<div class="col-md-9 col-sm-9 col-xs-12">{input}{error}<span class="small-px">example: http://ecc.ft.ugm.ac.id</span></div>', 'options' => ['class' => 'form-group', 'style' => $model->linked_i == 0 ? 'display: none' : '']])
+<?php echo $form->field($model, 'url', ['template' => '{label}<div class="col-md-9 col-sm-9 col-xs-12">{input}{error}<span class="small-px">example: http://sudaryanto.id</span></div>', 'options' => ['class' => 'form-group', 'style' => $model->linked_i == 0 ? 'display: none' : '']])
 	->textInput()
 	->label($model->getAttributeLabel('url'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 

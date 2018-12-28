@@ -4,12 +4,12 @@
  * 
  * @author Aziz Masruhan <aziz.masruhan@gmail.com>
  * @contact (+62)857-4115-5177
- * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
+ * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 6 October 2017, 13:09 WIB
  * @modified date 30 April 2018, 12:41 WIB
  * @modified by Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @link https://ecc.ft.ugm.ac.id
+ * @link https://github.com/ommu/mod-banner
  *
  * This is the model class for table "ommu_banner_click_history".
  *

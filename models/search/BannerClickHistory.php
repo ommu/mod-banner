@@ -6,7 +6,7 @@
  *
  * @author Aziz Masruhan <aziz.masruhan@gmail.com>
  * @contact (+62)857-4115-5177
- * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
+ * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 6 October 2017, 13:29 WIB
  * @modified date 2 May 2018, 11:10 WIB
  * @modified by Putra Sudaryanto <putra@sudaryanto.id>

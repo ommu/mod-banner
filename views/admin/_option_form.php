@@ -8,7 +8,7 @@
  *
  * @author Aziz Masruhan <aziz.masruhan@gmail.com>
  * @contact (+62)857-4115-5177
- * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
+ * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 6 October 2017, 08:14 WIB
  * @modified date 30 April 2018, 21:22 WIB
  * @modified by Putra Sudaryanto <putra@sudaryanto.id>
@@ -17,7 +17,7 @@
  *
  */
 
-use app\helpers\Html;
+use yii\helpers\Html;
 use yii\helpers\Url;
 
 $js = <<<JS
