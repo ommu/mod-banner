@@ -19,7 +19,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\widgets\ActiveForm;
+use app\components\ActiveForm;
 use ommu\banner\models\Banners;
 use ommu\banner\models\BannerCategory;
 
@@ -46,7 +46,6 @@ JS;
 
 <?php $form = ActiveForm::begin([
 	'options' => [
-		'class' => 'form-horizontal form-label-left',
 		'enctype' => 'multipart/form-data',
 	],
 	'enableClientValidation' => false,
