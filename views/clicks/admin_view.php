@@ -1,7 +1,7 @@
 <?php
 /**
  * Banner Clicks (banner-clicks)
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $this ommu\banner\controllers\ClicksController
  * @var $model ommu\banner\models\BannerClicks
  *
@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 $this->params['menu']['content'] = [
 	['label' => Yii::t('app', 'Back To Manage'), 'url' => Url::to(['index']), 'icon' => 'table'],
-	['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id' => $model->click_id]), 'htmlOptions' => ['data-confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'), 'data-method'=>'post'], 'icon' => 'trash'],
+	['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id'=>$model->click_id]), 'htmlOptions' => ['data-confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'), 'data-method'=>'post'], 'icon' => 'trash'],
 ];
 ?>
 

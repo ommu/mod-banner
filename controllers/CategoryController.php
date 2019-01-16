@@ -1,7 +1,7 @@
 <?php
 /**
  * CategoryController
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $model ommu\banner\models\BannerCategory
  *
  * CategoryController implements the CRUD actions for BannerCategory model.

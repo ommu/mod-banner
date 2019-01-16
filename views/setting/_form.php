@@ -1,10 +1,10 @@
 <?php
 /**
  * Banner Settings (banner-setting)
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $this ommu\banner\controllers\SettingController
  * @var $model ommu\banner\models\BannerSetting
- * @var $form yii\widgets\ActiveForm
+ * @var $form app\components\ActiveForm
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
@@ -34,7 +34,7 @@ $js = <<<JS
 		}
 	});
 JS;
-	$this->registerJs($js, \yii\web\View::POS_READY);
+	$this->registerJs($js, \app\components\View::POS_READY);
 ?>
 
 <?php $form = ActiveForm::begin([
@@ -48,7 +48,7 @@ JS;
 <?php if($model->isNewRecord)
 	$model->license = BannerSetting::getLicense();
 echo $form->field($model, 'license', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12"><span class="small-px mb-10">'.Yii::t('app', 'Enter the your license key that is provided to you when you purchased this plugin. If you do not know your license key, please contact support team.').'</span>{input}{error}<span class="small-px">'.Yii::t('app', 'Format: XXXX-XXXX-XXXX-XXXX').'</span></div>'])
-	->textInput(['maxlength' => true])
+	->textInput(['maxlength'=>true])
 	->label($model->getAttributeLabel('license'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 
 <?php 
@@ -61,11 +61,11 @@ echo $form->field($model, 'permission', ['template' => '{label}<div class="col-m
 	->label($model->getAttributeLabel('permission'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 
 <?php echo $form->field($model, 'meta_description', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12">{input}{error}</div>'])
-	->textarea(['rows'=>2,'rows'=>6])
+	->textarea(['rows'=>6, 'cols'=>50])
 	->label($model->getAttributeLabel('meta_description'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 
 <?php echo $form->field($model, 'meta_keyword', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12">{input}{error}</div>'])
-	->textarea(['rows'=>2,'rows'=>6])
+	->textarea(['rows'=>6, 'cols'=>50])
 	->label($model->getAttributeLabel('meta_keyword'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 
 <?php 
@@ -92,7 +92,7 @@ echo $form->field($model, 'banner_resize', ['template' => '{label}<div class="co
 
 <div class="ln_solid"></div>
 <div class="form-group">
-	<div class="col-md-6 col-sm-9 col-xs-12 col-md-offset-3">
+	<div class="col-md-6 col-sm-9 col-xs-12 col-sm-offset-3">
 		<?php echo Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']); ?>
 	</div>
 </div>

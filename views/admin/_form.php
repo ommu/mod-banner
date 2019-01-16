@@ -1,10 +1,10 @@
 <?php
 /**
  * Banners (banners)
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $this ommu\banner\controllers\AdminController
  * @var $model ommu\banner\models\Banners
- * @var $form yii\widgets\ActiveForm
+ * @var $form app\components\ActiveForm
  *
  * @author Aziz Masruhan <aziz.masruhan@gmail.com>
  * @contact (+62)857-4115-5177
@@ -41,7 +41,7 @@ $js = <<<JS
 		}
 	});
 JS;
-	$this->registerJs($js, \yii\web\View::POS_READY);
+	$this->registerJs($js, \app\components\View::POS_READY);
 ?>
 
 <?php $form = ActiveForm::begin([
@@ -62,7 +62,7 @@ echo $form->field($model, 'cat_id', ['template' => '{label}<div class="col-md-6 
 	->label($model->getAttributeLabel('cat_id'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 
 <?php echo $form->field($model, 'title', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12">{input}{error}</div>'])
-	->textInput(['maxlength' => true])
+	->textInput(['maxlength'=>true])
 	->label($model->getAttributeLabel('title'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 
 <?php 
@@ -91,7 +91,7 @@ echo $form->field($model, 'linked_i', ['template' => '{label}<div class="col-md-
 </div>
 
 <?php echo $form->field($model, 'banner_desc', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12">{input}{error}</div>'])
-	->textarea(['rows'=>2,'rows'=>6])
+	->textarea(['rows'=>6, 'cols'=>50])
 	->label($model->getAttributeLabel('banner_desc'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 
 <?php echo $form->field($model, 'published_date', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12">{input}{error}</div>'])
@@ -118,7 +118,7 @@ echo $form->field($model, 'permanent_i', ['template' => '{label}<div class="col-
 
 <div class="ln_solid"></div>
 <div class="form-group">
-	<div class="col-md-6 col-sm-9 col-xs-12 col-md-offset-3">
+	<div class="col-md-6 col-sm-9 col-xs-12 col-sm-offset-3">
 		<?php echo Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']); ?>
 	</div>
 </div>

@@ -1,10 +1,10 @@
 <?php
 /**
  * Banners (banners)
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $this ommu\banner\controllers\AdminController
  * @var $model ommu\banner\models\search\Banners
- * @var $form yii\widgets\ActiveForm
+ * @var $form app\components\ActiveForm
  *
  * @author Aziz Masruhan <aziz.masruhan@gmail.com>
  * @contact (+62)857-4115-5177

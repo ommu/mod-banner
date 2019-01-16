@@ -1,7 +1,7 @@
 <?php
 /**
  * Banner Clicks (banner-clicks)
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $this ommu\banner\controllers\ClicksController
  * @var $model ommu\banner\models\BannerClicks
  *
@@ -18,7 +18,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use app\libraries\grid\GridView;
+use app\components\grid\GridView;
 use yii\widgets\Pjax;
 
 $this->params['breadcrumbs'][] = $this->title;

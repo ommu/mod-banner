@@ -1,7 +1,7 @@
 <?php
 /**
  * ViewsController
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $model ommu\banner\models\BannerViews
  *
  * ViewsController implements the CRUD actions for BannerViews model.

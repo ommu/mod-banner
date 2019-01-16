@@ -1,10 +1,10 @@
 <?php
 /**
  * Banner View Histories (banner-view-history)
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $this ommu\banner\controllers\HistoryViewController
  * @var $model ommu\banner\models\search\BannerViewHistory
- * @var $form yii\widgets\ActiveForm
+ * @var $form app\components\ActiveForm
  *
  * @author Aziz Masruhan <aziz.masruhan@gmail.com>
  * @contact (+62)857-4115-5177
@@ -35,7 +35,7 @@ $js = <<<JS
 		});
 	});
 JS;
-	$this->registerJs($js, \yii\web\View::POS_READY);
+	$this->registerJs($js, \app\components\View::POS_READY);
 ?>
 
 <div class="grid-form">

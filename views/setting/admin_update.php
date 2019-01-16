@@ -1,10 +1,10 @@
 <?php
 /**
  * Banner Settings (banner-setting)
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $this ommu\banner\controllers\SettingController
  * @var $model ommu\banner\models\BannerSetting
- * @var $form yii\widgets\ActiveForm
+ * @var $form app\components\ActiveForm
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
@@ -17,7 +17,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use app\libraries\grid\GridView;
+use app\components\grid\GridView;
 use yii\widgets\Pjax;
 use app\components\menu\MenuContent;
 use app\components\menu\MenuOption;

@@ -1,7 +1,7 @@
 <?php
 /**
  * Banner View Histories (banner-view-history)
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $this ommu\banner\controllers\HistoryViewController
  * @var $model ommu\banner\models\BannerViewHistory
  *
@@ -18,7 +18,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use app\libraries\grid\GridView;
+use app\components\grid\GridView;
 use yii\widgets\Pjax;
 
 $this->params['breadcrumbs'][] = $this->title;

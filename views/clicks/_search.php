@@ -1,10 +1,10 @@
 <?php
 /**
  * Banner Clicks (banner-clicks)
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $this ommu\banner\controllers\ClicksController
  * @var $model ommu\banner\models\search\BannerClicks
- * @var $form yii\widgets\ActiveForm
+ * @var $form app\components\ActiveForm
  *
  * @author Aziz Masruhan <aziz.masruhan@gmail.com>
  * @contact (+62)857-4115-5177

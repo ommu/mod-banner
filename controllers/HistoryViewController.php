@@ -1,7 +1,7 @@
 <?php
 /**
  * HistoryViewController
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $model ommu\banner\models\BannerViewHistory
  *
  * HistoryViewController implements the CRUD actions for BannerViewHistory model.

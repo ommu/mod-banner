@@ -1,10 +1,10 @@
 <?php
 /**
  * Banner Click Histories (banner-click-history)
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $this ommu\banner\controllers\HistoryClickController
  * @var $model ommu\banner\models\search\BannerClickHistory
- * @var $form yii\widgets\ActiveForm
+ * @var $form app\components\ActiveForm
  *
  * @author Aziz Masruhan <aziz.masruhan@gmail.com>
  * @contact (+62)857-4115-5177
