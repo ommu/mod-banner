@@ -1,10 +1,10 @@
 <?php
 /**
- * AdminController
+ * CategoryController
  * @var $this app\components\View
- * @var $model ommu\banner\models\Banners
+ * @var $model ommu\banner\models\BannerCategory
  *
- * AdminController implements the CRUD actions for Banners model.
+ * CategoryController implements the CRUD actions for BannerCategory model.
  * Reference start
  * TOC :
  *	Index
@@ -17,27 +17,25 @@
  *
  *	findModel
  *
- * @author Aziz Masruhan <aziz.masruhan@gmail.com>
- * @contact (+62)857-4115-5177
- * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
- * @created date 6 October 2017, 08:14 WIB
- * @modified date 30 April 2018, 21:22 WIB
- * @modified by Putra Sudaryanto <putra@sudaryanto.id>
+ * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
+ * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
+ * @created date 5 October 2017, 15:43 WIB
+ * @modified date 30 April 2018, 13:27 WIB
  * @link https://github.com/ommu/mod-banner
  *
  */
  
-namespace ommu\banner\controllers;
+namespace ommu\banner\controllers\setting;
 
 use Yii;
 use yii\filters\VerbFilter;
 use app\components\Controller;
 use mdm\admin\components\AccessControl;
-use ommu\banner\models\Banners;
-use ommu\banner\models\search\Banners as BannersSearch;
+use ommu\banner\models\BannerCategory;
+use ommu\banner\models\search\BannerCategory as BannerCategorySearch;
 
-class AdminController extends Controller
+class CategoryController extends Controller
 {
 	/**
 	 * {@inheritdoc}
@@ -67,12 +65,12 @@ class AdminController extends Controller
 	}
 
 	/**
-	 * Lists all Banners models.
+	 * Lists all BannerCategory models.
 	 * @return mixed
 	 */
 	public function actionManage()
 	{
-		$searchModel = new BannersSearch();
+		$searchModel = new BannerCategorySearch();
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
 		$gridColumn = Yii::$app->request->get('GridColumn', null);
@@ -85,7 +83,7 @@ class AdminController extends Controller
 		}
 		$columns = $searchModel->getGridColumn($cols);
 
-		$this->view->title = Yii::t('app', 'Banners');
+		$this->view->title = Yii::t('app', 'Banner Categories');
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_index', [
@@ -96,24 +94,24 @@ class AdminController extends Controller
 	}
 
 	/**
-	 * Creates a new Banners model.
+	 * Creates a new BannerCategory model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 * @return mixed
 	 */
 	public function actionCreate()
 	{
-		$model = new Banners();
+		$model = new BannerCategory();
 
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
 			if($model->save()) {
-				Yii::$app->session->setFlash('success', Yii::t('app', 'Banner success created.'));
+				Yii::$app->session->setFlash('success', Yii::t('app', 'Banner category success created.'));
 				return $this->redirect(['manage']);
-				//return $this->redirect(['view', 'id' => $model->banner_id]);
+				//return $this->redirect(['view', 'id' => $model->cat_id]);
 			} 
 		}
 
-		$this->view->title = Yii::t('app', 'Create Banner');
+		$this->view->title = Yii::t('app', 'Create Banner Category');
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_create', [
@@ -122,7 +120,7 @@ class AdminController extends Controller
 	}
 
 	/**
-	 * Updates an existing Banners model.
+	 * Updates an existing BannerCategory model.
 	 * If update is successful, the browser will be redirected to the 'view' page.
 	 * @param integer $id
 	 * @return mixed
@@ -134,13 +132,13 @@ class AdminController extends Controller
 			$model->load(Yii::$app->request->post());
 
 			if($model->save()) {
-				Yii::$app->session->setFlash('success', Yii::t('app', 'Banner success updated.'));
+				Yii::$app->session->setFlash('success', Yii::t('app', 'Banner category success updated.'));
 				return $this->redirect(['manage']);
-				//return $this->redirect(['view', 'id' => $model->banner_id]);
+				//return $this->redirect(['view', 'id' => $model->cat_id]);
 			}
 		}
 
-		$this->view->title = Yii::t('app', 'Update {model-class}: {title}', ['model-class' => 'Banner', 'title' => $model->title]);
+		$this->view->title = Yii::t('app', 'Update {model-class}: {name}', ['model-class' => 'Banner Category', 'name' => $model->title->message]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_update', [
@@ -149,7 +147,7 @@ class AdminController extends Controller
 	}
 
 	/**
-	 * Displays a single Banners model.
+	 * Displays a single BannerCategory model.
 	 * @param integer $id
 	 * @return mixed
 	 */
@@ -157,7 +155,7 @@ class AdminController extends Controller
 	{
 		$model = $this->findModel($id);
 
-		$this->view->title = Yii::t('app', 'Detail {model-class}: {title}', ['model-class' => 'Banner', 'title' => $model->title]);
+		$this->view->title = Yii::t('app', 'Detail {model-class}: {name}', ['model-class' => 'Banner Category', 'name' => $model->title->message]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_view', [
@@ -166,7 +164,7 @@ class AdminController extends Controller
 	}
 
 	/**
-	 * Deletes an existing Banners model.
+	 * Deletes an existing BannerCategory model.
 	 * If deletion is successful, the browser will be redirected to the 'index' page.
 	 * @param integer $id
 	 * @return mixed
@@ -177,14 +175,14 @@ class AdminController extends Controller
 		$model->publish = 2;
 
 		if($model->save(false, ['publish'])) {
-			Yii::$app->session->setFlash('success', Yii::t('app', 'Banner success deleted.'));
+			Yii::$app->session->setFlash('success', Yii::t('app', 'Banner category success deleted.'));
 			return $this->redirect(['manage']);
-			//return $this->redirect(['view', 'id' => $model->banner_id]);
+			//return $this->redirect(['view', 'id' => $model->cat_id]);
 		}
 	}
 
 	/**
-	 * actionPublish an existing Banners model.
+	 * actionPublish an existing BannerCategory model.
 	 * If publish is successful, the browser will be redirected to the 'index' page.
 	 * @param integer $id
 	 * @return mixed
@@ -196,21 +194,21 @@ class AdminController extends Controller
 		$model->publish = $replace;
 
 		if($model->save(false, ['publish'])) {
-			Yii::$app->session->setFlash('success', Yii::t('app', 'Banner success updated.'));
+			Yii::$app->session->setFlash('success', Yii::t('app', 'Banner category success updated.'));
 			return $this->redirect(['manage']);
 		}
 	}
 
 	/**
-	 * Finds the Banners model based on its primary key value.
+	 * Finds the BannerCategory model based on its primary key value.
 	 * If the model is not found, a 404 HTTP exception will be thrown.
 	 * @param integer $id
-	 * @return Banners the loaded model
+	 * @return BannerCategory the loaded model
 	 * @throws NotFoundHttpException if the model cannot be found
 	 */
 	protected function findModel($id)
 	{
-		if(($model = Banners::findOne($id)) !== null) 
+		if(($model = BannerCategory::findOne($id)) !== null) 
 			return $model;
 
 		throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
