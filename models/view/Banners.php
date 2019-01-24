@@ -6,14 +6,13 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 11 October 2017, 10:31 WIB
- * @modified date 30 April 2018, 11:53 WIB
+ * @modified date 24 January 2019, 17:28 WIB
  * @link https://github.com/ommu/mod-banner
  *
  * This is the model class for table "_banners".
  *
  * The followings are the available columns in table "_banners":
  * @property integer $banner_id
- * @property integer $publish
  * @property integer $permanent
  * @property string $views
  * @property string $clicks
@@ -23,8 +22,6 @@
 namespace ommu\banner\models\view;
 
 use Yii;
-use yii\helpers\Url;
-use yii\helpers\Html;
 
 class Banners extends \app\components\ActiveRecord
 {
@@ -52,7 +49,7 @@ class Banners extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['banner_id', 'publish', 'permanent'], 'integer'],
+			[['banner_id', 'permanent'], 'integer'],
 			[['views', 'clicks'], 'number'],
 		];
 	}
@@ -64,7 +61,6 @@ class Banners extends \app\components\ActiveRecord
 	{
 		return [
 			'banner_id' => Yii::t('app', 'Banner'),
-			'publish' => Yii::t('app', 'Publish'),
 			'permanent' => Yii::t('app', 'Permanent'),
 			'views' => Yii::t('app', 'Views'),
 			'clicks' => Yii::t('app', 'Clicks'),
@@ -74,7 +70,7 @@ class Banners extends \app\components\ActiveRecord
 	/**
 	 * Set default columns to display
 	 */
-	public function init() 
+	public function init()
 	{
 		parent::init();
 
@@ -87,12 +83,6 @@ class Banners extends \app\components\ActiveRecord
 			'attribute' => 'banner_id',
 			'value' => function($model, $key, $index, $column) {
 				return $model->banner_id;
-			},
-		];
-		$this->templateColumns['publish'] = [
-			'attribute' => 'publish',
-			'value' => function($model, $key, $index, $column) {
-				return $model->publish;
 			},
 		];
 		$this->templateColumns['permanent'] = [

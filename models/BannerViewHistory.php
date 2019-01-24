@@ -6,7 +6,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 6 October 2017, 13:17 WIB
- * @modified date 30 April 2018, 12:42 WIB
+ * @modified date 19 January 2019, 06:56 WIB
  * @link https://github.com/ommu/mod-banner
  *
  * This is the model class for table "ommu_banner_view_history".
@@ -25,14 +25,12 @@
 namespace ommu\banner\models;
 
 use Yii;
-use yii\helpers\Url;
-use yii\helpers\Html;
 
 class BannerViewHistory extends \app\components\ActiveRecord
 {
 	public $gridForbiddenColumn = [];
 
-	// Variable Search
+	// Search Variable
 	public $category_search;
 	public $banner_search;
 	public $user_search;
@@ -95,7 +93,7 @@ class BannerViewHistory extends \app\components\ActiveRecord
 	/**
 	 * Set default columns to display
 	 */
-	public function init() 
+	public function init()
 	{
 		parent::init();
 
@@ -156,29 +154,5 @@ class BannerViewHistory extends \app\components\ActiveRecord
 			$model = self::findOne($id);
 			return $model;
 		}
-	}
-
-	/**
-	 * before validate attributes
-	 */
-	public function beforeValidate() 
-	{
-		if(parent::beforeValidate()) {
-			if($this->isNewRecord)
-				$this->view_ip = $_SERVER['REMOTE_ADDR'];
-		}
-		return true;
-	}
-
-	/**
-	 * before save attributes
-	 */
-	public function beforeSave($insert)
-	{
-		if(parent::beforeSave($insert)) {
-			if($insert)
-				$this->view_date = Yii::$app->formatter->asDate($this->view_date, 'php:Y-m-d');
-		}
-		return true;
 	}
 }

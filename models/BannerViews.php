@@ -6,7 +6,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 6 October 2017, 13:14 WIB
- * @modified date 30 April 2018, 12:40 WIB
+ * @modified date 19 January 2019, 06:56 WIB
  * @link https://github.com/ommu/mod-banner
  *
  * This is the model class for table "ommu_banner_views".
@@ -21,15 +21,14 @@
  *
  * The followings are the available model relations:
  * @property BannerViewHistory[] $histories
- * @property Banners $banner
  * @property Users $user
+ * @property Banners $banner
  *
  */
 
 namespace ommu\banner\models;
 
 use Yii;
-use yii\helpers\Url;
 use yii\helpers\Html;
 use ommu\users\models\Users;
 
@@ -37,7 +36,7 @@ class BannerViews extends \app\components\ActiveRecord
 {
 	public $gridForbiddenColumn = [];
 
-	// Variable Search
+	// Search Variable
 	public $category_search;
 	public $banner_search;
 	public $user_search;
@@ -58,10 +57,9 @@ class BannerViews extends \app\components\ActiveRecord
 		return [
 			[['banner_id'], 'required'],
 			[['banner_id', 'user_id', 'views'], 'integer'],
-			[['user_id', 'view_date', 'view_ip'], 'safe'],
 			[['view_ip'], 'string', 'max' => 20],
-			[['banner_id'], 'exist', 'skipOnError' => true, 'targetClass' => Banners::className(), 'targetAttribute' => ['banner_id' => 'banner_id']],
 			[['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_id' => 'user_id']],
+			[['banner_id'], 'exist', 'skipOnError' => true, 'targetClass' => Banners::className(), 'targetAttribute' => ['banner_id' => 'banner_id']],
 		];
 	}
 
@@ -77,6 +75,7 @@ class BannerViews extends \app\components\ActiveRecord
 			'views' => Yii::t('app', 'Views'),
 			'view_date' => Yii::t('app', 'View Date'),
 			'view_ip' => Yii::t('app', 'View Ip'),
+			'histories' => Yii::t('app', 'Histories'),
 			'category_search' => Yii::t('app', 'Category'),
 			'banner_search' => Yii::t('app', 'Banner'),
 			'user_search' => Yii::t('app', 'User'),
@@ -86,17 +85,15 @@ class BannerViews extends \app\components\ActiveRecord
 	/**
 	 * @return \yii\db\ActiveQuery
 	 */
-	public function getHistories()
+	public function getHistories($count=true)
 	{
-		return $this->hasMany(BannerViewHistory::className(), ['view_id' => 'view_id']);
-	}
+		if($count == true) {
+			$model = BannerViewHistory::find()
+				->where(['view_id' => $this->view_id]);
+			return $model->count();
+		}
 
-	/**
-	 * @return \yii\db\ActiveQuery
-	 */
-	public function getBanner()
-	{
-		return $this->hasOne(Banners::className(), ['banner_id' => 'banner_id']);
+		return $this->hasMany(BannerViewHistory::className(), ['view_id' => 'view_id']);
 	}
 
 	/**
@@ -105,6 +102,14 @@ class BannerViews extends \app\components\ActiveRecord
 	public function getUser()
 	{
 		return $this->hasOne(Users::className(), ['user_id' => 'user_id']);
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getBanner()
+	{
+		return $this->hasOne(Banners::className(), ['banner_id' => 'banner_id']);
 	}
 
 	/**
@@ -119,7 +124,7 @@ class BannerViews extends \app\components\ActiveRecord
 	/**
 	 * Set default columns to display
 	 */
-	public function init() 
+	public function init()
 	{
 		parent::init();
 
@@ -128,7 +133,7 @@ class BannerViews extends \app\components\ActiveRecord
 			'class'  => 'yii\grid\SerialColumn',
 			'contentOptions' => ['class'=>'center'],
 		];
-		if(!Yii::$app->request->get('category') && !Yii::$app->request->get('banner')) {
+		if(!Yii::$app->request->get('banner')) {
 			$this->templateColumns['category_search'] = [
 				'attribute' => 'category_search',
 				'filter' => BannerCategory::getCategory(),
@@ -136,8 +141,6 @@ class BannerViews extends \app\components\ActiveRecord
 					return isset($model->banner->category) ? $model->banner->category->title->message : '-';
 				},
 			];
-		}
-		if(!Yii::$app->request->get('banner')) {
 			$this->templateColumns['banner_search'] = [
 				'attribute' => 'banner_search',
 				'value' => function($model, $key, $index, $column) {
@@ -170,11 +173,10 @@ class BannerViews extends \app\components\ActiveRecord
 			'attribute' => 'views',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['history-view/index', 'view'=>$model->primaryKey]);
-				return Html::a($model->views ? $model->views : 0, $url);
+				return Html::a($model->views ? $model->views : 0, ['history/view-detail/manage', 'view'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} histories', ['count'=>$model->histories])]);
 			},
 			'contentOptions' => ['class'=>'center'],
-			'format' => 'raw',
+			'format' => 'html',
 		];
 	}
 
@@ -196,6 +198,9 @@ class BannerViews extends \app\components\ActiveRecord
 		}
 	}
 
+	/**
+	 * {@inheritdoc}
+	 */
 	public function insertView($banner_id)
 	{
 		$user_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
@@ -222,14 +227,13 @@ class BannerViews extends \app\components\ActiveRecord
 	/**
 	 * before validate attributes
 	 */
-	public function beforeValidate() 
+	public function beforeValidate()
 	{
 		if(parent::beforeValidate()) {
 			if($this->isNewRecord) {
 				if($this->user_id == null)
 					$this->user_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
 			}
-
 			$this->view_ip = $_SERVER['REMOTE_ADDR'];
 		}
 		return true;

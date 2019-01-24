@@ -8,15 +8,17 @@
  * Reference start
  * TOC :
  *	Index
+ *	Manage
  *	View
  *	Delete
  *
  *	findModel
  *
- * @created date 6 October 2017, 13:24 WIB
+ * @author Putra Sudaryanto <putra@sudaryanto.id>
+ * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 6 October 2017, 13:24 WIB
- * @modified date 1 May 2018, 20:44 WIB
+ * @modified date 24 January 2019, 17:54 WIB
  * @link https://github.com/ommu/mod-banner
  *
  */
@@ -77,7 +79,7 @@ class ViewController extends Controller
 		}
 		$columns = $searchModel->getGridColumn($cols);
 
-		$this->view->title = Yii::t('app', 'Banner Views');
+		$this->view->title = Yii::t('app', 'Views');
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_manage', [
@@ -96,7 +98,7 @@ class ViewController extends Controller
 	{
 		$model = $this->findModel($id);
 
-		$this->view->title = Yii::t('app', 'Detail {model-class}: {banner-id}', ['model-class' => 'Banner View', 'banner-id' => $model->banner->title]);
+		$this->view->title = Yii::t('app', 'Detail {model-class}: {banner-id}', ['model-class' => 'View', 'banner-id' => $model->banner->title]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_view', [
@@ -127,7 +129,7 @@ class ViewController extends Controller
 	 */
 	protected function findModel($id)
 	{
-		if(($model = BannerViews::findOne($id)) !== null) 
+		if(($model = BannerViews::findOne($id)) !== null)
 			return $model;
 
 		throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));

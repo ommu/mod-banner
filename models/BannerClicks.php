@@ -6,7 +6,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 6 October 2017, 13:04 WIB
- * @modified date 30 April 2018, 12:39 WIB
+ * @modified date 19 January 2019, 06:56 WIB
  * @link https://github.com/ommu/mod-banner
  *
  * This is the model class for table "ommu_banner_clicks".
@@ -21,15 +21,14 @@
  *
  * The followings are the available model relations:
  * @property BannerClickHistory[] $histories
- * @property Banners $banner
  * @property Users $user
+ * @property Banners $banner
  *
  */
 
 namespace ommu\banner\models;
 
 use Yii;
-use yii\helpers\Url;
 use yii\helpers\Html;
 use ommu\users\models\Users;
 
@@ -37,7 +36,7 @@ class BannerClicks extends \app\components\ActiveRecord
 {
 	public $gridForbiddenColumn = [];
 
-	// Variable Search
+	// Search Variable
 	public $category_search;
 	public $banner_search;
 	public $user_search;
@@ -58,10 +57,9 @@ class BannerClicks extends \app\components\ActiveRecord
 		return [
 			[['banner_id'], 'required'],
 			[['banner_id', 'user_id', 'clicks'], 'integer'],
-			[['user_id', 'click_date', 'click_ip'], 'safe'],
 			[['click_ip'], 'string', 'max' => 20],
-			[['banner_id'], 'exist', 'skipOnError' => true, 'targetClass' => Banners::className(), 'targetAttribute' => ['banner_id' => 'banner_id']],
 			[['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_id' => 'user_id']],
+			[['banner_id'], 'exist', 'skipOnError' => true, 'targetClass' => Banners::className(), 'targetAttribute' => ['banner_id' => 'banner_id']],
 		];
 	}
 
@@ -77,6 +75,7 @@ class BannerClicks extends \app\components\ActiveRecord
 			'clicks' => Yii::t('app', 'Clicks'),
 			'click_date' => Yii::t('app', 'Click Date'),
 			'click_ip' => Yii::t('app', 'Click Ip'),
+			'histories' => Yii::t('app', 'Histories'),
 			'category_search' => Yii::t('app', 'Category'),
 			'banner_search' => Yii::t('app', 'Banner'),
 			'user_search' => Yii::t('app', 'User'),
@@ -86,17 +85,15 @@ class BannerClicks extends \app\components\ActiveRecord
 	/**
 	 * @return \yii\db\ActiveQuery
 	 */
-	public function getHistories()
+	public function getHistories($count=true)
 	{
-		return $this->hasMany(BannerClickHistory::className(), ['click_id' => 'click_id']);
-	}
+		if($count == true) {
+			$model = BannerClickHistory::find()
+				->where(['click_id' => $this->click_id]);
+			return $model->count();
+		}
 
-	/**
-	 * @return \yii\db\ActiveQuery
-	 */
-	public function getBanner()
-	{
-		return $this->hasOne(Banners::className(), ['banner_id' => 'banner_id']);
+		return $this->hasMany(BannerClickHistory::className(), ['click_id' => 'click_id']);
 	}
 
 	/**
@@ -105,6 +102,14 @@ class BannerClicks extends \app\components\ActiveRecord
 	public function getUser()
 	{
 		return $this->hasOne(Users::className(), ['user_id' => 'user_id']);
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getBanner()
+	{
+		return $this->hasOne(Banners::className(), ['banner_id' => 'banner_id']);
 	}
 
 	/**
@@ -119,7 +124,7 @@ class BannerClicks extends \app\components\ActiveRecord
 	/**
 	 * Set default columns to display
 	 */
-	public function init() 
+	public function init()
 	{
 		parent::init();
 
@@ -128,7 +133,7 @@ class BannerClicks extends \app\components\ActiveRecord
 			'class'  => 'yii\grid\SerialColumn',
 			'contentOptions' => ['class'=>'center'],
 		];
-		if(!Yii::$app->request->get('category') && !Yii::$app->request->get('banner')) {
+		if(!Yii::$app->request->get('banner')) {
 			$this->templateColumns['category_search'] = [
 				'attribute' => 'category_search',
 				'filter' => BannerCategory::getCategory(),
@@ -136,8 +141,6 @@ class BannerClicks extends \app\components\ActiveRecord
 					return isset($model->banner->category) ? $model->banner->category->title->message : '-';
 				},
 			];
-		}
-		if(!Yii::$app->request->get('banner')) {
 			$this->templateColumns['banner_search'] = [
 				'attribute' => 'banner_search',
 				'value' => function($model, $key, $index, $column) {
@@ -170,11 +173,10 @@ class BannerClicks extends \app\components\ActiveRecord
 			'attribute' => 'clicks',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['history-click/index', 'click'=>$model->primaryKey]);
-				return Html::a($model->clicks ? $model->clicks : 0, $url);
+				return Html::a($model->clicks ? $model->clicks : 0, ['history/click-detail/manage', 'click'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} histories', ['count'=>$model->histories])]);
 			},
 			'contentOptions' => ['class'=>'center'],
-			'format' => 'raw',
+			'format' => 'html',
 		];
 	}
 
@@ -196,6 +198,10 @@ class BannerClicks extends \app\components\ActiveRecord
 		}
 	}
 
+
+	/**
+	 * {@inheritdoc}
+	 */
 	public function insertCLick($banner_id)
 	{
 		$user_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
@@ -222,14 +228,13 @@ class BannerClicks extends \app\components\ActiveRecord
 	/**
 	 * before validate attributes
 	 */
-	public function beforeValidate() 
+	public function beforeValidate()
 	{
 		if(parent::beforeValidate()) {
 			if($this->isNewRecord) {
 				if($this->user_id == null)
 					$this->user_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
 			}
-
 			$this->click_ip = $_SERVER['REMOTE_ADDR'];
 		}
 		return true;

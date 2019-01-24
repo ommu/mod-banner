@@ -10,7 +10,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 6 October 2017, 13:06 WIB
- * @modified date 1 May 2018, 20:45 WIB
+ * @modified date 24 January 2019, 17:53 WIB
  * @link https://github.com/ommu/mod-banner
  *
  */
@@ -19,11 +19,16 @@ use yii\helpers\Html;
 use app\components\ActiveForm;
 ?>
 
-<div class="search-form">
+<div class="banner-clicks-search search-form">
+
 	<?php $form = ActiveForm::begin([
 		'action' => ['index'],
 		'method' => 'get',
+		'options' => [
+			'data-pjax' => 1
+		],
 	]); ?>
+
 		<?php echo $form->field($model, 'banner_search');?>
 
 		<?php echo $form->field($model, 'user_search');?>
@@ -39,5 +44,7 @@ use app\components\ActiveForm;
 			<?php echo Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
 			<?php echo Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
 		</div>
+
 	<?php ActiveForm::end(); ?>
+
 </div>

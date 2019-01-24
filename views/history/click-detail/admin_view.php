@@ -9,22 +9,24 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2018 OMMU (www.ommu.co)
  * @created date 2 May 2018, 11:10 WIB
+ * @modified date 24 January 2019, 17:55 WIB
  * @link https://github.com/ommu/mod-banner
  *
  */
 
-use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\DetailView;
 
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Banner Click Histories'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Click Histories'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = $model->click->banner->title;
 
 $this->params['menu']['content'] = [
 	['label' => Yii::t('app', 'Back To Manage'), 'url' => Url::to(['index']), 'icon' => 'table'],
 	['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id'=>$model->id]), 'htmlOptions' => ['data-confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'), 'data-method'=>'post'], 'icon' => 'trash'],
 ];
 ?>
+
+<div class="banner-click-history-view">
 
 <?php echo DetailView::widget([
 	'model' => $model,
@@ -34,8 +36,16 @@ $this->params['menu']['content'] = [
 	'attributes' => [
 		'id',
 		[
-			'attribute' => 'click_search',
-			'value' => isset($model->click) ? $model->click->banner->title : '-',
+			'attribute' => 'category_search',
+			'value' => isset($model->click->banner->category) ? $model->click->banner->category->title->message : '-',
+		],
+		[
+			'attribute' => 'banner_search',
+			'value' => isset($model->click->banner) ? $model->click->banner->title : '-',
+		],
+		[
+			'attribute' => 'user_search',
+			'value' => isset($model->click->user) ? $model->click->user->displayname : '-',
 		],
 		[
 			'attribute' => 'click_date',
@@ -44,3 +54,5 @@ $this->params['menu']['content'] = [
 		'click_ip',
 	],
 ]) ?>
+
+</div>

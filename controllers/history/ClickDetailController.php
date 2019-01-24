@@ -8,6 +8,7 @@
  * Reference start
  * TOC :
  *	Index
+ *	Manage
  *	View
  *	Delete
  *
@@ -17,7 +18,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 6 October 2017, 13:29 WIB
- * @modified date 2 May 2018, 11:10 WIB
+ * @modified date 24 January 2019, 17:55 WIB
  * @link https://github.com/ommu/mod-banner
  *
  */
@@ -78,7 +79,7 @@ class ClickDetailController extends Controller
 		}
 		$columns = $searchModel->getGridColumn($cols);
 
-		$this->view->title = Yii::t('app', 'Banner Click Histories');
+		$this->view->title = Yii::t('app', 'Click Histories');
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_manage', [
@@ -97,7 +98,7 @@ class ClickDetailController extends Controller
 	{
 		$model = $this->findModel($id);
 
-		$this->view->title = Yii::t('app', 'Detail {model-class}: {click-id}', ['model-class' => 'Banner Click History', 'click-id' => $model->click->banner->title]);
+		$this->view->title = Yii::t('app', 'Detail {model-class}: {click-id}', ['model-class' => 'Click History', 'click-id' => $model->click->banner->title]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_view', [
@@ -128,7 +129,7 @@ class ClickDetailController extends Controller
 	 */
 	protected function findModel($id)
 	{
-		if(($model = BannerClickHistory::findOne($id)) !== null) 
+		if(($model = BannerClickHistory::findOne($id)) !== null)
 			return $model;
 
 		throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));

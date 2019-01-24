@@ -8,6 +8,7 @@
  * Reference start
  * TOC :
  *	Index
+ *	Manage
  *	View
  *	Delete
  *
@@ -17,7 +18,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 6 October 2017, 13:06 WIB
- * @modified date 1 May 2018, 20:45 WIB
+ * @modified date 24 January 2019, 17:53 WIB
  * @link https://github.com/ommu/mod-banner
  *
  */
@@ -78,7 +79,7 @@ class ClickController extends Controller
 		}
 		$columns = $searchModel->getGridColumn($cols);
 
-		$this->view->title = Yii::t('app', 'Banner Clicks');
+		$this->view->title = Yii::t('app', 'Clicks');
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_manage', [
@@ -97,7 +98,7 @@ class ClickController extends Controller
 	{
 		$model = $this->findModel($id);
 
-		$this->view->title = Yii::t('app', 'Detail {model-class}: {banner-id}', ['model-class' => 'Banner Click', 'banner-id' => $model->banner->title]);
+		$this->view->title = Yii::t('app', 'Detail {model-class}: {banner-id}', ['model-class' => 'Click', 'banner-id' => $model->banner->title]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_view', [
@@ -128,7 +129,7 @@ class ClickController extends Controller
 	 */
 	protected function findModel($id)
 	{
-		if(($model = BannerClicks::findOne($id)) !== null) 
+		if(($model = BannerClicks::findOne($id)) !== null)
 			return $model;
 
 		throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
