@@ -2,13 +2,11 @@
 /**
  * BannerViews
  * 
- * @author Aziz Masruhan <aziz.masruhan@gmail.com>
- * @contact (+62)857-4115-5177
+ * @author Putra Sudaryanto <putra@sudaryanto.id>
+ * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 6 October 2017, 13:14 WIB
  * @modified date 30 April 2018, 12:40 WIB
- * @modified by Putra Sudaryanto <putra@sudaryanto.id>
- * @contact (+62)856-299-4114
  * @link https://github.com/ommu/mod-banner
  *
  * This is the model class for table "ommu_banner_views".
@@ -111,11 +109,11 @@ class BannerViews extends \app\components\ActiveRecord
 
 	/**
 	 * {@inheritdoc}
-	 * @return \ommu\banner\models\query\BannerViewsQuery the active query used by this AR class.
+	 * @return \ommu\banner\models\query\BannerViews the active query used by this AR class.
 	 */
 	public static function find()
 	{
-		return new \ommu\banner\models\query\BannerViewsQuery(get_called_class());
+		return new \ommu\banner\models\query\BannerViews(get_called_class());
 	}
 
 	/**

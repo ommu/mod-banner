@@ -17,8 +17,6 @@
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 6 October 2017, 13:24 WIB
  * @modified date 1 May 2018, 20:44 WIB
- * @modified by Putra Sudaryanto <putra@sudaryanto.id>
- * @contact (+62)856-299-4114
  * @link https://github.com/ommu/mod-banner
  *
  */

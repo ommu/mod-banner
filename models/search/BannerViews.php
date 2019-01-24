@@ -4,13 +4,11 @@
  *
  * BannerViews represents the model behind the search form about `ommu\banner\models\BannerViews`.
  *
- * @author Aziz Masruhan <aziz.masruhan@gmail.com>
- * @contact (+62)857-4115-5177
+ * @author Putra Sudaryanto <putra@sudaryanto.id>
+ * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2018 OMMU (www.ommu.co)
  * @created date 6 October 2017, 13:16 WIB
  * @modified date 1 May 2018, 20:44 WIB
- * @modified by Putra Sudaryanto <putra@sudaryanto.id>
- * @contact (+62)856-299-4114
  * @link https://github.com/ommu/mod-banner
  *
  */
