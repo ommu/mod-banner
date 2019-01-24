@@ -64,6 +64,7 @@ class BannerCategory extends BannerCategoryModel
 	{
 		$query = BannerCategoryModel::find()->alias('t');
 		$query->joinWith([
+			'view view',
 			'title title', 
 			'description description', 
 			'creation creation', 
@@ -95,6 +96,22 @@ class BannerCategory extends BannerCategoryModel
 		$attributes['modified_search'] = [
 			'asc' => ['modified.displayname' => SORT_ASC],
 			'desc' => ['modified.displayname' => SORT_DESC],
+		];
+		$attributes['banners'] = [
+			'asc' => ['view.banners' => SORT_ASC],
+			'desc' => ['view.banners' => SORT_DESC],
+		];
+		$attributes['permanent'] = [
+			'asc' => ['view.banner_permanent' => SORT_ASC],
+			'desc' => ['view.banner_permanent' => SORT_DESC],
+		];
+		$attributes['pending'] = [
+			'asc' => ['view.banner_pending' => SORT_ASC],
+			'desc' => ['view.banner_pending' => SORT_DESC],
+		];
+		$attributes['expired'] = [
+			'asc' => ['view.banner_expired' => SORT_ASC],
+			'desc' => ['view.banner_expired' => SORT_DESC],
 		];
 		$dataProvider->setSort([
 			'attributes' => $attributes,

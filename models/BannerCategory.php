@@ -43,6 +43,7 @@ use yii\helpers\Html;
 use yii\behaviors\SluggableBehavior;
 use app\models\SourceMessage;
 use ommu\users\models\Users;
+use ommu\banner\models\view\BannerCategory as BannerCategoryView;
 
 class BannerCategory extends \app\components\ActiveRecord
 {
@@ -234,6 +235,14 @@ class BannerCategory extends \app\components\ActiveRecord
 	public function getModified()
 	{
 		return $this->hasOne(Users::className(), ['user_id' => 'modified_id']);
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getView()
+	{
+		return $this->hasOne(BannerCategoryView::className(), ['cat_id' => 'cat_id']);
 	}
 
 	/**

@@ -2,11 +2,11 @@
 /**
  * BannerCategory
  * 
- * @author Aziz Masruhan <aziz.masruhan@gmail.com>
- * @contact (+62)857-4115-5177
+ * @author Putra Sudaryanto <putra@sudaryanto.id>
+ * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 11 October 2017, 10:32 WIB
- * @modified date 30 April 2018, 11:53 WIB
+ * @modified date 24 January 2019, 16:50 WIB
  * @modified by Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @link https://github.com/ommu/mod-banner
@@ -16,6 +16,7 @@
  * The followings are the available columns in table "_banner_category":
  * @property integer $cat_id
  * @property string $banners
+ * @property string $banner_permanent
  * @property string $banner_pending
  * @property string $banner_expired
  * @property string $banner_unpublish
@@ -26,8 +27,6 @@
 namespace ommu\banner\models\view;
 
 use Yii;
-use yii\helpers\Url;
-use yii\helpers\Html;
 
 class BannerCategory extends \app\components\ActiveRecord
 {
@@ -56,7 +55,7 @@ class BannerCategory extends \app\components\ActiveRecord
 	{
 		return [
 			[['cat_id', 'banner_all'], 'integer'],
-			[['banners', 'banner_pending', 'banner_expired', 'banner_unpublish'], 'number'],
+			[['banners', 'banner_permanent', 'banner_pending', 'banner_expired', 'banner_unpublish'], 'number'],
 		];
 	}
 
@@ -68,6 +67,7 @@ class BannerCategory extends \app\components\ActiveRecord
 		return [
 			'cat_id' => Yii::t('app', 'Category'),
 			'banners' => Yii::t('app', 'Banners'),
+			'banner_permanent' => Yii::t('app', 'Banner Permanent'),
 			'banner_pending' => Yii::t('app', 'Banner Pending'),
 			'banner_expired' => Yii::t('app', 'Banner Expired'),
 			'banner_unpublish' => Yii::t('app', 'Banner Unpublish'),
@@ -78,7 +78,7 @@ class BannerCategory extends \app\components\ActiveRecord
 	/**
 	 * Set default columns to display
 	 */
-	public function init() 
+	public function init()
 	{
 		parent::init();
 
@@ -97,6 +97,12 @@ class BannerCategory extends \app\components\ActiveRecord
 			'attribute' => 'banners',
 			'value' => function($model, $key, $index, $column) {
 				return $model->banners;
+			},
+		];
+		$this->templateColumns['banner_permanent'] = [
+			'attribute' => 'banner_permanent',
+			'value' => function($model, $key, $index, $column) {
+				return $model->banner_permanent;
 			},
 		];
 		$this->templateColumns['banner_pending'] = [
