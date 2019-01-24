@@ -8,6 +8,7 @@
  * Reference start
  * TOC :
  *	Index
+ *	Manage
  *	Create
  *	Update
  *	View
@@ -17,13 +18,11 @@
  *
  *	findModel
  *
- * @author Aziz Masruhan <aziz.masruhan@gmail.com>
- * @contact (+62)857-4115-5177
+ * @author Putra Sudaryanto <putra@sudaryanto.id>
+ * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 6 October 2017, 08:14 WIB
- * @modified date 30 April 2018, 21:22 WIB
- * @modified by Putra Sudaryanto <putra@sudaryanto.id>
- * @contact (+62)856-299-4114
+ * @modified date 24 January 2019, 15:50 WIB
  * @link https://github.com/ommu/mod-banner
  *
  */
@@ -88,7 +87,7 @@ class AdminController extends Controller
 		$this->view->title = Yii::t('app', 'Banners');
 		$this->view->description = '';
 		$this->view->keywords = '';
-		return $this->render('admin_index', [
+		return $this->render('admin_manage', [
 			'searchModel' => $searchModel,
 			'dataProvider' => $dataProvider,
 			'columns' => $columns,
@@ -109,8 +108,12 @@ class AdminController extends Controller
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'Banner success created.'));
 				return $this->redirect(['manage']);
-				//return $this->redirect(['view', 'id' => $model->banner_id]);
-			} 
+				//return $this->redirect(['view', 'id'=>$model->banner_id]);
+
+			} else {
+				if(Yii::$app->request->isAjax)
+					return \yii\helpers\Json::encode(\app\components\ActiveForm::validate($model));
+			}
 		}
 
 		$this->view->title = Yii::t('app', 'Create Banner');
@@ -136,7 +139,10 @@ class AdminController extends Controller
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'Banner success updated.'));
 				return $this->redirect(['manage']);
-				//return $this->redirect(['view', 'id' => $model->banner_id]);
+
+			} else {
+				if(Yii::$app->request->isAjax)
+					return \yii\helpers\Json::encode(\app\components\ActiveForm::validate($model));
 			}
 		}
 
@@ -176,10 +182,9 @@ class AdminController extends Controller
 		$model = $this->findModel($id);
 		$model->publish = 2;
 
-		if($model->save(false, ['publish'])) {
+		if($model->save(false, ['publish','modified_id'])) {
 			Yii::$app->session->setFlash('success', Yii::t('app', 'Banner success deleted.'));
 			return $this->redirect(['manage']);
-			//return $this->redirect(['view', 'id' => $model->banner_id]);
 		}
 	}
 
@@ -195,7 +200,7 @@ class AdminController extends Controller
 		$replace = $model->publish == 1 ? 0 : 1;
 		$model->publish = $replace;
 
-		if($model->save(false, ['publish'])) {
+		if($model->save(false, ['publish','modified_id'])) {
 			Yii::$app->session->setFlash('success', Yii::t('app', 'Banner success updated.'));
 			return $this->redirect(['manage']);
 		}
@@ -210,7 +215,7 @@ class AdminController extends Controller
 	 */
 	protected function findModel($id)
 	{
-		if(($model = Banners::findOne($id)) !== null) 
+		if(($model = Banners::findOne($id)) !== null)
 			return $model;
 
 		throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));

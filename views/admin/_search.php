@@ -6,30 +6,33 @@
  * @var $model ommu\banner\models\search\Banners
  * @var $form app\components\ActiveForm
  *
- * @author Aziz Masruhan <aziz.masruhan@gmail.com>
- * @contact (+62)857-4115-5177
+ * @author Putra Sudaryanto <putra@sudaryanto.id>
+ * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 6 October 2017, 08:14 WIB
- * @modified date 30 April 2018, 21:22 WIB
- * @modified by Putra Sudaryanto <putra@sudaryanto.id>
- * @contact (+62)856-299-4114
+ * @modified date 24 January 2019, 15:50 WIB
  * @link https://github.com/ommu/mod-banner
  *
  */
 
 use yii\helpers\Html;
 use app\components\ActiveForm;
+use ommu\banner\models\BannerCategory;
 ?>
 
-<div class="search-form">
+<div class="banners-search search-form">
+
 	<?php $form = ActiveForm::begin([
 		'action' => ['index'],
 		'method' => 'get',
+		'options' => [
+			'data-pjax' => 1
+		],
 	]); ?>
-		<?php echo $form->field($model, 'publish')
-			->checkbox();?>
 
-		<?php echo $form->field($model, 'category_search');?>
+		<?php $category = BannerCategory::getCategory();
+		echo $form->field($model, 'cat_id')
+			->dropDownList($category, ['prompt'=>'']);?>
 
 		<?php echo $form->field($model, 'title');?>
 
@@ -60,9 +63,14 @@ use app\components\ActiveForm;
 
 		<?php echo $form->field($model, 'slug');?>
 
+		<?php echo $form->field($model, 'publish')
+			->dropDownList($this->filterYesNo(), ['prompt'=>'']);?>
+
 		<div class="form-group">
 			<?php echo Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
 			<?php echo Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
 		</div>
+
 	<?php ActiveForm::end(); ?>
+
 </div>

@@ -4,14 +4,13 @@
  * @var $this app\components\View
  * @var $this ommu\banner\controllers\AdminController
  * @var $model ommu\banner\models\Banners
+ * @var $searchModel ommu\banner\models\search\Banners
  *
- * @author Aziz Masruhan <aziz.masruhan@gmail.com>
- * @contact (+62)857-4115-5177
+ * @author Putra Sudaryanto <putra@sudaryanto.id>
+ * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 6 October 2017, 08:14 WIB
- * @modified date 30 April 2018, 21:22 WIB
- * @modified by Putra Sudaryanto <putra@sudaryanto.id>
- * @contact (+62)856-299-4114
+ * @modified date 24 January 2019, 15:50 WIB
  * @link https://github.com/ommu/mod-banner
  *
  */
@@ -32,6 +31,7 @@ $this->params['menu']['option'] = [
 ];
 ?>
 
+<div class="banners-index">
 <?php Pjax::begin(); ?>
 
 <?php //echo $this->render('_search', ['model'=>$searchModel]); ?>
@@ -75,3 +75,4 @@ echo GridView::widget([
 ]); ?>
 
 <?php Pjax::end(); ?>
+</div>
