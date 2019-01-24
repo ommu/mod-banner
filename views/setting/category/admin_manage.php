@@ -4,12 +4,13 @@
  * @var $this app\components\View
  * @var $this ommu\banner\controllers\setting\CategoryController
  * @var $model ommu\banner\models\BannerCategory
+ * @var $searchModel ommu\banner\models\search\BannerCategory
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 5 October 2017, 15:43 WIB
- * @modified date 30 April 2018, 13:27 WIB
+ * @modified date 24 January 2019, 13:06 WIB
  * @link https://github.com/ommu/mod-banner
  *
  */
@@ -22,7 +23,7 @@ use yii\widgets\Pjax;
 $this->params['breadcrumbs'][] = $this->title;
 
 $this->params['menu']['content'] = [
-	['label' => Yii::t('app', 'Back To Setting'), 'url' => Url::to(['setting/index']), 'icon' => 'gears'],
+	['label' => Yii::t('app', 'Back To Setting'), 'url' => Url::to(['setting/admin/index']), 'icon' => 'gears'],
 	['label' => Yii::t('app', 'Add Category'), 'url' => Url::to(['create']), 'icon' => 'plus-square'],
 ];
 $this->params['menu']['option'] = [
@@ -31,6 +32,7 @@ $this->params['menu']['option'] = [
 ];
 ?>
 
+<div class="banner-category-index">
 <?php Pjax::begin(); ?>
 
 <?php //echo $this->render('_search', ['model'=>$searchModel]); ?>
@@ -48,16 +50,16 @@ array_push($columnData, [
 	'buttons' => [
 		'view' => function ($url, $model, $key) {
 			$url = Url::to(['view', 'id'=>$model->primaryKey]);
-			return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, ['title' => Yii::t('app', 'Detail Banner Category')]);
+			return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, ['title' => Yii::t('app', 'Detail Category')]);
 		},
 		'update' => function ($url, $model, $key) {
 			$url = Url::to(['update', 'id'=>$model->primaryKey]);
-			return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, ['title' => Yii::t('app', 'Update Banner Category')]);
+			return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, ['title' => Yii::t('app', 'Update Category')]);
 		},
 		'delete' => function ($url, $model, $key) {
 			$url = Url::to(['delete', 'id'=>$model->primaryKey]);
 			return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
-				'title' => Yii::t('app', 'Delete Banner Category'),
+				'title' => Yii::t('app', 'Delete Category'),
 				'data-confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
 				'data-method'  => 'post',
 			]);
@@ -74,3 +76,4 @@ echo GridView::widget([
 ]); ?>
 
 <?php Pjax::end(); ?>
+</div>

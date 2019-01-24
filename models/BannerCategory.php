@@ -6,7 +6,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 5 October 2017, 15:42 WIB
- * @modified date 30 April 2018, 12:38 WIB
+ * @modified date 19 January 2019, 06:55 WIB
  * @link https://github.com/ommu/mod-banner
  *
  * This is the model class for table "ommu_banner_category".
@@ -43,7 +43,6 @@ use yii\helpers\Html;
 use yii\behaviors\SluggableBehavior;
 use app\models\SourceMessage;
 use ommu\users\models\Users;
-use ommu\banner\models\view\BannerCategory as BannerCategoryView;
 
 class BannerCategory extends \app\components\ActiveRecord
 {
@@ -53,13 +52,9 @@ class BannerCategory extends \app\components\ActiveRecord
 	public $name_i;
 	public $desc_i;
 
-	// Variable Search
+	// Search Variable
 	public $creation_search;
 	public $modified_search;
-	public $banner_search;
-	public $pending_search;
-	public $expired_search;
-	public $unpublish_search;
 
 	/**
 	 * @return string the associated database table name
@@ -89,14 +84,13 @@ class BannerCategory extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['name_i', 'desc_i', 'banner_limit', 'banner_size'], 'required'],
+			[['name_i', 'desc_i', 'banner_size', 'banner_limit'], 'required'],
 			[['publish', 'name', 'desc', 'banner_limit', 'creation_id', 'modified_id'], 'integer'],
-			[['name_i', 'desc_i', 'cat_code'], 'string'],
+			[['name_i', 'desc_i'], 'string'],
 			//[['banner_size'], 'serialize'],
-			[['cat_code', 'banner_size', 'creation_date', 'modified_date', 'updated_date'], 'safe'],
-			[['cat_code', 'slug', 'name_i'], 'string', 'max' => 64],
-			[['desc_i'], 'string', 'max' => 256],
-			[['banner_limit'], 'string', 'max' => 2],
+			[['name_i'], 'string', 'max' => 64],
+			[['desc_i'], 'string', 'max' => 128],
+			[['cat_code', 'slug'], 'string', 'max' => 32],
 		];
 	}
 
@@ -112,7 +106,7 @@ class BannerCategory extends \app\components\ActiveRecord
 			'desc' => Yii::t('app', 'Description'),
 			'cat_code' => Yii::t('app', 'Code'),
 			'banner_size' => Yii::t('app', 'Size'),
-			'banner_size[i]' => Yii::t('app', 'Banner Size'),
+			'banner_size[i]' => Yii::t('app', 'Size'),
 			'banner_size[width]' => Yii::t('app', 'Width'),
 			'banner_size[height]' => Yii::t('app', 'Height'),
 			'banner_limit' => Yii::t('app', 'Limit'),
@@ -124,20 +118,89 @@ class BannerCategory extends \app\components\ActiveRecord
 			'slug' => Yii::t('app', 'Slug'),
 			'name_i' => Yii::t('app', 'Category'),
 			'desc_i' => Yii::t('app', 'Description'),
+			'banners' => Yii::t('app', 'Banners'),
+			'permanent' => Yii::t('app', 'Permanent'),
+			'pending' => Yii::t('app', 'Pending'),
+			'expired' => Yii::t('app', 'Expired'),
 			'creation_search' => Yii::t('app', 'Creation'),
 			'modified_search' => Yii::t('app', 'Modified'),
-			'banner_search'	=> Yii::t('app', 'Banners'),
-			'pending_search'   => Yii::t('app', 'Pending'),
-			'expired_search'   => Yii::t('app', 'Expired'),
-			'unpublish_search' => Yii::t('app', 'Unpublish'),
 		];
 	}
 
 	/**
 	 * @return \yii\db\ActiveQuery
 	 */
-	public function getBanners()
+	public function getBannersByType($cat_id, $type='published')
 	{
+		$model = Banners::find()
+			->where(['cat_id' => $cat_id]);
+		if($type == 'published')
+			$model->published();
+		elseif($type == 'permanent')
+			$model->permanent();
+		elseif($type == 'pending')
+			$model->pending();
+		elseif($type == 'expired')
+			$model->expired();
+
+		return $model->count();
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getBanners($count=true, $publish=null)
+	{
+		if($count == true) {
+			if($publish === null)
+				return self::getBannersByType($this->cat_id, 'published');
+
+			$model = Banners::find()
+				->where(['cat_id' => $this->cat_id]);
+			if($publish == 0)
+				$model->unpublish();
+			elseif($publish == 1)
+				$model->published();
+			elseif($publish == 2)
+				$model->deleted();
+
+			return $model->count();
+		}
+
+		return $this->hasMany(Banners::className(), ['cat_id' => 'cat_id'])
+			->andOnCondition([sprintf('%s.publish', Banners::tableName()) => $publish]);
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getPermanent($count=true)
+	{
+		if($count == true)
+			return self::getBannersByType($this->cat_id, 'permanent');
+
+		return $this->hasMany(Banners::className(), ['cat_id' => 'cat_id']);
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getPending($count=true)
+	{
+		if($count == true)
+			return self::getBannersByType($this->cat_id, 'pending');
+
+		return $this->hasMany(Banners::className(), ['cat_id' => 'cat_id']);
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getExpired($count=true)
+	{
+		if($count == true)
+			return self::getBannersByType($this->cat_id, 'expired');
+
 		return $this->hasMany(Banners::className(), ['cat_id' => 'cat_id']);
 	}
 
@@ -174,26 +237,18 @@ class BannerCategory extends \app\components\ActiveRecord
 	}
 
 	/**
-	 * @return \yii\db\ActiveQuery
-	 */
-	public function getView()
-	{
-		return $this->hasOne(BannerCategoryView::className(), ['cat_id' => 'cat_id']);
-	}
-
-	/**
 	 * {@inheritdoc}
-	 * @return \ommu\banner\models\query\BannerCategoryQuery the active query used by this AR class.
+	 * @return \ommu\banner\models\query\BannerCategory the active query used by this AR class.
 	 */
 	public static function find()
 	{
-		return new \ommu\banner\models\query\BannerCategoryQuery(get_called_class());
+		return new \ommu\banner\models\query\BannerCategory(get_called_class());
 	}
 
 	/**
 	 * Set default columns to display
 	 */
-	public function init() 
+	public function init()
 	{
 		parent::init();
 
@@ -205,13 +260,13 @@ class BannerCategory extends \app\components\ActiveRecord
 		$this->templateColumns['name_i'] = [
 			'attribute' => 'name_i',
 			'value' => function($model, $key, $index, $column) {
-				return isset($model->title) ? $model->title->message : '-';
+				return $model->name_i;
 			},
 		];
 		$this->templateColumns['desc_i'] = [
 			'attribute' => 'desc_i',
 			'value' => function($model, $key, $index, $column) {
-				return isset($model->description) ? $model->description->message : '-';
+				return $model->desc_i;
 			},
 		];
 		$this->templateColumns['cat_code'] = [
@@ -224,6 +279,13 @@ class BannerCategory extends \app\components\ActiveRecord
 			'attribute' => 'banner_size',
 			'value' => function($model, $key, $index, $column) {
 				return self::getSize($model->banner_size);
+			},
+		];
+		$this->templateColumns['banner_limit'] = [
+			'attribute' => 'banner_limit',
+			'filter' => false,
+			'value' => function($model, $key, $index, $column) {
+				return $model->banner_limit;
 			},
 			'contentOptions' => ['class'=>'center'],
 		];
@@ -270,53 +332,41 @@ class BannerCategory extends \app\components\ActiveRecord
 				return $model->slug;
 			},
 		];
-		$this->templateColumns['banner_limit'] = [
-			'attribute' => 'banner_limit',
+		$this->templateColumns['banners'] = [
+			'attribute' => 'banners',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
-				return $model->banner_limit;
+				return Html::a($model->banners, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'publish']);
 			},
 			'contentOptions' => ['class'=>'center'],
+			'format' => 'html',
 		];
-		$this->templateColumns['banner_search'] = [
-			'attribute' => 'banner_search',
+		$this->templateColumns['permanent'] = [
+			'attribute' => 'permanent',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['admin/index', 'category'=>$model->primaryKey, 'expired'=>'publish']);
-				return Html::a($model->view->banners ? $model->view->banners : 0, $url);
+				return Html::a($model->permanent, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'permanent']);
 			},
 			'contentOptions' => ['class'=>'center'],
-			'format'	=> 'html',
+			'format' => 'html',
 		];
-		$this->templateColumns['pending_search'] = [
-			'attribute' => 'pending_search',
+		$this->templateColumns['pending'] = [
+			'attribute' => 'pending',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['admin/index', 'category'=>$model->primaryKey, 'expired'=>'pending']);
-				return Html::a($model->view->banner_pending ? $model->view->banner_pending : 0, $url);
+				return Html::a($model->pending, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'pending']);
 			},
 			'contentOptions' => ['class'=>'center'],
-			'format'	=> 'html',
+			'format' => 'html',
 		];
-		$this->templateColumns['expired_search'] = [
-			'attribute' => 'expired_search',
+		$this->templateColumns['expired'] = [
+			'attribute' => 'expired',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['admin/index', 'category'=>$model->primaryKey, 'expired'=>'expired']);
-				return Html::a($model->view->banner_expired ? $model->view->banner_expired : 0, $url);
+				return Html::a($model->expired, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'expired']);
 			},
 			'contentOptions' => ['class'=>'center'],
-			'format'	=> 'html',
-		];
-		$this->templateColumns['unpublish_search'] = [
-			'attribute' => 'unpublish_search',
-			'filter' => false,
-			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['admin/index', 'category'=>$model->primaryKey, 'expired'=>'unpublish']);
-				return Html::a($model->view->banner_unpublish ? $model->view->banner_unpublish : 0, $url);
-			},
-			'contentOptions' => ['class'=>'center'],
-			'format'	=> 'html',
+			'format' => 'html',
 		];
 		if(!Yii::$app->request->get('trash')) {
 			$this->templateColumns['publish'] = [
@@ -324,7 +374,7 @@ class BannerCategory extends \app\components\ActiveRecord
 				'filter' => $this->filterYesNo(),
 				'value' => function($model, $key, $index, $column) {
 					$url = Url::to(['category/publish', 'id'=>$model->primaryKey]);
-					return $this->quickAction($url, $model->publish);
+					return $this->quickAction($url, $model->publish, 'Enable,Disable');
 				},
 				'contentOptions' => ['class'=>'center'],
 				'format' => 'raw',
@@ -355,24 +405,17 @@ class BannerCategory extends \app\components\ActiveRecord
 	 */
 	public static function getCategory($publish=null, $array=true) 
 	{
-		$model = self::find()->alias('t')
-			->leftJoin(sprintf('%s title', SourceMessage::tableName()), 't.name=title.id');
+		$model = self::find()->alias('t');
+		$model->leftJoin(sprintf('%s title', SourceMessage::tableName()), 't.name=title.id');
 		if($publish != null)
 			$model->andWhere(['t.publish' => $publish]);
 
 		$model = $model->orderBy('title.message ASC')->all();
 
-		if($array == true) {
-			$items = [];
-			if($model !== null) {
-				foreach($model as $val) {
-					$items[$val->cat_id] = $val->title->message;
-				}
-				return $items;
-			} else
-				return false;
-		} else 
-			return $model;
+		if($array == true)
+			return \yii\helpers\ArrayHelper::map($model, 'cat_id', 'name_i');
+
+		return $model;
 	}
 
 	/**
@@ -389,8 +432,10 @@ class BannerCategory extends \app\components\ActiveRecord
 	/**
 	 * after find attributes
 	 */
-	public function afterFind() 
+	public function afterFind()
 	{
+		parent::afterFind();
+
 		$this->name_i = isset($this->title) ? $this->title->message : '';
 		$this->desc_i = isset($this->description) ? $this->description->message : '';
 		$this->banner_size = unserialize($this->banner_size);
@@ -399,9 +444,18 @@ class BannerCategory extends \app\components\ActiveRecord
 	/**
 	 * before validate attributes
 	 */
-	public function beforeValidate() 
+	public function beforeValidate()
 	{
 		if(parent::beforeValidate()) {
+			if($this->banner_size['width'] == '' && $this->banner_size['height'] == '')
+				$this->addError('banner_size', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('banner_size')]));
+			else {
+				if($this->banner_size['width'] == '')
+					$this->addError('banner_size', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('banner_size[width]')]));
+				else if($this->banner_size['height'] == '')
+					$this->addError('banner_size', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('banner_size[height]')]));
+			}
+
 			if($this->isNewRecord) {
 				if($this->creation_id == null)
 					$this->creation_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
@@ -409,6 +463,8 @@ class BannerCategory extends \app\components\ActiveRecord
 				if($this->modified_id == null)
 					$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
 			}
+
+			$this->cat_code = $this->urlTitle($this->name_i);
 		}
 		return true;
 	}
@@ -431,7 +487,9 @@ class BannerCategory extends \app\components\ActiveRecord
 				$name->message = $this->name_i;
 				if($name->save())
 					$this->name = $name->id;
-				
+
+				$this->slug = $this->urlTitle($this->name_i);
+
 			} else {
 				$name = SourceMessage::findOne($this->name);
 				$name->message = $this->name_i;
@@ -444,17 +502,15 @@ class BannerCategory extends \app\components\ActiveRecord
 				$desc->message = $this->desc_i;
 				if($desc->save())
 					$this->desc = $desc->id;
-				
+
 			} else {
 				$desc = SourceMessage::findOne($this->desc);
 				$desc->message = $this->desc_i;
 				$desc->save();
 			}
 
-			$this->cat_code = $this->urlTitle($this->name_i);
 			$this->banner_size = serialize($this->banner_size);
 		}
 		return true;
 	}
-
 }

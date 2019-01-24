@@ -8,7 +8,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 5 October 2017, 15:43 WIB
- * @modified date 30 April 2018, 13:27 WIB
+ * @modified date 24 January 2019, 13:06 WIB
  * @link https://github.com/ommu/mod-banner
  *
  */
@@ -28,7 +28,7 @@ class BannerCategory extends BannerCategoryModel
 	public function rules()
 	{
 		return [
-			[['publish', 'cat_id', 'name', 'desc', 'banner_limit', 'creation_id', 'modified_id'], 'integer'],
+			[['cat_id', 'publish', 'name', 'desc', 'banner_limit', 'creation_id', 'modified_id'], 'integer'],
 			[['cat_code', 'banner_size', 'creation_date', 'modified_date', 'updated_date', 'slug',
 				'name_i', 'desc_i', 'creation_search', 'modified_search'], 'safe'],
 		];
@@ -57,13 +57,13 @@ class BannerCategory extends BannerCategoryModel
 	 * Creates data provider instance with search query applied
 	 *
 	 * @param array $params
+	 *
 	 * @return ActiveDataProvider
 	 */
 	public function search($params)
 	{
 		$query = BannerCategoryModel::find()->alias('t');
 		$query->joinWith([
-			'view view', 
 			'title title', 
 			'description description', 
 			'creation creation', 
@@ -71,9 +71,13 @@ class BannerCategory extends BannerCategoryModel
 		]);
 
 		// add conditions that should always apply here
-		$dataProvider = new ActiveDataProvider([
+		$dataParams = [
 			'query' => $query,
-		]);
+		];
+		// disable pagination agar data pada api tampil semua
+		if(isset($params['pagination']) && $params['pagination'] == 0)
+			$dataParams['pagination'] = false;
+		$dataProvider = new ActiveDataProvider($dataParams);
 
 		$attributes = array_keys($this->getTableSchema()->columns);
 		$attributes['name_i'] = [
@@ -91,22 +95,6 @@ class BannerCategory extends BannerCategoryModel
 		$attributes['modified_search'] = [
 			'asc' => ['modified.displayname' => SORT_ASC],
 			'desc' => ['modified.displayname' => SORT_DESC],
-		];
-		$attributes['banner_search'] = [
-			'asc' => ['view.banners' => SORT_ASC],
-			'desc' => ['view.banners' => SORT_DESC],
-		];
-		$attributes['pending_search'] = [
-			'asc' => ['view.banner_pending' => SORT_ASC],
-			'desc' => ['view.banner_pending' => SORT_DESC],
-		];
-		$attributes['expired_search'] = [
-			'asc' => ['view.banner_expired' => SORT_ASC],
-			'desc' => ['view.banner_expired' => SORT_DESC],
-		];
-		$attributes['unpublish_search'] = [
-			'asc' => ['view.banner_unpublish' => SORT_ASC],
-			'desc' => ['view.banner_unpublish' => SORT_DESC],
 		];
 		$dataProvider->setSort([
 			'attributes' => $attributes,

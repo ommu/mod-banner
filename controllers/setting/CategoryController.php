@@ -8,6 +8,7 @@
  * Reference start
  * TOC :
  *	Index
+ *	Manage
  *	Create
  *	Update
  *	View
@@ -21,7 +22,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 5 October 2017, 15:43 WIB
- * @modified date 30 April 2018, 13:27 WIB
+ * @modified date 24 January 2019, 13:06 WIB
  * @link https://github.com/ommu/mod-banner
  *
  */
@@ -83,10 +84,10 @@ class CategoryController extends Controller
 		}
 		$columns = $searchModel->getGridColumn($cols);
 
-		$this->view->title = Yii::t('app', 'Banner Categories');
+		$this->view->title = Yii::t('app', 'Categories');
 		$this->view->description = '';
 		$this->view->keywords = '';
-		return $this->render('admin_index', [
+		return $this->render('admin_manage', [
 			'searchModel' => $searchModel,
 			'dataProvider' => $dataProvider,
 			'columns' => $columns,
@@ -107,14 +108,18 @@ class CategoryController extends Controller
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'Banner category success created.'));
 				return $this->redirect(['manage']);
-				//return $this->redirect(['view', 'id' => $model->cat_id]);
-			} 
+				//return $this->redirect(['view', 'id'=>$model->cat_id]);
+
+			} else {
+				if(Yii::$app->request->isAjax)
+					return \yii\helpers\Json::encode(\app\components\ActiveForm::validate($model));
+			}
 		}
 
-		$this->view->title = Yii::t('app', 'Create Banner Category');
+		$this->view->title = Yii::t('app', 'Create Category');
 		$this->view->description = '';
 		$this->view->keywords = '';
-		return $this->render('admin_create', [
+		return $this->oRender('admin_create', [
 			'model' => $model,
 		]);
 	}
@@ -134,14 +139,17 @@ class CategoryController extends Controller
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'Banner category success updated.'));
 				return $this->redirect(['manage']);
-				//return $this->redirect(['view', 'id' => $model->cat_id]);
+
+			} else {
+				if(Yii::$app->request->isAjax)
+					return \yii\helpers\Json::encode(\app\components\ActiveForm::validate($model));
 			}
 		}
 
-		$this->view->title = Yii::t('app', 'Update {model-class}: {name}', ['model-class' => 'Banner Category', 'name' => $model->title->message]);
+		$this->view->title = Yii::t('app', 'Update {model-class}: {name}', ['model-class' => 'Category', 'name' => $model->title->message]);
 		$this->view->description = '';
 		$this->view->keywords = '';
-		return $this->render('admin_update', [
+		return $this->oRender('admin_update', [
 			'model' => $model,
 		]);
 	}
@@ -155,7 +163,7 @@ class CategoryController extends Controller
 	{
 		$model = $this->findModel($id);
 
-		$this->view->title = Yii::t('app', 'Detail {model-class}: {name}', ['model-class' => 'Banner Category', 'name' => $model->title->message]);
+		$this->view->title = Yii::t('app', 'Detail {model-class}: {name}', ['model-class' => 'Category', 'name' => $model->title->message]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_view', [
@@ -174,10 +182,9 @@ class CategoryController extends Controller
 		$model = $this->findModel($id);
 		$model->publish = 2;
 
-		if($model->save(false, ['publish'])) {
+		if($model->save(false, ['publish','modified_id'])) {
 			Yii::$app->session->setFlash('success', Yii::t('app', 'Banner category success deleted.'));
 			return $this->redirect(['manage']);
-			//return $this->redirect(['view', 'id' => $model->cat_id]);
 		}
 	}
 
@@ -193,7 +200,7 @@ class CategoryController extends Controller
 		$replace = $model->publish == 1 ? 0 : 1;
 		$model->publish = $replace;
 
-		if($model->save(false, ['publish'])) {
+		if($model->save(false, ['publish','modified_id'])) {
 			Yii::$app->session->setFlash('success', Yii::t('app', 'Banner category success updated.'));
 			return $this->redirect(['manage']);
 		}
@@ -208,7 +215,7 @@ class CategoryController extends Controller
 	 */
 	protected function findModel($id)
 	{
-		if(($model = BannerCategory::findOne($id)) !== null) 
+		if(($model = BannerCategory::findOne($id)) !== null)
 			return $model;
 
 		throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));

@@ -10,7 +10,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 5 October 2017, 15:43 WIB
- * @modified date 30 April 2018, 13:27 WIB
+ * @modified date 24 January 2019, 13:06 WIB
  * @link https://github.com/ommu/mod-banner
  *
  */
@@ -19,13 +19,15 @@ use yii\helpers\Html;
 use app\components\ActiveForm;
 ?>
 
-<div class="search-form">
+<div class="banner-category-search search-form">
+
 	<?php $form = ActiveForm::begin([
 		'action' => ['index'],
 		'method' => 'get',
+		'options' => [
+			'data-pjax' => 1
+		],
 	]); ?>
-		<?php echo $form->field($model, 'publish')
-			->checkbox();?>
 
 		<?php echo $form->field($model, 'name_i');?>
 
@@ -52,9 +54,14 @@ use app\components\ActiveForm;
 
 		<?php echo $form->field($model, 'slug');?>
 
+		<?php echo $form->field($model, 'publish')
+			->dropDownList($this->filterYesNo(), ['prompt'=>'']);?>
+
 		<div class="form-group">
 			<?php echo Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
 			<?php echo Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
 		</div>
+
 	<?php ActiveForm::end(); ?>
+
 </div>

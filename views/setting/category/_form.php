@@ -10,7 +10,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 5 October 2017, 15:43 WIB
- * @modified date 30 April 2018, 13:27 WIB
+ * @modified date 24 January 2019, 13:06 WIB
  * @link https://github.com/ommu/mod-banner
  *
  */
@@ -18,6 +18,8 @@
 use yii\helpers\Html;
 use app\components\ActiveForm;
 ?>
+
+<div class="banner-category-form">
 
 <?php $form = ActiveForm::begin([
 	'enableClientValidation' => true,
@@ -35,19 +37,13 @@ use app\components\ActiveForm;
 	->textarea(['rows'=>6, 'cols'=>50, 'maxlength'=>true])
 	->label($model->getAttributeLabel('desc_i'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 
-<div class="form-group field-banner_size">
-	<?php echo $form->field($model, 'banner_size[i]', ['template' => '{label}', 'options' => ['tag' => null]])
-		->label($model->getAttributeLabel('banner_size[i]'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
-	<div class="col-md-6 col-sm-9 col-xs-12 row">
-		<?php echo $form->field($model, 'banner_size[width]', ['template' => '{input}{error}', 'options' => ['class' => 'col-md-6 col-sm-6 col-xs-12']])
-			->textInput(['type'=>'number', 'min'=>0, 'maxlength'=>'3', 'placeholder'=>$model->getAttributeLabel('banner_size[width]')])
-			->label($model->getAttributeLabel('banner_size[width]'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
-			
-		<?php echo $form->field($model, 'banner_size[height]', ['template' => '{input}{error}', 'options' => ['class' => 'col-md-6 col-sm-6 col-xs-12']])
-			->textInput(['type'=>'number', 'min'=>0, 'maxlength'=>'3', 'placeholder'=>$model->getAttributeLabel('banner_size[height]')])
-			->label($model->getAttributeLabel('banner_size[height]'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
-	</div>
-</div>
+<?php $banner_size_height = $form->field($model, 'banner_size[height]', ['template' => '<div class="col-md-3 col-sm-5 col-xs-6">{input}</div>', 'options' => ['tag' => null]])
+	->textInput(['type'=>'number', 'min'=>0, 'maxlength'=>'3', 'placeholder'=>$model->getAttributeLabel('banner_size[height]')])
+	->label($model->getAttributeLabel('banner_size[height]'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+
+<?php echo $form->field($model, 'banner_size[width]', ['template' => '{label}<div class="col-md-3 col-sm-4 col-xs-6">{input}</div>'.$banner_size_height.'<div class="col-md-6 col-sm-9 col-xs-12 col-sm-offset-3">{error}</div>'])
+	->textInput(['type'=>'number', 'min'=>0, 'maxlength'=>'3', 'placeholder'=>$model->getAttributeLabel('banner_size[width]')])
+	->label($model->getAttributeLabel('banner_size'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 
 <?php echo $form->field($model, 'banner_limit', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12">{input}{error}</div>'])
 	->textInput(['type' => 'number', 'min' => '1','maxlength' => true])
@@ -65,3 +61,5 @@ use app\components\ActiveForm;
 </div>
 
 <?php ActiveForm::end(); ?>
+
+</div>
