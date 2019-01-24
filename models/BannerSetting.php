@@ -6,7 +6,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 6 October 2017, 06:21 WIB
- * @modified date 30 April 2018, 12:38 WIB
+ * @modified date 19 January 2019, 06:54 WIB
  * @link https://github.com/ommu/mod-banner
  *
  * This is the model class for table "ommu_banner_setting".
@@ -15,8 +15,8 @@
  * @property integer $id
  * @property string $license
  * @property integer $permission
- * @property string $meta_keyword
  * @property string $meta_description
+ * @property string $meta_keyword
  * @property integer $banner_validation
  * @property integer $banner_resize
  * @property string $banner_file_type
@@ -31,7 +31,6 @@
 namespace ommu\banner\models;
 
 use Yii;
-use yii\helpers\Url;
 use yii\helpers\Html;
 use ommu\users\models\Users;
 
@@ -42,7 +41,7 @@ class BannerSetting extends \app\components\ActiveRecord
 
 	public $gridForbiddenColumn = [];
 
-	// Variable Search
+	// Search Variable
 	public $modified_search;
 
 	/**
@@ -59,11 +58,10 @@ class BannerSetting extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['license', 'permission', 'meta_keyword', 'meta_description', 'banner_validation', 'banner_resize', 'banner_file_type'], 'required'],
+			[['license', 'permission', 'meta_description', 'meta_keyword', 'banner_validation', 'banner_resize', 'banner_file_type'], 'required'],
 			[['permission', 'banner_validation', 'banner_resize', 'modified_id'], 'integer'],
 			[['meta_keyword', 'meta_description', 'banner_file_type'], 'string'],
 			//[['banner_file_type'], 'serialize'],
-			[['modified_date'], 'safe'],
 			[['license'], 'string', 'max' => 32],
 		];
 	}
@@ -77,8 +75,8 @@ class BannerSetting extends \app\components\ActiveRecord
 			'id' => Yii::t('app', 'ID'),
 			'license' => Yii::t('app', 'License'),
 			'permission' => Yii::t('app', 'Permission'),
-			'meta_keyword' => Yii::t('app', 'Meta Keyword'),
 			'meta_description' => Yii::t('app', 'Meta Description'),
+			'meta_keyword' => Yii::t('app', 'Meta Keyword'),
 			'banner_validation' => Yii::t('app', 'Banner Validation'),
 			'banner_resize' => Yii::t('app', 'Banner Resize'),
 			'banner_file_type' => Yii::t('app', 'Banner File Type'),
@@ -97,9 +95,18 @@ class BannerSetting extends \app\components\ActiveRecord
 	}
 
 	/**
+	 * {@inheritdoc}
+	 * @return \ommu\banner\models\query\BannerSetting the active query used by this AR class.
+	 */
+	public static function find()
+	{
+		return new \ommu\banner\models\query\BannerSetting(get_called_class());
+	}
+
+	/**
 	 * Set default columns to display
 	 */
-	public function init() 
+	public function init()
 	{
 		parent::init();
 
@@ -114,16 +121,22 @@ class BannerSetting extends \app\components\ActiveRecord
 				return $model->license;
 			},
 		];
-		$this->templateColumns['meta_keyword'] = [
-			'attribute' => 'meta_keyword',
+		$this->templateColumns['permission'] = [
+			'attribute' => 'permission',
 			'value' => function($model, $key, $index, $column) {
-				return $model->meta_keyword;
+				return self::getPermission($model->permission);
 			},
 		];
 		$this->templateColumns['meta_description'] = [
 			'attribute' => 'meta_description',
 			'value' => function($model, $key, $index, $column) {
 				return $model->meta_description;
+			},
+		];
+		$this->templateColumns['meta_keyword'] = [
+			'attribute' => 'meta_keyword',
+			'value' => function($model, $key, $index, $column) {
+				return $model->meta_keyword;
 			},
 		];
 		$this->templateColumns['banner_file_type'] = [
@@ -147,14 +160,6 @@ class BannerSetting extends \app\components\ActiveRecord
 				},
 			];
 		}
-		$this->templateColumns['permission'] = [
-			'attribute' => 'permission',
-			'filter' => $this->filterYesNo(),
-			'value' => function($model, $key, $index, $column) {
-				return $this->filterYesNo($model->permission);
-			},
-			'contentOptions' => ['class'=>'center'],
-		];
 		$this->templateColumns['banner_validation'] = [
 			'attribute' => 'banner_validation',
 			'filter' => $this->filterYesNo(),
@@ -192,37 +197,60 @@ class BannerSetting extends \app\components\ActiveRecord
 	}
 
 	/**
-	 * get Module License
+	 * function getPermission
 	 */
-	public static function getLicense($source='1234567890', $length=16, $char=4)
+	public static function getPermission($value=null)
 	{
-		$mod = $length%$char;
-		if($mod == 0)
-			$sep = ($length/$char);
-		else
-			$sep = (int)($length/$char)+1;
-		
-		$sourceLength = strlen($source);
-		$random = '';
-		for ($i = 0; $i < $length; $i++)
-			$random .= $source[rand(0, $sourceLength - 1)];
-		
-		$license = '';
-		for ($i = 0; $i < $sep; $i++) {
-			if($i != $sep-1)
-				$license .= substr($random,($i*$char),$char).'-';
-			else
-				$license .= substr($random,($i*$char),$char);
-		}
+		$items = array(
+			1 => Yii::t('app', 'Yes, the public can view "module name" unless they are made private.'),
+			0 => Yii::t('app', 'No, the public cannot view "module name".'),
+		);
 
-		return $license;
+		if($value !== null)
+			return $items[$value];
+		else
+			return $items;
+	}
+
+	/**
+	 * function getBannerValidation
+	 */
+	public static function getBannerValidation($value=null)
+	{
+		$items = array(
+			1 => Yii::t('app', 'Yes, validation banner size before upload.'),
+			0 => Yii::t('app', 'No, not validation banner size before upload.'),
+		);
+
+		if($value !== null)
+			return $items[$value];
+		else
+			return $items;
+	}
+
+	/**
+	 * function getBannerResize
+	 */
+	public static function getBannerResize($value=null)
+	{
+		$items = array(
+			1 => Yii::t('app', 'Yes, resize banner after upload.'),
+			0 => Yii::t('app', 'No, not resize banner after upload.'),
+		);
+
+		if($value !== null)
+			return $items[$value];
+		else
+			return $items;
 	}
 
 	/**
 	 * after find attributes
 	 */
-	public function afterFind() 
+	public function afterFind()
 	{
+		parent::afterFind();
+
 		$banner_file_type = unserialize($this->banner_file_type);
 		if(!empty($banner_file_type))
 			$this->banner_file_type = $this->formatFileType($banner_file_type, false);
@@ -231,7 +259,7 @@ class BannerSetting extends \app\components\ActiveRecord
 	/**
 	 * before validate attributes
 	 */
-	public function beforeValidate() 
+	public function beforeValidate()
 	{
 		if(parent::beforeValidate()) {
 			if(!$this->isNewRecord) {

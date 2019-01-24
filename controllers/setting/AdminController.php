@@ -17,7 +17,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 6 October 2017, 06:22 WIB
- * @modified date 30 April 2018, 13:27 WIB
+ * @modified date 23 January 2019, 16:05 WIB
  * @link https://github.com/ommu/mod-banner
  *
  */
@@ -57,18 +57,20 @@ class AdminController extends Controller
 	 */
 	public function actionIndex()
 	{
-		return $this->redirect(['update']);
-	}
-
-	/**
-	 * Updates an existing BannerSetting model.
-	 * If update is successful, the browser will be redirected to the 'view' page.
-	 * @param integer $id
-	 * @return mixed
-	 */
-	public function actionUpdate()
-	{
 		$this->layout = 'admin_default';
+
+		$model = BannerSetting::findOne(1);
+		if($model === null) 
+			$model = new BannerSetting();
+
+		if(Yii::$app->request->isPost) {
+			$model->load(Yii::$app->request->post());
+
+			if($model->save()) {
+				Yii::$app->session->setFlash('success', Yii::t('app', 'Banner setting success updated.'));
+				return $this->redirect(['index']);
+			}
+		}
 		
 		$searchModel = new BannerCategorySearch();
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -83,6 +85,25 @@ class AdminController extends Controller
 		}
 		$columns = $searchModel->getGridColumn($cols);
 
+		$this->view->title = Yii::t('app', 'Banner Settings');
+		$this->view->description = '';
+		$this->view->keywords = '';
+		return $this->render('admin_index', [
+			'model' => $model,
+			'searchModel' => $searchModel,
+			'dataProvider' => $dataProvider,
+			'columns' => $columns,
+		]);
+	}
+
+	/**
+	 * Updates an existing BannerSetting model.
+	 * If update is successful, the browser will be redirected to the 'view' page.
+	 * @param integer $id
+	 * @return mixed
+	 */
+	public function actionUpdate()
+	{
 		$model = BannerSetting::findOne(1);
 		if ($model === null) 
 			$model = new BannerSetting();
@@ -92,8 +113,11 @@ class AdminController extends Controller
 
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'Banner setting success updated.'));
-				return $this->redirect(['manage']);
-				//return $this->redirect(['view', 'id' => $model->id]);
+				return $this->redirect(['update']);
+
+			} else {
+				if(Yii::$app->request->isAjax)
+					return \yii\helpers\Json::encode(\app\components\ActiveForm::validate($model));
 			}
 		}
 
@@ -101,9 +125,6 @@ class AdminController extends Controller
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_update', [
-			'searchModel' => $searchModel,
-			'dataProvider' => $dataProvider,
-			'columns' => $columns,
 			'model' => $model,
 		]);
 	}
@@ -119,7 +140,7 @@ class AdminController extends Controller
 		$this->findModel($id)->delete();
 		
 		Yii::$app->session->setFlash('success', Yii::t('app', 'Banner setting success deleted.'));
-		return $this->redirect(['manage']);
+		return $this->redirect(['update']);
 	}
 
 	/**
@@ -131,7 +152,7 @@ class AdminController extends Controller
 	 */
 	protected function findModel($id)
 	{
-		if(($model = BannerSetting::findOne($id)) !== null) 
+		if(($model = BannerSetting::findOne($id)) !== null)
 			return $model;
 
 		throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
