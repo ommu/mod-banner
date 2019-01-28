@@ -36,15 +36,15 @@ $this->params['menu']['content'] = [
 	'attributes' => [
 		'id',
 		[
-			'attribute' => 'category_search',
+			'attribute' => 'categoryId',
 			'value' => isset($model->click->banner->category) ? $model->click->banner->category->title->message : '-',
 		],
 		[
-			'attribute' => 'banner_search',
+			'attribute' => 'bannerTitle',
 			'value' => isset($model->click->banner) ? $model->click->banner->title : '-',
 		],
 		[
-			'attribute' => 'user_search',
+			'attribute' => 'userDisplayname',
 			'value' => isset($model->click->user) ? $model->click->user->displayname : '-',
 		],
 		[

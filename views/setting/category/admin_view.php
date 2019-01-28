@@ -62,7 +62,7 @@ $this->params['menu']['content'] = [
 			'value' => Yii::$app->formatter->asDatetime($model->creation_date, 'medium'),
 		],
 		[
-			'attribute' => 'creation_search',
+			'attribute' => 'creationDisplayname',
 			'value' => isset($model->creation) ? $model->creation->displayname : '-',
 		],
 		[
@@ -70,7 +70,7 @@ $this->params['menu']['content'] = [
 			'value' => Yii::$app->formatter->asDatetime($model->modified_date, 'medium'),
 		],
 		[
-			'attribute' => 'modified_search',
+			'attribute' => 'modifiedDisplayname',
 			'value' => isset($model->modified) ? $model->modified->displayname : '-',
 		],
 		[

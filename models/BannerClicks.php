@@ -37,9 +37,9 @@ class BannerClicks extends \app\components\ActiveRecord
 	public $gridForbiddenColumn = [];
 
 	// Search Variable
-	public $category_search;
-	public $banner_search;
-	public $user_search;
+	public $categoryId;
+	public $bannerTitle;
+	public $userDisplayname;
 
 	/**
 	 * @return string the associated database table name
@@ -76,9 +76,9 @@ class BannerClicks extends \app\components\ActiveRecord
 			'click_date' => Yii::t('app', 'Click Date'),
 			'click_ip' => Yii::t('app', 'Click Ip'),
 			'histories' => Yii::t('app', 'Histories'),
-			'category_search' => Yii::t('app', 'Category'),
-			'banner_search' => Yii::t('app', 'Banner'),
-			'user_search' => Yii::t('app', 'User'),
+			'categoryId' => Yii::t('app', 'Category'),
+			'bannerTitle' => Yii::t('app', 'Banner'),
+			'userDisplayname' => Yii::t('app', 'User'),
 		];
 	}
 
@@ -134,23 +134,23 @@ class BannerClicks extends \app\components\ActiveRecord
 			'contentOptions' => ['class'=>'center'],
 		];
 		if(!Yii::$app->request->get('banner')) {
-			$this->templateColumns['category_search'] = [
-				'attribute' => 'category_search',
+			$this->templateColumns['categoryId'] = [
+				'attribute' => 'categoryId',
 				'filter' => BannerCategory::getCategory(),
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->banner->category) ? $model->banner->category->title->message : '-';
 				},
 			];
-			$this->templateColumns['banner_search'] = [
-				'attribute' => 'banner_search',
+			$this->templateColumns['bannerTitle'] = [
+				'attribute' => 'bannerTitle',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->banner) ? $model->banner->title : '-';
 				},
 			];
 		}
 		if(!Yii::$app->request->get('user')) {
-			$this->templateColumns['user_search'] = [
-				'attribute' => 'user_search',
+			$this->templateColumns['userDisplayname'] = [
+				'attribute' => 'userDisplayname',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->user) ? $model->user->displayname : '-';
 				},
@@ -223,6 +223,18 @@ class BannerClicks extends \app\components\ActiveRecord
 			$click->banner_id = $banner_id;
 			$click->save();
 		}
+	}
+
+	/**
+	 * after find attributes
+	 */
+	public function afterFind()
+	{
+		parent::afterFind();
+
+		// this->categoryId = isset($this->banner->category) ? $this->banner->category->title->message : '-';
+		// $this->bannerTitle = isset($this->banner) ? $this->banner->title : '-';
+		// $this->userDisplayname = isset($this->user) ? $this->user->displayname : '-';
 	}
 
 	/**

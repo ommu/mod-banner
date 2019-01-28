@@ -30,7 +30,7 @@ class BannerCategory extends BannerCategoryModel
 		return [
 			[['cat_id', 'publish', 'name', 'desc', 'banner_limit', 'creation_id', 'modified_id'], 'integer'],
 			[['cat_code', 'banner_size', 'creation_date', 'modified_date', 'updated_date', 'slug',
-				'name_i', 'desc_i', 'creation_search', 'modified_search'], 'safe'],
+				'name_i', 'desc_i', 'creationDisplayname', 'modifiedDisplayname'], 'safe'],
 		];
 	}
 
@@ -89,11 +89,11 @@ class BannerCategory extends BannerCategoryModel
 			'asc' => ['description.message' => SORT_ASC],
 			'desc' => ['description.message' => SORT_DESC],
 		];
-		$attributes['creation_search'] = [
+		$attributes['creationDisplayname'] = [
 			'asc' => ['creation.displayname' => SORT_ASC],
 			'desc' => ['creation.displayname' => SORT_DESC],
 		];
-		$attributes['modified_search'] = [
+		$attributes['modifiedDisplayname'] = [
 			'asc' => ['modified.displayname' => SORT_ASC],
 			'desc' => ['modified.displayname' => SORT_DESC],
 		];
@@ -153,8 +153,8 @@ class BannerCategory extends BannerCategoryModel
 			->andFilterWhere(['like', 't.slug', $this->slug])
 			->andFilterWhere(['like', 'title.message', $this->name_i])
 			->andFilterWhere(['like', 'description.message', $this->desc_i])
-			->andFilterWhere(['like', 'creation.displayname', $this->creation_search])
-			->andFilterWhere(['like', 'modified.displayname', $this->modified_search]);
+			->andFilterWhere(['like', 'creation.displayname', $this->creationDisplayname])
+			->andFilterWhere(['like', 'modified.displayname', $this->modifiedDisplayname]);
 
 		return $dataProvider;
 	}

@@ -42,7 +42,7 @@ class BannerSetting extends \app\components\ActiveRecord
 	public $gridForbiddenColumn = [];
 
 	// Search Variable
-	public $modified_search;
+	public $modifiedDisplayname;
 
 	/**
 	 * @return string the associated database table name
@@ -82,7 +82,7 @@ class BannerSetting extends \app\components\ActiveRecord
 			'banner_file_type' => Yii::t('app', 'Banner File Type'),
 			'modified_date' => Yii::t('app', 'Modified Date'),
 			'modified_id' => Yii::t('app', 'Modified'),
-			'modified_search' => Yii::t('app', 'Modified'),
+			'modifiedDisplayname' => Yii::t('app', 'Modified'),
 		];
 	}
 
@@ -153,8 +153,8 @@ class BannerSetting extends \app\components\ActiveRecord
 			'filter' => $this->filterDatepicker($this, 'modified_date'),
 		];
 		if(!Yii::$app->request->get('modified')) {
-			$this->templateColumns['modified_search'] = [
-				'attribute' => 'modified_search',
+			$this->templateColumns['modifiedDisplayname'] = [
+				'attribute' => 'modifiedDisplayname',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->modified) ? $model->modified->displayname : '-';
 				},
@@ -254,6 +254,7 @@ class BannerSetting extends \app\components\ActiveRecord
 		$banner_file_type = unserialize($this->banner_file_type);
 		if(!empty($banner_file_type))
 			$this->banner_file_type = $this->formatFileType($banner_file_type, false);
+		// $this->modifiedDisplayname = isset($this->modified) ? $this->modified->displayname : '-';
 	}
 
 	/**

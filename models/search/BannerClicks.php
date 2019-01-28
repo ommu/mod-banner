@@ -30,7 +30,7 @@ class BannerClicks extends BannerClicksModel
 		return [
 			[['click_id', 'banner_id', 'user_id', 'clicks'], 'integer'],
 			[['click_date', 'click_ip',
-				'category_search', 'banner_search', 'user_search'], 'safe'],
+				'categoryId', 'bannerTitle', 'userDisplayname'], 'safe'],
 		];
 	}
 
@@ -79,15 +79,15 @@ class BannerClicks extends BannerClicksModel
 		$dataProvider = new ActiveDataProvider($dataParams);
 
 		$attributes = array_keys($this->getTableSchema()->columns);
-		$attributes['category_search'] = [
+		$attributes['categoryId'] = [
 			'asc' => ['category.message' => SORT_ASC],
 			'desc' => ['category.message' => SORT_DESC],
 		];
-		$attributes['banner_search'] = [
+		$attributes['bannerTitle'] = [
 			'asc' => ['banner.title' => SORT_ASC],
 			'desc' => ['banner.title' => SORT_DESC],
 		];
-		$attributes['user_search'] = [
+		$attributes['userDisplayname'] = [
 			'asc' => ['user.displayname' => SORT_ASC],
 			'desc' => ['user.displayname' => SORT_DESC],
 		];
@@ -111,12 +111,12 @@ class BannerClicks extends BannerClicksModel
 			't.user_id' => isset($params['user']) ? $params['user'] : $this->user_id,
 			't.clicks' => $this->clicks,
 			'cast(t.click_date as date)' => $this->click_date,
-			'banner.cat_id' => isset($params['category']) ? $params['category'] : $this->category_search,
+			'banner.cat_id' => isset($params['category']) ? $params['category'] : $this->categoryId,
 		]);
 
 		$query->andFilterWhere(['like', 't.click_ip', $this->click_ip])
-			->andFilterWhere(['like', 'banner.title', $this->banner_search])
-			->andFilterWhere(['like', 'user.displayname', $this->user_search]);
+			->andFilterWhere(['like', 'banner.title', $this->bannerTitle])
+			->andFilterWhere(['like', 'user.displayname', $this->userDisplayname]);
 
 		return $dataProvider;
 	}

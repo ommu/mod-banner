@@ -158,7 +158,7 @@ echo GridView::widget([
 				'value' => Yii::$app->formatter->asDatetime($model->modified_date, 'medium'),
 			],
 			[
-				'attribute' => 'modified_search',
+				'attribute' => 'modifiedDisplayname',
 				'value' => isset($model->modified) ? $model->modified->displayname : '-',
 			],
 			[

@@ -31,9 +31,9 @@ class BannerViewHistory extends \app\components\ActiveRecord
 	public $gridForbiddenColumn = [];
 
 	// Search Variable
-	public $category_search;
-	public $banner_search;
-	public $user_search;
+	public $categoryId;
+	public $bannerTitle;
+	public $userDisplayname;
 
 	/**
 	 * @return string the associated database table name
@@ -67,9 +67,9 @@ class BannerViewHistory extends \app\components\ActiveRecord
 			'view_id' => Yii::t('app', 'View'),
 			'view_date' => Yii::t('app', 'View Date'),
 			'view_ip' => Yii::t('app', 'View Ip'),
-			'category_search' => Yii::t('app', 'Category'),
-			'banner_search' => Yii::t('app', 'Banner'),
-			'user_search' => Yii::t('app', 'User'),
+			'categoryId' => Yii::t('app', 'Category'),
+			'bannerTitle' => Yii::t('app', 'Banner'),
+			'userDisplayname' => Yii::t('app', 'User'),
 		];
 	}
 
@@ -103,21 +103,21 @@ class BannerViewHistory extends \app\components\ActiveRecord
 			'contentOptions' => ['class'=>'center'],
 		];
 		if(!Yii::$app->request->get('view')) {
-			$this->templateColumns['category_search'] = [
-				'attribute' => 'category_search',
+			$this->templateColumns['categoryId'] = [
+				'attribute' => 'categoryId',
 				'filter' => BannerCategory::getCategory(),
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->view->banner->category) ? $model->view->banner->category->title->message : '-';
 				},
 			];
-			$this->templateColumns['banner_search'] = [
-				'attribute' => 'banner_search',
+			$this->templateColumns['bannerTitle'] = [
+				'attribute' => 'bannerTitle',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->view->banner) ? $model->view->banner->title : '-';
 				},
 			];
-			$this->templateColumns['user_search'] = [
-				'attribute' => 'user_search',
+			$this->templateColumns['userDisplayname'] = [
+				'attribute' => 'userDisplayname',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->view->user) ? $model->view->user->displayname : '-';
 				},
@@ -154,5 +154,17 @@ class BannerViewHistory extends \app\components\ActiveRecord
 			$model = self::findOne($id);
 			return $model;
 		}
+	}
+
+	/**
+	 * after find attributes
+	 */
+	public function afterFind()
+	{
+		parent::afterFind();
+
+		// $this->categoryId = isset($this->view->banner->category) ? $this->view->banner->category->title->message : '-';
+		// $this->bannerTitle = isset($this->view->banner) ? $this->view->banner->title : '-';
+		// $this->userDisplayname = isset($this->view->user) ? $this->view->user->displayname : '-';
 	}
 }

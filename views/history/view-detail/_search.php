@@ -17,6 +17,7 @@
 
 use yii\helpers\Html;
 use app\components\ActiveForm;
+use ommu\banner\models\BannerCategory;
 ?>
 
 <div class="banner-view-history-search search-form">
@@ -29,7 +30,13 @@ use app\components\ActiveForm;
 		],
 	]); ?>
 
-		<?php echo $form->field($model, 'view_search');?>
+		<?php $category = BannerCategory::getCategory();
+		echo $form->field($model, 'categoryId')
+			->dropDownList($category, ['prompt'=>'']);?>
+
+		<?php echo $form->field($model, 'bannerTitle');?>
+
+		<?php echo $form->field($model, 'userDisplayname');?>
 
 		<?php echo $form->field($model, 'view_date')
 			->input('date');?>

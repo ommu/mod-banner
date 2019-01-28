@@ -30,7 +30,7 @@ class BannerViewHistory extends BannerViewHistoryModel
 		return [
 			[['id', 'view_id'], 'integer'],
 			[['view_date', 'view_ip',
-				'category_search', 'banner_search', 'user_search'], 'safe'],
+				'categoryId', 'bannerTitle', 'userDisplayname'], 'safe'],
 		];
 	}
 
@@ -80,15 +80,15 @@ class BannerViewHistory extends BannerViewHistoryModel
 		$dataProvider = new ActiveDataProvider($dataParams);
 
 		$attributes = array_keys($this->getTableSchema()->columns);
-		$attributes['category_search'] = [
+		$attributes['categoryId'] = [
 			'asc' => ['category.message' => SORT_ASC],
 			'desc' => ['category.message' => SORT_DESC],
 		];
-		$attributes['banner_search'] = [
+		$attributes['bannerTitle'] = [
 			'asc' => ['banner.title' => SORT_ASC],
 			'desc' => ['banner.title' => SORT_DESC],
 		];
-		$attributes['user_search'] = [
+		$attributes['userDisplayname'] = [
 			'asc' => ['user.displayname' => SORT_ASC],
 			'desc' => ['user.displayname' => SORT_DESC],
 		];
@@ -110,12 +110,12 @@ class BannerViewHistory extends BannerViewHistoryModel
 			't.id' => $this->id,
 			't.view_id' => isset($params['view']) ? $params['view'] : $this->view_id,
 			'cast(t.view_date as date)' => $this->view_date,
-			'banner.cat_id' => isset($params['category']) ? $params['category'] : $this->category_search,
+			'banner.cat_id' => isset($params['category']) ? $params['category'] : $this->categoryId,
 		]);
 
 		$query->andFilterWhere(['like', 't.view_ip', $this->view_ip])
-			->andFilterWhere(['like', 'banner.title', $this->banner_search])
-			->andFilterWhere(['like', 'user.displayname', $this->user_search]);
+			->andFilterWhere(['like', 'banner.title', $this->bannerTitle])
+			->andFilterWhere(['like', 'user.displayname', $this->userDisplayname]);
 
 		return $dataProvider;
 	}
