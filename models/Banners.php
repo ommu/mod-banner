@@ -40,8 +40,8 @@
 namespace ommu\banner\models;
 
 use Yii;
-use yii\helpers\Url;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\web\UploadedFile;
 use yii\behaviors\SluggableBehavior;
 use thamtech\uuid\helpers\UuidHelper;
