@@ -10,7 +10,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 6 October 2017, 08:14 WIB
- * @modified date 24 January 2019, 15:50 WIB
+ * @modified date 13 February 2019, 05:27 WIB
  * @link https://github.com/ommu/mod-banner
  *
  */
@@ -20,6 +20,8 @@ use yii\helpers\Url;
 use app\components\grid\GridView;
 use yii\widgets\Pjax;
 use yii\helpers\ArrayHelper;
+use yii\widgets\DetailView;
+use ommu\banner\models\BannerCategory;
 
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -34,6 +36,41 @@ $this->params['menu']['option'] = [
 
 <div class="banners-manage">
 <?php Pjax::begin(); ?>
+
+<?php if($category != null) {
+$model = $categories;
+echo DetailView::widget([
+	'model' => $categories,
+	'options' => [
+		'class'=>'table table-striped detail-view',
+	],
+	'attributes' => [
+		[
+			'attribute' => 'name_i',
+			'value' => function ($model) {
+				if($model->name_i != '')
+					return Html::a($model->name_i, ['category/view', 'id'=>$model->cat_id], ['title'=>$model->name_i]);
+				return $model->name_i;
+			},
+			'format' => 'html',
+		],
+		'cat_code',
+		[
+			'attribute' => 'banner_size',
+			'value' => BannerCategory::getSize($model->banner_size),
+		],
+		'banner_limit',
+		[
+			'attribute' => 'creation_date',
+			'value' => Yii::$app->formatter->asDatetime($model->creation_date, 'medium'),
+		],
+		[
+			'attribute' => 'creationDisplayname',
+			'value' => isset($model->creation) ? $model->creation->displayname : '-',
+		],
+	],
+]);
+}?>
 
 <?php //echo $this->render('_search', ['model'=>$searchModel]); ?>
 

@@ -8,7 +8,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 6 October 2017, 08:14 WIB
- * @modified date 24 January 2019, 15:50 WIB
+ * @modified date 13 February 2019, 05:27 WIB
  * @link https://github.com/ommu/mod-banner
  *
  */
@@ -30,7 +30,7 @@ class Banners extends BannersModel
 		return [
 			[['banner_id', 'publish', 'cat_id', 'creation_id', 'modified_id'], 'integer'],
 			[['title', 'url', 'banner_filename', 'banner_desc', 'published_date', 'expired_date', 'creation_date', 'modified_date', 'updated_date', 'slug',
-				'permanent', 'creationDisplayname', 'modifiedDisplayname'], 'safe'],
+				'permanent', 'categoryName', 'creationDisplayname', 'modifiedDisplayname'], 'safe'],
 		];
 	}
 
@@ -81,6 +81,10 @@ class Banners extends BannersModel
 
 		$attributes = array_keys($this->getTableSchema()->columns);
 		$attributes['cat_id'] = [
+			'asc' => ['category.message' => SORT_ASC],
+			'desc' => ['category.message' => SORT_DESC],
+		];
+		$attributes['categoryName'] = [
 			'asc' => ['category.message' => SORT_ASC],
 			'desc' => ['category.message' => SORT_DESC],
 		];
@@ -164,6 +168,7 @@ class Banners extends BannersModel
 			->andFilterWhere(['like', 't.banner_filename', $this->banner_filename])
 			->andFilterWhere(['like', 't.banner_desc', $this->banner_desc])
 			->andFilterWhere(['like', 't.slug', $this->slug])
+			->andFilterWhere(['like', 'category.message', $this->categoryName])
 			->andFilterWhere(['like', 'creation.displayname', $this->creationDisplayname])
 			->andFilterWhere(['like', 'modified.displayname', $this->modifiedDisplayname]);
 

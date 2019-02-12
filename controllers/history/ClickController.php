@@ -31,6 +31,7 @@ use app\components\Controller;
 use mdm\admin\components\AccessControl;
 use ommu\banner\models\BannerClicks;
 use ommu\banner\models\search\BannerClicks as BannerClicksSearch;
+use ommu\banner\models\Banners;
 
 class ClickController extends Controller
 {
@@ -66,6 +67,8 @@ class ClickController extends Controller
 	 */
 	public function actionManage()
 	{
+		$banner = Yii::$app->request->get('banner');
+
 		$searchModel = new BannerClicksSearch();
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -79,6 +82,9 @@ class ClickController extends Controller
 		}
 		$columns = $searchModel->getGridColumn($cols);
 
+		if($banner != null)
+			$banners = Banners::findOne($banner);
+
 		$this->view->title = Yii::t('app', 'Clicks');
 		$this->view->description = '';
 		$this->view->keywords = '';
@@ -86,6 +92,8 @@ class ClickController extends Controller
 			'searchModel' => $searchModel,
 			'dataProvider' => $dataProvider,
 			'columns' => $columns,
+			'banner' => $banner,
+			'banners' => $banners,
 		]);
 	}
 

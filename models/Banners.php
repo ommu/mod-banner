@@ -6,7 +6,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 5 October 2017, 16:51 WIB
- * @modified date 19 January 2019, 06:58 WIB
+ * @modified date 12 February 2019, 22:27 WIB
  * @link https://github.com/ommu/mod-banner
  *
  * This is the model class for table "ommu_banners".
@@ -57,8 +57,7 @@ class Banners extends \app\components\ActiveRecord
 	public $linked;
 	public $permanent;
 	public $old_banner_filename;
-
-	// Search Variable
+	public $categoryName;
 	public $creationDisplayname;
 	public $modifiedDisplayname;
 
@@ -120,11 +119,12 @@ class Banners extends \app\components\ActiveRecord
 			'modified_id' => Yii::t('app', 'Modified'),
 			'updated_date' => Yii::t('app', 'Updated Date'),
 			'slug' => Yii::t('app', 'Slug'),
+			'old_banner_filename' => Yii::t('app', 'Old Filename'),
 			'clicks' => Yii::t('app', 'Clicks'),
 			'views' => Yii::t('app', 'Views'),
 			'linked' => Yii::t('app', 'Linked'),
 			'permanent' => Yii::t('app', 'Permanent'),
-			'old_banner_filename' => Yii::t('app', 'Old Filename'),
+			'categoryName' => Yii::t('app', 'Category'),
 			'creationDisplayname' => Yii::t('app', 'Creation'),
 			'modifiedDisplayname' => Yii::t('app', 'Modified'),
 		];
@@ -133,29 +133,31 @@ class Banners extends \app\components\ActiveRecord
 	/**
 	 * @return \yii\db\ActiveQuery
 	 */
-	public function getClicks($count=true)
+	public function getClicks($count=false)
 	{
-		if($count == true) {
-			$model = BannerClicks::find()
-				->where(['banner_id' => $this->banner_id]);
-			return $model->sum('clicks');
-		}
+		if($count == false)
+			return $this->hasMany(BannerClicks::className(), ['banner_id' => 'banner_id']);
 
-		return $this->hasMany(BannerClicks::className(), ['banner_id' => 'banner_id']);
+		$model = BannerClicks::find()
+			->where(['banner_id' => $this->banner_id]);
+		$clicks = $model->sum('clicks');
+
+		return $clicks ? $clicks : 0;
 	}
 
 	/**
 	 * @return \yii\db\ActiveQuery
 	 */
-	public function getViews($count=true)
+	public function getViews($count=false)
 	{
-		if($count == true) {
-			$model = BannerViews::find()
-				->where(['banner_id' => $this->banner_id]);
-			return $model->sum('views');
-		}
+		if($count == false)
+			return $this->hasMany(BannerViews::className(), ['banner_id' => 'banner_id']);
 
-		return $this->hasMany(BannerViews::className(), ['banner_id' => 'banner_id']);
+		$model = BannerViews::find()
+			->where(['banner_id' => $this->banner_id]);
+		$views = $model->sum('views');
+
+		return $views ? $views : 0;
 	}
 
 	/**
@@ -308,7 +310,8 @@ class Banners extends \app\components\ActiveRecord
 			'attribute' => 'clicks',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
-				return Html::a($model->clicks ? $model->clicks : 0, ['history/click/manage', 'banner'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} clicks', ['count'=>$model->clicks])]);
+				$clicks = $model->getClicks(true);
+				return Html::a($clicks, ['history/click/manage', 'banner'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} clicks', ['count'=>$clicks])]);
 			},
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'html',
@@ -317,7 +320,8 @@ class Banners extends \app\components\ActiveRecord
 			'attribute' => 'views',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
-				return Html::a($model->views ? $model->views : 0, ['history/view/manage', 'banner'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} views', ['count'=>$model->views])]);
+				$views = $model->getViews(true);
+				return Html::a($views, ['history/view/manage', 'banner'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} views', ['count'=>$views])]);
 			},
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'html',
@@ -379,6 +383,7 @@ class Banners extends \app\components\ActiveRecord
 		parent::afterFind();
 
 		$this->old_banner_filename = $this->banner_filename;
+		// $this->categoryName = isset($this->category) ? $this->category->title->message : '-';
 		// $this->creationDisplayname = isset($this->creation) ? $this->creation->displayname : '-';
 		// $this->modifiedDisplayname = isset($this->modified) ? $this->modified->displayname : '-';
 	}
@@ -479,7 +484,7 @@ class Banners extends \app\components\ActiveRecord
 					$fileName = join('-', [time(), UuidHelper::uuid(), $this->banner_id]).'.'.strtolower($this->banner_filename->getExtension()); 
 					if($this->banner_filename->saveAs(join('/', [$uploadPath, $fileName]))) {
 						if($this->old_banner_filename != '' && file_exists(join('/', [$uploadPath, $this->old_banner_filename])))
-							rename(join('/', [$uploadPath, $this->old_banner_filename]), join('/', [$verwijderenPath, time().'_change_'.$this->old_banner_filename]));
+							rename(join('/', [$uploadPath, $this->old_banner_filename]), join('/', [$verwijderenPath, $this->banner_id.'-'.time().'_change_'.$this->old_banner_filename]));
 						$this->banner_filename = $fileName;
 
 						if(!$setting->banner_validation && $setting->banner_resize)
@@ -489,6 +494,7 @@ class Banners extends \app\components\ActiveRecord
 					if($this->banner_filename == '')
 						$this->banner_filename = $this->old_banner_filename;
 				}
+
 			}
 			$this->published_date = Yii::$app->formatter->asDate($this->published_date, 'php:Y-m-d');
 			$this->expired_date = Yii::$app->formatter->asDate($this->expired_date, 'php:Y-m-d');
@@ -537,7 +543,7 @@ class Banners extends \app\components\ActiveRecord
 		$verwijderenPath = join('/', [self::getUploadPath(), 'verwijderen']);
 
 		if($this->banner_filename != '' && file_exists(join('/', [$uploadPath, $this->banner_filename])))
-			rename(join('/', [$uploadPath, $this->banner_filename]), join('/', [$verwijderenPath, time().'_deleted_'.$this->banner_filename]));
+			rename(join('/', [$uploadPath, $this->banner_filename]), join('/', [$verwijderenPath, $this->banner_id.'-'.time().'_deleted_'.$this->banner_filename]));
 
 	}
 }

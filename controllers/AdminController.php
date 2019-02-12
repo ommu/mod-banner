@@ -22,11 +22,11 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 6 October 2017, 08:14 WIB
- * @modified date 24 January 2019, 15:50 WIB
+ * @modified date 13 February 2019, 05:27 WIB
  * @link https://github.com/ommu/mod-banner
  *
  */
- 
+
 namespace ommu\banner\controllers;
 
 use Yii;
@@ -35,6 +35,7 @@ use app\components\Controller;
 use mdm\admin\components\AccessControl;
 use ommu\banner\models\Banners;
 use ommu\banner\models\search\Banners as BannersSearch;
+use ommu\banner\models\BannerCategory;
 
 class AdminController extends Controller
 {
@@ -71,6 +72,8 @@ class AdminController extends Controller
 	 */
 	public function actionManage()
 	{
+		$category = Yii::$app->request->get('category');
+
 		$searchModel = new BannersSearch();
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -84,6 +87,9 @@ class AdminController extends Controller
 		}
 		$columns = $searchModel->getGridColumn($cols);
 
+		if($category != null)
+			$categories = BannerCategory::findOne($category);
+
 		$this->view->title = Yii::t('app', 'Banners');
 		$this->view->description = '';
 		$this->view->keywords = '';
@@ -91,6 +97,8 @@ class AdminController extends Controller
 			'searchModel' => $searchModel,
 			'dataProvider' => $dataProvider,
 			'columns' => $columns,
+			'category' => $category,
+			'categories' => $categories,
 		]);
 	}
 
@@ -105,6 +113,9 @@ class AdminController extends Controller
 
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
+			// $postData = Yii::$app->request->post();
+			// $model->load($postData);
+
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'Banner success created.'));
 				return $this->redirect(['manage']);
@@ -135,6 +146,8 @@ class AdminController extends Controller
 		$model = $this->findModel($id);
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
+			// $postData = Yii::$app->request->post();
+			// $model->load($postData);
 
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'Banner success updated.'));

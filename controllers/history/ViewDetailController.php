@@ -31,6 +31,7 @@ use app\components\Controller;
 use mdm\admin\components\AccessControl;
 use ommu\banner\models\BannerViewHistory;
 use ommu\banner\models\search\BannerViewHistory as BannerViewHistorySearch;
+use ommu\banner\models\BannerViews;
 
 class ViewDetailController extends Controller
 {
@@ -66,6 +67,8 @@ class ViewDetailController extends Controller
 	 */
 	public function actionManage()
 	{
+		$view = Yii::$app->request->get('view');
+
 		$searchModel = new BannerViewHistorySearch();
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -79,6 +82,9 @@ class ViewDetailController extends Controller
 		}
 		$columns = $searchModel->getGridColumn($cols);
 
+		if($view != null)
+			$views = BannerViews::findOne($view);
+
 		$this->view->title = Yii::t('app', 'View Histories');
 		$this->view->description = '';
 		$this->view->keywords = '';
@@ -86,6 +92,8 @@ class ViewDetailController extends Controller
 			'searchModel' => $searchModel,
 			'dataProvider' => $dataProvider,
 			'columns' => $columns,
+			'view' => $view,
+			'views' => $views,
 		]);
 	}
 

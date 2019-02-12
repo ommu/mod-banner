@@ -55,7 +55,10 @@ $this->params['menu']['content'] = [
 		'click_ip',
 		[
 			'attribute' => 'clicks',
-			'value' => Html::a($model->clicks ? $model->clicks : 0, ['history/click-detail/manage', 'click'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} histories', ['count'=>$model->clicks])]),
+			'value' => function ($model) {
+				$clicks = $model->clicks;
+				return  Html::a($clicks, ['history/click-detail/manage', 'click'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} histories', ['count'=>$clicks])]);
+			},
 			'format' => 'html',
 		],
 	],

@@ -143,66 +143,69 @@ class BannerCategory extends \app\components\ActiveRecord
 			$model->pending();
 		elseif($type == 'expired')
 			$model->expired();
+		$banners = $model->count();
 
-		return $model->count();
+		return $banners ? $banners : 0;
 	}
 
 	/**
 	 * @return \yii\db\ActiveQuery
 	 */
-	public function getBanners($count=true, $publish=null)
+	public function getBanners($count=false, $publish=null)
 	{
-		if($count == true) {
-			if($publish === null)
-				return self::getBannersByType($this->cat_id, 'published');
-
-			$model = Banners::find()
-				->where(['cat_id' => $this->cat_id]);
-			if($publish == 0)
-				$model->unpublish();
-			elseif($publish == 1)
-				$model->published();
-			elseif($publish == 2)
-				$model->deleted();
-
-			return $model->count();
+		if($count == false) {
+			return $this->hasMany(Banners::className(), ['cat_id' => 'cat_id'])
+				->andOnCondition([sprintf('%s.publish', Banners::tableName()) => $publish]);
 		}
 
-		return $this->hasMany(Banners::className(), ['cat_id' => 'cat_id'])
-			->andOnCondition([sprintf('%s.publish', Banners::tableName()) => $publish]);
+		if($publish === null)
+			return self::getBannersByType($this->cat_id, 'published');
+
+		$model = Banners::find()
+			->where(['cat_id' => $this->cat_id]);
+		if($publish == 0)
+			$model->unpublish();
+		elseif($publish == 1)
+			$model->published();
+		elseif($publish == 2)
+			$model->deleted();
+		$banners = $model->count();
+
+		return $banners ? $banners : 0;
 	}
 
 	/**
 	 * @return \yii\db\ActiveQuery
 	 */
-	public function getPermanent($count=true)
+	public function getPermanent($count=false)
 	{
-		if($count == true)
-			return self::getBannersByType($this->cat_id, 'permanent');
+		if($count == false)
+			return $this->hasMany(Banners::className(), ['cat_id' => 'cat_id']);
 
-		return $this->hasMany(Banners::className(), ['cat_id' => 'cat_id']);
+		return self::getBannersByType($this->cat_id, 'permanent');
+
 	}
 
 	/**
 	 * @return \yii\db\ActiveQuery
 	 */
-	public function getPending($count=true)
+	public function getPending($count=false)
 	{
-		if($count == true)
-			return self::getBannersByType($this->cat_id, 'pending');
+		if($count == false)
+			return $this->hasMany(Banners::className(), ['cat_id' => 'cat_id']);
 
-		return $this->hasMany(Banners::className(), ['cat_id' => 'cat_id']);
+		return self::getBannersByType($this->cat_id, 'pending');
 	}
 
 	/**
 	 * @return \yii\db\ActiveQuery
 	 */
-	public function getExpired($count=true)
+	public function getExpired($count=false)
 	{
-		if($count == true)
-			return self::getBannersByType($this->cat_id, 'expired');
+		if($count == false)
+			return $this->hasMany(Banners::className(), ['cat_id' => 'cat_id']);
 
-		return $this->hasMany(Banners::className(), ['cat_id' => 'cat_id']);
+		return self::getBannersByType($this->cat_id, 'expired');
 	}
 
 	/**
@@ -289,6 +292,7 @@ class BannerCategory extends \app\components\ActiveRecord
 			'value' => function($model, $key, $index, $column) {
 				return self::getSize($model->banner_size);
 			},
+			'contentOptions' => ['class'=>'center'],
 		];
 		$this->templateColumns['banner_limit'] = [
 			'attribute' => 'banner_limit',
@@ -345,7 +349,8 @@ class BannerCategory extends \app\components\ActiveRecord
 			'attribute' => 'banners',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
-				return Html::a($model->banners, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'publish']);
+				$banners = $model->getBanners(true);
+				return Html::a($banners, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'publish']);
 			},
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'html',
@@ -354,7 +359,8 @@ class BannerCategory extends \app\components\ActiveRecord
 			'attribute' => 'permanent',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
-				return Html::a($model->permanent, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'permanent']);
+				$permanent = $model->getPermanent(true);
+				return Html::a($permanent, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'permanent']);
 			},
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'html',
@@ -363,7 +369,8 @@ class BannerCategory extends \app\components\ActiveRecord
 			'attribute' => 'pending',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
-				return Html::a($model->pending, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'pending']);
+				$pending = $model->getPending(true);
+				return Html::a($pending, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'pending']);
 			},
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'html',
@@ -372,7 +379,8 @@ class BannerCategory extends \app\components\ActiveRecord
 			'attribute' => 'expired',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
-				return Html::a($model->expired, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'expired']);
+				$expired = $model->getExpired(true);
+				return Html::a($expired, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'expired']);
 			},
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'html',
@@ -435,7 +443,10 @@ class BannerCategory extends \app\components\ActiveRecord
 		if(empty($banner_size))
 			return '-';
 
-		return $banner_size['width'].'x'.$banner_size['height'];
+		$width = $banner_size['width'] != 0 ? $banner_size['width'] : '~';
+		$height = $banner_size['height'] != 0 ? $banner_size['height'] : '~';
+
+		return $width.'x'.$height;
 	}
 
 	/**

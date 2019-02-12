@@ -20,6 +20,8 @@ use yii\helpers\Url;
 use app\components\grid\GridView;
 use yii\widgets\Pjax;
 use yii\helpers\ArrayHelper;
+use yii\widgets\DetailView;
+use ommu\banner\models\BannerClicks;
 
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -34,6 +36,47 @@ $this->params['menu']['option'] = [
 
 <div class="banner-click-history-manage">
 <?php Pjax::begin(); ?>
+
+<?php if($click != null) {
+$model = $clicks;
+echo DetailView::widget([
+	'model' => $clicks,
+	'options' => [
+		'class'=>'table table-striped detail-view',
+	],
+	'attributes' => [
+		[
+			'attribute' => 'categoryId',
+			'value' => function ($model) {
+				$categoryId = isset($model->banner->category) ? $model->banner->category->title->message : '-';
+				if($categoryId != '-')
+					return Html::a($categoryId, ['setting/category/view', 'id'=>$model->banner->cat_id], ['title'=>$categoryId]);
+				return $categoryId;
+			},
+			'format' => 'html',
+		],
+		[
+			'attribute' => 'bannerTitle',
+			'value' => function ($model) {
+				$bannerTitle = isset($model->banner) ? $model->banner->title : '-';
+				if($bannerTitle != '-')
+					return Html::a($bannerTitle, ['admin/view', 'id'=>$model->banner_id], ['title'=>$bannerTitle]);
+				return $bannerTitle;
+			},
+			'format' => 'html',
+		],
+		[
+			'attribute' => 'userDisplayname',
+			'value' => isset($model->user) ? $model->user->displayname : '-',
+		],
+		[
+			'attribute' => 'click_date',
+			'value' => Yii::$app->formatter->asDatetime($model->click_date, 'medium'),
+		],
+		'click_ip',
+	],
+]);
+}?>
 
 <?php //echo $this->render('_search', ['model'=>$searchModel]); ?>
 

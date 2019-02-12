@@ -20,6 +20,8 @@ use yii\helpers\Url;
 use app\components\grid\GridView;
 use yii\widgets\Pjax;
 use yii\helpers\ArrayHelper;
+use yii\widgets\DetailView;
+use ommu\banner\models\Banners;
 
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -34,6 +36,55 @@ $this->params['menu']['option'] = [
 
 <div class="banner-views-manage">
 <?php Pjax::begin(); ?>
+
+<?php if($banner != null) {
+$model = $banners;
+echo DetailView::widget([
+	'model' => $banners,
+	'options' => [
+		'class'=>'table table-striped detail-view',
+	],
+	'attributes' => [
+		[
+			'attribute' => 'categoryName',
+			'value' => function ($model) {
+				$categoryName = isset($model->category) ? $model->category->title->message : '-';
+				if($categoryName != '-')
+					return Html::a($categoryName, ['setting/category/view', 'id'=>$model->cat_id], ['title'=>$categoryName]);
+				return $categoryName;
+			},
+			'format' => 'html',
+		],
+		[
+			'attribute' => 'title',
+			'value' => function ($model) {
+				return Html::a($model->title, ['admin/view', 'id'=>$model->banner_id], ['title'=>$model->title]);
+			},
+			'format' => 'html',
+		],
+		[
+			'attribute' => 'url',
+			'value' => $model->url ? $model->url : '-',
+		],
+		[
+			'attribute' => 'banner_filename',
+			'value' => function ($model) {
+				$uploadPath = Banners::getUploadPath(false);
+				return $model->banner_filename ? Html::img(join('/', [Url::Base(), $uploadPath, $model->banner_filename]), ['width' => '100%']).'<br/><br/>'.$model->banner_filename : '-';
+			},
+			'format' => 'html',
+		],
+		[
+			'attribute' => 'published_date',
+			'value' => Yii::$app->formatter->asDate($model->published_date, 'medium'),
+		],
+		[
+			'attribute' => 'expired_date',
+			'value' => Yii::$app->formatter->asDate($model->expired_date, 'medium'),
+		],
+	],
+]);
+}?>
 
 <?php //echo $this->render('_search', ['model'=>$searchModel]); ?>
 

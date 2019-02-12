@@ -6,7 +6,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 6 October 2017, 13:14 WIB
- * @modified date 19 January 2019, 06:56 WIB
+ * @modified date 12 February 2019, 22:53 WIB
  * @link https://github.com/ommu/mod-banner
  *
  * This is the model class for table "ommu_banner_views".
@@ -36,7 +36,6 @@ class BannerViews extends \app\components\ActiveRecord
 {
 	public $gridForbiddenColumn = [];
 
-	// Search Variable
 	public $categoryId;
 	public $bannerTitle;
 	public $userDisplayname;
@@ -85,15 +84,16 @@ class BannerViews extends \app\components\ActiveRecord
 	/**
 	 * @return \yii\db\ActiveQuery
 	 */
-	public function getHistories($count=true)
+	public function getHistories($count=false)
 	{
-		if($count == true) {
-			$model = BannerViewHistory::find()
-				->where(['view_id' => $this->view_id]);
-			return $model->count();
-		}
+		if($count == false)
+			return $this->hasMany(BannerViewHistory::className(), ['view_id' => 'view_id']);
 
-		return $this->hasMany(BannerViewHistory::className(), ['view_id' => 'view_id']);
+		$model = BannerViewHistory::find()
+			->where(['view_id' => $this->view_id]);
+		$histories = $model->count();
+
+		return $histories ? $histories : 0;
 	}
 
 	/**
@@ -173,7 +173,8 @@ class BannerViews extends \app\components\ActiveRecord
 			'attribute' => 'views',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
-				return Html::a($model->views ? $model->views : 0, ['history/view-detail/manage', 'view'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} histories', ['count'=>$model->histories])]);
+				$views = $model->views;
+				return Html::a($views, ['history/view-detail/manage', 'view'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} histories', ['count'=>$views])]);
 			},
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'html',

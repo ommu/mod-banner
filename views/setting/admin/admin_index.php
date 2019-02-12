@@ -144,15 +144,15 @@ echo GridView::widget([
 			],
 			[
 				'attribute' => 'banner_validation',
-				'value' => $this->filterYesNo($model->banner_validation),
+				'value' => BannerSetting::getBannerValidation($model->banner_validation),
 			],
 			[
 				'attribute' => 'banner_resize',
-				'value' => $this->filterYesNo($model->banner_resize),
+				'value' => BannerSetting::getBannerResize($model->banner_resize),
 			],
 			[
 				'attribute' => 'banner_file_type',
-				'value' => serialize($model->banner_file_type),
+				'value' => $model->banner_file_type,
 			],
 			[
 				'attribute' => 'modified_date',

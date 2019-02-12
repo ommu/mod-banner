@@ -81,22 +81,34 @@ $this->params['menu']['content'] = [
 		'slug',
 		[
 			'attribute' => 'banners',
-			'value' => Html::a($model->banners, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'publish']),
+			'value' => function ($model) {
+				$banners = $model->getBanners(true);
+				return Html::a($banners, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'publish']);
+			},
 			'format' => 'html',
 		],
 		[
 			'attribute' => 'permanent',
-			'value' => Html::a($model->permanent, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'permanent']),
+			'value' => function ($model) {
+				$permanent = $model->getPermanent(true);
+				return Html::a($permanent, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'permanent']);
+			},
 			'format' => 'html',
 		],
 		[
 			'attribute' => 'pending',
-			'value' => Html::a($model->pending, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'pending']),
+			'value' => function ($model) {
+				$pending = $model->getPending(true);
+				return Html::a($pending, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'pending']);
+			},
 			'format' => 'html',
 		],
 		[
 			'attribute' => 'expired',
-			'value' => Html::a($model->expired, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'expired']),
+			'value' => function ($model) {
+				$expired = $model->getExpired(true);
+				return Html::a($expired, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'expired']);
+			},
 			'format' => 'html',
 		],
 	],

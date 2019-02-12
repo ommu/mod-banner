@@ -9,7 +9,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 6 October 2017, 08:14 WIB
- * @modified date 24 January 2019, 15:50 WIB
+ * @modified date 13 February 2019, 05:27 WIB
  * @link https://github.com/ommu/mod-banner
  *
  */
@@ -45,8 +45,14 @@ $this->params['menu']['content'] = [
 			'format' => 'raw',
 		],
 		[
-			'attribute' => 'cat_id',
-			'value' => isset($model->category) ? $model->category->title->message : '-',
+			'attribute' => 'categoryName',
+			'value' => function ($model) {
+				$categoryName = isset($model->category) ? $model->category->title->message : '-';
+				if($categoryName != '-')
+					return Html::a($categoryName, ['setting/category/view', 'id'=>$model->cat_id], ['title'=>$categoryName]);
+				return $categoryName;
+			},
+			'format' => 'html',
 		],
 		'title',
 		[
@@ -99,15 +105,21 @@ $this->params['menu']['content'] = [
 		],
 		[
 			'attribute' => 'clicks',
-			'value' => Html::a($model->clicks ? $model->clicks : 0, ['history/click/manage', 'banner'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} clicks', ['count'=>$model->clicks])]),
+			'value' => function ($model) {
+				$clicks = $model->getClicks(true);
+				return Html::a($clicks, ['history/click/manage', 'banner'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} clicks', ['count'=>$clicks])]);
+			},
 			'format' => 'html',
 		],
 		[
 			'attribute' => 'views',
-			'value' => Html::a($model->views ? $model->views : 0, ['history/view/manage', 'banner'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} views', ['count'=>$model->views])]),
+			'value' => function ($model) {
+				$views = $model->getViews(true);
+				return Html::a($views, ['history/view/manage', 'banner'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} views', ['count'=>$views])]);
+			},
 			'format' => 'html',
 		],
 	],
-]) ?>
+]); ?>
 
 </div>

@@ -6,7 +6,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 6 October 2017, 13:04 WIB
- * @modified date 19 January 2019, 06:56 WIB
+ * @modified date 12 February 2019, 22:52 WIB
  * @link https://github.com/ommu/mod-banner
  *
  * This is the model class for table "ommu_banner_clicks".
@@ -36,7 +36,6 @@ class BannerClicks extends \app\components\ActiveRecord
 {
 	public $gridForbiddenColumn = [];
 
-	// Search Variable
 	public $categoryId;
 	public $bannerTitle;
 	public $userDisplayname;
@@ -85,15 +84,16 @@ class BannerClicks extends \app\components\ActiveRecord
 	/**
 	 * @return \yii\db\ActiveQuery
 	 */
-	public function getHistories($count=true)
+	public function getHistories($count=false)
 	{
-		if($count == true) {
-			$model = BannerClickHistory::find()
-				->where(['click_id' => $this->click_id]);
-			return $model->count();
-		}
+		if($count == false)
+			return $this->hasMany(BannerClickHistory::className(), ['click_id' => 'click_id']);
 
-		return $this->hasMany(BannerClickHistory::className(), ['click_id' => 'click_id']);
+		$model = BannerClickHistory::find()
+			->where(['click_id' => $this->click_id]);
+		$histories = $model->count();
+
+		return $histories ? $histories : 0;
 	}
 
 	/**
@@ -173,7 +173,8 @@ class BannerClicks extends \app\components\ActiveRecord
 			'attribute' => 'clicks',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
-				return Html::a($model->clicks ? $model->clicks : 0, ['history/click-detail/manage', 'click'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} histories', ['count'=>$model->histories])]);
+				$clicks = $model->clicks;
+				return Html::a($clicks, ['history/click-detail/manage', 'click'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} histories', ['count'=>$clicks])]);
 			},
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'html',

@@ -55,7 +55,10 @@ $this->params['menu']['content'] = [
 		'view_ip',
 		[
 			'attribute' => 'views',
-			'value' => Html::a($model->views ? $model->views : 0, ['history/manage', 'view'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} histories', ['count'=>$model->views])]),
+			'value' => function ($model) {
+				$views = $model->views;
+				return  Html::a($views, ['history/manage', 'view'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} histories', ['count'=>$views])]);
+			},
 			'format' => 'html',
 		],
 	],
