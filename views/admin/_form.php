@@ -46,6 +46,7 @@ JS;
 
 <?php $form = ActiveForm::begin([
 	'options' => [
+		'class' => 'form-horizontal form-label-left',
 		'enctype' => 'multipart/form-data',
 	],
 	'enableClientValidation' => false,
@@ -56,13 +57,13 @@ JS;
 <?php //echo $form->errorSummary($model);?>
 
 <?php $category = BannerCategory::getCategory(1);
-echo $form->field($model, 'cat_id', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12">{input}{error}</div>'])
+echo $form->field($model, 'cat_id')
 	->dropDownList($category, ['prompt'=>''])
-	->label($model->getAttributeLabel('cat_id'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+	->label($model->getAttributeLabel('cat_id')); ?>
 
-<?php echo $form->field($model, 'title', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12">{input}{error}</div>'])
+<?php echo $form->field($model, 'title')
 	->textInput(['maxlength'=>true])
-	->label($model->getAttributeLabel('title'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+	->label($model->getAttributeLabel('title')); ?>
 
 <?php 
 if(!$model->getErrors()) {
@@ -70,13 +71,14 @@ if(!$model->getErrors()) {
 	if($model->isNewRecord || (!$model->isNewRecord && $model->url != '-'))
 		$model->linked = 1;
 }
-echo $form->field($model, 'linked', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12 checkbox">{input}{error}</div>'])
+echo $form->field($model, 'linked')
 	->checkbox(['label'=>''])
-	->label($model->getAttributeLabel('linked'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+	->label($model->getAttributeLabel('linked')); ?>
 
-<?php echo $form->field($model, 'url', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12">{input}{error}<span class="small-px">example: http://sudaryanto.id</span></div>', 'options' => ['class' => 'form-group', 'style' => $model->linked == 0 ? 'display: none' : '']])
+<?php echo $form->field($model, 'url', ['options' => ['style' => $model->linked == 0 ? 'display: none' : '']])
 	->textInput()
-	->label($model->getAttributeLabel('url'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+	->label($model->getAttributeLabel('url'))
+	->hint('example: http://sudaryanto.id'); ?>
 
 <?php $uploadPath = Banners::getUploadPath(false);
 $bannerFilename = !$model->isNewRecord && $model->old_banner_filename != '' ? Html::img(join('/', [Url::Base(), $uploadPath, $model->old_banner_filename]), ['class'=>'mb-15', 'width'=>'100%']) : '';
@@ -84,13 +86,13 @@ echo $form->field($model, 'banner_filename', ['template' => '{label}<div class="
 	->fileInput()
 	->label($model->getAttributeLabel('banner_filename'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 
-<?php echo $form->field($model, 'banner_desc', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12">{input}{error}</div>'])
+<?php echo $form->field($model, 'banner_desc')
 	->textarea(['rows'=>6, 'cols'=>50])
-	->label($model->getAttributeLabel('banner_desc'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+	->label($model->getAttributeLabel('banner_desc')); ?>
 
-<?php echo $form->field($model, 'published_date', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12">{input}{error}</div>'])
+<?php echo $form->field($model, 'published_date')
 	->textInput(['type' => 'date'])
-	->label($model->getAttributeLabel('published_date'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+	->label($model->getAttributeLabel('published_date')); ?>
 
 <?php
 if(!$model->getErrors()) {
@@ -98,17 +100,17 @@ if(!$model->getErrors()) {
 	if(!$model->isNewRecord && in_array($model->expired_date, ['0000-00-00','1970-01-01','0002-12-02','-0001-11-30']))
 		$model->permanent = 1;
 }
-echo $form->field($model, 'permanent', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12 checkbox">{input}{error}</div>'])
+echo $form->field($model, 'permanent')
 	->checkbox(['label'=>''])
-	->label($model->getAttributeLabel('permanent'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+	->label($model->getAttributeLabel('permanent')); ?>
 
-<?php echo $form->field($model, 'expired_date', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12">{input}{error}</div>', 'options' => ['class' => 'form-group', 'style' => $model->permanent == 1 ? 'display: none' : '']])
+<?php echo $form->field($model, 'expired_date', ['options' => ['style' => $model->permanent == 1 ? 'display: none' : '']])
 	->textInput(['type' => 'date'])
-	->label($model->getAttributeLabel('expired_date'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+	->label($model->getAttributeLabel('expired_date')); ?>
 
-<?php echo $form->field($model, 'publish', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12 checkbox">{input}{error}</div>'])
+<?php echo $form->field($model, 'publish')
 	->checkbox(['label'=>''])
-	->label($model->getAttributeLabel('publish'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+	->label($model->getAttributeLabel('publish')); ?>
 
 <div class="ln_solid"></div>
 <div class="form-group">
