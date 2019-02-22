@@ -40,9 +40,9 @@ use app\components\ActiveForm;
 
 <?php $banner_size_height = $form->field($model, 'banner_size[height]', ['template' => '<div class="col-md-3 col-sm-5 col-xs-6">{input}</div>', 'options' => ['tag' => null]])
 	->textInput(['type'=>'number', 'min'=>0, 'maxlength'=>'3', 'placeholder'=>$model->getAttributeLabel('banner_size[height]')])
-	->label($model->getAttributeLabel('banner_size[height]'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+	->label($model->getAttributeLabel('banner_size[height]')); ?>
 
-<?php echo $form->field($model, 'banner_size[width]', ['template' => '{label}<div class="col-md-3 col-sm-4 col-xs-6">{input}</div>'.$banner_size_height.'<div class="col-md-6 col-sm-9 col-xs-12 col-sm-offset-3">{error}</div>'])
+<?php echo $form->field($model, 'banner_size[width]', ['template' => '{label}<div class="col-md-3 col-sm-4 col-xs-6">{input}</div>'.$banner_size_height.'<div class="col-md-6 col-sm-9 col-xs-12 offset-sm-3">{error}</div>'])
 	->textInput(['type'=>'number', 'min'=>0, 'maxlength'=>'3', 'placeholder'=>$model->getAttributeLabel('banner_size[width]')])
 	->label($model->getAttributeLabel('banner_size'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 
@@ -55,8 +55,8 @@ use app\components\ActiveForm;
 	->label($model->getAttributeLabel('publish')); ?>
 
 <div class="ln_solid"></div>
-<div class="form-group">
-	<div class="col-md-6 col-sm-9 col-xs-12 col-sm-offset-3">
+<div class="form-group row">
+	<div class="col-md-6 col-sm-9 col-xs-12 offset-sm-3">
 		<?php echo Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']); ?>
 	</div>
 </div>
