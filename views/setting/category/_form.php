@@ -44,7 +44,7 @@ use app\components\ActiveForm;
 
 <?php echo $form->field($model, 'banner_size[width]', ['template' => '{label}<div class="col-md-3 col-sm-4 col-xs-6">{input}</div>'.$banner_size_height.'<div class="col-md-6 col-sm-9 col-xs-12 offset-sm-3">{error}</div>'])
 	->textInput(['type'=>'number', 'min'=>0, 'maxlength'=>'3', 'placeholder'=>$model->getAttributeLabel('banner_size[width]')])
-	->label($model->getAttributeLabel('banner_size'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+	->label($model->getAttributeLabel('banner_size')); ?>
 
 <?php echo $form->field($model, 'banner_limit')
 	->textInput(['type'=>'number', 'min'=>'1', 'maxlength'=>true])

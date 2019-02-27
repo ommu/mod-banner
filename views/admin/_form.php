@@ -82,9 +82,9 @@ echo $form->field($model, 'linked')
 
 <?php $uploadPath = Banners::getUploadPath(false);
 $bannerFilename = !$model->isNewRecord && $model->old_banner_filename != '' ? Html::img(join('/', [Url::Base(), $uploadPath, $model->old_banner_filename]), ['class'=>'mb-15', 'width'=>'100%']) : '';
-echo $form->field($model, 'banner_filename', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12"><div>'.$bannerFilename.'</div>{input}{error}</div>'])
+echo $form->field($model, 'banner_filename', ['template'=> '{label}{beginWrapper}<div>'.$bannerFilename.'</div>{input}{error}{hint}{endWrapper}'])
 	->fileInput()
-	->label($model->getAttributeLabel('banner_filename'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+	->label($model->getAttributeLabel('banner_filename')); ?>
 
 <?php echo $form->field($model, 'banner_desc')
 	->textarea(['rows'=>6, 'cols'=>50])

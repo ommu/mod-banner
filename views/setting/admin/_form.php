@@ -55,7 +55,7 @@ echo $form->field($model, 'license')
 	->hint(Yii::t('app', 'Enter the your license key that is provided to you when you purchased this plugin. If you do not know your license key, please contact support team.').'<br/>'.Yii::t('app', 'Format: XXXX-XXXX-XXXX-XXXX')); ?>
 
 <?php $permission = BannerSetting::getPermission();
-echo $form->field($model, 'permission')
+echo $form->field($model, 'permission', ['template'=> '{label}{beginWrapper}{hint}{input}{error}{endWrapper}'])
 	->radioList($permission, ['class'=>'desc mt-10', 'separator' => '<br />'])
 	->label($model->getAttributeLabel('permission'))
 	->hint(Yii::t('app', 'Select whether or not you want to let the public (visitors that are not logged-in) to view the following sections of your social network. In some cases (such as Profiles, Blogs, and Albums), if you have given them the option, your users will be able to make their pages private even though you have made them publically viewable here. For more permissions settings, please visit the General Settings page.')); ?>
