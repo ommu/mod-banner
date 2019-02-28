@@ -72,7 +72,7 @@ if(!$model->getErrors()) {
 		$model->linked = 1;
 }
 echo $form->field($model, 'linked')
-	->checkbox(['label'=>''])
+	->checkbox()
 	->label($model->getAttributeLabel('linked')); ?>
 
 <?php echo $form->field($model, 'url', ['options' => ['style' => $model->linked == 0 ? 'display: none' : '']])
@@ -101,7 +101,7 @@ if(!$model->getErrors()) {
 		$model->permanent = 1;
 }
 echo $form->field($model, 'permanent')
-	->checkbox(['label'=>''])
+	->checkbox()
 	->label($model->getAttributeLabel('permanent')); ?>
 
 <?php echo $form->field($model, 'expired_date', ['options' => ['style' => $model->permanent == 1 ? 'display: none' : '']])
@@ -109,7 +109,7 @@ echo $form->field($model, 'permanent')
 	->label($model->getAttributeLabel('expired_date')); ?>
 
 <?php echo $form->field($model, 'publish')
-	->checkbox(['label'=>''])
+	->checkbox()
 	->label($model->getAttributeLabel('publish')); ?>
 
 <div class="ln_solid"></div>

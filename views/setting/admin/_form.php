@@ -56,7 +56,7 @@ echo $form->field($model, 'license')
 
 <?php $permission = BannerSetting::getPermission();
 echo $form->field($model, 'permission', ['template' => '{label}{beginWrapper}{hint}{input}{error}{endWrapper}'])
-	->radioList($permission, ['class'=>'desc mt-10', 'separator' => '<br />'])
+	->radioList($permission)
 	->label($model->getAttributeLabel('permission'))
 	->hint(Yii::t('app', 'Select whether or not you want to let the public (visitors that are not logged-in) to view the following sections of your social network. In some cases (such as Profiles, Blogs, and Albums), if you have given them the option, your users will be able to make their pages private even though you have made them publically viewable here. For more permissions settings, please visit the General Settings page.')); ?>
 
@@ -70,12 +70,12 @@ echo $form->field($model, 'permission', ['template' => '{label}{beginWrapper}{hi
 
 <?php $bannerValidation = BannerSetting::getBannerValidation();
 echo $form->field($model, 'banner_validation')
-	->radioList($bannerValidation, ['class'=>'desc pt-10', 'separator' => '<br />'])
+	->radioList($bannerValidation)
 	->label($model->getAttributeLabel('banner_validation')); ?>
 
 <?php $bannerResize = BannerSetting::getBannerResize();
 echo $form->field($model, 'banner_resize')
-	->radioList($bannerResize, ['class'=>'desc pt-10', 'separator' => '<br />'])
+	->radioList($bannerResize)
 	->label($model->getAttributeLabel('banner_resize')); ?>
 
 <?php echo $form->field($model, 'banner_file_type')
