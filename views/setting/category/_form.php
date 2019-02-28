@@ -38,11 +38,11 @@ use app\components\ActiveForm;
 	->textarea(['rows'=>6, 'cols'=>50, 'maxlength'=>true])
 	->label($model->getAttributeLabel('desc_i')); ?>
 
-<?php $banner_size_height = $form->field($model, 'banner_size[height]', ['template' => '{beginWrapper}{input}{endWrapper}', 'horizontalCssClasses' => ['wrapper'=>'col-md-3 col-sm-5 col-6'], 'options' => ['tag' => null]])
+<?php $banner_size_height = $form->field($model, 'banner_size[height]', ['template' => '{beginWrapper}{input}{endWrapper}', 'horizontalCssClasses' => ['wrapper'=>'col-md-3 col-sm-5 col-xs-6 col-6'], 'options' => ['tag' => null]])
 	->textInput(['type'=>'number', 'min'=>0, 'maxlength'=>'3', 'placeholder'=>$model->getAttributeLabel('banner_size[height]')])
 	->label($model->getAttributeLabel('banner_size[height]')); ?>
 
-<?php echo $form->field($model, 'banner_size[width]', ['template' => '{label}{beginWrapper}{input}{endWrapper}'.$banner_size_height.'{error}', 'horizontalCssClasses' => ['wrapper'=>'col-md-3 col-sm-4 col-6', 'error'=>'col-md-6 col-sm-9 col-12 offset-sm-3']])
+<?php echo $form->field($model, 'banner_size[width]', ['template' => '{label}{beginWrapper}{input}{endWrapper}'.$banner_size_height.'{error}', 'horizontalCssClasses' => ['wrapper'=>'col-md-3 col-sm-4 col-xs-6 col-6', 'error'=>'col-md-6 col-sm-9 col-xs-12 col-12 offset-sm-3']])
 	->textInput(['type'=>'number', 'min'=>0, 'maxlength'=>'3', 'placeholder'=>$model->getAttributeLabel('banner_size[width]')])
 	->label($model->getAttributeLabel('banner_size')); ?>
 
@@ -56,7 +56,7 @@ use app\components\ActiveForm;
 
 <div class="ln_solid"></div>
 <div class="form-group row">
-	<div class="col-md-6 col-sm-9 col-12 offset-sm-3">
+	<div class="col-md-6 col-sm-9 col-xs-12 col-12 offset-sm-3">
 		<?php echo Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']); ?>
 	</div>
 </div>
