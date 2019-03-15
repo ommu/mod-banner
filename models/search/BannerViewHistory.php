@@ -60,9 +60,12 @@ class BannerViewHistory extends BannerViewHistoryModel
 	 *
 	 * @return ActiveDataProvider
 	 */
-	public function search($params)
+	public function search($params, $column=null)
 	{
-		$query = BannerViewHistoryModel::find()->alias('t');
+		if(!($column && is_array($column)))
+			$query = BannerViewHistoryModel::find()->alias('t');
+		else
+			$query = BannerViewHistoryModel::find()->alias('t')->select($column);
 		$query->joinWith([
 			'view view',
 			'view.banner banner',

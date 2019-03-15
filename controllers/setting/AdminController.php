@@ -135,9 +135,9 @@ class AdminController extends Controller
 	 * @param integer $id
 	 * @return mixed
 	 */
-	public function actionDelete($id)
+	public function actionDelete()
 	{
-		$this->findModel($id)->delete();
+		$this->findModel(1)->delete();
 		
 		Yii::$app->session->setFlash('success', Yii::t('app', 'Banner setting success deleted.'));
 		return $this->redirect(['update']);

@@ -60,9 +60,12 @@ class BannerClicks extends BannerClicksModel
 	 *
 	 * @return ActiveDataProvider
 	 */
-	public function search($params)
+	public function search($params, $column=null)
 	{
-		$query = BannerClicksModel::find()->alias('t');
+		if(!($column && is_array($column)))
+			$query = BannerClicksModel::find()->alias('t');
+		else
+			$query = BannerClicksModel::find()->alias('t')->select($column);
 		$query->joinWith([
 			'banner banner',
 			'banner.category.title category',

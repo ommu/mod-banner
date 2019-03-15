@@ -60,9 +60,12 @@ class BannerClickHistory extends BannerClickHistoryModel
 	 *
 	 * @return ActiveDataProvider
 	 */
-	public function search($params)
+	public function search($params, $column=null)
 	{
-		$query = BannerClickHistoryModel::find()->alias('t');
+		if(!($column && is_array($column)))
+			$query = BannerClickHistoryModel::find()->alias('t');
+		else
+			$query = BannerClickHistoryModel::find()->alias('t')->select($column);
 		$query->joinWith([
 			'click click',
 			'click.banner banner',

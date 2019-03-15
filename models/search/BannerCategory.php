@@ -60,9 +60,12 @@ class BannerCategory extends BannerCategoryModel
 	 *
 	 * @return ActiveDataProvider
 	 */
-	public function search($params)
+	public function search($params, $column=null)
 	{
-		$query = BannerCategoryModel::find()->alias('t');
+		if(!($column && is_array($column)))
+			$query = BannerCategoryModel::find()->alias('t');
+		else
+			$query = BannerCategoryModel::find()->alias('t')->select($column);
 		$query->joinWith([
 			'view view',
 			'title title', 
