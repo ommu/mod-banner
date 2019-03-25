@@ -30,7 +30,6 @@ class BannerClickHistory extends \app\components\ActiveRecord
 {
 	public $gridForbiddenColumn = [];
 
-	// Search Variable
 	public $categoryId;
 	public $bannerTitle;
 	public $userDisplayname;
@@ -108,18 +107,21 @@ class BannerClickHistory extends \app\components\ActiveRecord
 				'filter' => BannerCategory::getCategory(),
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->click->banner->category) ? $model->click->banner->category->title->message : '-';
+					// return $model->categoryId;
 				},
 			];
 			$this->templateColumns['bannerTitle'] = [
 				'attribute' => 'bannerTitle',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->click->banner) ? $model->click->banner->title : '-';
+					// return $model->bannerTitle;
 				},
 			];
 			$this->templateColumns['userDisplayname'] = [
 				'attribute' => 'userDisplayname',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->click->user) ? $model->click->user->displayname : '-';
+					// return $model->userDisplayname;
 				},
 			];
 		}

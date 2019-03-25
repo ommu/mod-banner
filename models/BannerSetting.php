@@ -41,7 +41,6 @@ class BannerSetting extends \app\components\ActiveRecord
 
 	public $gridForbiddenColumn = [];
 
-	// Search Variable
 	public $modifiedDisplayname;
 
 	/**
@@ -157,6 +156,7 @@ class BannerSetting extends \app\components\ActiveRecord
 				'attribute' => 'modifiedDisplayname',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->modified) ? $model->modified->displayname : '-';
+					// return $model->modifiedDisplayname;
 				},
 			];
 		}

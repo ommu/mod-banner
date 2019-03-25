@@ -139,12 +139,14 @@ class BannerClicks extends \app\components\ActiveRecord
 				'filter' => BannerCategory::getCategory(),
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->banner->category) ? $model->banner->category->title->message : '-';
+					// return $model->categoryId;
 				},
 			];
 			$this->templateColumns['bannerTitle'] = [
 				'attribute' => 'bannerTitle',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->banner) ? $model->banner->title : '-';
+					// return $model->bannerTitle;
 				},
 			];
 		}
@@ -153,6 +155,7 @@ class BannerClicks extends \app\components\ActiveRecord
 				'attribute' => 'userDisplayname',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->user) ? $model->user->displayname : '-';
+					// return $model->userDisplayname;
 				},
 			];
 		}

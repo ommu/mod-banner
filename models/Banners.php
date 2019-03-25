@@ -54,6 +54,7 @@ class Banners extends \app\components\ActiveRecord
 	use \ommu\traits\FileTrait;
 
 	public $gridForbiddenColumn = ['url','banner_filename','banner_desc','creation_date','creationDisplayname','modified_date','modifiedDisplayname','updated_date','slug'];
+
 	public $linked;
 	public $permanent;
 	public $old_banner_filename;
@@ -218,6 +219,7 @@ class Banners extends \app\components\ActiveRecord
 				'attribute' => 'cat_id',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->category) ? $model->category->title->message : '-';
+					// return $model->categoryName;
 				},
 				'filter' => BannerCategory::getCategory(),
 			];
@@ -275,6 +277,7 @@ class Banners extends \app\components\ActiveRecord
 				'attribute' => 'creationDisplayname',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->creation) ? $model->creation->displayname : '-';
+					// return $model->creationDisplayname;
 				},
 			];
 		}
@@ -290,6 +293,7 @@ class Banners extends \app\components\ActiveRecord
 				'attribute' => 'modifiedDisplayname',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->modified) ? $model->modified->displayname : '-';
+					// return $model->modifiedDisplayname;
 				},
 			];
 		}

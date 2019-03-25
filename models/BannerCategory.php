@@ -50,10 +50,9 @@ class BannerCategory extends \app\components\ActiveRecord
 	use \ommu\traits\UtilityTrait;
 
 	public $gridForbiddenColumn = ['creation_date','creationDisplayname','modified_date','modifiedDisplayname','updated_date','slug','desc_i'];
+
 	public $name_i;
 	public $desc_i;
-
-	// Search Variable
 	public $creationDisplayname;
 	public $modifiedDisplayname;
 
@@ -314,6 +313,7 @@ class BannerCategory extends \app\components\ActiveRecord
 				'attribute' => 'creationDisplayname',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->creation) ? $model->creation->displayname : '-';
+					// return $model->creationDisplayname;
 				},
 			];
 		}
@@ -329,6 +329,7 @@ class BannerCategory extends \app\components\ActiveRecord
 				'attribute' => 'modifiedDisplayname',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->modified) ? $model->modified->displayname : '-';
+					// return $model->modifiedDisplayname;
 				},
 			];
 		}
