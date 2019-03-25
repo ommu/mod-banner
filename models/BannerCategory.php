@@ -295,10 +295,10 @@ class BannerCategory extends \app\components\ActiveRecord
 		];
 		$this->templateColumns['banner_limit'] = [
 			'attribute' => 'banner_limit',
-			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
 				return $model->banner_limit;
 			},
+			'filter' => false,
 			'contentOptions' => ['class'=>'center'],
 		];
 		$this->templateColumns['creation_date'] = [
@@ -348,41 +348,41 @@ class BannerCategory extends \app\components\ActiveRecord
 		];
 		$this->templateColumns['banners'] = [
 			'attribute' => 'banners',
-			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
 				$banners = $model->getBanners(true);
 				return Html::a($banners, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'publish']);
 			},
+			'filter' => false,
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'html',
 		];
 		$this->templateColumns['permanent'] = [
 			'attribute' => 'permanent',
-			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
 				$permanent = $model->getPermanent(true);
 				return Html::a($permanent, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'permanent']);
 			},
+			'filter' => false,
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'html',
 		];
 		$this->templateColumns['pending'] = [
 			'attribute' => 'pending',
-			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
 				$pending = $model->getPending(true);
 				return Html::a($pending, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'pending']);
 			},
+			'filter' => false,
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'html',
 		];
 		$this->templateColumns['expired'] = [
 			'attribute' => 'expired',
-			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
 				$expired = $model->getExpired(true);
 				return Html::a($expired, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'expired']);
 			},
+			'filter' => false,
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'html',
 		];

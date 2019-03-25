@@ -104,11 +104,11 @@ class BannerViewHistory extends \app\components\ActiveRecord
 		if(!Yii::$app->request->get('view')) {
 			$this->templateColumns['categoryId'] = [
 				'attribute' => 'categoryId',
-				'filter' => BannerCategory::getCategory(),
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->view->banner->category) ? $model->view->banner->category->title->message : '-';
 					// return $model->categoryId;
 				},
+				'filter' => BannerCategory::getCategory(),
 			];
 			$this->templateColumns['bannerTitle'] = [
 				'attribute' => 'bannerTitle',

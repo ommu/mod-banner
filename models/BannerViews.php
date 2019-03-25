@@ -136,11 +136,11 @@ class BannerViews extends \app\components\ActiveRecord
 		if(!Yii::$app->request->get('banner')) {
 			$this->templateColumns['categoryId'] = [
 				'attribute' => 'categoryId',
-				'filter' => BannerCategory::getCategory(),
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->banner->category) ? $model->banner->category->title->message : '-';
 					// return $model->categoryId;
 				},
+				'filter' => BannerCategory::getCategory(),
 			];
 			$this->templateColumns['bannerTitle'] = [
 				'attribute' => 'bannerTitle',
@@ -174,11 +174,11 @@ class BannerViews extends \app\components\ActiveRecord
 		];
 		$this->templateColumns['views'] = [
 			'attribute' => 'views',
-			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
 				$views = $model->views;
 				return Html::a($views, ['history/view-detail/manage', 'view'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} histories', ['count'=>$views])]);
 			},
+			'filter' => false,
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'html',
 		];

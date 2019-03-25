@@ -162,18 +162,18 @@ class BannerSetting extends \app\components\ActiveRecord
 		}
 		$this->templateColumns['banner_validation'] = [
 			'attribute' => 'banner_validation',
-			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
 				return $this->filterYesNo($model->banner_validation);
 			},
+			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class'=>'center'],
 		];
 		$this->templateColumns['banner_resize'] = [
 			'attribute' => 'banner_resize',
-			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
 				return $this->filterYesNo($model->banner_resize);
 			},
+			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class'=>'center'],
 		];
 	}

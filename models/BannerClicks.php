@@ -136,11 +136,11 @@ class BannerClicks extends \app\components\ActiveRecord
 		if(!Yii::$app->request->get('banner')) {
 			$this->templateColumns['categoryId'] = [
 				'attribute' => 'categoryId',
-				'filter' => BannerCategory::getCategory(),
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->banner->category) ? $model->banner->category->title->message : '-';
 					// return $model->categoryId;
 				},
+				'filter' => BannerCategory::getCategory(),
 			];
 			$this->templateColumns['bannerTitle'] = [
 				'attribute' => 'bannerTitle',
@@ -174,11 +174,11 @@ class BannerClicks extends \app\components\ActiveRecord
 		];
 		$this->templateColumns['clicks'] = [
 			'attribute' => 'clicks',
-			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
 				$clicks = $model->clicks;
 				return Html::a($clicks, ['history/click-detail/manage', 'click'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} histories', ['count'=>$clicks])]);
 			},
+			'filter' => false,
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'html',
 		];

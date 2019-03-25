@@ -104,11 +104,11 @@ class BannerClickHistory extends \app\components\ActiveRecord
 		if(!Yii::$app->request->get('click')) {
 			$this->templateColumns['categoryId'] = [
 				'attribute' => 'categoryId',
-				'filter' => BannerCategory::getCategory(),
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->click->banner->category) ? $model->click->banner->category->title->message : '-';
 					// return $model->categoryId;
 				},
+				'filter' => BannerCategory::getCategory(),
 			];
 			$this->templateColumns['bannerTitle'] = [
 				'attribute' => 'bannerTitle',

@@ -312,30 +312,30 @@ class Banners extends \app\components\ActiveRecord
 		];
 		$this->templateColumns['clicks'] = [
 			'attribute' => 'clicks',
-			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
 				$clicks = $model->getClicks(true);
 				return Html::a($clicks, ['history/click/manage', 'banner'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} clicks', ['count'=>$clicks])]);
 			},
+			'filter' => false,
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'html',
 		];
 		$this->templateColumns['views'] = [
 			'attribute' => 'views',
-			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
 				$views = $model->getViews(true);
 				return Html::a($views, ['history/view/manage', 'banner'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} views', ['count'=>$views])]);
 			},
+			'filter' => false,
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'html',
 		];
 		$this->templateColumns['permanent'] = [
 			'attribute' => 'permanent',
-			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
 				return $this->filterYesNo($model->view->permanent);
 			},
+			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class'=>'center'],
 		];
 		if(!Yii::$app->request->get('trash') && !Yii::$app->request->get('expired')) {
