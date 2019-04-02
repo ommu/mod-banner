@@ -109,7 +109,7 @@ class ClickController extends Controller
 		$this->view->title = Yii::t('app', 'Detail {model-class}: {banner-id}', ['model-class' => 'Click', 'banner-id' => $model->banner->title]);
 		$this->view->description = '';
 		$this->view->keywords = '';
-		return $this->render('admin_view', [
+		return $this->oRender('admin_view', [
 			'model' => $model,
 		]);
 	}

@@ -109,7 +109,7 @@ class ViewDetailController extends Controller
 		$this->view->title = Yii::t('app', 'Detail {model-class}: {view-id}', ['model-class' => 'View History', 'view-id' => $model->view->banner->title]);
 		$this->view->description = '';
 		$this->view->keywords = '';
-		return $this->render('admin_view', [
+		return $this->oRender('admin_view', [
 			'model' => $model,
 		]);
 	}
