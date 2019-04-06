@@ -38,9 +38,9 @@ $this->params['menu']['option'] = [
 <?php Pjax::begin(); ?>
 
 <?php if($banner != null) {
-$model = $banners;
+$model = $banner;
 echo DetailView::widget([
-	'model' => $banners,
+	'model' => $model,
 	'options' => [
 		'class'=>'table table-striped detail-view',
 	],
@@ -50,7 +50,7 @@ echo DetailView::widget([
 			'value' => function ($model) {
 				$categoryName = isset($model->category) ? $model->category->title->message : '-';
 				if($categoryName != '-')
-					return Html::a($categoryName, ['setting/category/view', 'id'=>$model->cat_id], ['title'=>$categoryName]);
+					return Html::a($categoryName, ['setting/category/view', 'id'=>$model->cat_id], ['title'=>$categoryName, 'class'=>'modal-btn']);
 				return $categoryName;
 			},
 			'format' => 'html',
@@ -58,7 +58,9 @@ echo DetailView::widget([
 		[
 			'attribute' => 'title',
 			'value' => function ($model) {
-				return Html::a($model->title, ['admin/view', 'id'=>$model->banner_id], ['title'=>$model->title]);
+				if($model->title != '')
+					return Html::a($model->title, ['admin/view', 'id'=>$model->banner_id], ['title'=>$model->title, 'class'=>'modal-btn']);
+				return $model->title;
 			},
 			'format' => 'html',
 		],

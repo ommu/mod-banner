@@ -38,9 +38,9 @@ $this->params['menu']['option'] = [
 <?php Pjax::begin(); ?>
 
 <?php if($category != null) {
-$model = $categories;
+$model = $category;
 echo DetailView::widget([
-	'model' => $categories,
+	'model' => $model,
 	'options' => [
 		'class'=>'table table-striped detail-view',
 	],
@@ -49,7 +49,7 @@ echo DetailView::widget([
 			'attribute' => 'name_i',
 			'value' => function ($model) {
 				if($model->name_i != '')
-					return Html::a($model->name_i, ['category/view', 'id'=>$model->cat_id], ['title'=>$model->name_i]);
+					return Html::a($model->name_i, ['category/view', 'id'=>$model->cat_id], ['title'=>$model->name_i, 'class'=>'modal-btn']);
 				return $model->name_i;
 			},
 			'format' => 'html',
@@ -60,14 +60,6 @@ echo DetailView::widget([
 			'value' => BannerCategory::getSize($model->banner_size),
 		],
 		'banner_limit',
-		[
-			'attribute' => 'creation_date',
-			'value' => Yii::$app->formatter->asDatetime($model->creation_date, 'medium'),
-		],
-		[
-			'attribute' => 'creationDisplayname',
-			'value' => isset($model->creation) ? $model->creation->displayname : '-',
-		],
 	],
 ]);
 }?>

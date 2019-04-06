@@ -35,7 +35,6 @@ use app\components\Controller;
 use mdm\admin\components\AccessControl;
 use ommu\banner\models\Banners;
 use ommu\banner\models\search\Banners as BannersSearch;
-use ommu\banner\models\BannerCategory;
 
 class AdminController extends Controller
 {
@@ -72,8 +71,6 @@ class AdminController extends Controller
 	 */
 	public function actionManage()
 	{
-		$category = Yii::$app->request->get('category');
-
 		$searchModel = new BannersSearch();
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -87,8 +84,8 @@ class AdminController extends Controller
 		}
 		$columns = $searchModel->getGridColumn($cols);
 
-		if($category != null)
-			$categories = BannerCategory::findOne($category);
+		if(($category = Yii::$app->request->get('category')) != null)
+			$category = \ommu\banner\models\BannerCategory::findOne($category);
 
 		$this->view->title = Yii::t('app', 'Banners');
 		$this->view->description = '';
@@ -98,7 +95,6 @@ class AdminController extends Controller
 			'dataProvider' => $dataProvider,
 			'columns' => $columns,
 			'category' => $category,
-			'categories' => $categories,
 		]);
 	}
 

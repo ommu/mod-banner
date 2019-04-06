@@ -31,7 +31,6 @@ use app\components\Controller;
 use mdm\admin\components\AccessControl;
 use ommu\banner\models\BannerClickHistory;
 use ommu\banner\models\search\BannerClickHistory as BannerClickHistorySearch;
-use ommu\banner\models\BannerClicks;
 
 class ClickDetailController extends Controller
 {
@@ -67,8 +66,6 @@ class ClickDetailController extends Controller
 	 */
 	public function actionManage()
 	{
-		$click = Yii::$app->request->get('click');
-
 		$searchModel = new BannerClickHistorySearch();
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -82,8 +79,8 @@ class ClickDetailController extends Controller
 		}
 		$columns = $searchModel->getGridColumn($cols);
 
-		if($click != null)
-			$clicks = BannerClicks::findOne($click);
+		if(($click = Yii::$app->request->get('click')) != null)
+			$click = \ommu\banner\models\BannerClicks::findOne($click);
 
 		$this->view->title = Yii::t('app', 'Click Histories');
 		$this->view->description = '';
@@ -93,7 +90,6 @@ class ClickDetailController extends Controller
 			'dataProvider' => $dataProvider,
 			'columns' => $columns,
 			'click' => $click,
-			'clicks' => $clicks,
 		]);
 	}
 
