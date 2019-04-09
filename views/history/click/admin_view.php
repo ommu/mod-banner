@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Clicks'), 'url' => [
 $this->params['breadcrumbs'][] = $model->banner->title;
 
 $this->params['menu']['content'] = [
-	['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id'=>$model->click_id]), 'htmlOptions' => ['data-confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'), 'data-method'=>'post'], 'icon' => 'trash'],
+	['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id'=>$model->click_id]), 'htmlOptions' => ['data-confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'), 'data-method'=>'post', 'class'=>'btn btn-danger btn-sm'], 'icon' => 'trash'],
 ];
 ?>
 
