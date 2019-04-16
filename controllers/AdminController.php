@@ -155,7 +155,7 @@ class AdminController extends Controller
 			}
 		}
 
-		$this->view->title = Yii::t('app', 'Update {model-class}: {title}', ['model-class' => 'Banner', 'title' => $model->title]);
+		$this->view->title = Yii::t('app', 'Update Banner: {title}', ['title' => $model->title]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_update', [
@@ -172,7 +172,7 @@ class AdminController extends Controller
 	{
 		$model = $this->findModel($id);
 
-		$this->view->title = Yii::t('app', 'Detail {model-class}: {title}', ['model-class' => 'Banner', 'title' => $model->title]);
+		$this->view->title = Yii::t('app', 'Detail Banner: {title}', ['title' => $model->title]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->oRender('admin_view', [
