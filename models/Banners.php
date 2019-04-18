@@ -341,11 +341,11 @@ class Banners extends \app\components\ActiveRecord
 		if(!Yii::$app->request->get('trash') && !Yii::$app->request->get('expired')) {
 			$this->templateColumns['publish'] = [
 				'attribute' => 'publish',
-				'filter' => $this->filterYesNo(),
 				'value' => function($model, $key, $index, $column) {
 					$url = Url::to(['publish', 'id'=>$model->primaryKey]);
 					return $this->quickAction($url, $model->publish);
 				},
+				'filter' => $this->filterYesNo(),
 				'contentOptions' => ['class'=>'center'],
 				'format' => 'raw',
 			];
