@@ -1,7 +1,7 @@
 <?php
 /**
  * CategoryController
- * @var $this app\components\View
+ * @var $this ommu\banner\controllers\setting\CategoryController
  * @var $model ommu\banner\models\BannerCategory
  *
  * CategoryController implements the CRUD actions for BannerCategory model.

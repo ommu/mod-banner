@@ -1,7 +1,7 @@
 <?php
 /**
  * AdminController
- * @var $this app\components\View
+ * @var $this ommu\banner\controllers\setting\AdminController
  * @var $model ommu\banner\models\BannerSetting
  *
  * AdminController implements the CRUD actions for BannerSetting model.

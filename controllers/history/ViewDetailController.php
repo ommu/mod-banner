@@ -1,7 +1,7 @@
 <?php
 /**
  * ViewDetailController
- * @var $this app\components\View
+ * @var $this ommu\banner\controllers\history\ViewDetailController
  * @var $model ommu\banner\models\BannerViewHistory
  *
  * ViewDetailController implements the CRUD actions for BannerViewHistory model.

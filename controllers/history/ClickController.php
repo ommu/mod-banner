@@ -1,7 +1,7 @@
 <?php
 /**
  * ClickController
- * @var $this app\components\View
+ * @var $this ommu\banner\controllers\history\ClickController
  * @var $model ommu\banner\models\BannerClicks
  *
  * ClickController implements the CRUD actions for BannerClicks model.

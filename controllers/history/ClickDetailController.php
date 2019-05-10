@@ -1,7 +1,7 @@
 <?php
 /**
  * ClickDetailController
- * @var $this app\components\View
+ * @var $this ommu\banner\controllers\history\ClickDetailController
  * @var $model ommu\banner\models\BannerClickHistory
  *
  * ClickDetailController implements the CRUD actions for BannerClickHistory model.

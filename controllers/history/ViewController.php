@@ -1,7 +1,7 @@
 <?php
 /**
  * ViewController
- * @var $this app\components\View
+ * @var $this ommu\banner\controllers\history\ViewController
  * @var $model ommu\banner\models\BannerViews
  *
  * ViewController implements the CRUD actions for BannerViews model.
