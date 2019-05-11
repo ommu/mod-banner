@@ -30,8 +30,7 @@
 	],
 	"require": {
 		"php": "~7.0",
-		"yiisoft/yii2": "~2.0.13",
-		"thamtech/yii2-uuid": "*"
+		"yiisoft/yii2": "~2.0.13"
 	},
 	"autoload": {
 		"psr-4": {
