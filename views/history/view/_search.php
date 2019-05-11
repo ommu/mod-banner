@@ -46,8 +46,8 @@ use ommu\banner\models\BannerCategory;
 		<?php echo $form->field($model, 'view_ip');?>
 
 		<div class="form-group">
-			<?php echo Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
-			<?php echo Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
+			<?php echo Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']); ?>
+			<?php echo Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']); ?>
 		</div>
 
 	<?php ActiveForm::end(); ?>
