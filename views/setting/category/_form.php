@@ -38,11 +38,11 @@ use app\components\widgets\ActiveForm;
 	->textarea(['rows'=>6, 'cols'=>50, 'maxlength'=>true])
 	->label($model->getAttributeLabel('desc_i')); ?>
 
-<?php $banner_size_height = $form->field($model, 'banner_size[height]', ['template' => '{beginWrapper}{input}{endWrapper}', 'horizontalCssClasses' => ['wrapper'=>'col-md-3 col-sm-5 col-xs-6 col-6'], 'options' => ['tag' => null]])
+<?php $banner_size_height = $form->field($model, 'banner_size[height]', ['template' => '{beginWrapper}{input}{endWrapper}', 'horizontalCssClasses' => ['wrapper'=>'col-md-3 col-sm-5 col-xs-6'], 'options' => ['tag' => null]])
 	->textInput(['type'=>'number', 'min'=>0, 'maxlength'=>'3', 'placeholder'=>$model->getAttributeLabel('banner_size[height]')])
 	->label($model->getAttributeLabel('banner_size[height]')); ?>
 
-<?php echo $form->field($model, 'banner_size[width]', ['template' => '{label}{beginWrapper}{input}{endWrapper}'.$banner_size_height.'{error}', 'horizontalCssClasses' => ['wrapper'=>'col-md-3 col-sm-4 col-xs-6 col-6', 'error'=>'col-md-6 col-sm-9 col-xs-12 col-sm-offset-3']])
+<?php echo $form->field($model, 'banner_size[width]', ['template' => '{label}{beginWrapper}{input}{endWrapper}'.$banner_size_height.'{error}', 'horizontalCssClasses' => ['wrapper'=>'col-md-3 col-sm-4 col-xs-6', 'error'=>'col-md-6 col-sm-9 col-xs-12 col-sm-offset-3']])
 	->textInput(['type'=>'number', 'min'=>0, 'maxlength'=>'3', 'placeholder'=>$model->getAttributeLabel('banner_size[width]')])
 	->label($model->getAttributeLabel('banner_size')); ?>
 

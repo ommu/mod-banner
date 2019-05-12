@@ -130,7 +130,7 @@ class BannerClicks extends \app\components\ActiveRecord
 
 		$this->templateColumns['_no'] = [
 			'header' => Yii::t('app', 'No'),
-			'class'  => 'yii\grid\SerialColumn',
+			'class' => 'yii\grid\SerialColumn',
 			'contentOptions' => ['class'=>'center'],
 		];
 		if(!Yii::$app->request->get('banner')) {
@@ -206,9 +206,10 @@ class BannerClicks extends \app\components\ActiveRecord
 	/**
 	 * {@inheritdoc}
 	 */
-	public function insertCLick($banner_id)
+	public function insertCLick($banner_id, $user_id=null)
 	{
-		$user_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+		if($user_id == null)
+			$user_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
 		
 		$findClick = self::find()
 			->select(['click_id','banner_id','user_id','clicks'])
@@ -225,6 +226,7 @@ class BannerClicks extends \app\components\ActiveRecord
 		else {
 			$click = new BannerClicks();
 			$click->banner_id = $banner_id;
+			$click->user_id = $user_id;
 			$click->save();
 		}
 	}
