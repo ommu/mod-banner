@@ -81,7 +81,7 @@ echo $form->field($model, 'linked')
 	->hint('example: http://sudaryanto.id'); ?>
 
 <?php $uploadPath = Banners::getUploadPath(false);
-$bannerFilename = !$model->isNewRecord && $model->old_banner_filename != '' ? Html::img(join('/', [Url::Base(), $uploadPath, $model->old_banner_filename]), ['class'=>'mb-15', 'width'=>'100%']) : '';
+$bannerFilename = !$model->isNewRecord && $model->old_banner_filename != '' ? Html::img(Url::to(join('/', ['@webpublic', $uploadPath, $model->old_banner_filename])), ['class'=>'mb-15', 'width'=>'100%']) : '';
 echo $form->field($model, 'banner_filename', ['template'=> '{label}{beginWrapper}<div>'.$bannerFilename.'</div>{input}{error}{hint}{endWrapper}'])
 	->fileInput()
 	->label($model->getAttributeLabel('banner_filename')); ?>

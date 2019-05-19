@@ -1,6 +1,7 @@
 {
 	"name": "ommu/banner",
 	"description": "Banner Module from Ommu Platform",
+	"type": "ommu-module",
 	"keywords": [
 		"module",
 		"banner",
@@ -8,9 +9,8 @@
 		"ommu-platform",
 		"yii2"
 	],
-	"homepage": "https://github.com/ommu/mod-banner",
-	"type": "ommu-module",
 	"license": "Apache-2.0",
+	"homepage": "https://github.com/ommu/mod-banner",
 	"support": {
 		"issues": "https://github.com/ommu/mod-banner/issues",
 		"wiki": "https://github.com/ommu/mod-banner/wiki",

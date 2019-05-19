@@ -240,7 +240,7 @@ class Banners extends \app\components\ActiveRecord
 			'attribute' => 'banner_filename',
 			'value' => function($model, $key, $index, $column) {
 				$uploadPath = self::getUploadPath(false);
-				return $model->banner_filename ? Html::img(join('/', [Url::Base(), $uploadPath, $model->banner_filename]), ['alt' => $model->banner_filename]) : '-';
+				return $model->banner_filename ? Html::img(Url::to(join('/', ['@webpublic', $uploadPath, $model->banner_filename])), ['alt' => $model->banner_filename]) : '-';
 			},
 			'format' => 'html',
 		];
