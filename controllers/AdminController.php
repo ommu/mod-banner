@@ -30,8 +30,8 @@
 namespace ommu\banner\controllers;
 
 use Yii;
-use app\components\Controller;
 use yii\filters\VerbFilter;
+use app\components\Controller;
 use mdm\admin\components\AccessControl;
 use ommu\banner\models\Banners;
 use ommu\banner\models\search\Banners as BannersSearch;

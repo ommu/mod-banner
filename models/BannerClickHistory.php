@@ -65,7 +65,7 @@ class BannerClickHistory extends \app\components\ActiveRecord
 			'id' => Yii::t('app', 'ID'),
 			'click_id' => Yii::t('app', 'Click'),
 			'click_date' => Yii::t('app', 'Click Date'),
-			'click_ip' => Yii::t('app', 'Click Ip'),
+			'click_ip' => Yii::t('app', 'Click IP'),
 			'categoryId' => Yii::t('app', 'Category'),
 			'bannerTitle' => Yii::t('app', 'Banner'),
 			'userDisplayname' => Yii::t('app', 'User'),

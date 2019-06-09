@@ -26,12 +26,12 @@
  * @link https://github.com/ommu/mod-banner
  *
  */
- 
+
 namespace ommu\banner\controllers\setting;
 
 use Yii;
-use app\components\Controller;
 use yii\filters\VerbFilter;
+use app\components\Controller;
 use mdm\admin\components\AccessControl;
 use ommu\banner\models\BannerCategory;
 use ommu\banner\models\search\BannerCategory as BannerCategorySearch;
@@ -114,6 +114,9 @@ class CategoryController extends Controller
 
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
+			// $postData = Yii::$app->request->post();
+			// $model->load($postData);
+
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'Banner category success created.'));
 				return $this->redirect(['manage']);
@@ -145,6 +148,8 @@ class CategoryController extends Controller
 
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
+			// $postData = Yii::$app->request->post();
+			// $model->load($postData);
 
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'Banner category success updated.'));

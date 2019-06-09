@@ -73,7 +73,7 @@ class BannerClicks extends \app\components\ActiveRecord
 			'user_id' => Yii::t('app', 'User'),
 			'clicks' => Yii::t('app', 'Clicks'),
 			'click_date' => Yii::t('app', 'Click Date'),
-			'click_ip' => Yii::t('app', 'Click Ip'),
+			'click_ip' => Yii::t('app', 'Click IP'),
 			'histories' => Yii::t('app', 'Histories'),
 			'categoryId' => Yii::t('app', 'Category'),
 			'bannerTitle' => Yii::t('app', 'Banner'),

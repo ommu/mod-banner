@@ -73,7 +73,7 @@ class BannerViews extends \app\components\ActiveRecord
 			'user_id' => Yii::t('app', 'User'),
 			'views' => Yii::t('app', 'Views'),
 			'view_date' => Yii::t('app', 'View Date'),
-			'view_ip' => Yii::t('app', 'View Ip'),
+			'view_ip' => Yii::t('app', 'View IP'),
 			'histories' => Yii::t('app', 'Histories'),
 			'categoryId' => Yii::t('app', 'Category'),
 			'bannerTitle' => Yii::t('app', 'Banner'),

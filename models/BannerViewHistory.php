@@ -65,7 +65,7 @@ class BannerViewHistory extends \app\components\ActiveRecord
 			'id' => Yii::t('app', 'ID'),
 			'view_id' => Yii::t('app', 'View'),
 			'view_date' => Yii::t('app', 'View Date'),
-			'view_ip' => Yii::t('app', 'View Ip'),
+			'view_ip' => Yii::t('app', 'View IP'),
 			'categoryId' => Yii::t('app', 'Category'),
 			'bannerTitle' => Yii::t('app', 'Banner'),
 			'userDisplayname' => Yii::t('app', 'User'),

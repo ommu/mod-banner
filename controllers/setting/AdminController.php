@@ -21,7 +21,7 @@
  * @link https://github.com/ommu/mod-banner
  *
  */
- 
+
 namespace ommu\banner\controllers\setting;
 
 use Yii;
@@ -65,6 +65,8 @@ class AdminController extends Controller
 
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
+			// $postData = Yii::$app->request->post();
+			// $model->load($postData);
 
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'Banner setting success updated.'));
@@ -110,6 +112,8 @@ class AdminController extends Controller
 
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
+			// $postData = Yii::$app->request->post();
+			// $model->load($postData);
 
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'Banner setting success updated.'));
