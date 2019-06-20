@@ -61,7 +61,7 @@ class AdminController extends Controller
 
 		$model = BannerSetting::findOne(1);
 		if($model === null) 
-			$model = new BannerSetting();
+			$model = new BannerSetting(['id'=>1]);
 
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
@@ -108,7 +108,7 @@ class AdminController extends Controller
 	{
 		$model = BannerSetting::findOne(1);
 		if ($model === null) 
-			$model = new BannerSetting();
+			$model = new BannerSetting(['id'=>1]);
 
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
