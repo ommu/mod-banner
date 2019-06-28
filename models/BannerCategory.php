@@ -155,7 +155,8 @@ class BannerCategory extends \app\components\ActiveRecord
 	{
 		if($count == false)
 			return $this->hasMany(Banners::className(), ['cat_id' => 'cat_id'])
-				->andOnCondition([sprintf('%s.publish', Banners::tableName()) => $publish]);
+				->alias('banners')
+				->andOnCondition([sprintf('%s.publish', 'banners') => $publish]);
 
 		if($publish === null)
 			return self::getBannersByType($this->cat_id, 'published');
