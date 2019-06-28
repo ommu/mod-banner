@@ -91,7 +91,7 @@ echo $form->field($model, 'banner_filename', ['template'=> '{label}{beginWrapper
 	->label($model->getAttributeLabel('banner_desc')); ?>
 
 <?php echo $form->field($model, 'published_date')
-	->textInput(['type' => 'date'])
+	->textInput(['type'=>'date'])
 	->label($model->getAttributeLabel('published_date')); ?>
 
 <?php
@@ -105,7 +105,7 @@ echo $form->field($model, 'permanent')
 	->label($model->getAttributeLabel('permanent')); ?>
 
 <?php echo $form->field($model, 'expired_date', ['options' => ['style' => $model->permanent == 1 ? 'display: none' : '']])
-	->textInput(['type' => 'date'])
+	->textInput(['type'=>'date'])
 	->label($model->getAttributeLabel('expired_date')); ?>
 
 <?php echo $form->field($model, 'publish')

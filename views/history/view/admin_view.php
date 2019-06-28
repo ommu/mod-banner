@@ -21,10 +21,11 @@ use yii\widgets\DetailView;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Views'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $model->banner->title;
 
+if(!$small) {
 $this->params['menu']['content'] = [
 	['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id'=>$model->view_id]), 'htmlOptions' => ['data-confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'), 'data-method'=>'post', 'class'=>'btn btn-danger'], 'icon' => 'trash'],
 ];
-?>
+} ?>
 
 <div class="banner-views-view">
 
