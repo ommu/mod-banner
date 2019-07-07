@@ -70,7 +70,8 @@ class BannerClicks extends BannerClicksModel
 			'banner banner',
 			'banner.category.title category',
 			'user user'
-		]);
+		])
+		->groupBy(['click_id']);
 
 		// add conditions that should always apply here
 		$dataParams = [

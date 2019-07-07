@@ -70,7 +70,8 @@ class BannerViews extends BannerViewsModel
 			'banner banner',
 			'banner.category.title category',
 			'user user'
-		]);
+		])
+		->groupBy(['view_id']);
 
 		// add conditions that should always apply here
 		$dataParams = [

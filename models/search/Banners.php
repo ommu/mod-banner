@@ -71,7 +71,8 @@ class Banners extends BannersModel
 			'category.title category', 
 			'creation creation', 
 			'modified modified'
-		]);
+		])
+		->groupBy(['banner_id']);
 
 		// add conditions that should always apply here
 		$dataParams = [

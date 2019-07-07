@@ -71,7 +71,8 @@ class BannerViewHistory extends BannerViewHistoryModel
 			'view.banner banner',
 			'view.banner.category.title category',
 			'view.user user',
-		]);
+		])
+		->groupBy(['id']);
 
 		// add conditions that should always apply here
 		$dataParams = [

@@ -71,7 +71,8 @@ class BannerClickHistory extends BannerClickHistoryModel
 			'click.banner banner',
 			'click.banner.category.title category',
 			'click.user user',
-		]);
+		])
+		->groupBy(['id']);
 
 		// add conditions that should always apply here
 		$dataParams = [
