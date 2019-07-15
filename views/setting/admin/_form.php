@@ -17,7 +17,6 @@
 
 use yii\helpers\Html;
 use app\components\widgets\ActiveForm;
-use ommu\banner\models\BannerSetting;
 
 $js = <<<JS
 	$('.field-banner_validation input[name="banner_validation"]').on('change', function() {
@@ -59,7 +58,7 @@ echo $form->field($model, 'license')
 	->label($model->getAttributeLabel('license'))
 	->hint(Yii::t('app', 'Enter the your license key that is provided to you when you purchased this plugin. If you do not know your license key, please contact support team.').'<br/>'.Yii::t('app', 'Format: XXXX-XXXX-XXXX-XXXX')); ?>
 
-<?php $permission = BannerSetting::getPermission();
+<?php $permission = $model::getPermission();
 echo $form->field($model, 'permission', ['template' => '{label}{beginWrapper}{hint}{input}{error}{endWrapper}'])
 	->radioList($permission)
 	->label($model->getAttributeLabel('permission'))
@@ -73,12 +72,12 @@ echo $form->field($model, 'permission', ['template' => '{label}{beginWrapper}{hi
 	->textarea(['rows'=>6, 'cols'=>50])
 	->label($model->getAttributeLabel('meta_keyword')); ?>
 
-<?php $bannerValidation = BannerSetting::getBannerValidation();
+<?php $bannerValidation = $model::getBannerValidation();
 echo $form->field($model, 'banner_validation')
 	->radioList($bannerValidation)
 	->label($model->getAttributeLabel('banner_validation')); ?>
 
-<?php $bannerResize = BannerSetting::getBannerResize();
+<?php $bannerResize = $model::getBannerResize();
 echo $form->field($model, 'banner_resize')
 	->radioList($bannerResize)
 	->label($model->getAttributeLabel('banner_resize')); ?>

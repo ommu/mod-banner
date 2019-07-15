@@ -22,7 +22,6 @@ use yii\widgets\Pjax;
 use app\components\widgets\MenuContent;
 use app\components\widgets\MenuOption;
 use yii\widgets\DetailView;
-use ommu\banner\models\BannerSetting;
 
 $this->params['breadcrumbs'][] = Yii::t('app', 'Banner Settings');
 
@@ -129,7 +128,7 @@ echo GridView::widget([
 			'license',
 			[
 				'attribute' => 'permission',
-				'value' => BannerSetting::getPermission($model->permission),
+				'value' => $model::getPermission($model->permission),
 			],
 			[
 				'attribute' => 'meta_description',
@@ -141,11 +140,11 @@ echo GridView::widget([
 			],
 			[
 				'attribute' => 'banner_validation',
-				'value' => BannerSetting::getBannerValidation($model->banner_validation),
+				'value' => $model::getBannerValidation($model->banner_validation),
 			],
 			[
 				'attribute' => 'banner_resize',
-				'value' => BannerSetting::getBannerResize($model->banner_resize),
+				'value' => $model::getBannerResize($model->banner_resize),
 			],
 			[
 				'attribute' => 'banner_file_type',
