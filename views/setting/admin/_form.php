@@ -85,7 +85,7 @@ echo $form->field($model, 'banner_resize')
 <?php echo $form->field($model, 'banner_file_type')
 	->textInput()
 	->label($model->getAttributeLabel('banner_file_type'))
-	->hint(Yii::t('app', 'What file types do you want to allow for banner image (gif, jpg, jpeg, or png)? Separate file types with commas, i.e. jpg, jpeg, gif, png')); ?>
+	->hint(Yii::t('app', 'What file types do you want to allow for banner image (jpg, gif, or png)? Separate file types with commas, i.e. jpg, jpeg, bmp, gif, png')); ?>
 
 <div class="ln_solid"></div>
 
