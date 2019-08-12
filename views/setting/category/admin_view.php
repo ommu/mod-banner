@@ -5,7 +5,7 @@
  * @var $this ommu\banner\controllers\setting\CategoryController
  * @var $model ommu\banner\models\BannerCategory
  *
- * @author Putra Sudaryanto <putra@sudaryanto.id>
+ * @author Putra Sudaryanto <putra@ommu.co>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 5 October 2017, 15:43 WIB
