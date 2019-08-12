@@ -2,7 +2,7 @@
 /**
  * BannerSetting
  *
- * @author Putra Sudaryanto <putra@sudaryanto.id>
+ * @author Putra Sudaryanto <putra@ommu.co>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2014 Ommu Platform (www.ommu.co)
  * @modified date 19 January 2018, 17:03 WIB
