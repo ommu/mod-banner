@@ -381,7 +381,7 @@ class Banners extends \app\components\ActiveRecord
 	 */
 	public static function getUploadPath($returnAlias=true) 
 	{
-		return ($returnAlias ? Yii::getAlias('@public/banner') : 'public/banner');
+		return ($returnAlias ? Yii::getAlias('@public/banner') : 'banner');
 	}
 
 	/**
