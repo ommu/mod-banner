@@ -122,7 +122,7 @@ class ClickDetailController extends Controller
 		$model->delete();
 
 		Yii::$app->session->setFlash('success', Yii::t('app', 'Banner click history success deleted.'));
-		return $this->redirect(['manage']);
+		return $this->redirect(Yii::$app->request->referrer ?: ['manage']);
 	}
 
 	/**
