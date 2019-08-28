@@ -79,6 +79,7 @@ $this->params['breadcrumbs'][] = $model->title;
 				return Html::a($clicks, ['o/click/manage', 'banner'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} clicks', ['count'=>$clicks])]);
 			},
 			'format' => 'html',
+			'visible' => !$small,
 		],
 		[
 			'attribute' => 'views',
@@ -87,36 +88,43 @@ $this->params['breadcrumbs'][] = $model->title;
 				return Html::a($views, ['o/view/manage', 'banner'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} views', ['count'=>$views])]);
 			},
 			'format' => 'html',
+			'visible' => !$small,
 		],
 		[
 			'attribute' => 'creation_date',
 			'value' => Yii::$app->formatter->asDatetime($model->creation_date, 'medium'),
+			'visible' => !$small,
 		],
 		[
 			'attribute' => 'creationDisplayname',
 			'value' => isset($model->creation) ? $model->creation->displayname : '-',
+			'visible' => !$small,
 		],
 		[
 			'attribute' => 'modified_date',
 			'value' => Yii::$app->formatter->asDatetime($model->modified_date, 'medium'),
+			'visible' => !$small,
 		],
 		[
 			'attribute' => 'modifiedDisplayname',
 			'value' => isset($model->modified) ? $model->modified->displayname : '-',
+			'visible' => !$small,
 		],
 		[
 			'attribute' => 'updated_date',
 			'value' => Yii::$app->formatter->asDatetime($model->updated_date, 'medium'),
+			'visible' => !$small,
 		],
 		[
 			'attribute' => 'slug',
 			'value' => $model->slug ? $model->slug : '-',
+			'visible' => !$small,
 		],
 		[
 			'attribute' => '',
 			'value' => Html::a(Yii::t('app', 'Update'), ['update', 'id'=>$model->banner_id], ['title'=>Yii::t('app', 'Update'), 'class'=>'btn btn-primary']),
 			'format' => 'html',
-			'visible' => Yii::$app->request->isAjax ? true : false,
+			'visible' => !$small && Yii::$app->request->isAjax ? true : false,
 		],
 	],
 ]); ?>

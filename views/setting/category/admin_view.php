@@ -66,6 +66,7 @@ $this->params['menu']['content'] = [
 				return Html::a($banners, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'publish']);
 			},
 			'format' => 'html',
+			'visible' => !$small,
 		],
 		[
 			'attribute' => 'permanent',
@@ -74,6 +75,7 @@ $this->params['menu']['content'] = [
 				return Html::a($permanent, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'permanent']);
 			},
 			'format' => 'html',
+			'visible' => !$small,
 		],
 		[
 			'attribute' => 'pending',
@@ -82,6 +84,7 @@ $this->params['menu']['content'] = [
 				return Html::a($pending, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'pending']);
 			},
 			'format' => 'html',
+			'visible' => !$small,
 		],
 		[
 			'attribute' => 'expired',
@@ -90,26 +93,32 @@ $this->params['menu']['content'] = [
 				return Html::a($expired, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'expired']);
 			},
 			'format' => 'html',
+			'visible' => !$small,
 		],
 		[
 			'attribute' => 'creation_date',
 			'value' => Yii::$app->formatter->asDatetime($model->creation_date, 'medium'),
+			'visible' => !$small,
 		],
 		[
 			'attribute' => 'creationDisplayname',
 			'value' => isset($model->creation) ? $model->creation->displayname : '-',
+			'visible' => !$small,
 		],
 		[
 			'attribute' => 'modified_date',
 			'value' => Yii::$app->formatter->asDatetime($model->modified_date, 'medium'),
+			'visible' => !$small,
 		],
 		[
 			'attribute' => 'modifiedDisplayname',
 			'value' => isset($model->modified) ? $model->modified->displayname : '-',
+			'visible' => !$small,
 		],
 		[
 			'attribute' => 'updated_date',
 			'value' => Yii::$app->formatter->asDatetime($model->updated_date, 'medium'),
+			'visible' => !$small,
 		],
 		'slug',
 	],

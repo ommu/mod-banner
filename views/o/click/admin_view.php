@@ -56,6 +56,7 @@ $this->params['menu']['content'] = [
 				return  Html::a($clicks, ['history/click/manage', 'click'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} histories', ['count'=>$clicks])]);
 			},
 			'format' => 'html',
+			'visible' => !$small,
 		],
 		[
 			'attribute' => 'click_date',

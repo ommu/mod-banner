@@ -56,6 +56,7 @@ $this->params['menu']['content'] = [
 				return  Html::a($views, ['history/view/manage', 'view'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} histories', ['count'=>$views])]);
 			},
 			'format' => 'html',
+			'visible' => !$small,
 		],
 		[
 			'attribute' => 'view_date',
