@@ -2,7 +2,7 @@
 /**
  * Banner View Histories (banner-view-history)
  * @var $this app\components\View
- * @var $this ommu\banner\controllers\history\ViewDetailController
+ * @var $this ommu\banner\controllers\history\ViewController
  * @var $model ommu\banner\models\search\BannerViewHistory
  * @var $form yii\widgets\ActiveForm
  *

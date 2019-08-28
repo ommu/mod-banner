@@ -2,7 +2,7 @@
 /**
  * Banner View Histories (banner-view-history)
  * @var $this app\components\View
- * @var $this ommu\banner\controllers\history\ViewDetailController
+ * @var $this ommu\banner\controllers\history\ViewController
  * @var $model ommu\banner\models\BannerViewHistory
  * @var $searchModel ommu\banner\models\search\BannerViewHistory
  *
@@ -24,7 +24,7 @@ use ommu\banner\models\BannerViews;
 
 $this->params['breadcrumbs'][] = $this->title;
 
-$viewUrl = $view ? Url::to(['history/view/manage', 'banner'=>$view->banner_id]) : Url::to(['history/view/manage']);
+$viewUrl = $view ? Url::to(['o/view/manage', 'banner'=>$view->banner_id]) : Url::to(['o/view/manage']);
 $this->params['menu']['content'] = [
 	['label' => Yii::t('app', 'Back To Views'), 'url' => $viewUrl, 'icon' => 'table', 'htmlOptions' => ['class'=>'btn btn-success']],
 ];

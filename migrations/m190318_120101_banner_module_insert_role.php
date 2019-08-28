@@ -23,10 +23,10 @@ class m190318_120101_banner_module_insert_role extends \yii\db\Migration
 				['bannerModLevelModerator', '2', '', time()],
 				['/banner/admin/*', '2', '', time()],
 				['/banner/admin/index', '2', '', time()],
+				['/banner/o/click/*', '2', '', time()],
 				['/banner/history/click/*', '2', '', time()],
-				['/banner/history/click-detail/*', '2', '', time()],
+				['/banner/o/view/*', '2', '', time()],
 				['/banner/history/view/*', '2', '', time()],
-				['/banner/history/view-detail/*', '2', '', time()],
 				['/banner/setting/admin/index', '2', '', time()],
 				['/banner/setting/admin/update', '2', '', time()],
 				['/banner/setting/admin/delete', '2', '', time()],
@@ -45,10 +45,10 @@ class m190318_120101_banner_module_insert_role extends \yii\db\Migration
 				['bannerModLevelAdmin', '/banner/setting/category/*'],
 				['bannerModLevelModerator', '/banner/setting/admin/index'],
 				['bannerModLevelModerator', '/banner/admin/*'],
+				['bannerModLevelModerator', '/banner/o/click/*'],
 				['bannerModLevelModerator', '/banner/history/click/*'],
-				['bannerModLevelModerator', '/banner/history/click-detail/*'],
+				['bannerModLevelModerator', '/banner/o/view/*'],
 				['bannerModLevelModerator', '/banner/history/view/*'],
-				['bannerModLevelModerator', '/banner/history/view-detail/*'],
 			]);
 		}
 	}

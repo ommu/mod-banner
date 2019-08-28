@@ -1,9 +1,9 @@
 <?php
 /**
- * Banner Click Histories (banner-click-history)
+ * Banner View Histories (banner-view-history)
  * @var $this app\components\View
- * @var $this ommu\banner\controllers\history\ClickDetailController
- * @var $model ommu\banner\models\BannerClickHistory
+ * @var $this ommu\banner\controllers\history\ViewController
+ * @var $model ommu\banner\models\BannerViewHistory
  *
  * @author Putra Sudaryanto <putra@ommu.co>
  * @contact (+62)856-299-4114
@@ -17,8 +17,8 @@
 use yii\helpers\Url;
 use yii\widgets\DetailView;
 
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Click Histories'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = $model->click->banner->title;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'View Histories'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = $model->view->banner->title;
 
 if(!$small) {
 $this->params['menu']['content'] = [
@@ -27,7 +27,7 @@ $this->params['menu']['content'] = [
 ];
 } ?>
 
-<div class="banner-click-history-view">
+<div class="banner-view-history-view">
 
 <?php echo DetailView::widget([
 	'model' => $model,
@@ -38,21 +38,21 @@ $this->params['menu']['content'] = [
 		'id',
 		[
 			'attribute' => 'categoryId',
-			'value' => isset($model->click->banner->category) ? $model->click->banner->category->title->message : '-',
+			'value' => isset($model->view->banner->category) ? $model->view->banner->category->title->message : '-',
 		],
 		[
 			'attribute' => 'bannerTitle',
-			'value' => isset($model->click->banner) ? $model->click->banner->title : '-',
+			'value' => isset($model->view->banner) ? $model->view->banner->title : '-',
 		],
 		[
 			'attribute' => 'userDisplayname',
-			'value' => isset($model->click->user) ? $model->click->user->displayname : '-',
+			'value' => isset($model->view->user) ? $model->view->user->displayname : '-',
 		],
 		[
-			'attribute' => 'click_date',
-			'value' => Yii::$app->formatter->asDatetime($model->click_date, 'medium'),
+			'attribute' => 'view_date',
+			'value' => Yii::$app->formatter->asDatetime($model->view_date, 'medium'),
 		],
-		'click_ip',
+		'view_ip',
 	],
 ]) ?>
 

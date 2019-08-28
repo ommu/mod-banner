@@ -1,10 +1,10 @@
 <?php
 /**
- * ClickDetailController
- * @var $this ommu\banner\controllers\history\ClickDetailController
- * @var $model ommu\banner\models\BannerClickHistory
+ * ViewController
+ * @var $this ommu\banner\controllers\history\ViewController
+ * @var $model ommu\banner\models\BannerViewHistory
  *
- * ClickDetailController implements the CRUD actions for BannerClickHistory model.
+ * ViewController implements the CRUD actions for BannerViewHistory model.
  * Reference start
  * TOC :
  *	Index
@@ -17,7 +17,7 @@
  * @author Putra Sudaryanto <putra@ommu.co>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
- * @created date 6 October 2017, 13:29 WIB
+ * @created date 6 October 2017, 13:24 WIB
  * @modified date 24 January 2019, 17:55 WIB
  * @link https://github.com/ommu/mod-banner
  *
@@ -29,10 +29,10 @@ use Yii;
 use yii\filters\VerbFilter;
 use app\components\Controller;
 use mdm\admin\components\AccessControl;
-use ommu\banner\models\BannerClickHistory;
-use ommu\banner\models\search\BannerClickHistory as BannerClickHistorySearch;
+use ommu\banner\models\BannerViewHistory;
+use ommu\banner\models\search\BannerViewHistory as BannerViewHistorySearch;
 
-class ClickDetailController extends Controller
+class ViewController extends Controller
 {
 	/**
 	 * {@inheritdoc}
@@ -40,7 +40,7 @@ class ClickDetailController extends Controller
 	public function init()
 	{
 		parent::init();
-		if(Yii::$app->request->get('click') || Yii::$app->request->get('id'))
+		if(Yii::$app->request->get('view') || Yii::$app->request->get('id'))
 			$this->subMenu = $this->module->params['banner_submenu'];
 	}
 
@@ -71,12 +71,12 @@ class ClickDetailController extends Controller
 	}
 
 	/**
-	 * Lists all BannerClickHistory models.
+	 * Lists all BannerViewHistory models.
 	 * @return mixed
 	 */
 	public function actionManage()
 	{
-		$searchModel = new BannerClickHistorySearch();
+		$searchModel = new BannerViewHistorySearch();
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
 		$gridColumn = Yii::$app->request->get('GridColumn', null);
@@ -89,33 +89,33 @@ class ClickDetailController extends Controller
 		}
 		$columns = $searchModel->getGridColumn($cols);
 
-		if(($click = Yii::$app->request->get('click')) != null) {
-			$click = \ommu\banner\models\BannerClicks::findOne($click);
-			$this->subMenuParam = $click->banner_id;
+		if(($view = Yii::$app->request->get('view')) != null) {
+			$view = \ommu\banner\models\BannerViews::findOne($view);
+			$this->subMenuParam = $view->banner_id;
 		}
 
-		$this->view->title = Yii::t('app', 'Click Histories');
+		$this->view->title = Yii::t('app', 'View Histories');
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_manage', [
 			'searchModel' => $searchModel,
 			'dataProvider' => $dataProvider,
 			'columns' => $columns,
-			'click' => $click,
+			'view' => $view,
 		]);
 	}
 
 	/**
-	 * Displays a single BannerClickHistory model.
+	 * Displays a single BannerViewHistory model.
 	 * @param integer $id
 	 * @return mixed
 	 */
 	public function actionView($id)
 	{
 		$model = $this->findModel($id);
-		$this->subMenuParam = $model->click->banner_id;
+		$this->subMenuParam = $model->view->banner_id;
 
-		$this->view->title = Yii::t('app', 'Detail Click History: {click-id}', ['click-id' => $model->click->banner->title]);
+		$this->view->title = Yii::t('app', 'Detail View History: {view-id}', ['view-id' => $model->view->banner->title]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->oRender('admin_view', [
@@ -124,7 +124,7 @@ class ClickDetailController extends Controller
 	}
 
 	/**
-	 * Deletes an existing BannerClickHistory model.
+	 * Deletes an existing BannerViewHistory model.
 	 * If deletion is successful, the browser will be redirected to the 'index' page.
 	 * @param integer $id
 	 * @return mixed
@@ -134,20 +134,20 @@ class ClickDetailController extends Controller
 		$model = $this->findModel($id);
 		$model->delete();
 
-		Yii::$app->session->setFlash('success', Yii::t('app', 'Banner click history success deleted.'));
-		return $this->redirect(Yii::$app->request->referrer ?: ['manage', 'click'=>$model->click_id]);
+		Yii::$app->session->setFlash('success', Yii::t('app', 'Banner view history success deleted.'));
+		return $this->redirect(Yii::$app->request->referrer ?: ['manage', 'view'=>$model->view_id]);
 	}
 
 	/**
-	 * Finds the BannerClickHistory model based on its primary key value.
+	 * Finds the BannerViewHistory model based on its primary key value.
 	 * If the model is not found, a 404 HTTP exception will be thrown.
 	 * @param integer $id
-	 * @return BannerClickHistory the loaded model
+	 * @return BannerViewHistory the loaded model
 	 * @throws NotFoundHttpException if the model cannot be found
 	 */
 	protected function findModel($id)
 	{
-		if(($model = BannerClickHistory::findOne($id)) !== null)
+		if(($model = BannerViewHistory::findOne($id)) !== null)
 			return $model;
 
 		throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));

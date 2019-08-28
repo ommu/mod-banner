@@ -2,7 +2,7 @@
 /**
  * Banner Click Histories (banner-click-history)
  * @var $this app\components\View
- * @var $this ommu\banner\controllers\history\ClickDetailController
+ * @var $this ommu\banner\controllers\history\ClickController
  * @var $model ommu\banner\models\BannerClickHistory
  * @var $searchModel ommu\banner\models\search\BannerClickHistory
  *
@@ -24,7 +24,7 @@ use ommu\banner\models\BannerClicks;
 
 $this->params['breadcrumbs'][] = $this->title;
 
-$clickUrl = $click ? Url::to(['history/click/manage', 'banner'=>$click->banner_id]) : Url::to(['history/click/manage']);
+$clickUrl = $click ? Url::to(['o/click/manage', 'banner'=>$click->banner_id]) : Url::to(['o/click/manage']);
 $this->params['menu']['content'] = [
 	['label' => Yii::t('app', 'Back To Clicks'), 'url' => $clickUrl, 'icon' => 'table', 'htmlOptions' => ['class'=>'btn btn-success']],
 ];
