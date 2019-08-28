@@ -354,41 +354,41 @@ class BannerCategory extends \app\components\ActiveRecord
 			'attribute' => 'banners',
 			'value' => function($model, $key, $index, $column) {
 				$banners = $model->getBanners(true);
-				return Html::a($banners, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'publish']);
+				return Html::a($banners, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'publish'], ['title'=>Yii::t('app', '{count} publish', ['count'=>$banners]), 'data-pjax' => 0]);
 			},
 			'filter' => false,
 			'contentOptions' => ['class'=>'center'],
-			'format' => 'html',
+			'format' => 'raw',
 		];
 		$this->templateColumns['permanent'] = [
 			'attribute' => 'permanent',
 			'value' => function($model, $key, $index, $column) {
 				$permanent = $model->getPermanent(true);
-				return Html::a($permanent, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'permanent']);
+				return Html::a($permanent, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'permanent'], ['title'=>Yii::t('app', '{count} permanent', ['count'=>$permanent]), 'data-pjax' => 0]);
 			},
 			'filter' => false,
 			'contentOptions' => ['class'=>'center'],
-			'format' => 'html',
+			'format' => 'raw',
 		];
 		$this->templateColumns['pending'] = [
 			'attribute' => 'pending',
 			'value' => function($model, $key, $index, $column) {
 				$pending = $model->getPending(true);
-				return Html::a($pending, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'pending']);
+				return Html::a($pending, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'pending'], ['title'=>Yii::t('app', '{count} pending', ['count'=>$pending]), 'data-pjax' => 0]);
 			},
 			'filter' => false,
 			'contentOptions' => ['class'=>'center'],
-			'format' => 'html',
+			'format' => 'raw',
 		];
 		$this->templateColumns['expired'] = [
 			'attribute' => 'expired',
 			'value' => function($model, $key, $index, $column) {
 				$expired = $model->getExpired(true);
-				return Html::a($expired, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'expired']);
+				return Html::a($expired, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'expired'], ['title'=>Yii::t('app', '{count} expired', ['count'=>$expired]), 'data-pjax' => 0]);
 			},
 			'filter' => false,
 			'contentOptions' => ['class'=>'center'],
-			'format' => 'html',
+			'format' => 'raw',
 		];
 		if(!Yii::$app->request->get('trash')) {
 			$this->templateColumns['publish'] = [

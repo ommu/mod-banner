@@ -37,6 +37,16 @@ class ClickDetailController extends Controller
 	/**
 	 * {@inheritdoc}
 	 */
+	public function init()
+	{
+		parent::init();
+		if(Yii::$app->request->get('click') || Yii::$app->request->get('id'))
+			$this->subMenu = $this->module->params['banner_submenu'];
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
 	public function behaviors()
 	{
 		return [
@@ -79,8 +89,10 @@ class ClickDetailController extends Controller
 		}
 		$columns = $searchModel->getGridColumn($cols);
 
-		if(($click = Yii::$app->request->get('click')) != null)
+		if(($click = Yii::$app->request->get('click')) != null) {
 			$click = \ommu\banner\models\BannerClicks::findOne($click);
+			$this->subMenuParam = $click->banner_id;
+		}
 
 		$this->view->title = Yii::t('app', 'Click Histories');
 		$this->view->description = '';
@@ -101,6 +113,7 @@ class ClickDetailController extends Controller
 	public function actionView($id)
 	{
 		$model = $this->findModel($id);
+		$this->subMenuParam = $model->click->banner_id;
 
 		$this->view->title = Yii::t('app', 'Detail Click History: {click-id}', ['click-id' => $model->click->banner->title]);
 		$this->view->description = '';
@@ -122,7 +135,7 @@ class ClickDetailController extends Controller
 		$model->delete();
 
 		Yii::$app->session->setFlash('success', Yii::t('app', 'Banner click history success deleted.'));
-		return $this->redirect(Yii::$app->request->referrer ?: ['manage']);
+		return $this->redirect(Yii::$app->request->referrer ?: ['manage', 'click'=>$model->click_id]);
 	}
 
 	/**

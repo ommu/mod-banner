@@ -37,6 +37,16 @@ class ViewController extends Controller
 	/**
 	 * {@inheritdoc}
 	 */
+	public function init()
+	{
+		parent::init();
+		if(Yii::$app->request->get('id') || Yii::$app->request->get('banner'))
+			$this->subMenu = $this->module->params['banner_submenu'];
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
 	public function behaviors()
 	{
 		return [
@@ -79,8 +89,10 @@ class ViewController extends Controller
 		}
 		$columns = $searchModel->getGridColumn($cols);
 
-		if(($banner = Yii::$app->request->get('banner')) != null)
+		if(($banner = Yii::$app->request->get('banner')) != null) {
+			$this->subMenuParam = $banner;
 			$banner = \ommu\banner\models\Banners::findOne($banner);
+		}
 
 		$this->view->title = Yii::t('app', 'Views');
 		$this->view->description = '';
@@ -102,6 +114,7 @@ class ViewController extends Controller
 	{
 		$model = $this->findModel($id);
 
+		$this->subMenuParam = $model->banner_id;
 		$this->view->title = Yii::t('app', 'Detail View: {banner-id}', ['banner-id' => $model->banner->title]);
 		$this->view->description = '';
 		$this->view->keywords = '';
@@ -122,7 +135,7 @@ class ViewController extends Controller
 		$model->delete();
 
 		Yii::$app->session->setFlash('success', Yii::t('app', 'Banner view success deleted.'));
-		return $this->redirect(Yii::$app->request->referrer ?: ['manage']);
+		return $this->redirect(Yii::$app->request->referrer ?: ['manage', 'banner'=>$model->banner_id]);
 	}
 
 	/**

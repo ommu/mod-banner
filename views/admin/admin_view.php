@@ -21,14 +21,7 @@ use ommu\banner\models\Banners;
 
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Banners'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $model->title;
-
-if(!$small) {
-$this->params['menu']['content'] = [
-	['label' => Yii::t('app', 'Detail'), 'url' => Url::to(['view', 'id'=>$model->banner_id]), 'icon' => 'eye', 'htmlOptions' => ['class'=>'btn btn-success']],
-	['label' => Yii::t('app', 'Update'), 'url' => Url::to(['update', 'id'=>$model->banner_id]), 'icon' => 'pencil', 'htmlOptions' => ['class'=>'btn btn-primary']],
-	['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id'=>$model->banner_id]), 'htmlOptions' => ['data-confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'), 'data-method'=>'post', 'class'=>'btn btn-danger'], 'icon' => 'trash'],
-];
-} ?>
+?>
 
 <div class="banners-view">
 
@@ -80,6 +73,22 @@ $this->params['menu']['content'] = [
 			'value' => Yii::$app->formatter->asDate($model->expired_date, 'medium'),
 		],
 		[
+			'attribute' => 'clicks',
+			'value' => function ($model) {
+				$clicks = $model->getClicks(true);
+				return Html::a($clicks, ['history/click/manage', 'banner'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} clicks', ['count'=>$clicks])]);
+			},
+			'format' => 'html',
+		],
+		[
+			'attribute' => 'views',
+			'value' => function ($model) {
+				$views = $model->getViews(true);
+				return Html::a($views, ['history/view/manage', 'banner'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} views', ['count'=>$views])]);
+			},
+			'format' => 'html',
+		],
+		[
 			'attribute' => 'creation_date',
 			'value' => Yii::$app->formatter->asDatetime($model->creation_date, 'medium'),
 		],
@@ -104,20 +113,10 @@ $this->params['menu']['content'] = [
 			'value' => $model->slug ? $model->slug : '-',
 		],
 		[
-			'attribute' => 'clicks',
-			'value' => function ($model) {
-				$clicks = $model->getClicks(true);
-				return Html::a($clicks, ['history/click/manage', 'banner'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} clicks', ['count'=>$clicks])]);
-			},
+			'attribute' => '',
+			'value' => Html::a(Yii::t('app', 'Update'), ['update', 'id'=>$model->banner_id], ['title'=>Yii::t('app', 'Update'), 'class'=>'btn btn-primary']),
 			'format' => 'html',
-		],
-		[
-			'attribute' => 'views',
-			'value' => function ($model) {
-				$views = $model->getViews(true);
-				return Html::a($views, ['history/view/manage', 'banner'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} views', ['count'=>$views])]);
-			},
-			'format' => 'html',
+			'visible' => Yii::$app->request->isAjax ? true : false,
 		],
 	],
 ]); ?>

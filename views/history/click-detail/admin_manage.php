@@ -24,8 +24,9 @@ use ommu\banner\models\BannerClicks;
 
 $this->params['breadcrumbs'][] = $this->title;
 
+$clickUrl = $click ? Url::to(['history/click/manage', 'banner'=>$click->banner_id]) : Url::to(['history/click/manage']);
 $this->params['menu']['content'] = [
-	['label' => Yii::t('app', 'Back To Banner Clicks'), 'url' => Url::to(['history/click/index']), 'icon' => 'table'],
+	['label' => Yii::t('app', 'Back To Clicks'), 'url' => $clickUrl, 'icon' => 'table', 'htmlOptions' => ['class'=>'btn btn-success']],
 ];
 $this->params['menu']['option'] = [
 	//['label' => Yii::t('app', 'Search'), 'url' => 'javascript:void(0);'],
@@ -96,10 +97,10 @@ array_push($columnData, [
 	},
 	'buttons' => [
 		'view' => function ($url, $model, $key) {
-			return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, ['title'=>Yii::t('app', 'Detail')]);
+			return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, ['title'=>Yii::t('app', 'Detail'), 'class'=>'modal-btn']);
 		},
 		'update' => function ($url, $model, $key) {
-			return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, ['title'=>Yii::t('app', 'Update')]);
+			return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, ['title'=>Yii::t('app', 'Update'), 'class'=>'modal-btn']);
 		},
 		'delete' => function ($url, $model, $key) {
 			return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [

@@ -23,6 +23,7 @@ $this->params['breadcrumbs'][] = $model->banner->title;
 
 if(!$small) {
 $this->params['menu']['content'] = [
+	['label' => Yii::t('app', 'Detail'), 'url' => Url::to(['view', 'id'=>$model->view_id]), 'icon' => 'eye', 'htmlOptions' => ['class'=>'btn btn-success']],
 	['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id'=>$model->view_id]), 'htmlOptions' => ['data-confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'), 'data-method'=>'post', 'class'=>'btn btn-danger'], 'icon' => 'trash'],
 ];
 } ?>
@@ -49,18 +50,18 @@ $this->params['menu']['content'] = [
 			'value' => isset($model->user) ? $model->user->displayname : '-',
 		],
 		[
+			'attribute' => 'views',
+			'value' => function ($model) {
+				$views = $model->views;
+				return  Html::a($views, ['history/view-detail/manage', 'view'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} histories', ['count'=>$views])]);
+			},
+			'format' => 'html',
+		],
+		[
 			'attribute' => 'view_date',
 			'value' => Yii::$app->formatter->asDatetime($model->view_date, 'medium'),
 		],
 		'view_ip',
-		[
-			'attribute' => 'views',
-			'value' => function ($model) {
-				$views = $model->views;
-				return  Html::a($views, ['history/manage', 'view'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} histories', ['count'=>$views])]);
-			},
-			'format' => 'html',
-		],
 	],
 ]) ?>
 

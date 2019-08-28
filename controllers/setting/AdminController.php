@@ -147,7 +147,7 @@ class AdminController extends Controller
 		$this->findModel(1)->delete();
 		
 		Yii::$app->session->setFlash('success', Yii::t('app', 'Banner setting success deleted.'));
-		return $this->redirect(['update']);
+		return $this->redirect(Yii::$app->request->referrer ?: ['index']);
 	}
 
 	/**

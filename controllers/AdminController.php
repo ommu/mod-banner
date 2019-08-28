@@ -150,7 +150,7 @@ class AdminController extends Controller
 
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'Banner success updated.'));
-				return $this->redirect(['manage']);
+				return $this->redirect(['update', 'id'=>$model->banner_id]);
 
 			} else {
 				if(Yii::$app->request->isAjax)
@@ -158,6 +158,7 @@ class AdminController extends Controller
 			}
 		}
 
+		$this->subMenu = $this->module->params['banner_submenu'];
 		$this->view->title = Yii::t('app', 'Update Banner: {title}', ['title' => $model->title]);
 		$this->view->description = '';
 		$this->view->keywords = '';
@@ -175,6 +176,7 @@ class AdminController extends Controller
 	{
 		$model = $this->findModel($id);
 
+		$this->subMenu = $this->module->params['banner_submenu'];
 		$this->view->title = Yii::t('app', 'Detail Banner: {title}', ['title' => $model->title]);
 		$this->view->description = '';
 		$this->view->keywords = '';

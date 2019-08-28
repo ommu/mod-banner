@@ -23,6 +23,7 @@ $this->params['breadcrumbs'][] = $model->banner->title;
 
 if(!$small) {
 $this->params['menu']['content'] = [
+	['label' => Yii::t('app', 'Detail'), 'url' => Url::to(['view', 'id'=>$model->click_id]), 'icon' => 'eye', 'htmlOptions' => ['class'=>'btn btn-success']],
 	['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id'=>$model->click_id]), 'htmlOptions' => ['data-confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'), 'data-method'=>'post', 'class'=>'btn btn-danger'], 'icon' => 'trash'],
 ];
 } ?>
@@ -49,11 +50,6 @@ $this->params['menu']['content'] = [
 			'value' => isset($model->user) ? $model->user->displayname : '-',
 		],
 		[
-			'attribute' => 'click_date',
-			'value' => Yii::$app->formatter->asDatetime($model->click_date, 'medium'),
-		],
-		'click_ip',
-		[
 			'attribute' => 'clicks',
 			'value' => function ($model) {
 				$clicks = $model->clicks;
@@ -61,6 +57,11 @@ $this->params['menu']['content'] = [
 			},
 			'format' => 'html',
 		],
+		[
+			'attribute' => 'click_date',
+			'value' => Yii::$app->formatter->asDatetime($model->click_date, 'medium'),
+		],
+		'click_ip',
 	],
 ]) ?>
 

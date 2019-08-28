@@ -60,27 +60,6 @@ $this->params['menu']['content'] = [
 		],
 		'banner_limit',
 		[
-			'attribute' => 'creation_date',
-			'value' => Yii::$app->formatter->asDatetime($model->creation_date, 'medium'),
-		],
-		[
-			'attribute' => 'creationDisplayname',
-			'value' => isset($model->creation) ? $model->creation->displayname : '-',
-		],
-		[
-			'attribute' => 'modified_date',
-			'value' => Yii::$app->formatter->asDatetime($model->modified_date, 'medium'),
-		],
-		[
-			'attribute' => 'modifiedDisplayname',
-			'value' => isset($model->modified) ? $model->modified->displayname : '-',
-		],
-		[
-			'attribute' => 'updated_date',
-			'value' => Yii::$app->formatter->asDatetime($model->updated_date, 'medium'),
-		],
-		'slug',
-		[
 			'attribute' => 'banners',
 			'value' => function ($model) {
 				$banners = $model->getBanners(true);
@@ -112,6 +91,27 @@ $this->params['menu']['content'] = [
 			},
 			'format' => 'html',
 		],
+		[
+			'attribute' => 'creation_date',
+			'value' => Yii::$app->formatter->asDatetime($model->creation_date, 'medium'),
+		],
+		[
+			'attribute' => 'creationDisplayname',
+			'value' => isset($model->creation) ? $model->creation->displayname : '-',
+		],
+		[
+			'attribute' => 'modified_date',
+			'value' => Yii::$app->formatter->asDatetime($model->modified_date, 'medium'),
+		],
+		[
+			'attribute' => 'modifiedDisplayname',
+			'value' => isset($model->modified) ? $model->modified->displayname : '-',
+		],
+		[
+			'attribute' => 'updated_date',
+			'value' => Yii::$app->formatter->asDatetime($model->updated_date, 'medium'),
+		],
+		'slug',
 	],
 ]) ?>
 
