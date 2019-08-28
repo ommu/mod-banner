@@ -33,6 +33,7 @@ class BannerClickHistory extends \app\components\ActiveRecord
 	public $categoryId;
 	public $bannerTitle;
 	public $userDisplayname;
+	public $bannerId;
 
 	/**
 	 * @return string the associated database table name
@@ -105,21 +106,23 @@ class BannerClickHistory extends \app\components\ActiveRecord
 			'contentOptions' => ['class'=>'center'],
 		];
 		if(!Yii::$app->request->get('click')) {
-			$this->templateColumns['categoryId'] = [
-				'attribute' => 'categoryId',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->click->banner->category) ? $model->click->banner->category->title->message : '-';
-					// return $model->categoryId;
-				},
-				'filter' => BannerCategory::getCategory(),
-			];
-			$this->templateColumns['bannerTitle'] = [
-				'attribute' => 'bannerTitle',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->click->banner) ? $model->click->banner->title : '-';
-					// return $model->bannerTitle;
-				},
-			];
+			if(!Yii::$app->request->get('banner')) {
+				$this->templateColumns['categoryId'] = [
+					'attribute' => 'categoryId',
+					'value' => function($model, $key, $index, $column) {
+						return isset($model->click->banner->category) ? $model->click->banner->category->title->message : '-';
+						// return $model->categoryId;
+					},
+					'filter' => BannerCategory::getCategory(),
+				];
+				$this->templateColumns['bannerTitle'] = [
+					'attribute' => 'bannerTitle',
+					'value' => function($model, $key, $index, $column) {
+						return isset($model->click->banner) ? $model->click->banner->title : '-';
+						// return $model->bannerTitle;
+					},
+				];
+			}
 			$this->templateColumns['userDisplayname'] = [
 				'attribute' => 'userDisplayname',
 				'value' => function($model, $key, $index, $column) {

@@ -40,7 +40,7 @@ class ClickController extends Controller
 	public function init()
 	{
 		parent::init();
-		if(Yii::$app->request->get('click') || Yii::$app->request->get('id'))
+		if(Yii::$app->request->get('click') || Yii::$app->request->get('id') || Yii::$app->request->get('banner'))
 			$this->subMenu = $this->module->params['banner_submenu'];
 	}
 
@@ -77,6 +77,8 @@ class ClickController extends Controller
 	public function actionManage()
 	{
 		$searchModel = new BannerClickHistorySearch();
+		if(($banner = Yii::$app->request->get('banner')) != null)
+			$searchModel = new BannerClickHistorySearch(['bannerId'=>$banner]);
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
 		$gridColumn = Yii::$app->request->get('GridColumn', null);
@@ -94,6 +96,11 @@ class ClickController extends Controller
 			$this->subMenuParam = $click->banner_id;
 		}
 
+		if($banner) {
+			$this->subMenuParam = $banner;
+			$banner = \ommu\banner\models\Banners::findOne($banner);
+		}
+
 		$this->view->title = Yii::t('app', 'Click Histories');
 		$this->view->description = '';
 		$this->view->keywords = '';
@@ -102,6 +109,7 @@ class ClickController extends Controller
 			'dataProvider' => $dataProvider,
 			'columns' => $columns,
 			'click' => $click,
+			'banner' => $banner,
 		]);
 	}
 

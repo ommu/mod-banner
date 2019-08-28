@@ -28,7 +28,7 @@ class BannerClickHistory extends BannerClickHistoryModel
 	public function rules()
 	{
 		return [
-			[['id', 'click_id'], 'integer'],
+			[['id', 'click_id', 'bannerId'], 'integer'],
 			[['click_date', 'click_ip',
 				'categoryId', 'bannerTitle', 'userDisplayname'], 'safe'],
 		];
@@ -117,6 +117,7 @@ class BannerClickHistory extends BannerClickHistoryModel
 			't.click_id' => isset($params['click']) ? $params['click'] : $this->click_id,
 			'cast(t.click_date as date)' => $this->click_date,
 			'banner.cat_id' => isset($params['category']) ? $params['category'] : $this->categoryId,
+			'click.banner_id' => $this->bannerId,
 		]);
 
 		$query->andFilterWhere(['like', 't.click_ip', $this->click_ip])

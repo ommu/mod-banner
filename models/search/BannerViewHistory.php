@@ -28,7 +28,7 @@ class BannerViewHistory extends BannerViewHistoryModel
 	public function rules()
 	{
 		return [
-			[['id', 'view_id'], 'integer'],
+			[['id', 'view_id', 'bannerId'], 'integer'],
 			[['view_date', 'view_ip',
 				'categoryId', 'bannerTitle', 'userDisplayname'], 'safe'],
 		];
@@ -117,6 +117,7 @@ class BannerViewHistory extends BannerViewHistoryModel
 			't.view_id' => isset($params['view']) ? $params['view'] : $this->view_id,
 			'cast(t.view_date as date)' => $this->view_date,
 			'banner.cat_id' => isset($params['category']) ? $params['category'] : $this->categoryId,
+			'view.banner_id' => $this->bannerId,
 		]);
 
 		$query->andFilterWhere(['like', 't.view_ip', $this->view_ip])
