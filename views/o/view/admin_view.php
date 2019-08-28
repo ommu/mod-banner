@@ -2,7 +2,7 @@
 /**
  * Banner Views (banner-views)
  * @var $this app\components\View
- * @var $this ommu\banner\controllers\history\ViewController
+ * @var $this ommu\banner\controllers\o\ViewController
  * @var $model ommu\banner\models\BannerViews
  *
  * @author Putra Sudaryanto <putra@ommu.co>
@@ -53,7 +53,7 @@ $this->params['menu']['content'] = [
 			'attribute' => 'views',
 			'value' => function ($model) {
 				$views = $model->views;
-				return  Html::a($views, ['history/view-detail/manage', 'view'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} histories', ['count'=>$views])]);
+				return  Html::a($views, ['history/view/manage', 'view'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} histories', ['count'=>$views])]);
 			},
 			'format' => 'html',
 		],

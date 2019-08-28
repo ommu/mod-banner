@@ -2,7 +2,7 @@
 /**
  * Banner Views (banner-views)
  * @var $this app\components\View
- * @var $this ommu\banner\controllers\history\ViewController
+ * @var $this ommu\banner\controllers\o\ViewController
  * @var $model ommu\banner\models\search\BannerViews
  * @var $form yii\widgets\ActiveForm
  *

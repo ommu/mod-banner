@@ -1,10 +1,10 @@
 <?php
 /**
- * ViewController
- * @var $this ommu\banner\controllers\history\ViewController
- * @var $model ommu\banner\models\BannerViews
+ * ClickController
+ * @var $this ommu\banner\controllers\o\ClickController
+ * @var $model ommu\banner\models\BannerClicks
  *
- * ViewController implements the CRUD actions for BannerViews model.
+ * ClickController implements the CRUD actions for BannerClicks model.
  * Reference start
  * TOC :
  *	Index
@@ -17,22 +17,22 @@
  * @author Putra Sudaryanto <putra@ommu.co>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
- * @created date 6 October 2017, 13:24 WIB
- * @modified date 24 January 2019, 17:54 WIB
+ * @created date 6 October 2017, 13:06 WIB
+ * @modified date 24 January 2019, 17:53 WIB
  * @link https://github.com/ommu/mod-banner
  *
  */
 
-namespace ommu\banner\controllers\history;
+namespace ommu\banner\controllers\o;
 
 use Yii;
 use yii\filters\VerbFilter;
 use app\components\Controller;
 use mdm\admin\components\AccessControl;
-use ommu\banner\models\BannerViews;
-use ommu\banner\models\search\BannerViews as BannerViewsSearch;
+use ommu\banner\models\BannerClicks;
+use ommu\banner\models\search\BannerClicks as BannerClicksSearch;
 
-class ViewController extends Controller
+class ClickController extends Controller
 {
 	/**
 	 * {@inheritdoc}
@@ -71,12 +71,12 @@ class ViewController extends Controller
 	}
 
 	/**
-	 * Lists all BannerViews models.
+	 * Lists all BannerClicks models.
 	 * @return mixed
 	 */
 	public function actionManage()
 	{
-		$searchModel = new BannerViewsSearch();
+		$searchModel = new BannerClicksSearch();
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
 		$gridColumn = Yii::$app->request->get('GridColumn', null);
@@ -94,7 +94,7 @@ class ViewController extends Controller
 			$banner = \ommu\banner\models\Banners::findOne($banner);
 		}
 
-		$this->view->title = Yii::t('app', 'Views');
+		$this->view->title = Yii::t('app', 'Clicks');
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_manage', [
@@ -106,7 +106,7 @@ class ViewController extends Controller
 	}
 
 	/**
-	 * Displays a single BannerViews model.
+	 * Displays a single BannerClicks model.
 	 * @param integer $id
 	 * @return mixed
 	 */
@@ -115,7 +115,7 @@ class ViewController extends Controller
 		$model = $this->findModel($id);
 
 		$this->subMenuParam = $model->banner_id;
-		$this->view->title = Yii::t('app', 'Detail View: {banner-id}', ['banner-id' => $model->banner->title]);
+		$this->view->title = Yii::t('app', 'Detail Click: {banner-id}', ['banner-id' => $model->banner->title]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->oRender('admin_view', [
@@ -124,7 +124,7 @@ class ViewController extends Controller
 	}
 
 	/**
-	 * Deletes an existing BannerViews model.
+	 * Deletes an existing BannerClicks model.
 	 * If deletion is successful, the browser will be redirected to the 'index' page.
 	 * @param integer $id
 	 * @return mixed
@@ -134,20 +134,20 @@ class ViewController extends Controller
 		$model = $this->findModel($id);
 		$model->delete();
 
-		Yii::$app->session->setFlash('success', Yii::t('app', 'Banner view success deleted.'));
+		Yii::$app->session->setFlash('success', Yii::t('app', 'Banner click success deleted.'));
 		return $this->redirect(Yii::$app->request->referrer ?: ['manage', 'banner'=>$model->banner_id]);
 	}
 
 	/**
-	 * Finds the BannerViews model based on its primary key value.
+	 * Finds the BannerClicks model based on its primary key value.
 	 * If the model is not found, a 404 HTTP exception will be thrown.
 	 * @param integer $id
-	 * @return BannerViews the loaded model
+	 * @return BannerClicks the loaded model
 	 * @throws NotFoundHttpException if the model cannot be found
 	 */
 	protected function findModel($id)
 	{
-		if(($model = BannerViews::findOne($id)) !== null)
+		if(($model = BannerClicks::findOne($id)) !== null)
 			return $model;
 
 		throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));

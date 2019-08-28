@@ -14,13 +14,13 @@ banner_submenu:
   views:
     label: View(s)
     url:
-      0: 'history/view/manage'
+      0: 'o/view/manage'
       banner: $_GET*id
     select: controller
   clicks:
     label: Click(s)
     url:
-      0: 'history/click/manage'
+      0: 'o/click/manage'
       banner: $_GET*id
     select: controller
   delete:

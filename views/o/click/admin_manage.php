@@ -1,16 +1,16 @@
 <?php
 /**
- * Banner Views (banner-views)
+ * Banner Clicks (banner-clicks)
  * @var $this app\components\View
- * @var $this ommu\banner\controllers\history\ViewController
- * @var $model ommu\banner\models\BannerViews
- * @var $searchModel ommu\banner\models\search\BannerViews
+ * @var $this ommu\banner\controllers\o\ClickController
+ * @var $model ommu\banner\models\BannerClicks
+ * @var $searchModel ommu\banner\models\search\BannerClicks
  *
  * @author Putra Sudaryanto <putra@ommu.co>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
- * @created date 6 October 2017, 13:24 WIB
- * @modified date 24 January 2019, 17:54 WIB
+ * @created date 6 October 2017, 13:06 WIB
+ * @modified date 24 January 2019, 17:53 WIB
  * @link https://github.com/ommu/mod-banner
  *
  */
@@ -30,7 +30,7 @@ $this->params['menu']['option'] = [
 ];
 ?>
 
-<div class="banner-views-manage">
+<div class="banner-clicks-manage">
 <?php Pjax::begin(); ?>
 
 <?php if($banner != null) {

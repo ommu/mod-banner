@@ -76,7 +76,7 @@ $this->params['breadcrumbs'][] = $model->title;
 			'attribute' => 'clicks',
 			'value' => function ($model) {
 				$clicks = $model->getClicks(true);
-				return Html::a($clicks, ['history/click/manage', 'banner'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} clicks', ['count'=>$clicks])]);
+				return Html::a($clicks, ['o/click/manage', 'banner'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} clicks', ['count'=>$clicks])]);
 			},
 			'format' => 'html',
 		],
@@ -84,7 +84,7 @@ $this->params['breadcrumbs'][] = $model->title;
 			'attribute' => 'views',
 			'value' => function ($model) {
 				$views = $model->getViews(true);
-				return Html::a($views, ['history/view/manage', 'banner'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} views', ['count'=>$views])]);
+				return Html::a($views, ['o/view/manage', 'banner'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} views', ['count'=>$views])]);
 			},
 			'format' => 'html',
 		],

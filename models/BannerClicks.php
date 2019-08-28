@@ -179,7 +179,7 @@ class BannerClicks extends \app\components\ActiveRecord
 			'attribute' => 'clicks',
 			'value' => function($model, $key, $index, $column) {
 				$clicks = $model->clicks;
-				return Html::a($clicks, ['history/click-detail/manage', 'click'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} histories', ['count'=>$clicks]), 'data-pjax' => 0]);
+				return Html::a($clicks, ['history/click/manage', 'click'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} histories', ['count'=>$clicks]), 'data-pjax' => 0]);
 			},
 			'filter' => false,
 			'contentOptions' => ['class'=>'center'],

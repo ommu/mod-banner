@@ -2,7 +2,7 @@
 /**
  * Banner Clicks (banner-clicks)
  * @var $this app\components\View
- * @var $this ommu\banner\controllers\history\ClickController
+ * @var $this ommu\banner\controllers\o\ClickController
  * @var $model ommu\banner\models\BannerClicks
  *
  * @author Putra Sudaryanto <putra@ommu.co>
@@ -53,7 +53,7 @@ $this->params['menu']['content'] = [
 			'attribute' => 'clicks',
 			'value' => function ($model) {
 				$clicks = $model->clicks;
-				return  Html::a($clicks, ['history/click-detail/manage', 'click'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} histories', ['count'=>$clicks])]);
+				return  Html::a($clicks, ['history/click/manage', 'click'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} histories', ['count'=>$clicks])]);
 			},
 			'format' => 'html',
 		],
