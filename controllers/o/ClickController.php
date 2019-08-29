@@ -93,6 +93,8 @@ class ClickController extends Controller
 			$this->subMenuParam = $banner;
 			$banner = \ommu\banner\models\Banners::findOne($banner);
 		}
+		if(($user = Yii::$app->request->get('user')) != null)
+			$user = \ommu\users\models\Users::findOne($user);
 
 		$this->view->title = Yii::t('app', 'Clicks');
 		$this->view->description = '';
@@ -102,6 +104,7 @@ class ClickController extends Controller
 			'dataProvider' => $dataProvider,
 			'columns' => $columns,
 			'banner' => $banner,
+			'user' => $user,
 		]);
 	}
 

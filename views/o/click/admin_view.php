@@ -30,40 +30,64 @@ $this->params['menu']['content'] = [
 
 <div class="banner-clicks-view">
 
-<?php echo DetailView::widget([
+<?php 
+$attributes = [
+	[
+		'attribute' => 'click_id',
+		'value' => $model->click_id,
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'categoryId',
+		'value' => function ($model) {
+			$categoryId = isset($model->banner->category) ? $model->banner->category->title->message : '-';
+			if($categoryId != '-')
+				return Html::a($categoryId, ['setting/category/view', 'id'=>$model->banner->cat_id], ['title'=>$categoryId, 'class'=>'modal-btn']);
+			return $categoryId;
+		},
+		'format' => 'html',
+	],
+	[
+		'attribute' => 'bannerTitle',
+		'value' => function ($model) {
+			$bannerTitle = isset($model->banner) ? $model->banner->title : '-';
+			if($bannerTitle != '-')
+				return Html::a($bannerTitle, ['admin/view', 'id'=>$model->banner_id], ['title'=>$bannerTitle, 'class'=>'modal-btn']);
+			return $bannerTitle;
+		},
+		'format' => 'html',
+	],
+	[
+		'attribute' => 'userDisplayname',
+		'value' => isset($model->user) ? $model->user->displayname : '-',
+	],
+	[
+		'attribute' => 'clicks',
+		'value' => function ($model) {
+			$clicks = $model->clicks;
+			return  Html::a($clicks, ['history/click/manage', 'click'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} histories', ['count'=>$clicks])]);
+		},
+		'format' => 'html',
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'click_date',
+		'value' => Yii::$app->formatter->asDatetime($model->click_date, 'medium'),
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'click_ip',
+		'value' => $model->click_ip,
+		'visible' => !$small,
+	],
+];
+
+echo DetailView::widget([
 	'model' => $model,
 	'options' => [
 		'class'=>'table table-striped detail-view',
 	],
-	'attributes' => [
-		'click_id',
-		[
-			'attribute' => 'categoryId',
-			'value' => isset($model->banner->category) ? $model->banner->category->title->message : '-',
-		],
-		[
-			'attribute' => 'bannerTitle',
-			'value' => isset($model->banner) ? $model->banner->title : '-',
-		],
-		[
-			'attribute' => 'userDisplayname',
-			'value' => isset($model->user) ? $model->user->displayname : '-',
-		],
-		[
-			'attribute' => 'clicks',
-			'value' => function ($model) {
-				$clicks = $model->clicks;
-				return  Html::a($clicks, ['history/click/manage', 'click'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} histories', ['count'=>$clicks])]);
-			},
-			'format' => 'html',
-			'visible' => !$small,
-		],
-		[
-			'attribute' => 'click_date',
-			'value' => Yii::$app->formatter->asDatetime($model->click_date, 'medium'),
-		],
-		'click_ip',
-	],
-]) ?>
+	'attributes' => $attributes,
+]); ?>
 
 </div>

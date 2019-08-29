@@ -14,6 +14,7 @@
  *
  */
 
+use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\DetailView;
 
@@ -29,31 +30,55 @@ $this->params['menu']['content'] = [
 
 <div class="banner-click-history-view">
 
-<?php echo DetailView::widget([
+<?php 
+$attributes = [
+	[
+		'attribute' => 'id',
+		'value' => $model->id ? $model->id : '-',
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'categoryId',
+		'value' => function ($model) {
+			$categoryId = isset($model->click->banner->category) ? $model->click->banner->category->title->message : '-';
+			if($categoryId != '-')
+				return Html::a($categoryId, ['setting/category/view', 'id'=>$model->click->banner->cat_id], ['title'=>$categoryId, 'class'=>'modal-btn']);
+			return $categoryId;
+		},
+		'format' => 'html',
+	],
+	[
+		'attribute' => 'bannerTitle',
+		'value' => function ($model) {
+			$bannerTitle = isset($model->click->banner) ? $model->click->banner->title : '-';
+			if($bannerTitle != '-')
+				return Html::a($bannerTitle, ['admin/view', 'id'=>$model->click->banner_id], ['title'=>$bannerTitle, 'class'=>'modal-btn']);
+			return $bannerTitle;
+		},
+		'format' => 'html',
+	],
+	[
+		'attribute' => 'userDisplayname',
+		'value' => isset($model->click->user) ? $model->click->user->displayname : '-',
+	],
+	[
+		'attribute' => 'click_date',
+		'value' => Yii::$app->formatter->asDatetime($model->click_date, 'medium'),
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'click_ip',
+		'value' => $model->click_ip,
+		'visible' => !$small,
+	],
+];
+
+echo DetailView::widget([
 	'model' => $model,
 	'options' => [
 		'class'=>'table table-striped detail-view',
 	],
-	'attributes' => [
-		'id',
-		[
-			'attribute' => 'categoryId',
-			'value' => isset($model->click->banner->category) ? $model->click->banner->category->title->message : '-',
-		],
-		[
-			'attribute' => 'bannerTitle',
-			'value' => isset($model->click->banner) ? $model->click->banner->title : '-',
-		],
-		[
-			'attribute' => 'userDisplayname',
-			'value' => isset($model->click->user) ? $model->click->user->displayname : '-',
-		],
-		[
-			'attribute' => 'click_date',
-			'value' => Yii::$app->formatter->asDatetime($model->click_date, 'medium'),
-		],
-		'click_ip',
-	],
-]) ?>
+	'attributes' => $attributes,
+]); ?>
 
 </div>

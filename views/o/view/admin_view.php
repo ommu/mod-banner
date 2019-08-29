@@ -30,40 +30,64 @@ $this->params['menu']['content'] = [
 
 <div class="banner-views-view">
 
-<?php echo DetailView::widget([
+<?php 
+$attributes = [
+	[
+		'attribute' => 'view_id',
+		'value' => $model->view_id,
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'categoryId',
+		'value' => function ($model) {
+			$categoryId = isset($model->banner->category) ? $model->banner->category->title->message : '-';
+			if($categoryId != '-')
+				return Html::a($categoryId, ['setting/category/view', 'id'=>$model->banner->cat_id], ['title'=>$categoryId, 'class'=>'modal-btn']);
+			return $categoryId;
+		},
+		'format' => 'html',
+	],
+	[
+		'attribute' => 'bannerTitle',
+		'value' => function ($model) {
+			$bannerTitle = isset($model->banner) ? $model->banner->title : '-';
+			if($bannerTitle != '-')
+				return Html::a($bannerTitle, ['admin/view', 'id'=>$model->banner_id], ['title'=>$bannerTitle, 'class'=>'modal-btn']);
+			return $bannerTitle;
+		},
+		'format' => 'html',
+	],
+	[
+		'attribute' => 'userDisplayname',
+		'value' => isset($model->user) ? $model->user->displayname : '-',
+	],
+	[
+		'attribute' => 'views',
+		'value' => function ($model) {
+			$views = $model->views;
+			return  Html::a($views, ['history/view/manage', 'view'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} histories', ['count'=>$views])]);
+		},
+		'format' => 'html',
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'view_date',
+		'value' => Yii::$app->formatter->asDatetime($model->view_date, 'medium'),
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'view_ip',
+		'value' => $model->view_ip,
+		'visible' => !$small,
+	],
+];
+
+echo DetailView::widget([
 	'model' => $model,
 	'options' => [
 		'class'=>'table table-striped detail-view',
 	],
-	'attributes' => [
-		'view_id',
-		[
-			'attribute' => 'categoryId',
-			'value' => isset($model->banner->category) ? $model->banner->category->title->message : '-',
-		],
-		[
-			'attribute' => 'bannerTitle',
-			'value' => isset($model->banner) ? $model->banner->title : '-',
-		],
-		[
-			'attribute' => 'userDisplayname',
-			'value' => isset($model->user) ? $model->user->displayname : '-',
-		],
-		[
-			'attribute' => 'views',
-			'value' => function ($model) {
-				$views = $model->views;
-				return  Html::a($views, ['history/view/manage', 'view'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} histories', ['count'=>$views])]);
-			},
-			'format' => 'html',
-			'visible' => !$small,
-		],
-		[
-			'attribute' => 'view_date',
-			'value' => Yii::$app->formatter->asDatetime($model->view_date, 'medium'),
-		],
-		'view_ip',
-	],
-]) ?>
+	'attributes' => $attributes,
+]); ?>
 
 </div>

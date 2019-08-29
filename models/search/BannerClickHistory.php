@@ -28,9 +28,8 @@ class BannerClickHistory extends BannerClickHistoryModel
 	public function rules()
 	{
 		return [
-			[['id', 'click_id', 'bannerId'], 'integer'],
-			[['click_date', 'click_ip',
-				'categoryId', 'bannerTitle', 'userDisplayname'], 'safe'],
+			[['id', 'click_id', 'categoryId', 'bannerId'], 'integer'],
+			[['click_date', 'click_ip', 'bannerTitle', 'userDisplayname'], 'safe'],
 		];
 	}
 
@@ -84,10 +83,6 @@ class BannerClickHistory extends BannerClickHistoryModel
 		$dataProvider = new ActiveDataProvider($dataParams);
 
 		$attributes = array_keys($this->getTableSchema()->columns);
-		$attributes['categoryId'] = [
-			'asc' => ['category.message' => SORT_ASC],
-			'desc' => ['category.message' => SORT_DESC],
-		];
 		$attributes['bannerTitle'] = [
 			'asc' => ['banner.title' => SORT_ASC],
 			'desc' => ['banner.title' => SORT_DESC],
@@ -95,6 +90,10 @@ class BannerClickHistory extends BannerClickHistoryModel
 		$attributes['userDisplayname'] = [
 			'asc' => ['user.displayname' => SORT_ASC],
 			'desc' => ['user.displayname' => SORT_DESC],
+		];
+		$attributes['categoryId'] = [
+			'asc' => ['category.message' => SORT_ASC],
+			'desc' => ['category.message' => SORT_DESC],
 		];
 		$dataProvider->setSort([
 			'attributes' => $attributes,

@@ -30,9 +30,9 @@ class BannerViewHistory extends \app\components\ActiveRecord
 {
 	public $gridForbiddenColumn = [];
 
-	public $categoryId;
 	public $bannerTitle;
 	public $userDisplayname;
+	public $categoryId;
 	public $bannerId;
 
 	/**
@@ -67,9 +67,9 @@ class BannerViewHistory extends \app\components\ActiveRecord
 			'view_id' => Yii::t('app', 'View'),
 			'view_date' => Yii::t('app', 'View Date'),
 			'view_ip' => Yii::t('app', 'View IP'),
-			'categoryId' => Yii::t('app', 'Category'),
 			'bannerTitle' => Yii::t('app', 'Banner'),
 			'userDisplayname' => Yii::t('app', 'User'),
+			'categoryId' => Yii::t('app', 'Category'),
 		];
 	}
 
@@ -173,8 +173,8 @@ class BannerViewHistory extends \app\components\ActiveRecord
 	{
 		parent::afterFind();
 
-		// $this->categoryId = isset($this->view->banner->category) ? $this->view->banner->category->title->message : '-';
 		// $this->bannerTitle = isset($this->view->banner) ? $this->view->banner->title : '-';
 		// $this->userDisplayname = isset($this->view->user) ? $this->view->user->displayname : '-';
+		// $this->categoryId = isset($this->view->banner->category) ? $this->view->banner->category->title->message : '-';
 	}
 }

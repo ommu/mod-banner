@@ -14,6 +14,7 @@
  *
  */
 
+use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\DetailView;
 
@@ -29,31 +30,55 @@ $this->params['menu']['content'] = [
 
 <div class="banner-view-history-view">
 
-<?php echo DetailView::widget([
+<?php 
+$attributes = [
+	[
+		'attribute' => 'id',
+		'value' => $model->id ? $model->id : '-',
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'categoryId',
+		'value' => function ($model) {
+			$categoryId = isset($model->view->banner->category) ? $model->view->banner->category->title->message : '-';
+			if($categoryId != '-')
+				return Html::a($categoryId, ['setting/category/view', 'id'=>$model->view->banner->cat_id], ['title'=>$categoryId, 'class'=>'modal-btn']);
+			return $categoryId;
+		},
+		'format' => 'html',
+	],
+	[
+		'attribute' => 'bannerTitle',
+		'value' => function ($model) {
+			$bannerTitle = isset($model->view->banner) ? $model->view->banner->title : '-';
+			if($bannerTitle != '-')
+				return Html::a($bannerTitle, ['admin/view', 'id'=>$model->view->banner_id], ['title'=>$bannerTitle, 'class'=>'modal-btn']);
+			return $bannerTitle;
+		},
+		'format' => 'html',
+	],
+	[
+		'attribute' => 'userDisplayname',
+		'value' => isset($model->view->user) ? $model->view->user->displayname : '-',
+	],
+	[
+		'attribute' => 'view_date',
+		'value' => Yii::$app->formatter->asDatetime($model->view_date, 'medium'),
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'view_ip',
+		'value' => $model->view_ip,
+		'visible' => !$small,
+	],
+];
+
+echo DetailView::widget([
 	'model' => $model,
 	'options' => [
 		'class'=>'table table-striped detail-view',
 	],
-	'attributes' => [
-		'id',
-		[
-			'attribute' => 'categoryId',
-			'value' => isset($model->view->banner->category) ? $model->view->banner->category->title->message : '-',
-		],
-		[
-			'attribute' => 'bannerTitle',
-			'value' => isset($model->view->banner) ? $model->view->banner->title : '-',
-		],
-		[
-			'attribute' => 'userDisplayname',
-			'value' => isset($model->view->user) ? $model->view->user->displayname : '-',
-		],
-		[
-			'attribute' => 'view_date',
-			'value' => Yii::$app->formatter->asDatetime($model->view_date, 'medium'),
-		],
-		'view_ip',
-	],
-]) ?>
+	'attributes' => $attributes,
+]); ?>
 
 </div>

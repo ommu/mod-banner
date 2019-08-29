@@ -19,8 +19,6 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use app\components\grid\GridView;
 use yii\widgets\Pjax;
-use yii\widgets\DetailView;
-use ommu\banner\models\BannerClicks;
 
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -37,97 +35,11 @@ $this->params['menu']['option'] = [
 <div class="banner-click-history-manage">
 <?php Pjax::begin(); ?>
 
-<?php if($click != null) {
-$model = $click;
-echo DetailView::widget([
-	'model' => $model,
-	'options' => [
-		'class'=>'table table-striped detail-view',
-	],
-	'attributes' => [
-		[
-			'attribute' => 'categoryId',
-			'value' => function ($model) {
-				$categoryId = isset($model->banner->category) ? $model->banner->category->title->message : '-';
-				if($categoryId != '-')
-					return Html::a($categoryId, ['setting/category/view', 'id'=>$model->banner->cat_id], ['title'=>$categoryId, 'class'=>'modal-btn']);
-				return $categoryId;
-			},
-			'format' => 'html',
-		],
-		[
-			'attribute' => 'bannerTitle',
-			'value' => function ($model) {
-				$bannerTitle = isset($model->banner) ? $model->banner->title : '-';
-				if($bannerTitle != '-')
-					return Html::a($bannerTitle, ['admin/view', 'id'=>$model->banner_id], ['title'=>$bannerTitle, 'class'=>'modal-btn']);
-				return $bannerTitle;
-			},
-			'format' => 'html',
-		],
-		[
-			'attribute' => 'userDisplayname',
-			'value' => isset($model->user) ? $model->user->displayname : '-',
-		],
-		[
-			'attribute' => 'click_date',
-			'value' => Yii::$app->formatter->asDatetime($model->click_date, 'medium'),
-		],
-		'click_ip',
-	],
-]);
-}?>
+<?php if($click != null)
+	echo $this->render('/o/click/admin_view', ['model'=>$click, 'small'=>true]); ?>
 
-<?php if($banner != null) {
-$model = $banner;
-echo DetailView::widget([
-	'model' => $model,
-	'options' => [
-		'class'=>'table table-striped detail-view',
-	],
-	'attributes' => [
-		[
-			'attribute' => 'categoryName',
-			'value' => function ($model) {
-				$categoryName = isset($model->category) ? $model->category->title->message : '-';
-				if($categoryName != '-')
-					return Html::a($categoryName, ['setting/category/view', 'id'=>$model->cat_id], ['title'=>$categoryName, 'class'=>'modal-btn']);
-				return $categoryName;
-			},
-			'format' => 'html',
-		],
-		[
-			'attribute' => 'title',
-			'value' => function ($model) {
-				if($model->title != '')
-					return Html::a($model->title, ['admin/view', 'id'=>$model->banner_id], ['title'=>$model->title, 'class'=>'modal-btn']);
-				return $model->title;
-			},
-			'format' => 'html',
-		],
-		[
-			'attribute' => 'url',
-			'value' => $model->url ? $model->url : '-',
-		],
-		[
-			'attribute' => 'banner_filename',
-			'value' => function ($model) {
-				$uploadPath = $model::getUploadPath(false);
-				return $model->banner_filename ? Html::img(Url::to(join('/', ['@webpublic', $uploadPath, $model->banner_filename])), ['width' => '100%']).'<br/><br/>'.$model->banner_filename : '-';
-			},
-			'format' => 'html',
-		],
-		[
-			'attribute' => 'published_date',
-			'value' => Yii::$app->formatter->asDate($model->published_date, 'medium'),
-		],
-		[
-			'attribute' => 'expired_date',
-			'value' => Yii::$app->formatter->asDate($model->expired_date, 'medium'),
-		],
-	],
-]);
-}?>
+<?php if($banner != null)
+	echo $this->render('/admin/admin_view', ['model'=>$banner, 'small'=>true]); ?>
 
 <?php //echo $this->render('_search', ['model'=>$searchModel]); ?>
 

@@ -33,95 +33,116 @@ $this->params['menu']['content'] = [
 
 <div class="banner-category-view">
 
-<?php echo DetailView::widget([
+<?php 
+$attributes = [
+	[
+		'attribute' => 'cat_id',
+		'value' => $model->cat_id,
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'publish',
+		'value' => $model->quickAction(Url::to(['publish', 'id'=>$model->primaryKey]), $model->publish, 'Enable,Disable'),
+		'format' => 'raw',
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'name_i',
+		'value' => $model->name_i,
+	],
+	[
+		'attribute' => 'desc_i',
+		'value' => $model->desc_i,
+	],
+	[
+		'attribute' => 'cat_code',
+		'value' => $model->cat_code,
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'banner_size',
+		'value' => BannerCategory::getSize($model->banner_size),
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'banner_limit',
+		'value' => $model->banner_limit,
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'banners',
+		'value' => function ($model) {
+			$banners = $model->getBanners(true);
+			return Html::a($banners, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'publish']);
+		},
+		'format' => 'html',
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'permanent',
+		'value' => function ($model) {
+			$permanent = $model->getPermanent(true);
+			return Html::a($permanent, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'permanent']);
+		},
+		'format' => 'html',
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'pending',
+		'value' => function ($model) {
+			$pending = $model->getPending(true);
+			return Html::a($pending, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'pending']);
+		},
+		'format' => 'html',
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'expired',
+		'value' => function ($model) {
+			$expired = $model->getExpired(true);
+			return Html::a($expired, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'expired']);
+		},
+		'format' => 'html',
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'creation_date',
+		'value' => Yii::$app->formatter->asDatetime($model->creation_date, 'medium'),
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'creationDisplayname',
+		'value' => isset($model->creation) ? $model->creation->displayname : '-',
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'modified_date',
+		'value' => Yii::$app->formatter->asDatetime($model->modified_date, 'medium'),
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'modifiedDisplayname',
+		'value' => isset($model->modified) ? $model->modified->displayname : '-',
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'updated_date',
+		'value' => Yii::$app->formatter->asDatetime($model->updated_date, 'medium'),
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'slug',
+		'value' => $model->slug,
+		'visible' => !$small,
+	],
+];
+
+echo DetailView::widget([
 	'model' => $model,
 	'options' => [
 		'class'=>'table table-striped detail-view',
 	],
-	'attributes' => [
-		'cat_id',
-		[
-			'attribute' => 'publish',
-			'value' => $model->quickAction(Url::to(['publish', 'id'=>$model->primaryKey]), $model->publish, 'Enable,Disable'),
-			'format' => 'raw',
-		],
-		[
-			'attribute' => 'name_i',
-			'value' => $model->name_i,
-		],
-		[
-			'attribute' => 'desc_i',
-			'value' => $model->desc_i,
-		],
-		'cat_code',
-		[
-			'attribute' => 'banner_size',
-			'value' => BannerCategory::getSize($model->banner_size),
-		],
-		'banner_limit',
-		[
-			'attribute' => 'banners',
-			'value' => function ($model) {
-				$banners = $model->getBanners(true);
-				return Html::a($banners, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'publish']);
-			},
-			'format' => 'html',
-			'visible' => !$small,
-		],
-		[
-			'attribute' => 'permanent',
-			'value' => function ($model) {
-				$permanent = $model->getPermanent(true);
-				return Html::a($permanent, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'permanent']);
-			},
-			'format' => 'html',
-			'visible' => !$small,
-		],
-		[
-			'attribute' => 'pending',
-			'value' => function ($model) {
-				$pending = $model->getPending(true);
-				return Html::a($pending, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'pending']);
-			},
-			'format' => 'html',
-			'visible' => !$small,
-		],
-		[
-			'attribute' => 'expired',
-			'value' => function ($model) {
-				$expired = $model->getExpired(true);
-				return Html::a($expired, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'expired']);
-			},
-			'format' => 'html',
-			'visible' => !$small,
-		],
-		[
-			'attribute' => 'creation_date',
-			'value' => Yii::$app->formatter->asDatetime($model->creation_date, 'medium'),
-			'visible' => !$small,
-		],
-		[
-			'attribute' => 'creationDisplayname',
-			'value' => isset($model->creation) ? $model->creation->displayname : '-',
-			'visible' => !$small,
-		],
-		[
-			'attribute' => 'modified_date',
-			'value' => Yii::$app->formatter->asDatetime($model->modified_date, 'medium'),
-			'visible' => !$small,
-		],
-		[
-			'attribute' => 'modifiedDisplayname',
-			'value' => isset($model->modified) ? $model->modified->displayname : '-',
-			'visible' => !$small,
-		],
-		[
-			'attribute' => 'updated_date',
-			'value' => Yii::$app->formatter->asDatetime($model->updated_date, 'medium'),
-			'visible' => !$small,
-		],
-		'slug',
-	],
-]) ?>
+	'attributes' => $attributes,
+]); ?>
 
 </div>

@@ -40,7 +40,7 @@ class ViewController extends Controller
 	public function init()
 	{
 		parent::init();
-		if(Yii::$app->request->get('click') || Yii::$app->request->get('id') || Yii::$app->request->get('banner'))
+		if(Yii::$app->request->get('view') || Yii::$app->request->get('id') || Yii::$app->request->get('banner'))
 			$this->subMenu = $this->module->params['banner_submenu'];
 	}
 

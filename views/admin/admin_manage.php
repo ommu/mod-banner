@@ -19,8 +19,6 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use app\components\grid\GridView;
 use yii\widgets\Pjax;
-use yii\widgets\DetailView;
-use ommu\banner\models\BannerCategory;
 
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -36,32 +34,8 @@ $this->params['menu']['option'] = [
 <div class="banners-manage">
 <?php Pjax::begin(); ?>
 
-<?php if($category != null) {
-$model = $category;
-echo DetailView::widget([
-	'model' => $model,
-	'options' => [
-		'class'=>'table table-striped detail-view',
-	],
-	'attributes' => [
-		[
-			'attribute' => 'name_i',
-			'value' => function ($model) {
-				if($model->name_i != '')
-					return Html::a($model->name_i, ['category/view', 'id'=>$model->cat_id], ['title'=>$model->name_i, 'class'=>'modal-btn']);
-				return $model->name_i;
-			},
-			'format' => 'html',
-		],
-		'cat_code',
-		[
-			'attribute' => 'banner_size',
-			'value' => BannerCategory::getSize($model->banner_size),
-		],
-		'banner_limit',
-	],
-]);
-}?>
+<?php if($category != null)
+	echo $this->render('/setting/category/admin_view', ['model'=>$category, 'small'=>true]); ?>
 
 <?php //echo $this->render('_search', ['model'=>$searchModel]); ?>
 
