@@ -140,7 +140,8 @@ class Banners extends \app\components\ActiveRecord
 			return $this->hasMany(BannerClicks::className(), ['banner_id' => 'banner_id']);
 
 		$model = BannerClicks::find()
-			->where(['banner_id' => $this->banner_id]);
+			->alias('t')
+			->where(['t.banner_id' => $this->banner_id]);
 		$clicks = $model->sum('clicks');
 
 		return $clicks ? $clicks : 0;
@@ -155,7 +156,8 @@ class Banners extends \app\components\ActiveRecord
 			return $this->hasMany(BannerViews::className(), ['banner_id' => 'banner_id']);
 
 		$model = BannerViews::find()
-			->where(['banner_id' => $this->banner_id]);
+			->alias('t')
+			->where(['t.banner_id' => $this->banner_id]);
 		$views = $model->sum('views');
 
 		return $views ? $views : 0;

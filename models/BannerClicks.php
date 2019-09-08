@@ -90,7 +90,8 @@ class BannerClicks extends \app\components\ActiveRecord
 			return $this->hasMany(BannerClickHistory::className(), ['click_id' => 'click_id']);
 
 		$model = BannerClickHistory::find()
-			->where(['click_id' => $this->click_id]);
+			->alias('t')
+			->where(['t.click_id' => $this->click_id]);
 		$histories = $model->count();
 
 		return $histories ? $histories : 0;

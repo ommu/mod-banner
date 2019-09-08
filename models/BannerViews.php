@@ -90,7 +90,8 @@ class BannerViews extends \app\components\ActiveRecord
 			return $this->hasMany(BannerViewHistory::className(), ['view_id' => 'view_id']);
 
 		$model = BannerViewHistory::find()
-			->where(['view_id' => $this->view_id]);
+			->alias('t')
+			->where(['t.view_id' => $this->view_id]);
 		$histories = $model->count();
 
 		return $histories ? $histories : 0;

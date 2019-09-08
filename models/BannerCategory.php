@@ -134,7 +134,8 @@ class BannerCategory extends \app\components\ActiveRecord
 	public function getBannersByType($cat_id, $type='published')
 	{
 		$model = Banners::find()
-			->where(['cat_id' => $cat_id]);
+			->alias('t')
+			->where(['t.cat_id' => $cat_id]);
 		if($type == 'published')
 			$model->published();
 		elseif($type == 'permanent')
@@ -162,7 +163,8 @@ class BannerCategory extends \app\components\ActiveRecord
 			return self::getBannersByType($this->cat_id, 'published');
 
 		$model = Banners::find()
-			->where(['cat_id' => $this->cat_id]);
+			->alias('t')
+			->where(['t.cat_id' => $this->cat_id]);
 		if($publish == 0)
 			$model->unpublish();
 		elseif($publish == 1)
