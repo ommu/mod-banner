@@ -35,6 +35,7 @@ use app\components\Controller;
 use mdm\admin\components\AccessControl;
 use ommu\banner\models\Banners;
 use ommu\banner\models\search\Banners as BannersSearch;
+use yii\web\UploadedFile;
 
 class AdminController extends Controller
 {
@@ -109,6 +110,7 @@ class AdminController extends Controller
 
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
+			$model->banner_filename = UploadedFile::getInstance($model, 'banner_filename');
 			// $postData = Yii::$app->request->post();
 			// $model->load($postData);
 			// $model->order = $postData['order'] ? $postData['order'] : 0;
@@ -144,6 +146,7 @@ class AdminController extends Controller
 
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
+			$model->banner_filename = UploadedFile::getInstance($model, 'banner_filename');
 			// $postData = Yii::$app->request->post();
 			// $model->load($postData);
 			// $model->order = $postData['order'] ? $postData['order'] : 0;

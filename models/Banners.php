@@ -432,16 +432,16 @@ class Banners extends \app\components\ActiveRecord
 					]));
 			}
 
-			$banner_filename = UploadedFile::getInstance($this, 'banner_filename');
-			if($banner_filename instanceof UploadedFile && !$banner_filename->getHasError()) {
-				if(!in_array(strtolower($banner_filename->getExtension()), $banner_file_type)) {
+			// $this->banner_filename = UploadedFile::getInstance($this, 'banner_filename');
+			if($this->banner_filename instanceof UploadedFile && !$this->banner_filename->getHasError()) {
+				if(!in_array(strtolower($this->banner_filename->getExtension()), $banner_file_type)) {
 					$this->addError('banner_filename', Yii::t('app', 'The file {name} cannot be uploaded. Only files with these extensions are allowed: {extensions}', [
-						'name'=>$banner_filename->name,
+						'name'=>$this->banner_filename->name,
 						'extensions'=>$setting->banner_file_type,
 					]));
 
 				} else {
-					$fileSize = getimagesize($banner_filename->tempName);
+					$fileSize = getimagesize($this->banner_filename->tempName);
 					if($this->cat_id && $setting->banner_validation) {
 						$banner_size = $this->category->banner_size;
 						if(empty($banner_size))
@@ -450,7 +450,7 @@ class Banners extends \app\components\ActiveRecord
 						else {
 							if(!($fileSize[0] == $banner_size['width'] && $fileSize[1] == $banner_size['height'])) {
 								$this->addError('banner_filename', Yii::t('app', 'The file {name} cannot be uploaded. ukuran banner ({file_size}) tidak sesuai dengan kategori ({banner_size})', [
-									'name'=>$banner_filename->name,
+									'name'=>$this->banner_filename->name,
 									'file_size'=>$fileSize[0].'x'.$fileSize[1],
 									'banner_size'=>BannerCategory::getSize($banner_size),
 								]));
@@ -490,7 +490,7 @@ class Banners extends \app\components\ActiveRecord
 				$this->createUploadDirectory(self::getUploadPath());
 
 				$banner_size = $this->category->banner_size;
-				$this->banner_filename = UploadedFile::getInstance($this, 'banner_filename');
+				// $this->banner_filename = UploadedFile::getInstance($this, 'banner_filename');
 				if($this->banner_filename instanceof UploadedFile && !$this->banner_filename->getHasError()) {
 					$fileName = join('-', [time(), UuidHelper::uuid(), $this->banner_id]).'.'.strtolower($this->banner_filename->getExtension()); 
 					if($this->banner_filename->saveAs(join('/', [$uploadPath, $fileName]))) {
@@ -530,7 +530,7 @@ class Banners extends \app\components\ActiveRecord
 
 		if($insert) {
 			$banner_size = $this->category->banner_size;
-			$this->banner_filename = UploadedFile::getInstance($this, 'banner_filename');
+			// $this->banner_filename = UploadedFile::getInstance($this, 'banner_filename');
 			if($this->banner_filename instanceof UploadedFile && !$this->banner_filename->getHasError()) {
 				$fileName = join('-', [time(), UuidHelper::uuid(), $this->banner_id]).'.'.strtolower($this->banner_filename->getExtension()); 
 				if($this->banner_filename->saveAs(join('/', [$uploadPath, $fileName]))) {
