@@ -19,9 +19,10 @@ use yii\helpers\Url;
 use yii\widgets\DetailView;
 use ommu\banner\models\Banners;
 
+if(!$small) {
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Banners'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $model->title;
-?>
+} ?>
 
 <div class="banners-view">
 
