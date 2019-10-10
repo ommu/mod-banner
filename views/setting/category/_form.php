@@ -55,7 +55,9 @@ use app\components\widgets\ActiveForm;
 	->textInput(['type'=>'number', 'min'=>'1', 'maxlength'=>true])
 	->label($model->getAttributeLabel('banner_limit')); ?>
 
-<?php echo $form->field($model, 'publish')
+<?php if($model->isNewRecord && !$model->getErrors())
+	$model->publish = 1;
+echo $form->field($model, 'publish')
 	->checkbox()
 	->label($model->getAttributeLabel('publish')); ?>
 

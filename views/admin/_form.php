@@ -113,7 +113,9 @@ echo $form->field($model, 'permanent')
 	->textInput(['type'=>'date'])
 	->label($model->getAttributeLabel('expired_date')); ?>
 
-<?php echo $form->field($model, 'publish')
+<?php if($model->isNewRecord && !$model->getErrors())
+	$model->publish = 1;
+echo $form->field($model, 'publish')
 	->checkbox()
 	->label($model->getAttributeLabel('publish')); ?>
 
