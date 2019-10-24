@@ -140,32 +140,31 @@ class BannerClicks extends \app\components\ActiveRecord
 			'class' => 'yii\grid\SerialColumn',
 			'contentOptions' => ['class'=>'center'],
 		];
-		if(!Yii::$app->request->get('banner')) {
-			$this->templateColumns['categoryId'] = [
-				'attribute' => 'categoryId',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->banner->category) ? $model->banner->category->title->message : '-';
-					// return $model->categoryId;
-				},
-				'filter' => BannerCategory::getCategory(),
-			];
-			$this->templateColumns['bannerTitle'] = [
-				'attribute' => 'bannerTitle',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->banner) ? $model->banner->title : '-';
-					// return $model->bannerTitle;
-				},
-			];
-		}
-		if(!Yii::$app->request->get('user')) {
-			$this->templateColumns['userDisplayname'] = [
-				'attribute' => 'userDisplayname',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->user) ? $model->user->displayname : '-';
-					// return $model->userDisplayname;
-				},
-			];
-		}
+		$this->templateColumns['categoryId'] = [
+			'attribute' => 'categoryId',
+			'value' => function($model, $key, $index, $column) {
+				return isset($model->banner->category) ? $model->banner->category->title->message : '-';
+				// return $model->categoryId;
+			},
+			'filter' => BannerCategory::getCategory(),
+			'visible' => !Yii::$app->request->get('banner') ? true : false,
+		];
+		$this->templateColumns['bannerTitle'] = [
+			'attribute' => 'bannerTitle',
+			'value' => function($model, $key, $index, $column) {
+				return isset($model->banner) ? $model->banner->title : '-';
+				// return $model->bannerTitle;
+			},
+			'visible' => !Yii::$app->request->get('banner') ? true : false,
+		];
+		$this->templateColumns['userDisplayname'] = [
+			'attribute' => 'userDisplayname',
+			'value' => function($model, $key, $index, $column) {
+				return isset($model->user) ? $model->user->displayname : '-';
+				// return $model->userDisplayname;
+			},
+			'visible' => !Yii::$app->request->get('user') ? true : false,
+		];
 		$this->templateColumns['click_date'] = [
 			'attribute' => 'click_date',
 			'value' => function($model, $key, $index, $column) {
