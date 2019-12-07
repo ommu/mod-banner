@@ -26,9 +26,9 @@
 namespace ommu\banner\controllers\history;
 
 use Yii;
-use yii\filters\VerbFilter;
 use app\components\Controller;
 use mdm\admin\components\AccessControl;
+use yii\filters\VerbFilter;
 use ommu\banner\models\BannerClickHistory;
 use ommu\banner\models\search\BannerClickHistory as BannerClickHistorySearch;
 

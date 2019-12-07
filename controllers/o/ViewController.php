@@ -26,9 +26,9 @@
 namespace ommu\banner\controllers\o;
 
 use Yii;
-use yii\filters\VerbFilter;
 use app\components\Controller;
 use mdm\admin\components\AccessControl;
+use yii\filters\VerbFilter;
 use ommu\banner\models\BannerViews;
 use ommu\banner\models\search\BannerViews as BannerViewsSearch;
 
