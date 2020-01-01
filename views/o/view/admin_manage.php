@@ -20,7 +20,11 @@ use yii\helpers\Url;
 use app\components\grid\GridView;
 use yii\widgets\Pjax;
 
-$this->params['breadcrumbs'][] = $this->title;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Publication'), 'url' => ['/admin/page/admin/index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Banner'), 'url' => ['admin/index']];
+if($banner != null)
+	$this->params['breadcrumbs'][] = ['label' => $banner->title, 'url' => ['admin/view', 'id'=>$banner->banner_id]];
+$this->params['breadcrumbs'][] = Yii::t('app', 'Views');
 
 $this->params['menu']['option'] = [
 	//['label' => Yii::t('app', 'Search'), 'url' => 'javascript:void(0);'],

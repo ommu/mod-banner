@@ -19,11 +19,14 @@ use yii\helpers\Url;
 use yii\widgets\DetailView;
 
 if(!$small) {
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Click Histories'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = $model->click->banner->title;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Publication'), 'url' => ['/admin/page/admin/index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Banner'), 'url' => ['admin/index']];
+$this->params['breadcrumbs'][] = ['label' => $model->click->banner->title, 'url' => ['admin/view', 'id'=>$model->click->banner_id]];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Click'), 'url' => ['o/click/manage', 'banner'=>$model->click->banner_id]];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'History'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = Yii::t('app', 'Detail');
 
 $this->params['menu']['content'] = [
-	['label' => Yii::t('app', 'Detail'), 'url' => Url::to(['view', 'id'=>$model->id]), 'icon' => 'eye', 'htmlOptions' => ['class'=>'btn btn-success']],
 	['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id'=>$model->id]), 'htmlOptions' => ['data-confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'), 'data-method'=>'post', 'class'=>'btn btn-danger'], 'icon' => 'trash'],
 ];
 } ?>

@@ -137,6 +137,7 @@ class AdminController extends Controller
 		$this->view->keywords = '';
 		return $this->render('admin_update', [
 			'model' => $model,
+			'breadcrumb' => true,
 		]);
 	}
 

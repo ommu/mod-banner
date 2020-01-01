@@ -20,7 +20,8 @@ use yii\widgets\DetailView;
 use ommu\banner\models\Banners;
 
 if(!$small) {
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Banners'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Publication'), 'url' => ['/admin/page/admin/index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Banner'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $model->title;
 } ?>
 

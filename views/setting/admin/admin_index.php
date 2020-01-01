@@ -17,15 +17,8 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 
-$this->params['breadcrumbs'][] = $this->title;
-
-$this->params['menu']['content'] = [
-	['label' => Yii::t('app', 'Add Category'), 'url' => Url::to(['setting/category/create']), 'icon' => 'plus-square', 'htmlOptions' => ['class'=>'btn modal-btn btn-success']],
-];
-$this->params['menu']['option'] = [
-	//['label' => Yii::t('app', 'Search'), 'url' => 'javascript:void(0);'],
-	['label' => Yii::t('app', 'Grid Option'), 'url' => 'javascript:void(0);'],
-];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Settings'), 'url' => ['/setting/update']];
+$this->params['breadcrumbs'][] = Yii::t('app', 'Banner');
 ?>
 
 <?php echo $this->renderWidget('/setting/category/admin_manage', [
@@ -33,9 +26,11 @@ $this->params['menu']['option'] = [
 	'searchModel' => $searchModel,
 	'dataProvider' => $dataProvider,
 	'columns' => $columns,
+	'breadcrumb' => false,
 ]); ?>
 
 <?php echo $this->renderWidget(!$model->isNewRecord ? 'admin_view' : 'admin_update', [
 	'contentMenu' => true,
 	'model' => $model,
+	'breadcrumb' => false,
 ]); ?>
