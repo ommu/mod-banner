@@ -57,8 +57,6 @@ class AdminController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$this->layout = 'admin_default';
-
 		$model = BannerSetting::findOne(1);
 		if($model === null) 
 			$model = new BannerSetting(['id'=>1]);
@@ -92,6 +90,7 @@ class AdminController extends Controller
 		}
 		$columns = $searchModel->getGridColumn($cols);
 
+		$this->view->cards = false;
 		$this->view->title = Yii::t('app', 'Banner Settings');
 		$this->view->description = '';
 		$this->view->keywords = '';

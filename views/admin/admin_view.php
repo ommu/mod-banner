@@ -59,7 +59,7 @@ $attributes = [
 		'attribute' => 'banner_filename',
 		'value' => function ($model) {
 			$uploadPath = Banners::getUploadPath(false);
-			return $model->banner_filename ? Html::img(Url::to(join('/', ['@webpublic', $uploadPath, $model->banner_filename])), ['alt'=>$model->banner_filename, 'class'=>'mb-3']).'<br/>'.$model->banner_filename : '-';
+			return $model->banner_filename ? Html::img(Url::to(join('/', ['@webpublic', $uploadPath, $model->banner_filename])), ['alt'=>$model->banner_filename, 'class'=>'d-block border border-width-3 mb-3']).$model->banner_filename : '-';
 		},
 		'format' => 'html',
 		'visible' => !$small,
