@@ -220,7 +220,7 @@ class Banners extends \app\components\ActiveRecord
 		$this->templateColumns['_no'] = [
 			'header' => '#',
 			'class' => 'yii\grid\SerialColumn',
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 		];
 		$this->templateColumns['cat_id'] = [
 			'attribute' => 'cat_id',
@@ -322,7 +322,7 @@ class Banners extends \app\components\ActiveRecord
 				return Html::a($clicks, ['o/click/manage', 'banner'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} clicks', ['count'=>$clicks]), 'data-pjax'=>0]);
 			},
 			'filter' => false,
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['views'] = [
@@ -332,7 +332,7 @@ class Banners extends \app\components\ActiveRecord
 				return Html::a($views, ['o/view/manage', 'banner'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} views', ['count'=>$views]), 'data-pjax'=>0]);
 			},
 			'filter' => false,
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['permanent'] = [
@@ -341,7 +341,7 @@ class Banners extends \app\components\ActiveRecord
 				return $this->filterYesNo($model->view->permanent);
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 		];
 		if(!Yii::$app->request->get('trash') && !Yii::$app->request->get('expired')) {
 			$this->templateColumns['publish'] = [
@@ -351,7 +351,7 @@ class Banners extends \app\components\ActiveRecord
 					return $this->quickAction($url, $model->publish);
 				},
 				'filter' => $this->filterYesNo(),
-				'contentOptions' => ['class'=>'center'],
+				'contentOptions' => ['class'=>'text-center'],
 				'format' => 'raw',
 			];
 		}

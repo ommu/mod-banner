@@ -275,7 +275,7 @@ class BannerCategory extends \app\components\ActiveRecord
 		$this->templateColumns['_no'] = [
 			'header' => '#',
 			'class' => 'yii\grid\SerialColumn',
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 		];
 		$this->templateColumns['name_i'] = [
 			'attribute' => 'name_i',
@@ -300,7 +300,7 @@ class BannerCategory extends \app\components\ActiveRecord
 			'value' => function($model, $key, $index, $column) {
 				return self::getSize($model->banner_size);
 			},
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 		];
 		$this->templateColumns['banner_limit'] = [
 			'attribute' => 'banner_limit',
@@ -308,7 +308,7 @@ class BannerCategory extends \app\components\ActiveRecord
 				return $model->banner_limit;
 			},
 			'filter' => false,
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 		];
 		$this->templateColumns['creation_date'] = [
 			'attribute' => 'creation_date',
@@ -360,7 +360,7 @@ class BannerCategory extends \app\components\ActiveRecord
 				return Html::a($banners, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'publish'], ['title'=>Yii::t('app', '{count} publish', ['count'=>$banners]), 'data-pjax'=>0]);
 			},
 			'filter' => false,
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['permanent'] = [
@@ -370,7 +370,7 @@ class BannerCategory extends \app\components\ActiveRecord
 				return Html::a($permanent, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'permanent'], ['title'=>Yii::t('app', '{count} permanent', ['count'=>$permanent]), 'data-pjax'=>0]);
 			},
 			'filter' => false,
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['pending'] = [
@@ -380,7 +380,7 @@ class BannerCategory extends \app\components\ActiveRecord
 				return Html::a($pending, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'pending'], ['title'=>Yii::t('app', '{count} pending', ['count'=>$pending]), 'data-pjax'=>0]);
 			},
 			'filter' => false,
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['expired'] = [
@@ -390,7 +390,7 @@ class BannerCategory extends \app\components\ActiveRecord
 				return Html::a($expired, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'expired'], ['title'=>Yii::t('app', '{count} expired', ['count'=>$expired]), 'data-pjax'=>0]);
 			},
 			'filter' => false,
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['publish'] = [
@@ -400,7 +400,7 @@ class BannerCategory extends \app\components\ActiveRecord
 				return $this->quickAction($url, $model->publish, 'Enable,Disable');
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 			'format' => 'raw',
 			'visible' => !Yii::$app->request->get('trash') ? true : false,
 		];
