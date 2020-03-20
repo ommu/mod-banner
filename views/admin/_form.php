@@ -6,9 +6,9 @@
  * @var $model ommu\banner\models\Banners
  * @var $form app\components\widgets\ActiveForm
  *
- * @author Putra Sudaryanto <putra@ommu.co>
+ * @author Putra Sudaryanto <putra@ommu.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
+ * @copyright Copyright (c) 2017 OMMU (www.ommu.id)
  * @created date 6 October 2017, 08:14 WIB
  * @modified date 24 January 2019, 15:50 WIB
  * @link https://github.com/ommu/mod-banner
@@ -83,7 +83,7 @@ echo $form->field($model, 'linked')
 <?php echo $form->field($model, 'url', ['options' => ['style' => $model->linked == 0 ? 'display: none' : '']])
 	->textInput()
 	->label($model->getAttributeLabel('url'))
-	->hint('example: http://ommu.co'); ?>
+	->hint('example: http://ommu.id'); ?>
 
 <?php $uploadPath = Banners::getUploadPath(false);
 $bannerFilename = !$model->isNewRecord && $model->old_banner_filename != '' ? Html::img(Url::to(join('/', ['@webpublic', $uploadPath, $model->old_banner_filename])), ['alt'=>$model->old_banner_filename, 'class'=>'d-block border border-width-3 mb-3']).$model->old_banner_filename.'<hr/>' : '';

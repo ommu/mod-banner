@@ -6,9 +6,9 @@
  * @var $model ommu\banner\models\BannerSetting
  * @var $form app\components\widgets\ActiveForm
  *
- * @author Putra Sudaryanto <putra@ommu.co>
+ * @author Putra Sudaryanto <putra@ommu.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
+ * @copyright Copyright (c) 2017 OMMU (www.ommu.id)
  * @created date 6 October 2017, 06:22 WIB
  * @modified date 23 January 2019, 16:06 WIB
  * @link https://github.com/ommu/mod-banner
