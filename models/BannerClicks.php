@@ -30,7 +30,7 @@ namespace ommu\banner\models;
 
 use Yii;
 use yii\helpers\Html;
-use ommu\users\models\Users;
+use app\models\Users;
 
 class BannerClicks extends \app\components\ActiveRecord
 {

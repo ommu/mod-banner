@@ -32,7 +32,7 @@ namespace ommu\banner\models;
 
 use Yii;
 use yii\helpers\Html;
-use ommu\users\models\Users;
+use app\models\Users;
 
 class BannerSetting extends \app\components\ActiveRecord
 {

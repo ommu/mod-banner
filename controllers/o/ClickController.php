@@ -94,7 +94,7 @@ class ClickController extends Controller
 			$banner = \ommu\banner\models\Banners::findOne($banner);
 		}
 		if(($user = Yii::$app->request->get('user')) != null)
-			$user = \ommu\users\models\Users::findOne($user);
+			$user = \app\models\Users::findOne($user);
 
 		$this->view->title = Yii::t('app', 'Clicks');
 		$this->view->description = '';

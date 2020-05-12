@@ -43,7 +43,7 @@ use yii\helpers\Url;
 use yii\helpers\Inflector;
 use yii\behaviors\SluggableBehavior;
 use app\models\SourceMessage;
-use ommu\users\models\Users;
+use app\models\Users;
 use ommu\banner\models\view\BannerCategory as BannerCategoryView;
 
 class BannerCategory extends \app\components\ActiveRecord
