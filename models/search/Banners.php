@@ -167,8 +167,8 @@ class Banners extends BannersModel
                 } else {
                     $query->andFilterWhere(['t.publish' => $this->publish]);
                 }
-			}
-		}
+            }
+        }
 
 		$query->andFilterWhere(['like', 't.title', $this->title])
 			->andFilterWhere(['like', 't.url', $this->url])

@@ -51,17 +51,17 @@ class ViewController extends Controller
 	 */
 	public function behaviors()
 	{
-		return [
-			'access' => [
-				'class' => AccessControl::className(),
-			],
-			'verbs' => [
-				'class' => VerbFilter::className(),
-				'actions' => [
-					'delete' => ['POST'],
-				],
-			],
-		];
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+            ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['POST'],
+                ],
+            ],
+        ];
 	}
 
 	/**
@@ -69,7 +69,7 @@ class ViewController extends Controller
 	 */
 	public function actionIndex()
 	{
-		return $this->redirect(['manage']);
+        return $this->redirect(['manage']);
 	}
 
 	/**
@@ -93,7 +93,7 @@ class ViewController extends Controller
         $columns = $searchModel->getGridColumn($cols);
 
         if (($banner = Yii::$app->request->get('banner')) != null) {
-			$this->subMenuParam = $banner;
+            $this->subMenuParam = $banner;
 			$banner = \ommu\banner\models\Banners::findOne($banner);
 		}
         if (($user = Yii::$app->request->get('user')) != null) {
@@ -119,7 +119,7 @@ class ViewController extends Controller
 	 */
 	public function actionView($id)
 	{
-		$model = $this->findModel($id);
+        $model = $this->findModel($id);
 
 		$this->subMenuParam = $model->banner_id;
 		$this->view->title = Yii::t('app', 'Detail View: {banner-id}', ['banner-id' => $model->banner->title]);

@@ -51,17 +51,17 @@ class ClickController extends Controller
 	 */
 	public function behaviors()
 	{
-		return [
-			'access' => [
-				'class' => AccessControl::className(),
-			],
-			'verbs' => [
-				'class' => VerbFilter::className(),
-				'actions' => [
-					'delete' => ['POST'],
-				],
-			],
-		];
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+            ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['POST'],
+                ],
+            ],
+        ];
 	}
 
 	/**
@@ -69,7 +69,7 @@ class ClickController extends Controller
 	 */
 	public function actionIndex()
 	{
-		return $this->redirect(['manage']);
+        return $this->redirect(['manage']);
 	}
 
 	/**
@@ -96,7 +96,7 @@ class ClickController extends Controller
         $columns = $searchModel->getGridColumn($cols);
 
         if (($click = Yii::$app->request->get('click')) != null) {
-			$click = \ommu\banner\models\BannerClicks::findOne($click);
+            $click = \ommu\banner\models\BannerClicks::findOne($click);
 			$this->subMenuParam = $click->banner_id;
 		}
         if ($banner) {
@@ -123,7 +123,7 @@ class ClickController extends Controller
 	 */
 	public function actionView($id)
 	{
-		$model = $this->findModel($id);
+        $model = $this->findModel($id);
 		$this->subMenuParam = $model->click->banner_id;
 
 		$this->view->title = Yii::t('app', 'Detail Click History: {click-id}', ['click-id' => $model->click->banner->title]);

@@ -44,18 +44,18 @@ class AdminController extends Controller
 	 */
 	public function behaviors()
 	{
-		return [
-			'access' => [
-				'class' => AccessControl::className(),
-			],
-			'verbs' => [
-				'class' => VerbFilter::className(),
-				'actions' => [
-					'delete' => ['POST'],
-					'publish' => ['POST'],
-				],
-			],
-		];
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+            ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['POST'],
+                    'publish' => ['POST'],
+                ],
+            ],
+        ];
 	}
 
 	/**
@@ -63,7 +63,7 @@ class AdminController extends Controller
 	 */
 	public function actionIndex()
 	{
-		return $this->redirect(['manage']);
+        return $this->redirect(['manage']);
 	}
 
 	/**
@@ -108,25 +108,25 @@ class AdminController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$model = new Banners();
+        $model = new Banners();
 
         if (Yii::$app->request->isPost) {
-			$model->load(Yii::$app->request->post());
-			$model->banner_filename = UploadedFile::getInstance($model, 'banner_filename');
-			// $postData = Yii::$app->request->post();
-			// $model->load($postData);
-			// $model->order = $postData['order'] ? $postData['order'] : 0;
+            $model->load(Yii::$app->request->post());
+            $model->banner_filename = UploadedFile::getInstance($model, 'banner_filename');
+            // $postData = Yii::$app->request->post();
+            // $model->load($postData);
+            // $model->order = $postData['order'] ? $postData['order'] : 0;
 
             if ($model->save()) {
-				Yii::$app->session->setFlash('success', Yii::t('app', 'Banner success created.'));
-				return $this->redirect(['manage']);
+                Yii::$app->session->setFlash('success', Yii::t('app', 'Banner success created.'));
+                return $this->redirect(['manage']);
 
             } else {
                 if (Yii::$app->request->isAjax) {
                     return \yii\helpers\Json::encode(\app\components\widgets\ActiveForm::validate($model));
                 }
-			}
-		}
+            }
+        }
 
 		$this->view->title = Yii::t('app', 'Create Banner');
 		$this->view->description = '';
@@ -147,22 +147,22 @@ class AdminController extends Controller
 		$model = $this->findModel($id);
 
         if (Yii::$app->request->isPost) {
-			$model->load(Yii::$app->request->post());
-			$model->banner_filename = UploadedFile::getInstance($model, 'banner_filename');
-			// $postData = Yii::$app->request->post();
-			// $model->load($postData);
-			// $model->order = $postData['order'] ? $postData['order'] : 0;
+            $model->load(Yii::$app->request->post());
+            $model->banner_filename = UploadedFile::getInstance($model, 'banner_filename');
+            // $postData = Yii::$app->request->post();
+            // $model->load($postData);
+            // $model->order = $postData['order'] ? $postData['order'] : 0;
 
             if ($model->save()) {
-				Yii::$app->session->setFlash('success', Yii::t('app', 'Banner success updated.'));
-				return $this->redirect(['update', 'id'=>$model->banner_id]);
+                Yii::$app->session->setFlash('success', Yii::t('app', 'Banner success updated.'));
+                return $this->redirect(['update', 'id'=>$model->banner_id]);
 
             } else {
                 if (Yii::$app->request->isAjax) {
                     return \yii\helpers\Json::encode(\app\components\widgets\ActiveForm::validate($model));
                 }
-			}
-		}
+            }
+        }
 
 		$this->subMenu = $this->module->params['banner_submenu'];
 		$this->view->title = Yii::t('app', 'Update Banner: {title}', ['title' => $model->title]);
@@ -180,7 +180,7 @@ class AdminController extends Controller
 	 */
 	public function actionView($id)
 	{
-		$model = $this->findModel($id);
+        $model = $this->findModel($id);
 
 		$this->subMenu = $this->module->params['banner_submenu'];
 		$this->view->title = Yii::t('app', 'Detail Banner: {title}', ['title' => $model->title]);
