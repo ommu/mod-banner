@@ -86,12 +86,13 @@ class BannerClicks extends \app\components\ActiveRecord
 	 */
 	public function getHistories($count=false)
 	{
-		if($count == false)
-			return $this->hasMany(BannerClickHistory::className(), ['click_id' => 'click_id']);
+        if ($count == false) {
+            return $this->hasMany(BannerClickHistory::className(), ['click_id' => 'click_id']);
+        }
 
 		$model = BannerClickHistory::find()
-			->alias('t')
-			->where(['t.click_id' => $this->click_id]);
+            ->alias('t')
+            ->where(['t.click_id' => $this->click_id]);
 		$histories = $model->count();
 
 		return $histories ? $histories : 0;
@@ -129,11 +130,13 @@ class BannerClicks extends \app\components\ActiveRecord
 	{
 		parent::init();
 
-		if(!(Yii::$app instanceof \app\components\Application))
-			return;
+        if (!(Yii::$app instanceof \app\components\Application)) {
+            return;
+        }
 
-		if(!$this->hasMethod('search'))
-			return;
+        if (!$this->hasMethod('search')) {
+            return;
+        }
 
 		$this->templateColumns['_no'] = [
 			'header' => '#',
@@ -195,19 +198,20 @@ class BannerClicks extends \app\components\ActiveRecord
 	 */
 	public static function getInfo($id, $column=null)
 	{
-		if($column != null) {
-			$model = self::find();
-			if(is_array($column))
-				$model->select($column);
-			else
-				$model->select([$column]);
-			$model = $model->where(['click_id' => $id])->one();
-			return is_array($column) ? $model : $model->$column;
-			
-		} else {
-			$model = self::findOne($id);
-			return $model;
-		}
+        if ($column != null) {
+            $model = self::find();
+            if (is_array($column)) {
+                $model->select($column);
+            } else {
+                $model->select([$column]);
+            }
+            $model = $model->where(['click_id' => $id])->one();
+            return is_array($column) ? $model : $model->$column;
+
+        } else {
+            $model = self::findOne($id);
+            return $model;
+        }
 	}
 
 
@@ -216,22 +220,23 @@ class BannerClicks extends \app\components\ActiveRecord
 	 */
 	public function insertCLick($banner_id, $user_id=null)
 	{
-		if($user_id == null)
-			$user_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+        if ($user_id == null) {
+            $user_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+        }
 		
 		$findClick = self::find()
-			->select(['click_id','banner_id','user_id','clicks'])
+			->select(['click_id', 'banner_id', 'user_id', 'clicks'])
 			->where(['banner_id' => $banner_id]);
-		if($user_id != null)
-			$findClick->andWhere(['user_id' => $user_id]);
-		else
-			$findClick->andWhere(['is', 'user_id', null]);
+        if ($user_id != null) {
+            $findClick->andWhere(['user_id' => $user_id]);
+        } else {
+            $findClick->andWhere(['is', 'user_id', null]);
+        }
 		$findClick = $findClick->one();
 			
-		if($findClick !== null)
-			$findClick->updateAttributes(['clicks'=>$findClick->clicks+1, 'click_ip'=>$_SERVER['REMOTE_ADDR']]);
-
-		else {
+        if ($findClick !== null) {
+            $findClick->updateAttributes(['clicks'=>$findClick->clicks+1, 'click_ip'=>$_SERVER['REMOTE_ADDR']]);
+        } else {
 			$click = new BannerClicks();
 			$click->banner_id = $banner_id;
 			$click->user_id = $user_id;
@@ -256,13 +261,14 @@ class BannerClicks extends \app\components\ActiveRecord
 	 */
 	public function beforeValidate()
 	{
-		if(parent::beforeValidate()) {
-			if($this->isNewRecord) {
-				if($this->user_id == null)
-					$this->user_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
-			}
-			$this->click_ip = $_SERVER['REMOTE_ADDR'];
-		}
-		return true;
+        if (parent::beforeValidate()) {
+            if ($this->isNewRecord) {
+                if ($this->user_id == null) {
+                    $this->user_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+                }
+            }
+            $this->click_ip = $_SERVER['REMOTE_ADDR'];
+        }
+        return true;
 	}
 }

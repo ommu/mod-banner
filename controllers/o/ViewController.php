@@ -39,9 +39,11 @@ class ViewController extends Controller
 	 */
 	public function init()
 	{
-		parent::init();
-		if(Yii::$app->request->get('id') || Yii::$app->request->get('banner'))
+        parent::init();
+
+        if (Yii::$app->request->get('id') || Yii::$app->request->get('banner')) {
 			$this->subMenu = $this->module->params['banner_submenu'];
+        }
 	}
 
 	/**
@@ -76,25 +78,27 @@ class ViewController extends Controller
 	 */
 	public function actionManage()
 	{
-		$searchModel = new BannerViewsSearch();
-		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel = new BannerViewsSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-		$gridColumn = Yii::$app->request->get('GridColumn', null);
-		$cols = [];
-		if($gridColumn != null && count($gridColumn) > 0) {
-			foreach($gridColumn as $key => $val) {
-				if($gridColumn[$key] == 1)
-					$cols[] = $key;
-			}
-		}
-		$columns = $searchModel->getGridColumn($cols);
+        $gridColumn = Yii::$app->request->get('GridColumn', null);
+        $cols = [];
+        if ($gridColumn != null && count($gridColumn) > 0) {
+            foreach ($gridColumn as $key => $val) {
+                if ($gridColumn[$key] == 1) {
+                    $cols[] = $key;
+                }
+            }
+        }
+        $columns = $searchModel->getGridColumn($cols);
 
-		if(($banner = Yii::$app->request->get('banner')) != null) {
+        if (($banner = Yii::$app->request->get('banner')) != null) {
 			$this->subMenuParam = $banner;
 			$banner = \ommu\banner\models\Banners::findOne($banner);
 		}
-		if(($user = Yii::$app->request->get('user')) != null)
-			$user = \app\models\Users::findOne($user);
+        if (($user = Yii::$app->request->get('user')) != null) {
+            $user = \app\models\Users::findOne($user);
+        }
 
 		$this->view->title = Yii::t('app', 'Views');
 		$this->view->description = '';
@@ -150,8 +154,9 @@ class ViewController extends Controller
 	 */
 	protected function findModel($id)
 	{
-		if(($model = BannerViews::findOne($id)) !== null)
-			return $model;
+        if (($model = BannerViews::findOne($id)) !== null) {
+            return $model;
+        }
 
 		throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
 	}

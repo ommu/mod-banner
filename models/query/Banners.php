@@ -29,10 +29,10 @@ class Banners extends \yii\db\ActiveQuery
 	/**
 	 * {@inheritdoc}
 	 */
-	public function published() 
+	public function published()
 	{
 		return $this->andWhere(['t.publish' => 1])
-			->andWhere(['not in', 'cast(expired_date as date)', ['0000-00-00','1970-01-01']])
+			->andWhere(['not in', 'cast(expired_date as date)', ['0000-00-00', '1970-01-01']])
 			->andWhere(['>=', 'cast(expired_date as date)', Yii::$app->formatter->asDate('now', 'php:Y-m-d')])
 			->andWhere(['<=', 'cast(published_date as date)', Yii::$app->formatter->asDate('now', 'php:Y-m-d')]);
 	}
@@ -40,17 +40,17 @@ class Banners extends \yii\db\ActiveQuery
 	/**
 	 * {@inheritdoc}
 	 */
-	public function permanent() 
+	public function permanent()
 	{
 		return $this->andWhere(['t.publish' => 1])
-			->andWhere(['in', 'cast(expired_date as date)', ['0000-00-00','1970-01-01']])
+			->andWhere(['in', 'cast(expired_date as date)', ['0000-00-00', '1970-01-01']])
 			->andWhere(['<=', 'cast(published_date as date)', Yii::$app->formatter->asDate('now', 'php:Y-m-d')]);
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function pending() 
+	public function pending()
 	{
 		return $this->andWhere(['t.publish' => 1])
 			->andWhere(['>', 'cast(published_date as date)', Yii::$app->formatter->asDate('now', 'php:Y-m-d')]);
@@ -59,7 +59,7 @@ class Banners extends \yii\db\ActiveQuery
 	/**
 	 * {@inheritdoc}
 	 */
-	public function expired() 
+	public function expired()
 	{
 		return $this->andWhere(['t.publish' => 1])
 			->andWhere(['<', 'cast(expired_date as date)', Yii::$app->formatter->asDate('now', 'php:Y-m-d')]);
@@ -68,7 +68,7 @@ class Banners extends \yii\db\ActiveQuery
 	/**
 	 * {@inheritdoc}
 	 */
-	public function unpublish() 
+	public function unpublish()
 	{
 		return $this->andWhere(['t.publish' => 0]);
 	}
@@ -76,7 +76,7 @@ class Banners extends \yii\db\ActiveQuery
 	/**
 	 * {@inheritdoc}
 	 */
-	public function deleted() 
+	public function deleted()
 	{
 		return $this->andWhere(['t.publish' => 2]);
 	}

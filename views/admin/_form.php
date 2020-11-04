@@ -24,7 +24,7 @@ use ommu\banner\models\BannerCategory;
 $js = <<<JS
 	$('.field-linked input[name="linked"]').on('change', function() {
 		var id = $(this).prop('checked');
-		if(id == true) {
+        if (id == true) {
 			$('div.field-url').slideDown();
 		} else {
 			$('div.field-url').slideUp();
@@ -32,7 +32,7 @@ $js = <<<JS
 	});
 	$('.field-permanent input[name="permanent"]').on('change', function() {
 		var id = $(this).prop('checked');
-		if(id == true) {
+        if (id == true) {
 			$('div.field-expired_date').slideUp();
 		} else {
 			$('div.field-expired_date').slideDown();
@@ -71,10 +71,11 @@ echo $form->field($model, 'cat_id')
 	->label($model->getAttributeLabel('title')); ?>
 
 <?php 
-if(!$model->getErrors()) {
+if (!$model->getErrors()) {
 	$model->linked = 0;
-	if($model->isNewRecord || (!$model->isNewRecord && $model->url != '-'))
+    if ($model->isNewRecord || (!$model->isNewRecord && $model->url != '-')) {
 		$model->linked = 1;
+    }
 }
 echo $form->field($model, 'linked')
 	->checkbox()
@@ -100,10 +101,11 @@ echo $form->field($model, 'banner_filename', ['template'=> '{label}{beginWrapper
 	->label($model->getAttributeLabel('published_date')); ?>
 
 <?php
-if(!$model->getErrors()) {
+if (!$model->getErrors()) {
 	$model->permanent = 0;
-	if(!$model->isNewRecord && in_array($model->expired_date, ['0000-00-00','1970-01-01','0002-12-02','-0001-11-30']))
+    if (!$model->isNewRecord && in_array($model->expired_date, ['0000-00-00', '1970-01-01', '0002-12-02', '-0001-11-30'])) {
 		$model->permanent = 1;
+    }
 }
 echo $form->field($model, 'permanent')
 	->checkbox()
@@ -113,8 +115,10 @@ echo $form->field($model, 'permanent')
 	->textInput(['type'=>'date'])
 	->label($model->getAttributeLabel('expired_date')); ?>
 
-<?php if($model->isNewRecord && !$model->getErrors())
-	$model->publish = 1;
+<?php 
+if ($model->isNewRecord && !$model->getErrors()) {
+    $model->publish = 1;
+}
 echo $form->field($model, 'publish')
 	->checkbox()
 	->label($model->getAttributeLabel('publish')); ?>

@@ -62,10 +62,11 @@ class Banners extends BannersModel
 	 */
 	public function search($params, $column=null)
 	{
-		if(!($column && is_array($column)))
-			$query = BannersModel::find()->alias('t');
-		else
-			$query = BannersModel::find()->alias('t')->select($column);
+        if (!($column && is_array($column))) {
+            $query = BannersModel::find()->alias('t');
+        } else {
+            $query = BannersModel::find()->alias('t')->select($column);
+        }
 		$query->joinWith([
 			'view view',
 			'category.title category', 
@@ -79,8 +80,9 @@ class Banners extends BannersModel
 			'query' => $query,
 		];
 		// disable pagination agar data pada api tampil semua
-		if(isset($params['pagination']) && $params['pagination'] == 0)
-			$dataParams['pagination'] = false;
+        if (isset($params['pagination']) && $params['pagination'] == 0) {
+            $dataParams['pagination'] = false;
+        }
 		$dataProvider = new ActiveDataProvider($dataParams);
 
 		$attributes = array_keys($this->getTableSchema()->columns);
@@ -119,7 +121,7 @@ class Banners extends BannersModel
 
 		$this->load($params);
 
-		if(!$this->validate()) {
+        if (!$this->validate()) {
 			// uncomment the following line if you do not want to return any records when validation fails
 			// $query->where('0=1');
 			return $dataProvider;
@@ -139,31 +141,32 @@ class Banners extends BannersModel
 			'view.permanent' => $this->permanent,
 		]);
 
-		if(isset($params['expired'])) {
+        if (isset($params['expired'])) {
 			$query->andFilterCompare('t.publish', 1);
-			if($params['expired'] == 'publish') {
-				$query->andFilterWhere(['not in', 'cast(expired_date as date)', ['0000-00-00','1970-01-01']])
+            if ($params['expired'] == 'publish') {
+				$query->andFilterWhere(['not in', 'cast(expired_date as date)', ['0000-00-00', '1970-01-01']])
 					->andFilterWhere(['>=', 'cast(expired_date as date)', Yii::$app->formatter->asDate('now', 'php:Y-m-d')])
 					->andFilterWhere(['<=', 'cast(published_date as date)', Yii::$app->formatter->asDate('now', 'php:Y-m-d')]);
 
-			} else if($params['expired'] == 'permanent') {
-				$query->andWhere(['in', 'cast(expired_date as date)', ['0000-00-00','1970-01-01']])
+			} else if ($params['expired'] == 'permanent') {
+				$query->andWhere(['in', 'cast(expired_date as date)', ['0000-00-00', '1970-01-01']])
 					->andWhere(['<=', 'cast(published_date as date)', Yii::$app->formatter->asDate('now', 'php:Y-m-d')]);
 
-			} else if($params['expired'] == 'pending')
-				$query->andFilterWhere(['>', 'cast(t.published_date as date)', Yii::$app->formatter->asDate('now', 'php:Y-m-d')]);
-
-			else if($params['expired'] == 'expired')
-				$query->andFilterWhere(['<', 'cast(t.expired_date as date)', Yii::$app->formatter->asDate('now', 'php:Y-m-d')]);
+			} else if ($params['expired'] == 'pending') {
+                $query->andFilterWhere(['>', 'cast(t.published_date as date)', Yii::$app->formatter->asDate('now', 'php:Y-m-d')]);
+            } else if ($params['expired'] == 'expired') {
+                $query->andFilterWhere(['<', 'cast(t.expired_date as date)', Yii::$app->formatter->asDate('now', 'php:Y-m-d')]);
+            }
 
 		} else {
-			if(isset($params['trash']))
-				$query->andFilterWhere(['NOT IN', 't.publish', [0,1]]);
-			else {
-				if(!isset($params['publish']) || (isset($params['publish']) && $params['publish'] == ''))
-					$query->andFilterWhere(['IN', 't.publish', [0,1]]);
-				else
-					$query->andFilterWhere(['t.publish' => $this->publish]);
+            if (isset($params['trash'])) {
+                $query->andFilterWhere(['NOT IN', 't.publish', [0,1]]);
+            } else {
+                if (!isset($params['publish']) || (isset($params['publish']) && $params['publish'] == '')) {
+                    $query->andFilterWhere(['IN', 't.publish', [0,1]]);
+                } else {
+                    $query->andFilterWhere(['t.publish' => $this->publish]);
+                }
 			}
 		}
 

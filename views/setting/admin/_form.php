@@ -21,13 +21,13 @@ use app\components\widgets\ActiveForm;
 $js = <<<JS
 	$('.field-banner_validation input[name="banner_validation"]').on('change', function() {
 		var id = $(this).val();
-		if(id == '1') {
+        if (id == '1') {
 			$('.field-banner_resize input[name="banner_resize"][value="0"]').prop('checked', true);
 		}
 	});
 	$('.field-banner_resize input[name="banner_resize"]').on('change', function() {
 		var id = $(this).val();
-		if(id == '1') {
+        if (id == '1') {
 			$('.field-banner_validation input[name="banner_validation"][value="0"]').prop('checked', true);
 		}
 	});
@@ -51,8 +51,10 @@ JS;
 
 <?php //echo $form->errorSummary($model);?>
 
-<?php if($model->isNewRecord && !$model->getErrors())
+<?php 
+if ($model->isNewRecord && !$model->getErrors()) {
 	$model->license = $model->licenseCode();
+}
 echo $form->field($model, 'license')
 	->textInput(['maxlength'=>true])
 	->label($model->getAttributeLabel('license'))

@@ -39,9 +39,11 @@ class ViewController extends Controller
 	 */
 	public function init()
 	{
-		parent::init();
-		if(Yii::$app->request->get('view') || Yii::$app->request->get('id') || Yii::$app->request->get('banner'))
-			$this->subMenu = $this->module->params['banner_submenu'];
+        parent::init();
+
+        if (Yii::$app->request->get('view') || Yii::$app->request->get('id') || Yii::$app->request->get('banner')) {
+            $this->subMenu = $this->module->params['banner_submenu'];
+        }
 	}
 
 	/**
@@ -76,27 +78,28 @@ class ViewController extends Controller
 	 */
 	public function actionManage()
 	{
-		$searchModel = new BannerViewHistorySearch();
-		if(($banner = Yii::$app->request->get('banner')) != null)
-			$searchModel = new BannerViewHistorySearch(['bannerId'=>$banner]);
+        $searchModel = new BannerViewHistorySearch();
+        if (($banner = Yii::$app->request->get('banner')) != null) {
+            $searchModel = new BannerViewHistorySearch(['bannerId'=>$banner]);
+        }
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-		$gridColumn = Yii::$app->request->get('GridColumn', null);
-		$cols = [];
-		if($gridColumn != null && count($gridColumn) > 0) {
-			foreach($gridColumn as $key => $val) {
-				if($gridColumn[$key] == 1)
-					$cols[] = $key;
-			}
-		}
-		$columns = $searchModel->getGridColumn($cols);
+        $gridColumn = Yii::$app->request->get('GridColumn', null);
+        $cols = [];
+        if ($gridColumn != null && count($gridColumn) > 0) {
+            foreach ($gridColumn as $key => $val) {
+                if ($gridColumn[$key] == 1) {
+                    $cols[] = $key;
+                }
+            }
+        }
+        $columns = $searchModel->getGridColumn($cols);
 
-		if(($view = Yii::$app->request->get('view')) != null) {
+        if (($view = Yii::$app->request->get('view')) != null) {
 			$view = \ommu\banner\models\BannerViews::findOne($view);
 			$this->subMenuParam = $view->banner_id;
 		}
-
-		if($banner) {
+        if ($banner) {
 			$this->subMenuParam = $banner;
 			$banner = \ommu\banner\models\Banners::findOne($banner);
 		}
@@ -155,8 +158,9 @@ class ViewController extends Controller
 	 */
 	protected function findModel($id)
 	{
-		if(($model = BannerViewHistory::findOne($id)) !== null)
-			return $model;
+        if (($model = BannerViewHistory::findOne($id)) !== null) {
+            return $model;
+        }
 
 		throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
 	}

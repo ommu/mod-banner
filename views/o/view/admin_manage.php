@@ -22,8 +22,9 @@ use yii\widgets\Pjax;
 
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Publication'), 'url' => ['/admin/page/admin/index']];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Banner'), 'url' => ['admin/index']];
-if($banner != null)
-	$this->params['breadcrumbs'][] = ['label' => $banner->title, 'url' => ['admin/view', 'id'=>$banner->banner_id]];
+if ($banner != null) {
+    $this->params['breadcrumbs'][] = ['label' => $banner->title, 'url' => ['admin/view', 'id'=>$banner->banner_id]];
+}
 $this->params['breadcrumbs'][] = Yii::t('app', 'Views');
 
 $this->params['menu']['option'] = [
@@ -35,11 +36,13 @@ $this->params['menu']['option'] = [
 <div class="banner-views-manage">
 <?php Pjax::begin(); ?>
 
-<?php if($banner != null)
-	echo $this->render('/admin/admin_view', ['model'=>$banner, 'small'=>true]); ?>
+<?php if ($banner != null) {
+    echo $this->render('/admin/admin_view', ['model'=>$banner, 'small'=>true]);
+} ?>
 
-<?php if($user != null)
-	echo $this->render('@users/views/member/admin_view', ['model'=>$user, 'small'=>true]); ?>
+<?php if ($user != null) {
+	echo $this->render('@users/views/member/admin_view', ['model'=>$user, 'small'=>true]);
+} ?>
 
 <?php //echo $this->render('_search', ['model'=>$searchModel]); ?>
 
@@ -51,12 +54,15 @@ array_push($columnData, [
 	'class' => 'app\components\grid\ActionColumn',
 	'header' => Yii::t('app', 'Option'),
 	'urlCreator' => function($action, $model, $key, $index) {
-		if($action == 'view')
-			return Url::to(['view', 'id'=>$key]);
-		if($action == 'update')
-			return Url::to(['update', 'id'=>$key]);
-		if($action == 'delete')
-			return Url::to(['delete', 'id'=>$key]);
+        if ($action == 'view') {
+            return Url::to(['view', 'id'=>$key]);
+        }
+        if ($action == 'update') {
+            return Url::to(['update', 'id'=>$key]);
+        }
+        if ($action == 'delete') {
+            return Url::to(['delete', 'id'=>$key]);
+        }
 	},
 	'buttons' => [
 		'view' => function ($url, $model, $key) {

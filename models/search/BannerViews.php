@@ -62,10 +62,11 @@ class BannerViews extends BannerViewsModel
 	 */
 	public function search($params, $column=null)
 	{
-		if(!($column && is_array($column)))
-			$query = BannerViewsModel::find()->alias('t');
-		else
-			$query = BannerViewsModel::find()->alias('t')->select($column);
+        if (!($column && is_array($column))) {
+            $query = BannerViewsModel::find()->alias('t');
+        } else {
+            $query = BannerViewsModel::find()->alias('t')->select($column);
+        }
 		$query->joinWith([
 			'banner banner',
 			'banner.category.title category',
@@ -78,8 +79,9 @@ class BannerViews extends BannerViewsModel
 			'query' => $query,
 		];
 		// disable pagination agar data pada api tampil semua
-		if(isset($params['pagination']) && $params['pagination'] == 0)
-			$dataParams['pagination'] = false;
+        if (isset($params['pagination']) && $params['pagination'] == 0) {
+            $dataParams['pagination'] = false;
+        }
 		$dataProvider = new ActiveDataProvider($dataParams);
 
 		$attributes = array_keys($this->getTableSchema()->columns);
@@ -102,7 +104,7 @@ class BannerViews extends BannerViewsModel
 
 		$this->load($params);
 
-		if(!$this->validate()) {
+        if (!$this->validate()) {
 			// uncomment the following line if you do not want to return any records when validation fails
 			// $query->where('0=1');
 			return $dataProvider;
