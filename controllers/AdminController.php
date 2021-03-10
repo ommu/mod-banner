@@ -155,7 +155,7 @@ class AdminController extends Controller
 
             if ($model->save()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'Banner success updated.'));
-                return $this->redirect(['update', 'id'=>$model->banner_id]);
+                return $this->redirect(['update', 'id' => $model->banner_id]);
 
             } else {
                 if (Yii::$app->request->isAjax) {

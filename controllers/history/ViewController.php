@@ -80,7 +80,7 @@ class ViewController extends Controller
 	{
         $searchModel = new BannerViewHistorySearch();
         if (($banner = Yii::$app->request->get('banner')) != null) {
-            $searchModel = new BannerViewHistorySearch(['bannerId'=>$banner]);
+            $searchModel = new BannerViewHistorySearch(['bannerId' => $banner]);
         }
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -146,7 +146,7 @@ class ViewController extends Controller
 		$model->delete();
 
 		Yii::$app->session->setFlash('success', Yii::t('app', 'Banner view history success deleted.'));
-		return $this->redirect(Yii::$app->request->referrer ?: ['manage', 'view'=>$model->view_id]);
+		return $this->redirect(Yii::$app->request->referrer ?: ['manage', 'view' => $model->view_id]);
 	}
 
 	/**

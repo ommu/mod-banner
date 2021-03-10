@@ -26,8 +26,8 @@ if (!$small) {
     $this->params['breadcrumbs'][] = $model->title->message;
 
     $this->params['menu']['content'] = [
-        ['label' => Yii::t('app', 'Update'), 'url' => Url::to(['update', 'id'=>$model->cat_id]), 'icon' => 'pencil', 'htmlOptions' => ['class'=>'btn btn-primary']],
-        ['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id'=>$model->cat_id]), 'htmlOptions' => ['data-confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'), 'data-method'=>'post', 'class'=>'btn btn-danger'], 'icon' => 'trash'],
+        ['label' => Yii::t('app', 'Update'), 'url' => Url::to(['update', 'id' => $model->cat_id]), 'icon' => 'pencil', 'htmlOptions' => ['class' => 'btn btn-primary']],
+        ['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id' => $model->cat_id]), 'htmlOptions' => ['data-confirm' => Yii::t('app', 'Are you sure you want to delete this item?'), 'data-method' => 'post', 'class' => 'btn btn-danger'], 'icon' => 'trash'],
     ];
 } ?>
 
@@ -42,7 +42,7 @@ $attributes = [
 	],
 	[
 		'attribute' => 'publish',
-		'value' => $model->quickAction(Url::to(['publish', 'id'=>$model->primaryKey]), $model->publish, 'Enable,Disable'),
+		'value' => $model->quickAction(Url::to(['publish', 'id' => $model->primaryKey]), $model->publish, 'Enable,Disable'),
 		'format' => 'raw',
 		'visible' => !$small,
 	],
@@ -73,7 +73,7 @@ $attributes = [
 		'attribute' => 'banners',
 		'value' => function ($model) {
 			$banners = $model->getBanners(true);
-			return Html::a($banners, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'publish']);
+			return Html::a($banners, ['admin/manage', 'category' => $model->primaryKey, 'expired' => 'publish']);
 		},
 		'format' => 'html',
 		'visible' => !$small,
@@ -82,7 +82,7 @@ $attributes = [
 		'attribute' => 'permanent',
 		'value' => function ($model) {
 			$permanent = $model->getPermanent(true);
-			return Html::a($permanent, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'permanent']);
+			return Html::a($permanent, ['admin/manage', 'category' => $model->primaryKey, 'expired' => 'permanent']);
 		},
 		'format' => 'html',
 		'visible' => !$small,
@@ -91,7 +91,7 @@ $attributes = [
 		'attribute' => 'pending',
 		'value' => function ($model) {
 			$pending = $model->getPending(true);
-			return Html::a($pending, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'pending']);
+			return Html::a($pending, ['admin/manage', 'category' => $model->primaryKey, 'expired' => 'pending']);
 		},
 		'format' => 'html',
 		'visible' => !$small,
@@ -100,7 +100,7 @@ $attributes = [
 		'attribute' => 'expired',
 		'value' => function ($model) {
 			$expired = $model->getExpired(true);
-			return Html::a($expired, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'expired']);
+			return Html::a($expired, ['admin/manage', 'category' => $model->primaryKey, 'expired' => 'expired']);
 		},
 		'format' => 'html',
 		'visible' => !$small,
@@ -140,7 +140,7 @@ $attributes = [
 echo DetailView::widget([
 	'model' => $model,
 	'options' => [
-		'class'=>'table table-striped detail-view',
+		'class' => 'table table-striped detail-view',
 	],
 	'attributes' => $attributes,
 ]); ?>

@@ -23,16 +23,16 @@ use yii\widgets\Pjax;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Publication'), 'url' => ['/admin/page/admin/index']];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Banner'), 'url' => ['admin/index']];
 if ($view != null) {
-	$this->params['breadcrumbs'][] = ['label' => $view->banner->title, 'url' => ['admin/view', 'id'=>$view->banner_id]];
-	$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'View'), 'url' => ['o/view/manage', 'banner'=>$view->banner_id]];
+	$this->params['breadcrumbs'][] = ['label' => $view->banner->title, 'url' => ['admin/view', 'id' => $view->banner_id]];
+	$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'View'), 'url' => ['o/view/manage', 'banner' => $view->banner_id]];
 } else {
 	$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'View'), 'url' => ['o/view/index']];
 }
 $this->params['breadcrumbs'][] = Yii::t('app', 'Histories');
 
-$viewUrl = $view ? Url::to(['o/view/manage', 'banner'=>$view->banner_id]) : Url::to(['o/view/manage']);
+$viewUrl = $view ? Url::to(['o/view/manage', 'banner' => $view->banner_id]) : Url::to(['o/view/manage']);
 $this->params['menu']['content'] = [
-	['label' => Yii::t('app', 'Back To Views'), 'url' => $viewUrl, 'icon' => 'table', 'htmlOptions' => ['class'=>'btn btn-success']],
+	['label' => Yii::t('app', 'Back To Views'), 'url' => $viewUrl, 'icon' => 'table', 'htmlOptions' => ['class' => 'btn btn-default']],
 ];
 $this->params['menu']['option'] = [
 	//['label' => Yii::t('app', 'Search'), 'url' => 'javascript:void(0);'],
@@ -44,16 +44,16 @@ $this->params['menu']['option'] = [
 <?php Pjax::begin(); ?>
 
 <?php if ($view != null) {
-	echo $this->render('/o/view/admin_view', ['model'=>$view, 'small'=>true]);
+	echo $this->render('/o/view/admin_view', ['model' => $view, 'small' => true]);
 } ?>
 
 <?php if ($banner != null) {
-	echo $this->render('/admin/admin_view', ['model'=>$banner, 'small'=>true]);
+	echo $this->render('/admin/admin_view', ['model' => $banner, 'small' => true]);
 } ?>
 
-<?php //echo $this->render('_search', ['model'=>$searchModel]); ?>
+<?php //echo $this->render('_search', ['model' => $searchModel]); ?>
 
-<?php echo $this->render('_option_form', ['model'=>$searchModel, 'gridColumns'=>$searchModel->activeDefaultColumns($columns), 'route'=>$this->context->route]); ?>
+<?php echo $this->render('_option_form', ['model' => $searchModel, 'gridColumns' => $searchModel->activeDefaultColumns($columns), 'route' => $this->context->route]); ?>
 
 <?php
 $columnData = $columns;
@@ -62,21 +62,21 @@ array_push($columnData, [
 	'header' => Yii::t('app', 'Option'),
 	'urlCreator' => function($action, $model, $key, $index) {
         if ($action == 'view') {
-            return Url::to(['view', 'id'=>$key]);
+            return Url::to(['view', 'id' => $key]);
         }
         if ($action == 'update') {
-            return Url::to(['update', 'id'=>$key]);
+            return Url::to(['update', 'id' => $key]);
         }
         if ($action == 'delete') {
-            return Url::to(['delete', 'id'=>$key]);
+            return Url::to(['delete', 'id' => $key]);
         }
 	},
 	'buttons' => [
 		'view' => function ($url, $model, $key) {
-			return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, ['title'=>Yii::t('app', 'Detail'), 'class'=>'modal-btn']);
+			return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, ['title' => Yii::t('app', 'Detail'), 'class' => 'modal-btn']);
 		},
 		'update' => function ($url, $model, $key) {
-			return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, ['title'=>Yii::t('app', 'Update'), 'class'=>'modal-btn']);
+			return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, ['title' => Yii::t('app', 'Update'), 'class' => 'modal-btn']);
 		},
 		'delete' => function ($url, $model, $key) {
 			return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [

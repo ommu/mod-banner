@@ -80,7 +80,7 @@ class ClickController extends Controller
 	{
         $searchModel = new BannerClickHistorySearch();
         if (($banner = Yii::$app->request->get('banner')) != null) {
-            $searchModel = new BannerClickHistorySearch(['bannerId'=>$banner]);
+            $searchModel = new BannerClickHistorySearch(['bannerId' => $banner]);
         }
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -146,7 +146,7 @@ class ClickController extends Controller
 		$model->delete();
 
 		Yii::$app->session->setFlash('success', Yii::t('app', 'Banner click history success deleted.'));
-		return $this->redirect(Yii::$app->request->referrer ?: ['manage', 'click'=>$model->click_id]);
+		return $this->redirect(Yii::$app->request->referrer ?: ['manage', 'click' => $model->click_id]);
 	}
 
 	/**

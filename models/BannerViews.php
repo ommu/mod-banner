@@ -141,7 +141,7 @@ class BannerViews extends \app\components\ActiveRecord
 		$this->templateColumns['_no'] = [
 			'header' => '#',
 			'class' => 'app\components\grid\SerialColumn',
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 		];
 		$this->templateColumns['categoryId'] = [
 			'attribute' => 'categoryId',
@@ -185,10 +185,10 @@ class BannerViews extends \app\components\ActiveRecord
 			'attribute' => 'views',
 			'value' => function($model, $key, $index, $column) {
 				$views = $model->views;
-				return Html::a($views, ['history/view/manage', 'view'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} histories', ['count'=>$views]), 'data-pjax'=>0]);
+				return Html::a($views, ['history/view/manage', 'view' => $model->primaryKey], ['title' => Yii::t('app', '{count} histories', ['count' => $views]), 'data-pjax' => 0]);
 			},
 			'filter' => false,
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 		];
 	}
@@ -234,7 +234,7 @@ class BannerViews extends \app\components\ActiveRecord
 		$findView = $findView->one();
 			
         if ($findView !== null) {
-            $findView->updateAttributes(['views'=>$findView->views+1, 'view_ip'=>$_SERVER['REMOTE_ADDR']]);
+            $findView->updateAttributes(['views' => $findView->views+1, 'view_ip' => $_SERVER['REMOTE_ADDR']]);
         } else {
 			$view = new BannerViews();
 			$view->banner_id = $banner_id;

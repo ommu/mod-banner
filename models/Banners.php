@@ -224,7 +224,7 @@ class Banners extends \app\components\ActiveRecord
 		$this->templateColumns['_no'] = [
 			'header' => '#',
 			'class' => 'app\components\grid\SerialColumn',
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 		];
 		$this->templateColumns['cat_id'] = [
 			'attribute' => 'cat_id',
@@ -251,7 +251,7 @@ class Banners extends \app\components\ActiveRecord
 			'attribute' => 'banner_filename',
 			'value' => function($model, $key, $index, $column) {
 				$uploadPath = self::getUploadPath(false);
-				return $model->banner_filename ? Html::img(Url::to(join('/', ['@webpublic', $uploadPath, $model->banner_filename])), ['alt'=>$model->banner_filename]) : '-';
+				return $model->banner_filename ? Html::img(Url::to(join('/', ['@webpublic', $uploadPath, $model->banner_filename])), ['alt' => $model->banner_filename]) : '-';
 			},
 			'format' => 'html',
 		];
@@ -323,20 +323,20 @@ class Banners extends \app\components\ActiveRecord
 			'attribute' => 'clicks',
 			'value' => function($model, $key, $index, $column) {
 				$clicks = $model->getClicks(true);
-				return Html::a($clicks, ['o/click/manage', 'banner'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} clicks', ['count'=>$clicks]), 'data-pjax'=>0]);
+				return Html::a($clicks, ['o/click/manage', 'banner' => $model->primaryKey], ['title' => Yii::t('app', '{count} clicks', ['count' => $clicks]), 'data-pjax' => 0]);
 			},
 			'filter' => false,
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['views'] = [
 			'attribute' => 'views',
 			'value' => function($model, $key, $index, $column) {
 				$views = $model->getViews(true);
-				return Html::a($views, ['o/view/manage', 'banner'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} views', ['count'=>$views]), 'data-pjax'=>0]);
+				return Html::a($views, ['o/view/manage', 'banner' => $model->primaryKey], ['title' => Yii::t('app', '{count} views', ['count' => $views]), 'data-pjax' => 0]);
 			},
 			'filter' => false,
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['permanent'] = [
@@ -345,16 +345,16 @@ class Banners extends \app\components\ActiveRecord
 				return $this->filterYesNo($model->view->permanent);
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 		];
         $this->templateColumns['publish'] = [
             'attribute' => 'publish',
             'value' => function($model, $key, $index, $column) {
-                $url = Url::to(['publish', 'id'=>$model->primaryKey]);
+                $url = Url::to(['publish', 'id' => $model->primaryKey]);
                 return $this->quickAction($url, $model->publish);
             },
             'filter' => $this->filterYesNo(),
-            'contentOptions' => ['class'=>'text-center'],
+            'contentOptions' => ['class' => 'text-center'],
             'format' => 'raw',
             'visible' => !Yii::$app->request->get('trash') && !Yii::$app->request->get('expired') ? true : false,
         ];
@@ -420,7 +420,7 @@ class Banners extends \app\components\ActiveRecord
         if (parent::beforeValidate()) {
             if ($this->linked) {
                 if ($this->url == '-') {
-                    $this->addError('url', Yii::t('app', '{attribute} harus dalam format hyperlink', ['attribute'=>$this->getAttributeLabel('url')]));
+                    $this->addError('url', Yii::t('app', '{attribute} harus dalam format hyperlink', ['attribute' => $this->getAttributeLabel('url')]));
                 }
 			} else {
                 $this->url = '-';
@@ -430,13 +430,13 @@ class Banners extends \app\components\ActiveRecord
                 $this->expired_date = '0000-00-00';
             } else {
                 if (in_array(Yii::$app->formatter->asDate($this->expired_date, 'php:Y-m-d'), ['0000-00-00', '1970-01-01', '0002-12-02', '-0001-11-30'])) {
-                    $this->addError('expired_date', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('expired_date')]));
+                    $this->addError('expired_date', Yii::t('app', '{attribute} cannot be blank.', ['attribute' => $this->getAttributeLabel('expired_date')]));
                 }
 
                 if (Yii::$app->formatter->asDate($this->published_date, 'php:Y-m-d') >= Yii::$app->formatter->asDate($this->expired_date, 'php:Y-m-d')) {
 					$this->addError('expired_date', Yii::t('app', '{expired-date} harus lebih besar dari {published-date}', [
-						'expired-date'=>$this->getAttributeLabel('expired_date'), 
-						'published-date'=>$this->getAttributeLabel('published_date'),
+						'expired-date' => $this->getAttributeLabel('expired_date'), 
+						'published-date' => $this->getAttributeLabel('published_date'),
                     ]));
                 }
 			}
@@ -445,8 +445,8 @@ class Banners extends \app\components\ActiveRecord
             if ($this->banner_filename instanceof UploadedFile && !$this->banner_filename->getHasError()) {
                 if (!in_array(strtolower($this->banner_filename->getExtension()), $banner_file_type)) {
 					$this->addError('banner_filename', Yii::t('app', 'The file {name} cannot be uploaded. Only files with these extensions are allowed: {extensions}', [
-						'name'=>$this->banner_filename->name,
-						'extensions'=>$setting->banner_file_type,
+						'name' => $this->banner_filename->name,
+						'extensions' => $setting->banner_file_type,
 					]));
 
 				} else {
@@ -454,13 +454,13 @@ class Banners extends \app\components\ActiveRecord
                     if ($this->cat_id && $setting->banner_validation) {
 						$banner_size = $this->category->banner_size;
                         if (empty($banner_size)) {
-                            $this->addError('cat_id', Yii::t('app', 'Validate and resize banner is enable. {attribute} belum memiliki ukuran.', ['attribute'=>$this->getAttributeLabel('cat_id')]));
+                            $this->addError('cat_id', Yii::t('app', 'Validate and resize banner is enable. {attribute} belum memiliki ukuran.', ['attribute' => $this->getAttributeLabel('cat_id')]));
                         } else {
                             if (!($fileSize[0] == $banner_size['width'] && $fileSize[1] == $banner_size['height'])) {
 								$this->addError('banner_filename', Yii::t('app', 'The file {name} cannot be uploaded. ukuran banner ({file_size}) tidak sesuai dengan kategori ({banner_size})', [
-									'name'=>$this->banner_filename->name,
-									'file_size'=>$fileSize[0].'x'.$fileSize[1],
-									'banner_size'=>BannerCategory::getSize($banner_size),
+									'name' => $this->banner_filename->name,
+									'file_size' => $fileSize[0].'x'.$fileSize[1],
+									'banner_size' => BannerCategory::getSize($banner_size),
 								]));
 							}
 						}
@@ -468,7 +468,7 @@ class Banners extends \app\components\ActiveRecord
                 }
             } else {
                 if ($this->isNewRecord || (!$this->isNewRecord && $this->old_banner_filename == '')) {
-                    $this->addError('banner_filename', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('banner_filename')]));
+                    $this->addError('banner_filename', Yii::t('app', '{attribute} cannot be blank.', ['attribute' => $this->getAttributeLabel('banner_filename')]));
                 }
 			}
 

@@ -141,7 +141,7 @@ class BannerClicks extends \app\components\ActiveRecord
 		$this->templateColumns['_no'] = [
 			'header' => '#',
 			'class' => 'app\components\grid\SerialColumn',
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 		];
 		$this->templateColumns['categoryId'] = [
 			'attribute' => 'categoryId',
@@ -185,10 +185,10 @@ class BannerClicks extends \app\components\ActiveRecord
 			'attribute' => 'clicks',
 			'value' => function($model, $key, $index, $column) {
 				$clicks = $model->clicks;
-				return Html::a($clicks, ['history/click/manage', 'click'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} histories', ['count'=>$clicks]), 'data-pjax'=>0]);
+				return Html::a($clicks, ['history/click/manage', 'click' => $model->primaryKey], ['title' => Yii::t('app', '{count} histories', ['count' => $clicks]), 'data-pjax' => 0]);
 			},
 			'filter' => false,
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 		];
 	}
@@ -235,7 +235,7 @@ class BannerClicks extends \app\components\ActiveRecord
 		$findClick = $findClick->one();
 			
         if ($findClick !== null) {
-            $findClick->updateAttributes(['clicks'=>$findClick->clicks+1, 'click_ip'=>$_SERVER['REMOTE_ADDR']]);
+            $findClick->updateAttributes(['clicks' => $findClick->clicks+1, 'click_ip' => $_SERVER['REMOTE_ADDR']]);
         } else {
 			$click = new BannerClicks();
 			$click->banner_id = $banner_id;

@@ -36,7 +36,7 @@ $attributes = [
 	],
 	[
 		'attribute' => 'publish',
-		'value' => $model->quickAction(Url::to(['publish', 'id'=>$model->primaryKey]), $model->publish),
+		'value' => $model->quickAction(Url::to(['publish', 'id' => $model->primaryKey]), $model->publish),
 		'format' => 'raw',
 		'visible' => !$small,
 	],
@@ -45,7 +45,7 @@ $attributes = [
 		'value' => function ($model) {
 			$categoryName = isset($model->category) ? $model->category->title->message : '-';
             if ($categoryName != '-') {
-                return Html::a($categoryName, ['setting/category/view', 'id'=>$model->cat_id], ['title'=>$categoryName, 'class'=>'modal-btn']);
+                return Html::a($categoryName, ['setting/category/view', 'id' => $model->cat_id], ['title' => $categoryName, 'class' => 'modal-btn']);
             }
 			return $categoryName;
 		},
@@ -60,7 +60,7 @@ $attributes = [
 		'attribute' => 'banner_filename',
 		'value' => function ($model) {
 			$uploadPath = Banners::getUploadPath(false);
-			return $model->banner_filename ? Html::img(Url::to(join('/', ['@webpublic', $uploadPath, $model->banner_filename])), ['alt'=>$model->banner_filename, 'class'=>'d-block border border-width-3 mb-3']).$model->banner_filename : '-';
+			return $model->banner_filename ? Html::img(Url::to(join('/', ['@webpublic', $uploadPath, $model->banner_filename])), ['alt' => $model->banner_filename, 'class' => 'd-block border border-width-3 mb-4']).$model->banner_filename : '-';
 		},
 		'format' => 'html',
 		'visible' => !$small,
@@ -82,7 +82,7 @@ $attributes = [
 		'attribute' => 'clicks',
 		'value' => function ($model) {
 			$clicks = $model->getClicks(true);
-			return Html::a($clicks, ['o/click/manage', 'banner'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} clicks', ['count'=>$clicks])]);
+			return Html::a($clicks, ['o/click/manage', 'banner' => $model->primaryKey], ['title' => Yii::t('app', '{count} clicks', ['count' => $clicks])]);
 		},
 		'format' => 'html',
 		'visible' => !$small,
@@ -91,7 +91,7 @@ $attributes = [
 		'attribute' => 'views',
 		'value' => function ($model) {
 			$views = $model->getViews(true);
-			return Html::a($views, ['o/view/manage', 'banner'=>$model->primaryKey], ['title'=>Yii::t('app', '{count} views', ['count'=>$views])]);
+			return Html::a($views, ['o/view/manage', 'banner' => $model->primaryKey], ['title' => Yii::t('app', '{count} views', ['count' => $views])]);
 		},
 		'format' => 'html',
 		'visible' => !$small,
@@ -128,7 +128,7 @@ $attributes = [
 	],
 	[
 		'attribute' => '',
-		'value' => Html::a(Yii::t('app', 'Update'), ['update', 'id'=>$model->primaryKey], ['title'=>Yii::t('app', 'Update'), 'class'=>'btn btn-success btn-sm']),
+		'value' => Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->primaryKey], ['title' => Yii::t('app', 'Update'), 'class' => 'btn btn-primary btn-sm']),
 		'format' => 'html',
 		'visible' => !$small && Yii::$app->request->isAjax ? true : false,
 	],
@@ -137,7 +137,7 @@ $attributes = [
 echo DetailView::widget([
 	'model' => $model,
 	'options' => [
-		'class'=>'table table-striped detail-view',
+		'class' => 'table table-striped detail-view',
 	],
 	'attributes' => $attributes,
 ]); ?>

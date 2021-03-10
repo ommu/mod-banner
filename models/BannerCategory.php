@@ -284,7 +284,7 @@ class BannerCategory extends \app\components\ActiveRecord
 		$this->templateColumns['_no'] = [
 			'header' => '#',
 			'class' => 'app\components\grid\SerialColumn',
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 		];
 		$this->templateColumns['name_i'] = [
 			'attribute' => 'name_i',
@@ -309,7 +309,7 @@ class BannerCategory extends \app\components\ActiveRecord
 			'value' => function($model, $key, $index, $column) {
 				return self::getSize($model->banner_size);
 			},
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 		];
 		$this->templateColumns['banner_limit'] = [
 			'attribute' => 'banner_limit',
@@ -317,7 +317,7 @@ class BannerCategory extends \app\components\ActiveRecord
 				return $model->banner_limit;
 			},
 			'filter' => false,
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 		];
 		$this->templateColumns['creation_date'] = [
 			'attribute' => 'creation_date',
@@ -366,50 +366,50 @@ class BannerCategory extends \app\components\ActiveRecord
 			'attribute' => 'banners',
 			'value' => function($model, $key, $index, $column) {
 				$banners = $model->getBanners(true);
-				return Html::a($banners, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'publish'], ['title'=>Yii::t('app', '{count} publish', ['count'=>$banners]), 'data-pjax'=>0]);
+				return Html::a($banners, ['admin/manage', 'category' => $model->primaryKey, 'expired' => 'publish'], ['title' => Yii::t('app', '{count} publish', ['count' => $banners]), 'data-pjax' => 0]);
 			},
 			'filter' => false,
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['permanent'] = [
 			'attribute' => 'permanent',
 			'value' => function($model, $key, $index, $column) {
 				$permanent = $model->getPermanent(true);
-				return Html::a($permanent, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'permanent'], ['title'=>Yii::t('app', '{count} permanent', ['count'=>$permanent]), 'data-pjax'=>0]);
+				return Html::a($permanent, ['admin/manage', 'category' => $model->primaryKey, 'expired' => 'permanent'], ['title' => Yii::t('app', '{count} permanent', ['count' => $permanent]), 'data-pjax' => 0]);
 			},
 			'filter' => false,
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['pending'] = [
 			'attribute' => 'pending',
 			'value' => function($model, $key, $index, $column) {
 				$pending = $model->getPending(true);
-				return Html::a($pending, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'pending'], ['title'=>Yii::t('app', '{count} pending', ['count'=>$pending]), 'data-pjax'=>0]);
+				return Html::a($pending, ['admin/manage', 'category' => $model->primaryKey, 'expired' => 'pending'], ['title' => Yii::t('app', '{count} pending', ['count' => $pending]), 'data-pjax' => 0]);
 			},
 			'filter' => false,
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['expired'] = [
 			'attribute' => 'expired',
 			'value' => function($model, $key, $index, $column) {
 				$expired = $model->getExpired(true);
-				return Html::a($expired, ['admin/manage', 'category'=>$model->primaryKey, 'expired'=>'expired'], ['title'=>Yii::t('app', '{count} expired', ['count'=>$expired]), 'data-pjax'=>0]);
+				return Html::a($expired, ['admin/manage', 'category' => $model->primaryKey, 'expired' => 'expired'], ['title' => Yii::t('app', '{count} expired', ['count' => $expired]), 'data-pjax' => 0]);
 			},
 			'filter' => false,
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['publish'] = [
 			'attribute' => 'publish',
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['setting/category/publish', 'id'=>$model->primaryKey]);
+				$url = Url::to(['setting/category/publish', 'id' => $model->primaryKey]);
 				return $this->quickAction($url, $model->publish, 'Enable,Disable');
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 			'visible' => !Yii::$app->request->get('trash') ? true : false,
 		];
@@ -492,12 +492,12 @@ class BannerCategory extends \app\components\ActiveRecord
 	{
         if (parent::beforeValidate()) {
             if ($this->banner_size['width'] == '' && $this->banner_size['height'] == '') {
-                $this->addError('banner_size', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('banner_size')]));
+                $this->addError('banner_size', Yii::t('app', '{attribute} cannot be blank.', ['attribute' => $this->getAttributeLabel('banner_size')]));
             } else {
                 if ($this->banner_size['width'] == '') {
-                    $this->addError('banner_size', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('banner_size[width]')]));
+                    $this->addError('banner_size', Yii::t('app', '{attribute} cannot be blank.', ['attribute' => $this->getAttributeLabel('banner_size[width]')]));
                 } else if ($this->banner_size['height'] == '') {
-                    $this->addError('banner_size', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('banner_size[height]')]));
+                    $this->addError('banner_size', Yii::t('app', '{attribute} cannot be blank.', ['attribute' => $this->getAttributeLabel('banner_size[height]')]));
                 }
 			}
 

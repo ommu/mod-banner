@@ -22,7 +22,7 @@ use app\components\widgets\ActiveForm;
 <div class="banner-category-form">
 
 <?php $form = ActiveForm::begin([
-	'options' => ['class'=>'form-horizontal form-label-left'],
+	'options' => ['class' => 'form-horizontal form-label-left'],
 	'enableClientValidation' => true,
 	'enableAjaxValidation' => false,
 	//'enableClientScript' => true,
@@ -36,23 +36,23 @@ use app\components\widgets\ActiveForm;
 <?php //echo $form->errorSummary($model);?>
 
 <?php echo $form->field($model, 'name_i')
-	->textInput(['maxlength'=>true])
+	->textInput(['maxlength' => true])
 	->label($model->getAttributeLabel('name_i')); ?>
 
 <?php echo $form->field($model, 'desc_i')
-	->textarea(['rows'=>6, 'cols'=>50, 'maxlength'=>true])
+	->textarea(['rows' => 6, 'cols' => 50, 'maxlength' => true])
 	->label($model->getAttributeLabel('desc_i')); ?>
 
-<?php $banner_size_height = $form->field($model, 'banner_size[height]', ['template' => '{beginWrapper}{input}{endWrapper}', 'horizontalCssClasses' => ['wrapper'=>'col-md-3 col-sm-5 col-xs-6'], 'options' => ['tag' => null]])
-	->textInput(['type'=>'number', 'min'=>0, 'maxlength'=>'3', 'placeholder'=>$model->getAttributeLabel('banner_size[height]')])
+<?php $banner_size_height = $form->field($model, 'banner_size[height]', ['template' => '{beginWrapper}{input}{endWrapper}', 'horizontalCssClasses' => ['wrapper' => 'col-md-3 col-sm-5 col-xs-6'], 'options' => ['tag' => null]])
+	->textInput(['type' => 'number', 'min' => 0, 'maxlength' => '3', 'placeholder' => $model->getAttributeLabel('banner_size[height]')])
 	->label($model->getAttributeLabel('banner_size[height]')); ?>
 
-<?php echo $form->field($model, 'banner_size[width]', ['template' => '{label}{beginWrapper}{input}{endWrapper}'.$banner_size_height.'{error}', 'horizontalCssClasses' => ['wrapper'=>'col-md-3 col-sm-4 col-xs-6', 'error'=>'col-md-6 col-sm-9 col-xs-12 col-sm-offset-3']])
-	->textInput(['type'=>'number', 'min'=>0, 'maxlength'=>'3', 'placeholder'=>$model->getAttributeLabel('banner_size[width]')])
+<?php echo $form->field($model, 'banner_size[width]', ['template' => '{label}{beginWrapper}{input}{endWrapper}'.$banner_size_height.'{error}', 'horizontalCssClasses' => ['wrapper' => 'col-md-3 col-sm-4 col-xs-6', 'error' => 'col-md-6 col-sm-9 col-xs-12 col-sm-offset-3']])
+	->textInput(['type' => 'number', 'min' => 0, 'maxlength' => '3', 'placeholder' => $model->getAttributeLabel('banner_size[width]')])
 	->label($model->getAttributeLabel('banner_size')); ?>
 
 <?php echo $form->field($model, 'banner_limit')
-	->textInput(['type'=>'number', 'min'=>'1', 'maxlength'=>true])
+	->textInput(['type' => 'number', 'min' => '1', 'maxlength' => true])
 	->label($model->getAttributeLabel('banner_limit')); ?>
 
 <?php 

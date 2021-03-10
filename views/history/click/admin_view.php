@@ -21,13 +21,13 @@ use yii\widgets\DetailView;
 if (!$small) {
     $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Publication'), 'url' => ['/admin/page/admin/index']];
     $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Banner'), 'url' => ['admin/index']];
-    $this->params['breadcrumbs'][] = ['label' => $model->click->banner->title, 'url' => ['admin/view', 'id'=>$model->click->banner_id]];
-    $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Click'), 'url' => ['o/click/manage', 'banner'=>$model->click->banner_id]];
+    $this->params['breadcrumbs'][] = ['label' => $model->click->banner->title, 'url' => ['admin/view', 'id' => $model->click->banner_id]];
+    $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Click'), 'url' => ['o/click/manage', 'banner' => $model->click->banner_id]];
     $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'History'), 'url' => ['index']];
     $this->params['breadcrumbs'][] = Yii::t('app', 'Detail');
 
     $this->params['menu']['content'] = [
-        ['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id'=>$model->id]), 'htmlOptions' => ['data-confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'), 'data-method'=>'post', 'class'=>'btn btn-danger'], 'icon' => 'trash'],
+        ['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id' => $model->id]), 'htmlOptions' => ['data-confirm' => Yii::t('app', 'Are you sure you want to delete this item?'), 'data-method' => 'post', 'class' => 'btn btn-danger'], 'icon' => 'trash'],
     ];
 } ?>
 
@@ -45,7 +45,7 @@ $attributes = [
 		'value' => function ($model) {
 			$categoryId = isset($model->click->banner->category) ? $model->click->banner->category->title->message : '-';
             if ($categoryId != '-') {
-				return Html::a($categoryId, ['setting/category/view', 'id'=>$model->click->banner->cat_id], ['title'=>$categoryId, 'class'=>'modal-btn']);
+				return Html::a($categoryId, ['setting/category/view', 'id' => $model->click->banner->cat_id], ['title' => $categoryId, 'class' => 'modal-btn']);
             }
 			return $categoryId;
 		},
@@ -56,7 +56,7 @@ $attributes = [
 		'value' => function ($model) {
 			$bannerTitle = isset($model->click->banner) ? $model->click->banner->title : '-';
             if ($bannerTitle != '-') {
-				return Html::a($bannerTitle, ['admin/view', 'id'=>$model->click->banner_id], ['title'=>$bannerTitle, 'class'=>'modal-btn']);
+				return Html::a($bannerTitle, ['admin/view', 'id' => $model->click->banner_id], ['title' => $bannerTitle, 'class' => 'modal-btn']);
             }
 			return $bannerTitle;
 		},
@@ -81,7 +81,7 @@ $attributes = [
 echo DetailView::widget([
 	'model' => $model,
 	'options' => [
-		'class'=>'table table-striped detail-view',
+		'class' => 'table table-striped detail-view',
 	],
 	'attributes' => $attributes,
 ]); ?>

@@ -142,7 +142,7 @@ class ViewController extends Controller
 		$model->delete();
 
 		Yii::$app->session->setFlash('success', Yii::t('app', 'Banner view success deleted.'));
-		return $this->redirect(Yii::$app->request->referrer ?: ['manage', 'banner'=>$model->banner_id]);
+		return $this->redirect(Yii::$app->request->referrer ?: ['manage', 'banner' => $model->banner_id]);
 	}
 
 	/**

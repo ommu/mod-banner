@@ -20,6 +20,7 @@ use yii\helpers\Url;
 use app\components\widgets\ActiveForm;
 use ommu\banner\models\Banners;
 use ommu\banner\models\BannerCategory;
+use ommu\flatpickr\Flatpickr;
 
 $js = <<<JS
 	$('.field-linked input[name="linked"]').on('change', function() {
@@ -63,11 +64,11 @@ JS;
 
 <?php $category = BannerCategory::getCategory(1);
 echo $form->field($model, 'cat_id')
-	->dropDownList($category, ['prompt'=>''])
+	->dropDownList($category, ['prompt' => ''])
 	->label($model->getAttributeLabel('cat_id')); ?>
 
 <?php echo $form->field($model, 'title')
-	->textInput(['maxlength'=>true])
+	->textInput(['maxlength' => true])
 	->label($model->getAttributeLabel('title')); ?>
 
 <?php 
@@ -87,17 +88,17 @@ echo $form->field($model, 'linked')
 	->hint('example: http://ommu.id'); ?>
 
 <?php $uploadPath = Banners::getUploadPath(false);
-$bannerFilename = !$model->isNewRecord && $model->old_banner_filename != '' ? Html::img(Url::to(join('/', ['@webpublic', $uploadPath, $model->old_banner_filename])), ['alt'=>$model->old_banner_filename, 'class'=>'d-block border border-width-3 mb-3']).$model->old_banner_filename.'<hr/>' : '';
-echo $form->field($model, 'banner_filename', ['template'=> '{label}{beginWrapper}<div>'.$bannerFilename.'</div>{input}{error}{hint}{endWrapper}'])
+$bannerFilename = !$model->isNewRecord && $model->old_banner_filename != '' ? Html::img(Url::to(join('/', ['@webpublic', $uploadPath, $model->old_banner_filename])), ['alt' => $model->old_banner_filename, 'class' => 'd-block border border-width-3 mb-4']).$model->old_banner_filename.'<hr/>' : '';
+echo $form->field($model, 'banner_filename', ['template' => '{label}{beginWrapper}<div>'.$bannerFilename.'</div>{input}{error}{hint}{endWrapper}'])
 	->fileInput()
 	->label($model->getAttributeLabel('banner_filename')); ?>
 
 <?php echo $form->field($model, 'banner_desc')
-	->textarea(['rows'=>6, 'cols'=>50])
+	->textarea(['rows' => 6, 'cols' => 50])
 	->label($model->getAttributeLabel('banner_desc')); ?>
 
 <?php echo $form->field($model, 'published_date')
-	->textInput(['type'=>'date'])
+    ->widget(Flatpickr::className(), ['model' => $model, 'attribute' => 'published_date'])
 	->label($model->getAttributeLabel('published_date')); ?>
 
 <?php
@@ -112,7 +113,7 @@ echo $form->field($model, 'permanent')
 	->label($model->getAttributeLabel('permanent')); ?>
 
 <?php echo $form->field($model, 'expired_date', ['options' => ['style' => $model->permanent == 1 ? 'display: none' : '']])
-	->textInput(['type'=>'date'])
+    ->widget(Flatpickr::className(), ['model' => $model, 'attribute' => 'expired_date'])
 	->label($model->getAttributeLabel('expired_date')); ?>
 
 <?php 
