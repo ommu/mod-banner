@@ -12,14 +12,16 @@
 
 use Yii;
 use app\models\Menu;
+use mdm\admin\components\Configs;
 
 class m190320_120101_banner_module_insert_menu extends \yii\db\Migration
 {
 	public function up()
 	{
-		$tableName = Yii::$app->db->tablePrefix . 'ommu_core_menus';
+        $menuTable = Configs::instance()->menuTable;
+		$tableName = Yii::$app->db->tablePrefix . $menuTable;
         if (Yii::$app->db->getTableSchema($tableName, true)) {
-			$this->batchInsert('ommu_core_menus', ['name', 'module', 'icon', 'parent', 'route', 'order', 'data'], [
+			$this->batchInsert($tableName, ['name', 'module', 'icon', 'parent', 'route', 'order', 'data'], [
 				['Banners', 'banner', null, Menu::getParentId('Publications#rbac'), '/banner/admin/index', null, null],
 				['Banner Settings', 'banner', null, Menu::getParentId('Settings#rbac'), '/banner/setting/admin/index', null, null],
 			]);
