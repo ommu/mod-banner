@@ -22,7 +22,7 @@ class m210806_141356_banner_module_create_table_setting extends \yii\db\Migratio
 			$tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
 		}
 		$tableName = Yii::$app->db->tablePrefix . 'ommu_banner_setting';
-		if(!Yii::$app->db->getTableSchema($tableName, true)) {
+		if (!Yii::$app->db->getTableSchema($tableName, true)) {
 			$this->createTable($tableName, [
 				'id' => Schema::TYPE_TINYINT . '(1) UNSIGNED NOT NULL AUTO_INCREMENT',
 				'license' => Schema::TYPE_STRING . '(32) NOT NULL',

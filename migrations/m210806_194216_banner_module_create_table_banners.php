@@ -38,7 +38,7 @@ class m210806_194216_banner_module_create_table_banners extends \yii\db\Migratio
 				'modified_date' => Schema::TYPE_TIMESTAMP . ' NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT \'trigger,on_update\'',
 				'modified_id' => Schema::TYPE_INTEGER . '(11) UNSIGNED',
 				'updated_date' => Schema::TYPE_DATETIME . ' NOT NULL DEFAULT \'0000-00-00 00:00:00\' COMMENT \'trigger\'',
-				'slug' => Schema::TYPE_TEXT . ' NOT NULL',
+				'slug' => Schema::TYPE_STRING . '(64) NOT NULL',
 				'PRIMARY KEY ([[banner_id]])',
 				'FOREIGN KEY ([[cat_id]]) REFERENCES ommu_banner_category ([[cat_id]]) ON DELETE CASCADE ON UPDATE CASCADE',
 			], $tableOptions);

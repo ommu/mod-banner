@@ -22,7 +22,7 @@ class m210806_195521_banner_module_create_table_view_history extends \yii\db\Mig
 			$tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
 		}
 		$tableName = Yii::$app->db->tablePrefix . 'ommu_banner_view_history';
-		if(!Yii::$app->db->getTableSchema($tableName, true)) {
+		if (!Yii::$app->db->getTableSchema($tableName, true)) {
 			$this->createTable($tableName, [
 				'id' => Schema::TYPE_INTEGER . '(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT \'trigger\'',
 				'view_id' => Schema::TYPE_INTEGER . '(11) UNSIGNED NOT NULL',

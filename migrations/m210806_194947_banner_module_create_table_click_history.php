@@ -22,7 +22,7 @@ class m210806_194947_banner_module_create_table_click_history extends \yii\db\Mi
 			$tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
 		}
 		$tableName = Yii::$app->db->tablePrefix . 'ommu_banner_click_history';
-		if(!Yii::$app->db->getTableSchema($tableName, true)) {
+		if (!Yii::$app->db->getTableSchema($tableName, true)) {
 			$this->createTable($tableName, [
 				'id' => Schema::TYPE_INTEGER . '(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT \'trigger\'',
 				'click_id' => Schema::TYPE_INTEGER . '(11) UNSIGNED NOT NULL',
