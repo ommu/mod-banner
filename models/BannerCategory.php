@@ -16,7 +16,7 @@
  * @property integer $publish
  * @property integer $name
  * @property integer $desc
- * @property string $cat_code
+ * @property string $code
  * @property string $banner_size
  * @property integer $banner_limit
  * @property string $creation_date
@@ -91,7 +91,7 @@ class BannerCategory extends \app\components\ActiveRecord
 			//[['banner_size'], 'serialize'],
 			[['name_i'], 'string', 'max' => 64],
 			[['desc_i'], 'string', 'max' => 128],
-			[['cat_code', 'slug'], 'string', 'max' => 32],
+			[['code', 'slug'], 'string', 'max' => 64],
 		];
 	}
 
@@ -105,7 +105,7 @@ class BannerCategory extends \app\components\ActiveRecord
 			'publish' => Yii::t('app', 'Publish'),
 			'name' => Yii::t('app', 'Category'),
 			'desc' => Yii::t('app', 'Description'),
-			'cat_code' => Yii::t('app', 'Code'),
+			'code' => Yii::t('app', 'Code'),
 			'banner_size' => Yii::t('app', 'Size'),
 			'banner_size[i]' => Yii::t('app', 'Size'),
 			'banner_size[width]' => Yii::t('app', 'Width'),
@@ -298,10 +298,10 @@ class BannerCategory extends \app\components\ActiveRecord
 				return $model->desc_i;
 			},
 		];
-		$this->templateColumns['cat_code'] = [
-			'attribute' => 'cat_code',
+		$this->templateColumns['code'] = [
+			'attribute' => 'code',
 			'value' => function($model, $key, $index, $column) {
-				return $model->cat_code;
+				return $model->code;
 			},
 		];
 		$this->templateColumns['banner_size'] = [
@@ -511,7 +511,7 @@ class BannerCategory extends \app\components\ActiveRecord
                 }
             }
 
-            $this->cat_code = Inflector::slug($this->name_i);
+            $this->code = Inflector::slug($this->name_i);
         }
         return true;
 	}
