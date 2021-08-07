@@ -33,7 +33,7 @@ use yii\widgets\ActiveForm;
 
 		<?php echo $form->field($model, 'desc_i');?>
 
-		<?php echo $form->field($model, 'cat_code');?>
+		<?php echo $form->field($model, 'code');?>
 
 		<?php echo $form->field($model, 'banner_size');?>
 

@@ -55,8 +55,8 @@ $attributes = [
 		'value' => $model->desc_i,
 	],
 	[
-		'attribute' => 'cat_code',
-		'value' => $model->cat_code,
+		'attribute' => 'code',
+		'value' => $model->code,
 		'visible' => !$small,
 	],
 	[
