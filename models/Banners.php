@@ -95,7 +95,7 @@ class Banners extends \app\components\ActiveRecord
 			[['publish', 'cat_id', 'creation_id', 'modified_id', 'linked', 'permanent'], 'integer'],
 			[['url', 'banner_desc', 'slug'], 'string'],
 			[['banner_filename', 'banner_desc', 'published_date', 'expired_date'], 'safe'],
-			[['title'], 'string', 'max' => 64],
+			[['title', 'slug'], 'string', 'max' => 64],
 			[['cat_id'], 'exist', 'skipOnError' => true, 'targetClass' => BannerCategory::className(), 'targetAttribute' => ['cat_id' => 'cat_id']],
 		];
 	}
