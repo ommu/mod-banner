@@ -48,7 +48,7 @@ class LinkTree extends \app\components\ActiveRecord
 {
 	use \ommu\traits\UtilityTrait;
 
-	public $gridForbiddenColumn = ['cat_id', 'creation_date', 'modified_date', 'modifiedDisplayname', 'updated_date', 'slug'];
+	public $gridForbiddenColumn = ['modified_date', 'modifiedDisplayname', 'updated_date', 'slug'];
 
 	public $categoryName;
 	public $creationDisplayname;
@@ -207,15 +207,6 @@ class LinkTree extends \app\components\ActiveRecord
 			'class' => 'app\components\grid\SerialColumn',
 			'contentOptions' => ['class' => 'text-center'],
 		];
-		$this->templateColumns['cat_id'] = [
-			'attribute' => 'cat_id',
-			'value' => function($model, $key, $index, $column) {
-				return isset($model->category) ? $model->category->title->message : '-';
-				// return $model->categoryName;
-			},
-			'filter' => BannerCategory::getCategory(),
-			'visible' => !Yii::$app->request->get('category') ? true : false,
-		];
 		$this->templateColumns['title'] = [
 			'attribute' => 'title',
 			'value' => function($model, $key, $index, $column) {
@@ -230,13 +221,6 @@ class LinkTree extends \app\components\ActiveRecord
 			},
 			'visible' => Yii::$app->request->get('creation') ? true : false,
 		];
-		$this->templateColumns['creation_date'] = [
-			'attribute' => 'creation_date',
-			'value' => function($model, $key, $index, $column) {
-				return Yii::$app->formatter->asDatetime($model->creation_date, 'medium');
-			},
-			'filter' => $this->filterDatepicker($this, 'creation_date'),
-		];
 		$this->templateColumns['creationDisplayname'] = [
 			'attribute' => 'creationDisplayname',
 			'value' => function($model, $key, $index, $column) {
@@ -244,6 +228,13 @@ class LinkTree extends \app\components\ActiveRecord
 				// return $model->creationDisplayname;
 			},
 			'visible' => !Yii::$app->request->get('creation') ? true : false,
+		];
+		$this->templateColumns['creation_date'] = [
+			'attribute' => 'creation_date',
+			'value' => function($model, $key, $index, $column) {
+				return Yii::$app->formatter->asDatetime($model->creation_date, 'medium');
+			},
+			'filter' => $this->filterDatepicker($this, 'creation_date'),
 		];
 		$this->templateColumns['modified_date'] = [
 			'attribute' => 'modified_date',
@@ -366,7 +357,16 @@ class LinkTree extends \app\components\ActiveRecord
 	 */
 	public function beforeValidate()
 	{
+		$category = BannerCategory::find()
+			->select(['cat_id'])
+			->andWhere(['publish' => 1])
+			->andWhere(['type' => 'linktree'])
+            ->one();
+
         if (parent::beforeValidate()) {
+            if ($category != null) {
+                $this->cat_id = $category->cat_id;
+            }
             $this->is_banner = 0;
 
             if ($this->isNewRecord) {

@@ -1,6 +1,6 @@
 <?php
 /**
- * m210808_155442_banner_module_dropColumn_slug_category
+ * m210808_155442_banner_module_dropColumn_slug_addColumn_type_category
  * 
  * @author Putra Sudaryanto <putra@ommu.id>
  * @contact (+62)856-299-4114
@@ -12,7 +12,7 @@
 
 use Yii;
 
-class m210808_155442_banner_module_dropColumn_slug_category extends \yii\db\Migration
+class m210808_155442_banner_module_dropColumn_slug_addColumn_type_category extends \yii\db\Migration
 {
 	public function up()
 	{
@@ -21,6 +21,12 @@ class m210808_155442_banner_module_dropColumn_slug_category extends \yii\db\Migr
 			$this->dropColumn(
 				$tableName,
 				'slug'
+			);
+
+			$this->addColumn(
+				$tableName,
+				'type',
+				'enum(\'banner\',\'linktree\',\'rotator\') NOT NULL DEFAULT \'banner\' AFTER publish',
 			);
 		}
 	}

@@ -136,6 +136,7 @@ class BannerCategory extends BannerCategoryModel
 		// grid filtering conditions
 		$query->andFilterWhere([
 			't.cat_id' => $this->cat_id,
+			't.type' => 'banner',
 			't.name' => $this->name,
 			't.desc' => $this->desc,
 			't.banner_limit' => $this->banner_limit,

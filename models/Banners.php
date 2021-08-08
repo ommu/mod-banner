@@ -411,7 +411,8 @@ class Banners extends \app\components\ActiveRecord
 	{
 		$setting = BannerSetting::find()
 			->select(['banner_validation', 'banner_file_type'])
-			->where(['id' => 1])->one();
+			->where(['id' => 1])
+            ->one();
 
 		$banner_file_type = $this->formatFileType($setting->banner_file_type);
         if (empty($banner_file_type)) {

@@ -113,7 +113,9 @@ class CategoryController extends Controller
 	 */
 	public function actionCreate()
 	{
-        $model = new BannerCategory();
+        $model = new BannerCategory([
+            'type' => 'banner',
+        ]);
 
         if (Yii::$app->request->isPost) {
             $model->load(Yii::$app->request->post());

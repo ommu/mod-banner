@@ -14,6 +14,7 @@
  * The followings are the available columns in table "ommu_banner_category":
  * @property integer $cat_id
  * @property integer $publish
+ * @property string $type
  * @property integer $name
  * @property integer $desc
  * @property string $code

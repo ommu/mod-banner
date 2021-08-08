@@ -29,10 +29,6 @@ use ommu\banner\models\BannerCategory;
 		],
 	]); ?>
 
-		<?php $category = BannerCategory::getCategory();
-		echo $form->field($model, 'cat_id')
-			->dropDownList($category, ['prompt' => '']);?>
-
 		<?php echo $form->field($model, 'title');?>
 
 		<?php echo $form->field($model, 'url');?>

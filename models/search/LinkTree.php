@@ -155,7 +155,7 @@ class LinkTree extends LinkTreeModel
         $query->andFilterWhere([
 			't.banner_id' => $this->banner_id,
 			't.cat_id' => isset($params['category']) ? $params['category'] : $this->cat_id,
-			// 't.is_banner' => 0,
+			't.is_banner' => 0,
 			'cast(t.creation_date as date)' => $this->creation_date,
 			't.creation_id' => isset($params['creation']) ? $params['creation'] : $this->creation_id,
 			'cast(t.modified_date as date)' => $this->modified_date,
