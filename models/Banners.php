@@ -15,6 +15,7 @@
  * @property integer $banner_id
  * @property integer $publish
  * @property integer $cat_id
+ * @property integer $is_banner
  * @property string $title
  * @property string $url
  * @property string $banner_filename
@@ -418,6 +419,8 @@ class Banners extends \app\components\ActiveRecord
         }
 
         if (parent::beforeValidate()) {
+            $this->is_banner = 1;
+
             if ($this->linked) {
                 if ($this->url == '-') {
                     $this->addError('url', Yii::t('app', '{attribute} harus dalam format hyperlink', ['attribute' => $this->getAttributeLabel('url')]));
@@ -492,7 +495,8 @@ class Banners extends \app\components\ActiveRecord
 	{
 		$setting = BannerSetting::find()
 			->select(['banner_validation', 'banner_resize'])
-			->where(['id' => 1])->one();
+			->where(['id' => 1])
+            ->one();
 
         if (parent::beforeSave($insert)) {
             if (!$insert) {

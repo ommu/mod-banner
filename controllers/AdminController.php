@@ -235,7 +235,12 @@ class AdminController extends Controller
 	 */
 	protected function findModel($id)
 	{
-        if (($model = Banners::findOne($id)) !== null) {
+        $model = Banners::find()
+            ->andWhere(['id' => $id])
+            ->andWhere(['is_banner' => 1])
+            ->one();
+
+        if ($model !== null) {
             return $model;
         }
 
