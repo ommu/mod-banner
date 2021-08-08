@@ -130,11 +130,6 @@ $attributes = [
 		'value' => Yii::$app->formatter->asDatetime($model->updated_date, 'medium'),
 		'visible' => !$small,
 	],
-	[
-		'attribute' => 'slug',
-		'value' => $model->slug,
-		'visible' => !$small,
-	],
 ];
 
 echo DetailView::widget([

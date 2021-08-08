@@ -24,7 +24,6 @@
  * @property string $modified_date
  * @property integer $modified_id
  * @property string $updated_date
- * @property string $slug
  *
  * The followings are the available model relations:
  * @property Banners[] $banners
@@ -41,7 +40,6 @@ use Yii;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\helpers\Inflector;
-use yii\behaviors\SluggableBehavior;
 use app\models\SourceMessage;
 use app\models\Users;
 use ommu\banner\models\view\BannerCategory as BannerCategoryView;
@@ -50,7 +48,7 @@ class BannerCategory extends \app\components\ActiveRecord
 {
 	use \ommu\traits\UtilityTrait;
 
-	public $gridForbiddenColumn = ['creation_date', 'creationDisplayname', 'modified_date', 'modifiedDisplayname', 'updated_date', 'slug', 'desc_i'];
+	public $gridForbiddenColumn = ['creation_date', 'creationDisplayname', 'modified_date', 'modifiedDisplayname', 'updated_date', 'desc_i'];
 
 	public $name_i;
 	public $desc_i;
@@ -66,32 +64,18 @@ class BannerCategory extends \app\components\ActiveRecord
 	}
 
 	/**
-	 * behaviors model class.
-	 */
-	public function behaviors() {
-		return [
-			[
-				'class' => SluggableBehavior::className(),
-				'attribute' => 'title.message',
-				'immutable' => true,
-				'ensureUnique' => true,
-			],
-		];
-	}
-
-	/**
 	 * @return array validation rules for model attributes.
 	 */
 	public function rules()
 	{
 		return [
-			[['name_i', 'desc_i', 'banner_size', 'banner_limit'], 'required'],
+			[['name_i', 'desc_i', 'code', 'banner_size', 'banner_limit'], 'required'],
 			[['publish', 'name', 'desc', 'banner_limit', 'creation_id', 'modified_id'], 'integer'],
-			[['name_i', 'desc_i'], 'string'],
+			[['name_i', 'desc_i', 'code'], 'string'],
 			//[['banner_size'], 'serialize'],
 			[['name_i'], 'string', 'max' => 64],
 			[['desc_i'], 'string', 'max' => 128],
-			[['code', 'slug'], 'string', 'max' => 64],
+			[['code'], 'string', 'max' => 64],
 		];
 	}
 
@@ -116,7 +100,6 @@ class BannerCategory extends \app\components\ActiveRecord
 			'modified_date' => Yii::t('app', 'Modified Date'),
 			'modified_id' => Yii::t('app', 'Modified'),
 			'updated_date' => Yii::t('app', 'Updated Date'),
-			'slug' => Yii::t('app', 'Slug'),
 			'name_i' => Yii::t('app', 'Category'),
 			'desc_i' => Yii::t('app', 'Description'),
 			'banners' => Yii::t('app', 'Banners'),
@@ -356,12 +339,6 @@ class BannerCategory extends \app\components\ActiveRecord
 			},
 			'filter' => $this->filterDatepicker($this, 'updated_date'),
 		];
-		$this->templateColumns['slug'] = [
-			'attribute' => 'slug',
-			'value' => function($model, $key, $index, $column) {
-				return $model->slug;
-			},
-		];
 		$this->templateColumns['banners'] = [
 			'attribute' => 'banners',
 			'value' => function($model, $key, $index, $column) {
@@ -511,7 +488,9 @@ class BannerCategory extends \app\components\ActiveRecord
                 }
             }
 
-            $this->code = Inflector::slug($this->name_i);
+            if ($this->code == '') {
+                $this->code = Inflector::slug($this->name_i);
+            }
         }
         return true;
 	}
@@ -535,8 +514,6 @@ class BannerCategory extends \app\components\ActiveRecord
                 if ($name->save()) {
                     $this->name = $name->id;
                 }
-
-                $this->slug = Inflector::slug($this->name_i);
 
             } else {
                 $name = SourceMessage::findOne($this->name);

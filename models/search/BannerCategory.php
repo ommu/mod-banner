@@ -29,7 +29,7 @@ class BannerCategory extends BannerCategoryModel
 	{
 		return [
 			[['cat_id', 'publish', 'name', 'desc', 'banner_limit', 'creation_id', 'modified_id'], 'integer'],
-			[['code', 'banner_size', 'creation_date', 'modified_date', 'updated_date', 'slug',
+			[['code', 'banner_size', 'creation_date', 'modified_date', 'updated_date',
 				'name_i', 'desc_i', 'creationDisplayname', 'modifiedDisplayname'], 'safe'],
 		];
 	}
@@ -158,7 +158,6 @@ class BannerCategory extends BannerCategoryModel
 
 		$query->andFilterWhere(['like', 't.code', $this->code])
 			->andFilterWhere(['like', 't.banner_size', $this->banner_size])
-			->andFilterWhere(['like', 't.slug', $this->slug])
 			->andFilterWhere(['like', 'title.message', $this->name_i])
 			->andFilterWhere(['like', 'description.message', $this->desc_i])
 			->andFilterWhere(['like', 'creation.displayname', $this->creationDisplayname])
