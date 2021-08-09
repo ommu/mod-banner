@@ -41,15 +41,15 @@ class m210807_224538_banner_module_insert_role_menu_linktree extends \yii\db\Mig
 		$tableName = Yii::$app->db->tablePrefix . $authManager->itemTable;
         if (Yii::$app->db->getTableSchema($tableName, true)) {
 			$this->batchInsert($tableName, ['name', 'type', 'data', 'created_at'], [
-				['/banner/linktree/admin/*', '2', '', time()],
-				['/banner/linktree/admin/index', '2', '', time()],
+				['/banner/linktree/*', '2', '', time()],
+				['/banner/linktree/index', '2', '', time()],
 			]);
 		}
 
 		$tableName = Yii::$app->db->tablePrefix . $authManager->itemChildTable;
         if (Yii::$app->db->getTableSchema($tableName, true)) {
 			$this->batchInsert($tableName, ['parent', 'child'], [
-				['bannerModLevelModerator', '/banner/linktree/admin/*'],
+				['bannerModLevelModerator', '/banner/linktree/*'],
 			]);
 		}
 
@@ -57,7 +57,7 @@ class m210807_224538_banner_module_insert_role_menu_linktree extends \yii\db\Mig
 		$tableName = Yii::$app->db->tablePrefix . $menuTable;
         if (Yii::$app->db->getTableSchema($tableName, true)) {
 			$this->batchInsert($tableName, ['name', 'module', 'icon', 'parent', 'route', 'order', 'data'], [
-				['Linktree', 'banner', null, Menu::getParentId('Publications#rbac'), '/banner/linktree/admin/index', null, null],
+				['Linktree', 'banner', null, Menu::getParentId('Publications#rbac'), '/banner/linktree/index', null, null],
 			]);
 		}
 	}

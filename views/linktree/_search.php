@@ -2,7 +2,7 @@
 /**
  * Link Trees (link-tree)
  * @var $this app\components\View
- * @var $this ommu\banner\controllers\linktree\AdminController
+ * @var $this ommu\banner\controllers\LinktreeController
  * @var $model ommu\banner\models\search\LinkTree
  * @var $form yii\widgets\ActiveForm
  *

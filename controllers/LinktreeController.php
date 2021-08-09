@@ -1,10 +1,10 @@
 <?php
 /**
- * AdminController
- * @var $this ommu\banner\controllers\linktree\AdminController
+ * LinktreeController
+ * @var $this ommu\banner\controllers\LinktreeController
  * @var $model ommu\banner\models\LinkTree
  *
- * AdminController implements the CRUD actions for LinkTree model.
+ * LinktreeController implements the CRUD actions for LinkTree model.
  * Reference start
  * TOC :
  *  Index
@@ -26,7 +26,7 @@
  *
  */
 
-namespace ommu\banner\controllers\linktree;
+namespace ommu\banner\controllers;
 
 use Yii;
 use app\components\Controller;
@@ -35,7 +35,7 @@ use yii\filters\VerbFilter;
 use ommu\banner\models\LinkTree;
 use ommu\banner\models\search\LinkTree as LinkTreeSearch;
 
-class AdminController extends Controller
+class LinktreeController extends Controller
 {
 	/**
 	 * {@inheritdoc}
