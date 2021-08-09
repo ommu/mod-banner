@@ -85,9 +85,9 @@ class LinkTree extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['cat_id', 'title', 'url'], 'required'],
+			[['cat_id', 'title', 'url', 'creation_id'], 'required'],
 			[['publish', 'cat_id', 'creation_id', 'modified_id'], 'integer'],
-			[['url'], 'string'],
+			[['url'], 'url'],
 			[['modified_date'], 'safe'],
 			[['title', 'slug'], 'string', 'max' => 64],
 			[['cat_id'], 'exist', 'skipOnError' => true, 'targetClass' => BannerCategory::className(), 'targetAttribute' => ['cat_id' => 'cat_id']],
