@@ -1,6 +1,6 @@
 <?php
 /**
- * LinkTree (link-tree)
+ * Link Trees (link-tree)
  * @var $this app\components\View
  * @var $this ommu\banner\controllers\linktree\AdminController
  * @var $model ommu\banner\models\LinkTree
@@ -103,7 +103,7 @@ $attributes = [
 	],
 	[
 		'attribute' => '',
-		'value' => Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->primaryKey], ['title' => Yii::t('app', 'Update'), 'class' => 'btn btn-primary btn-sm']),
+		'value' => Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->primaryKey], ['title' => Yii::t('app', 'Update'), 'class' => 'btn btn-primary btn-sm modal-btn']),
 		'format' => 'html',
 		'visible' => !$small && Yii::$app->request->isAjax ? true : false,
 	],

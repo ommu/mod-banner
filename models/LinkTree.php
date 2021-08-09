@@ -104,7 +104,7 @@ class LinkTree extends \app\components\ActiveRecord
 			'publish' => Yii::t('app', 'Publish'),
 			'cat_id' => Yii::t('app', 'Category'),
 			'title' => Yii::t('app', 'Title'),
-			'url' => Yii::t('app', 'Url'),
+			'url' => Yii::t('app', 'Link'),
 			'creation_date' => Yii::t('app', 'Creation Date'),
 			'creation_id' => Yii::t('app', 'Creation'),
 			'modified_date' => Yii::t('app', 'Modified Date'),
@@ -235,6 +235,7 @@ class LinkTree extends \app\components\ActiveRecord
 				return Yii::$app->formatter->asDatetime($model->creation_date, 'medium');
 			},
 			'filter' => $this->filterDatepicker($this, 'creation_date'),
+			'visible' => !Yii::$app->request->get('creation') ? true : false,
 		];
 		$this->templateColumns['modified_date'] = [
 			'attribute' => 'modified_date',

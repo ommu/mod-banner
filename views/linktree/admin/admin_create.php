@@ -1,6 +1,6 @@
 <?php
 /**
- * LinkTree (link-tree)
+ * Link Trees (link-tree)
  * @var $this app\components\View
  * @var $this ommu\banner\controllers\linktree\AdminController
  * @var $model ommu\banner\models\LinkTree

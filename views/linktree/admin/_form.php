@@ -1,6 +1,6 @@
 <?php
 /**
- * LinkTree (link-tree)
+ * Link Trees (link-tree)
  * @var $this app\components\View
  * @var $this ommu\banner\controllers\linktree\AdminController
  * @var $model ommu\banner\models\LinkTree
@@ -18,6 +18,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use app\components\widgets\ActiveForm;
 use ommu\banner\models\BannerCategory;
+use yii\helpers\ArrayHelper;
 ?>
 
 <div class="link-tree-form">
@@ -57,8 +58,14 @@ echo $form->field($model, 'publish')
 
 <hr/>
 
-<?php echo $form->field($model, 'submitButton')
-	->submitButton(); ?>
+<?php $submitButtonOption = [];
+if (!$model->isNewRecord && Yii::$app->request->isAjax) {
+    $submitButtonOption = ArrayHelper::merge($submitButtonOption, [
+        'backTo' => Html::a(Html::tag('span', '&laquo;', ['class' => 'mr-1']).Yii::t('app', 'Back to detail'), ['view', 'id'=>$model->primaryKey], ['title'=>Yii::t('app', 'Detail Linktree'), 'class' => 'ml-4 modal-btn']),
+    ]);
+}
+echo $form->field($model, 'submitButton')
+	->submitButton($submitButtonOption); ?>
 
 <?php ActiveForm::end(); ?>
 
