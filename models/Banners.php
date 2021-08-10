@@ -244,8 +244,9 @@ class Banners extends \app\components\ActiveRecord
 		$this->templateColumns['url'] = [
 			'attribute' => 'url',
 			'value' => function($model, $key, $index, $column) {
-				return $model->url;
+				return $model->url == '-' ? $model->url : Yii::$app->formatter->asUrl($model->url);
 			},
+            'format' => 'html',
 		];
 		$this->templateColumns['banner_filename'] = [
 			'attribute' => 'banner_filename',
@@ -429,7 +430,7 @@ class Banners extends \app\components\ActiveRecord
             if ($this->permanent) {
                 $this->expired_date = '0000-00-00';
             } else {
-                if (in_array(Yii::$app->formatter->asDate($this->expired_date, 'php:Y-m-d'), ['0000-00-00', '1970-01-01', '0002-12-02', '-0001-11-30'])) {
+                if (Yii::$app->formatter->asDate($this->expired_date, 'php:Y-m-d') == '-') {
                     $this->addError('expired_date', Yii::t('app', '{attribute} cannot be blank.', ['attribute' => $this->getAttributeLabel('expired_date')]));
                 }
 

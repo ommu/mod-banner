@@ -54,7 +54,8 @@ $attributes = [
 	'title',
 	[
 		'attribute' => 'url',
-		'value' => $model->url ? $model->url : '-',
+		'value' => $model->url == '-' ? $model->url : Yii::$app->formatter->asUrl($model->url),
+		'format' => 'html',
 	],
 	[
 		'attribute' => 'banner_filename',
