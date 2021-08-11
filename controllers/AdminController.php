@@ -236,7 +236,7 @@ class AdminController extends Controller
 	protected function findModel($id)
 	{
         $model = Banners::find()
-            ->andWhere(['id' => $id])
+            ->andWhere(['banner_id' => $id])
             ->andWhere(['is_banner' => 1])
             ->one();
 

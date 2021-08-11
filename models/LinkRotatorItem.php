@@ -46,6 +46,7 @@ use yii\web\UploadedFile;
 use yii\behaviors\SluggableBehavior;
 use thamtech\uuid\helpers\UuidHelper;
 use app\models\Users;
+use yii\validators\UrlValidator;
 
 class LinkRotatorItem extends \app\components\ActiveRecord
 {
@@ -246,9 +247,13 @@ class LinkRotatorItem extends \app\components\ActiveRecord
 		$this->templateColumns['url'] = [
 			'attribute' => 'url',
 			'value' => function($model, $key, $index, $column) {
-				return Yii::$app->formatter->asUrl($model->url);
+                $validator = new UrlValidator();
+                if ($validator->validate($model->url) === true) {
+                    return Yii::$app->formatter->asUrl($model->url, ['target' => '_blank']);
+                }
+                return '-';
 			},
-			'format' => 'html',
+			'format' => 'raw',
 		];
 		$this->templateColumns['banner_desc'] = [
 			'attribute' => 'banner_desc',

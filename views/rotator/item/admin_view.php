@@ -16,6 +16,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\DetailView;
+use yii\validators\UrlValidator;
 
 if (!$small) {
     $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Publication'), 'url' => ['/admin/page/admin/index']];
@@ -67,8 +68,14 @@ $attributes = [
 	],
 	[
 		'attribute' => 'url',
-		'value' => $model->url ? Yii::$app->formatter->asUrl($model->url) : '-',
-		'format' => 'html',
+		'value' => function ($model) {
+            $validator = new UrlValidator();
+            if ($validator->validate($model->url) === true) {
+                return Yii::$app->formatter->asUrl($model->url, ['target' => '_blank']);
+            }
+            return '-';
+		},
+		'format' => 'raw',
 		'visible' => !$small,
 	],
 	[
