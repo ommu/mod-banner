@@ -41,11 +41,11 @@ use yii\helpers\ArrayHelper;
 <?php //echo $form->errorSummary($model);?>
 
 <?php echo $form->field($model, 'title')
-	->textInput(['maxlength'=>true])
+	->textInput(['maxlength' => true])
 	->label($model->getAttributeLabel('title')); ?>
 
 <?php echo $form->field($model, 'url')
-	->textarea(['rows'=>6, 'cols'=>50])
+	->textarea(['rows' => 6, 'cols' => 50])
 	->label($model->getAttributeLabel('url')); ?>
 
 <?php 
@@ -61,7 +61,7 @@ echo $form->field($model, 'publish')
 <?php $submitButtonOption = [];
 if (!$model->isNewRecord && Yii::$app->request->isAjax) {
     $submitButtonOption = ArrayHelper::merge($submitButtonOption, [
-        'backTo' => Html::a(Html::tag('span', '&laquo;', ['class' => 'mr-1']).Yii::t('app', 'Back to detail'), ['view', 'id'=>$model->primaryKey], ['title'=>Yii::t('app', 'Detail Linktree'), 'class' => 'ml-4 modal-btn']),
+        'backTo' => Html::a(Html::tag('span', '&laquo;', ['class' => 'mr-1']).Yii::t('app', 'Back to detail'), ['view', 'id' => $model->primaryKey], ['title' => Yii::t('app', 'Detail Linktree'), 'class' => 'ml-4 modal-btn']),
     ]);
 }
 echo $form->field($model, 'submitButton')

@@ -1,10 +1,10 @@
 <?php
 /**
- * LinktreeController
- * @var $this ommu\banner\controllers\LinktreeController
- * @var $model ommu\banner\models\LinkTree
+ * ItemController
+ * @var $this ommu\banner\controllers\rotator\ItemController
+ * @var $model ommu\banner\models\LinkRotatorItem
  *
- * LinktreeController implements the CRUD actions for LinkTree model.
+ * ItemController implements the CRUD actions for LinkRotatorItem model.
  * Reference start
  * TOC :
  *  Index
@@ -21,21 +21,21 @@
  * @author Putra Sudaryanto <putra@ommu.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2021 OMMU (www.ommu.id)
- * @created date 7 August 2021, 22:42 WIB
+ * @created date 9 August 2021, 19:58 WIB
  * @link https://github.com/ommu/mod-banner
  *
  */
 
-namespace ommu\banner\controllers;
+namespace ommu\banner\controllers\rotator;
 
 use Yii;
 use app\components\Controller;
 use mdm\admin\components\AccessControl;
 use yii\filters\VerbFilter;
-use ommu\banner\models\LinkTree;
-use ommu\banner\models\search\LinkTree as LinkTreeSearch;
+use ommu\banner\models\LinkRotatorItem;
+use ommu\banner\models\search\LinkRotatorItem as LinkRotatorItemSearch;
 
-class LinktreeController extends Controller
+class ItemController extends Controller
 {
 	/**
 	 * {@inheritdoc}
@@ -65,12 +65,12 @@ class LinktreeController extends Controller
 	}
 
 	/**
-	 * Lists all LinkTree models.
+	 * Lists all LinkRotatorItem models.
 	 * @return mixed
 	 */
 	public function actionManage()
 	{
-        $searchModel = new LinkTreeSearch();
+        $searchModel = new LinkRotatorItemSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         $gridColumn = Yii::$app->request->get('GridColumn', null);
@@ -85,13 +85,10 @@ class LinktreeController extends Controller
         $columns = $searchModel->getGridColumn($cols);
 
         if (($category = Yii::$app->request->get('category')) != null) {
-            $category = \ommu\banner\models\BannerCategory::findOne($category);
-        }
-        if (($creation = Yii::$app->request->get('creation')) != null) {
-            $creation = \app\models\Users::findOne($creation);
+            $category = \ommu\banner\models\LinkRotators::findOne($category);
         }
 
-		$this->view->title = Yii::t('app', 'Linktree');
+		$this->view->title = Yii::t('app', 'Rotator Items');
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_manage', [
@@ -99,12 +96,11 @@ class LinktreeController extends Controller
 			'dataProvider' => $dataProvider,
 			'columns' => $columns,
 			'category' => $category,
-			'creation' => $creation,
 		]);
 	}
 
 	/**
-	 * Creates a new LinkTree model.
+	 * Creates a new LinkRotatorItem model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 * @return mixed
 	 */
@@ -114,8 +110,8 @@ class LinktreeController extends Controller
 			throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'The requested page does not exist.'));
         }
 
-        $model = new LinkTree([
-            'creation_id' => $id,
+        $model = new LinkRotatorItem([
+            'cat_id' => $id,
         ]);
 
         if (Yii::$app->request->isPost) {
@@ -125,11 +121,11 @@ class LinktreeController extends Controller
             // $model->order = $postData['order'] ? $postData['order'] : 0;
 
             if ($model->save()) {
-                Yii::$app->session->setFlash('success', Yii::t('app', 'Linktree success created.'));
+                Yii::$app->session->setFlash('success', Yii::t('app', 'Link rotator item success created.'));
                 if (Yii::$app->request->isAjax) {
-                    return $this->redirect(Yii::$app->request->referrer ?: ['manage', 'creation' => $model->creation_id]);
+                    return $this->redirect(Yii::$app->request->referrer ?: ['manage', 'category' => $model->cat_id]);
                 }
-                return $this->redirect(['manage', 'creation' => $model->creation_id]);
+                return $this->redirect(['manage', 'category' => $model->cat_id]);
                 //return $this->redirect(['view', 'id' => $model->banner_id]);
 
             } else {
@@ -139,7 +135,7 @@ class LinktreeController extends Controller
             }
         }
 
-		$this->view->title = Yii::t('app', 'Create Linktree');
+		$this->view->title = Yii::t('app', 'Create Rotator Item');
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->oRender('admin_create', [
@@ -148,7 +144,7 @@ class LinktreeController extends Controller
 	}
 
 	/**
-	 * Updates an existing LinkTree model.
+	 * Updates an existing LinkRotatorItem model.
 	 * If update is successful, the browser will be redirected to the 'view' page.
 	 * @param integer $id
 	 * @return mixed
@@ -164,11 +160,11 @@ class LinktreeController extends Controller
             // $model->order = $postData['order'] ? $postData['order'] : 0;
 
             if ($model->save()) {
-                Yii::$app->session->setFlash('success', Yii::t('app', 'Linktree success updated.'));
+                Yii::$app->session->setFlash('success', Yii::t('app', 'Link rotator item success updated.'));
                 if (Yii::$app->request->isAjax) {
-                    return $this->redirect(Yii::$app->request->referrer ?: ['manage', 'creation' => $model->creation_id]);
+                    return $this->redirect(Yii::$app->request->referrer ?: ['manage', 'category' => $model->cat_id]);
                 }
-                return $this->redirect(['manage', 'creation' => $model->creation_id]);
+                return $this->redirect(['manage', 'category' => $model->cat_id]);
 
             } else {
                 if (Yii::$app->request->isAjax) {
@@ -177,7 +173,7 @@ class LinktreeController extends Controller
             }
         }
 
-		$this->view->title = Yii::t('app', 'Update Linktree: {title}', ['title' => $model->title]);
+		$this->view->title = Yii::t('app', 'Update Rotator Item: {title}', ['title' => $model->title]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->oRender('admin_update', [
@@ -186,7 +182,7 @@ class LinktreeController extends Controller
 	}
 
 	/**
-	 * Displays a single LinkTree model.
+	 * Displays a single LinkRotatorItem model.
 	 * @param integer $id
 	 * @return mixed
 	 */
@@ -194,7 +190,7 @@ class LinktreeController extends Controller
 	{
         $model = $this->findModel($id);
 
-		$this->view->title = Yii::t('app', 'Detail Linktree: {title}', ['title' => $model->title]);
+		$this->view->title = Yii::t('app', 'Detail Rotator Item: {title}', ['title' => $model->title]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->oRender('admin_view', [
@@ -203,7 +199,7 @@ class LinktreeController extends Controller
 	}
 
 	/**
-	 * Deletes an existing LinkTree model.
+	 * Deletes an existing LinkRotatorItem model.
 	 * If deletion is successful, the browser will be redirected to the 'index' page.
 	 * @param integer $id
 	 * @return mixed
@@ -214,13 +210,13 @@ class LinktreeController extends Controller
 		$model->publish = 2;
 
         if ($model->save(false, ['publish','modified_id'])) {
-            Yii::$app->session->setFlash('success', Yii::t('app', 'Linktree success deleted.'));
-            return $this->redirect(Yii::$app->request->referrer ?: ['manage', 'creation' => $model->creation_id]);
+            Yii::$app->session->setFlash('success', Yii::t('app', 'Link rotator item success deleted.'));
+            return $this->redirect(Yii::$app->request->referrer ?: ['manage', 'category' => $model->cat_id]);
         }
 	}
 
 	/**
-	 * actionPublish an existing LinkTree model.
+	 * actionPublish an existing LinkRotatorItem model.
 	 * If publish is successful, the browser will be redirected to the 'index' page.
 	 * @param integer $id
 	 * @return mixed
@@ -232,27 +228,27 @@ class LinktreeController extends Controller
 		$model->publish = $replace;
 
         if ($model->save(false, ['publish','modified_id'])) {
-            Yii::$app->session->setFlash('success', Yii::t('app', 'Linktree success updated.'));
-            return $this->redirect(Yii::$app->request->referrer ?: ['manage', 'creation' => $model->creation_id]);
+            Yii::$app->session->setFlash('success', Yii::t('app', 'Link rotator item success updated.'));
+            return $this->redirect(Yii::$app->request->referrer ?: ['manage', 'category' => $model->cat_id]);
         }
 	}
 
 	/**
-	 * Finds the LinkTree model based on its primary key value.
+	 * Finds the LinkRotatorItem model based on its primary key value.
 	 * If the model is not found, a 404 HTTP exception will be thrown.
 	 * @param integer $id
-	 * @return LinkTree the loaded model
+	 * @return LinkRotatorItem the loaded model
 	 * @throws NotFoundHttpException if the model cannot be found
 	 */
 	protected function findModel($id)
 	{
-        $model = LinkTree::find()
+        $model = LinkRotatorItem::find()
             ->alias('t')
             ->select(['t.*'])
             ->joinWith(['category category'])
             ->andWhere(['t.banner_id' => $id])
             ->andWhere(['t.is_banner' => 0])
-            ->andWhere(['category.type' => 'linktree'])
+            ->andWhere(['category.type' => 'rotator'])
             ->one();
 
         if ($model !== null) {

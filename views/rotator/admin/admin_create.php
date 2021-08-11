@@ -16,7 +16,8 @@
 
 use yii\helpers\Url;
 
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Rotators'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Publication'), 'url' => ['/admin/page/admin/index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Link/WA Rotators'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Create');
 ?>
 

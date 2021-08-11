@@ -1,14 +1,14 @@
 <?php
 /**
- * Link Trees (link-tree)
+ * Link Rotator Items (link-rotator-item)
  * @var $this app\components\View
- * @var $this ommu\banner\controllers\LinktreeController
- * @var $model ommu\banner\models\LinkTree
+ * @var $this ommu\banner\controllers\rotator\ItemController
+ * @var $model ommu\banner\models\LinkRotatorItem
  *
  * @author Putra Sudaryanto <putra@ommu.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2021 OMMU (www.ommu.id)
- * @created date 7 August 2021, 22:42 WIB
+ * @created date 9 August 2021, 19:58 WIB
  * @link https://github.com/ommu/mod-banner
  *
  */
@@ -19,8 +19,9 @@ use yii\widgets\DetailView;
 
 if (!$small) {
     $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Publication'), 'url' => ['/admin/page/admin/index']];
-    $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Linktree'), 'url' => ['manage']];
-    $this->params['breadcrumbs'][] = ['label' => $model->creation->username ? $model->creation->username : $model->creation->displayname, 'url' => ['manage', 'creation' => $model->creation_id]];
+    $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Link/WA Rotators'), 'url' => ['rotator/admin/index']];
+    $this->params['breadcrumbs'][] = ['label' => $model->category->title->message, 'url' => ['rotator/admin/view', 'id' => $model->cat_id]];
+    $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Item'), 'url' => ['rotator/item/manage', 'category' => $model->cat_id]];
     $this->params['breadcrumbs'][] = $model->title;
 
     $this->params['menu']['content'] = [
@@ -29,7 +30,7 @@ if (!$small) {
     ];
 } ?>
 
-<div class="link-tree-view">
+<div class="link-rotator-item-view">
 
 <?php
 $attributes = [
@@ -45,20 +46,46 @@ $attributes = [
 		'visible' => !$small,
 	],
 	[
+		'attribute' => 'categoryName',
+		'value' => function ($model) {
+            $categoryName = isset($model->category) ? $model->category->title->message : '-';
+            if ($categoryName != '-') {
+                return Html::a($categoryName, ['rotator/admin/view', 'id' => $model->cat_id], ['title' => $categoryName, 'class' => 'modal-btn']);
+            }
+            return $categoryName;
+		},
+		'format' => 'html',
+	],
+	[
 		'attribute' => 'title',
 		'value' => $model->title ? $model->title : '-',
 	],
 	[
+		'attribute' => 'banner_desc',
+		'value' => $model->banner_desc ? $model->banner_desc : '-',
+		'visible' => !$small,
+	],
+	[
 		'attribute' => 'url',
-		'value' => Yii::$app->formatter->asUrl($model->url),
+		'value' => $model->url ? Yii::$app->formatter->asUrl($model->url) : '-',
 		'format' => 'html',
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'published_date',
+		'value' => Yii::$app->formatter->asDate($model->published_date, 'medium'),
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'expired_date',
+		'value' => Yii::$app->formatter->asDate($model->expired_date, 'medium'),
 		'visible' => !$small,
 	],
 	[
 		'attribute' => 'click',
 		'value' => function ($model) {
 			$clicks = $model->getClicks(true);
-			return Html::a($clicks, ['o/click/manage', 'banner' => $model->primaryKey, 'linktree' => true], ['title' => Yii::t('app', '{count} clicks', ['count' => $clicks])]);
+			return Html::a($clicks, ['o/click/manage', 'banner' => $model->primaryKey], ['title' => Yii::t('app', '{count} clicks', ['count' => $clicks])]);
 		},
 		'format' => 'html',
 		'visible' => !$small,
@@ -67,7 +94,7 @@ $attributes = [
 		'attribute' => 'view',
 		'value' => function ($model) {
 			$views = $model->getViews(true);
-			return Html::a($views, ['o/view/manage', 'banner' => $model->primaryKey, 'linktree' => true], ['title' => Yii::t('app', '{count} views', ['count' => $views])]);
+			return Html::a($views, ['o/view/manage', 'banner' => $model->primaryKey], ['title' => Yii::t('app', '{count} views', ['count' => $views])]);
 		},
 		'format' => 'html',
 		'visible' => !$small,

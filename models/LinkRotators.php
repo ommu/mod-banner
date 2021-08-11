@@ -83,7 +83,7 @@ class LinkRotators extends \app\components\ActiveRecord
 		return [
 			'cat_id' => Yii::t('app', 'ID'),
 			'publish' => Yii::t('app', 'Publish'),
-			'name' => Yii::t('app', 'Rotator Name'),
+			'name' => Yii::t('app', 'Name'),
 			'desc' => Yii::t('app', 'Description'),
 			'code' => Yii::t('app', 'Code'),
 			'creation_date' => Yii::t('app', 'Creation Date'),
@@ -91,7 +91,7 @@ class LinkRotators extends \app\components\ActiveRecord
 			'modified_date' => Yii::t('app', 'Modified Date'),
 			'modified_id' => Yii::t('app', 'Modified'),
 			'updated_date' => Yii::t('app', 'Updated Date'),
-			'name_i' => Yii::t('app', 'Rotator Name'),
+			'name_i' => Yii::t('app', 'Name'),
 			'desc_i' => Yii::t('app', 'Description'),
 			'creationDisplayname' => Yii::t('app', 'Creation'),
 			'modifiedDisplayname' => Yii::t('app', 'Modified'),

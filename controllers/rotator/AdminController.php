@@ -84,7 +84,7 @@ class AdminController extends Controller
         }
         $columns = $searchModel->getGridColumn($cols);
 
-		$this->view->title = Yii::t('app', 'Rotators');
+		$this->view->title = Yii::t('app', 'Link/WA Rotators');
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_manage', [
@@ -111,8 +111,11 @@ class AdminController extends Controller
 
             if ($model->save()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'Link rotator success created.'));
+                if (Yii::$app->request->isAjax) {
+                    return $this->redirect(Yii::$app->request->referrer ?: ['manage']);
+                }
                 return $this->redirect(['manage']);
-                //return $this->redirect(['view', 'id'=>$model->cat_id]);
+                //return $this->redirect(['view', 'id' => $model->cat_id]);
 
             } else {
                 if (Yii::$app->request->isAjax) {
@@ -124,7 +127,7 @@ class AdminController extends Controller
 		$this->view->title = Yii::t('app', 'Create Rotator');
 		$this->view->description = '';
 		$this->view->keywords = '';
-		return $this->render('admin_create', [
+		return $this->oRender('admin_create', [
 			'model' => $model,
 		]);
 	}
@@ -147,6 +150,9 @@ class AdminController extends Controller
 
             if ($model->save()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'Link rotator success updated.'));
+                if (Yii::$app->request->isAjax) {
+                    return $this->redirect(Yii::$app->request->referrer ?: ['manage']);
+                }
                 return $this->redirect(['manage']);
 
             } else {
@@ -159,7 +165,7 @@ class AdminController extends Controller
 		$this->view->title = Yii::t('app', 'Update Rotator: {name}', ['name' => $model->title->message]);
 		$this->view->description = '';
 		$this->view->keywords = '';
-		return $this->render('admin_update', [
+		return $this->oRender('admin_update', [
 			'model' => $model,
 		]);
 	}

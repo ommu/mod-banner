@@ -59,7 +59,7 @@ class m210809_200457_banner_module_insert_role_menu_linkrotator extends \yii\db\
 		$tableName = Yii::$app->db->tablePrefix . $menuTable;
         if (Yii::$app->db->getTableSchema($tableName, true)) {
 			$this->batchInsert($tableName, ['name', 'module', 'icon', 'parent', 'route', 'order', 'data'], [
-				['URL Rotator', 'banner', null, Menu::getParentId('Publications#rbac'), '/banner/rotator/admin/index', null, null],
+				['URL/WA Rotator', 'banner', null, Menu::getParentId('Publications#rbac'), '/banner/rotator/admin/index', null, null],
 			]);
 		}
 	}

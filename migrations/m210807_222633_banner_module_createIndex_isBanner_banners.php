@@ -20,7 +20,7 @@ class m210807_222633_banner_module_createIndex_isBanner_banners extends \yii\db\
 		$tableName = Yii::$app->db->tablePrefix . 'ommu_banners';
 		if (Yii::$app->db->getTableSchema($tableName, true)) {
 			$this->createIndex(
-				'controllerFindModel',
+				'bannerIdWithIsBanner',
 				$tableName,
 				['banner_id', 'is_banner'],
 			);

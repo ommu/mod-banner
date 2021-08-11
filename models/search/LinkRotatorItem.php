@@ -1,13 +1,13 @@
 <?php
 /**
- * LinkTree
+ * LinkRotatorItem
  *
- * LinkTree represents the model behind the search form about `ommu\banner\models\LinkTree`.
+ * LinkRotatorItem represents the model behind the search form about `ommu\banner\models\LinkRotatorItem`.
  *
  * @author Putra Sudaryanto <putra@ommu.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2021 OMMU (www.ommu.id)
- * @created date 7 August 2021, 22:42 WIB
+ * @created date 9 August 2021, 19:58 WIB
  * @link https://github.com/ommu/mod-banner
  *
  */
@@ -17,9 +17,9 @@ namespace ommu\banner\models\search;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use ommu\banner\models\LinkTree as LinkTreeModel;
+use ommu\banner\models\LinkRotatorItem as LinkRotatorItemModel;
 
-class LinkTree extends LinkTreeModel
+class LinkRotatorItem extends LinkRotatorItemModel
 {
 	/**
 	 * {@inheritdoc}
@@ -27,8 +27,8 @@ class LinkTree extends LinkTreeModel
 	public function rules()
 	{
 		return [
-			[['banner_id', 'publish', 'cat_id', 'creation_id', 'modified_id', 'click', 'view'], 'integer'],
-			[['title', 'url', 'creation_date', 'modified_date', 'updated_date', 'slug',
+			[['banner_id', 'publish', 'cat_id', 'creation_id', 'modified_id', 'click', 'view', 'permanent'], 'integer'],
+			[['title', 'url', 'banner_desc', 'published_date', 'expired_date', 'creation_date', 'modified_date', 'updated_date', 'slug',
                 'categoryName', 'creationDisplayname', 'modifiedDisplayname'], 'safe'],
 		];
 	}
@@ -62,9 +62,9 @@ class LinkTree extends LinkTreeModel
 	public function search($params, $column=null)
 	{
         if (!($column && is_array($column))) {
-            $query = LinkTreeModel::find()->alias('t');
+            $query = LinkRotatorItemModel::find()->alias('t');
         } else {
-            $query = LinkTreeModel::find()->alias('t')->select($column);
+            $query = LinkRotatorItemModel::find()->alias('t')->select($column);
         }
 		$query->joinWith([
 			'category category', 
@@ -84,22 +84,17 @@ class LinkTree extends LinkTreeModel
         if ((isset($params['sort']) && in_array($params['sort'], ['click', '-click'])) || (isset($params['click']) && $params['click'] != '')) {
             $query->joinWith(['clicks clicks']);
             if (isset($params['sort']) && in_array($params['sort'], ['click', '-click'])) {
-                $query->select(['t.*', 'count(clicks.click_id) as click']);
+                $query->select(['t.*', 'count(clicks.id) as click']);
             }
         }
         if ((isset($params['sort']) && in_array($params['sort'], ['view', '-view'])) || (isset($params['view']) && $params['view'] != '')) {
             $query->joinWith(['views views']);
             if (isset($params['sort']) && in_array($params['sort'], ['view', '-view'])) {
-                $query->select(['t.*', 'count(views.view_id) as view']);
+                $query->select(['t.*', 'count(views.id) as view']);
             }
         }
 
-        if (!Yii::$app->request->get('creation')) {
-            $query->select(['t.*', 'count(t.banner_id) as link']);
-            $query->groupBy(['creation_id']);
-        } else {
-            $query->groupBy(['banner_id']);
-        }
+		$query->groupBy(['banner_id']);
 
         // add conditions that should always apply here
 		$dataParams = [
@@ -132,10 +127,6 @@ class LinkTree extends LinkTreeModel
             'asc' => ['view' => SORT_ASC],
             'desc' => ['view' => SORT_DESC],
         ];
-        $attributes['link'] = [
-            'asc' => ['link' => SORT_ASC],
-            'desc' => ['link' => SORT_DESC],
-        ];
 		$dataProvider->setSort([
 			'attributes' => $attributes,
 			'defaultOrder' => ['banner_id' => SORT_DESC],
@@ -157,12 +148,14 @@ class LinkTree extends LinkTreeModel
 			't.banner_id' => $this->banner_id,
 			't.cat_id' => isset($params['category']) ? $params['category'] : $this->cat_id,
 			't.is_banner' => 0,
+			'cast(t.published_date as date)' => $this->published_date,
+			'cast(t.expired_date as date)' => $this->expired_date,
 			'cast(t.creation_date as date)' => $this->creation_date,
 			't.creation_id' => isset($params['creation']) ? $params['creation'] : $this->creation_id,
 			'cast(t.modified_date as date)' => $this->modified_date,
 			't.modified_id' => isset($params['modified']) ? $params['modified'] : $this->modified_id,
 			'cast(t.updated_date as date)' => $this->updated_date,
-			'category.type' => 'linktree',
+			'category.type' => 'rotator',
 		]);
 
 		if (isset($params['trash'])) {
@@ -177,22 +170,31 @@ class LinkTree extends LinkTreeModel
 
 		if (isset($params['click']) && $params['click'] != '') {
             if ($this->click == 1) {
-                $query->andWhere(['is not', 'clicks.click_id', null]);
+                $query->andWhere(['is not', 'clicks.id', null]);
             } else if ($this->click == 0) {
-                $query->andWhere(['is', 'clicks.click_id', null]);
+                $query->andWhere(['is', 'clicks.id', null]);
             }
         }
 
 		if (isset($params['view']) && $params['view'] != '') {
             if ($this->view == 1) {
-                $query->andWhere(['is not', 'views.view_id', null]);
+                $query->andWhere(['is not', 'views.id', null]);
             } else if ($this->view == 0) {
-                $query->andWhere(['is', 'views.view_id', null]);
+                $query->andWhere(['is', 'views.id', null]);
+            }
+        }
+
+		if (isset($params['permanent']) && $params['permanent'] != '') {
+            if ($this->permanent == 1) {
+                $query->andWhere(['in', 't.expired_date', ['0000-00-00', '1970-01-01', '0002-12-02', '-0001-11-30']]);
+            } else if ($this->permanent == 0) {
+                $query->andWhere(['not in', 't.expired_date', ['0000-00-00', '1970-01-01', '0002-12-02', '-0001-11-30']]);
             }
         }
 
 		$query->andFilterWhere(['like', 't.title', $this->title])
 			->andFilterWhere(['like', 't.url', $this->url])
+			->andFilterWhere(['like', 't.banner_desc', $this->banner_desc])
 			->andFilterWhere(['like', 't.slug', $this->slug])
 			->andFilterWhere(['like', 'categoryTitle.message', $this->categoryName])
 			->andFilterWhere(['like', 'creation.displayname', $this->creationDisplayname])

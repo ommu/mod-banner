@@ -1,11 +1,11 @@
 <?php
 /**
- * LinkTree
+ * LinkRotatorItem
  * 
  * @author Putra Sudaryanto <putra@ommu.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2021 OMMU (www.ommu.id)
- * @created date 7 August 2021, 19:22 WIB
+ * @created date 9 August 2021, 19:57 WIB
  * @link https://github.com/ommu/mod-banner
  *
  * This is the model class for table "ommu_banners".
@@ -17,6 +17,9 @@
  * @property integer $is_banner
  * @property string $title
  * @property string $url
+ * @property string $banner_desc
+ * @property string $published_date
+ * @property string $expired_date
  * @property string $creation_date
  * @property integer $creation_id
  * @property string $modified_date
@@ -27,7 +30,7 @@
  * The followings are the available model relations:
  * @property BannerClicks[] $clicks
  * @property BannerViews[] $views
- * @property BannerCategory $category
+ * @property LinkRotators $category
  * @property Users $creation
  * @property Users $modified
  *
@@ -44,18 +47,21 @@ use yii\behaviors\SluggableBehavior;
 use thamtech\uuid\helpers\UuidHelper;
 use app\models\Users;
 
-class LinkTree extends \app\components\ActiveRecord
+class LinkRotatorItem extends \app\components\ActiveRecord
 {
 	use \ommu\traits\UtilityTrait;
+	use \ommu\traits\FileTrait;
 
-	public $gridForbiddenColumn = ['modified_date', 'modifiedDisplayname', 'updated_date', 'slug'];
+	public $gridForbiddenColumn = ['url', 'banner_desc', 'creation_date', 'creationDisplayname', 'modified_date', 'modifiedDisplayname', 'updated_date', 'slug'];
 
+	public $permanent;
 	public $categoryName;
 	public $creationDisplayname;
 	public $modifiedDisplayname;
 	public $click;
 	public $view;
-	public $link;
+
+	const SCENARIO_IS_NOT_PERMANENT = 'isNotPermanent';
 
 	/**
 	 * @return string the associated database table name
@@ -85,12 +91,25 @@ class LinkTree extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['cat_id', 'title', 'url', 'creation_id'], 'required'],
-			[['publish', 'cat_id', 'creation_id', 'modified_id'], 'integer'],
+			[['cat_id', 'title', 'url', 'banner_desc', 'published_date', 'expired_date', 'permanent'], 'required'],
+			[['publish', 'cat_id', 'creation_id', 'modified_id', 'permanent'], 'integer'],
 			[['url'], 'url'],
+			[['banner_desc'], 'string'],
+			[['published_date', 'expired_date'], 'safe'],
 			[['title', 'slug'], 'string', 'max' => 64],
-			[['cat_id'], 'exist', 'skipOnError' => true, 'targetClass' => BannerCategory::className(), 'targetAttribute' => ['cat_id' => 'cat_id']],
+			[['cat_id'], 'exist', 'skipOnError' => true, 'targetClass' => LinkRotators::className(), 'targetAttribute' => ['cat_id' => 'cat_id']],
+			[['expired_date'], 'compare', 'compareAttribute' => 'published_date', 'operator' => '>=', 'on' => self::SCENARIO_IS_NOT_PERMANENT],
 		];
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function scenarios()
+	{
+		$scenarios = parent::scenarios();
+		$scenarios[self::SCENARIO_IS_NOT_PERMANENT] = ['cat_id', 'title', 'url', 'banner_desc', 'published_date', 'expired_date', 'permanent'];
+		return $scenarios;
 	}
 
 	/**
@@ -99,23 +118,26 @@ class LinkTree extends \app\components\ActiveRecord
 	public function attributeLabels()
 	{
 		return [
-			'banner_id' => Yii::t('app', 'Banner'),
+			'banner_id' => Yii::t('app', 'ID'),
 			'publish' => Yii::t('app', 'Publish'),
-			'cat_id' => Yii::t('app', 'Category'),
+			'cat_id' => Yii::t('app', 'Rotator'),
 			'title' => Yii::t('app', 'Title'),
-			'url' => Yii::t('app', 'Link'),
+			'url' => Yii::t('app', 'Url'),
+			'banner_desc' => Yii::t('app', 'Description'),
+			'published_date' => Yii::t('app', 'Published Date'),
+			'expired_date' => Yii::t('app', 'Expired Date'),
 			'creation_date' => Yii::t('app', 'Creation Date'),
 			'creation_id' => Yii::t('app', 'Creation'),
 			'modified_date' => Yii::t('app', 'Modified Date'),
 			'modified_id' => Yii::t('app', 'Modified'),
 			'updated_date' => Yii::t('app', 'Updated Date'),
 			'slug' => Yii::t('app', 'Slug'),
-			'categoryName' => Yii::t('app', 'Category'),
+			'categoryName' => Yii::t('app', 'Rotator'),
 			'creationDisplayname' => Yii::t('app', 'Creation'),
 			'modifiedDisplayname' => Yii::t('app', 'Modified'),
 			'click' => Yii::t('app', 'Click'),
 			'view' => Yii::t('app', 'View'),
-			'link' => Yii::t('app', 'Link'),
+			'permanent' => Yii::t('app', 'Permanent'),
 		];
 	}
 
@@ -158,7 +180,7 @@ class LinkTree extends \app\components\ActiveRecord
 	 */
 	public function getCategory()
 	{
-		return $this->hasOne(BannerCategory::className(), ['cat_id' => 'cat_id']);
+		return $this->hasOne(LinkRotators::className(), ['cat_id' => 'cat_id']);
 	}
 
 	/**
@@ -179,11 +201,11 @@ class LinkTree extends \app\components\ActiveRecord
 
 	/**
 	 * {@inheritdoc}
-	 * @return \ommu\banner\models\query\LinkTree the active query used by this AR class.
+	 * @return \ommu\banner\models\query\LinkRotatorItem the active query used by this AR class.
 	 */
 	public static function find()
 	{
-		return new \ommu\banner\models\query\LinkTree(get_called_class());
+		return new \ommu\banner\models\query\LinkRotatorItem(get_called_class());
 	}
 
 	/**
@@ -206,12 +228,20 @@ class LinkTree extends \app\components\ActiveRecord
 			'class' => 'app\components\grid\SerialColumn',
 			'contentOptions' => ['class' => 'text-center'],
 		];
+		$this->templateColumns['cat_id'] = [
+			'attribute' => 'cat_id',
+			'value' => function($model, $key, $index, $column) {
+				return isset($model->category) ? $model->category->title->message : '-';
+				// return $model->categoryName;
+			},
+			'filter' => LinkRotators::getRotator(),
+			'visible' => !Yii::$app->request->get('category') ? true : false,
+		];
 		$this->templateColumns['title'] = [
 			'attribute' => 'title',
 			'value' => function($model, $key, $index, $column) {
 				return $model->title;
 			},
-			'visible' => Yii::$app->request->get('creation') ? true : false,
 		];
 		$this->templateColumns['url'] = [
 			'attribute' => 'url',
@@ -219,15 +249,26 @@ class LinkTree extends \app\components\ActiveRecord
 				return Yii::$app->formatter->asUrl($model->url);
 			},
 			'format' => 'html',
-			'visible' => Yii::$app->request->get('creation') ? true : false,
 		];
-		$this->templateColumns['creationDisplayname'] = [
-			'attribute' => 'creationDisplayname',
+		$this->templateColumns['banner_desc'] = [
+			'attribute' => 'banner_desc',
 			'value' => function($model, $key, $index, $column) {
-				return isset($model->creation) ? $model->creation->displayname : '-';
-				// return $model->creationDisplayname;
+				return $model->banner_desc;
 			},
-			'visible' => !Yii::$app->request->get('creation') ? true : false,
+		];
+		$this->templateColumns['published_date'] = [
+			'attribute' => 'published_date',
+			'value' => function($model, $key, $index, $column) {
+				return Yii::$app->formatter->asDate($model->published_date, 'medium');
+			},
+			'filter' => $this->filterDatepicker($this, 'published_date'),
+		];
+		$this->templateColumns['expired_date'] = [
+			'attribute' => 'expired_date',
+			'value' => function($model, $key, $index, $column) {
+				return Yii::$app->formatter->asDate($model->expired_date, 'medium');
+			},
+			'filter' => $this->filterDatepicker($this, 'expired_date'),
 		];
 		$this->templateColumns['creation_date'] = [
 			'attribute' => 'creation_date',
@@ -235,6 +276,13 @@ class LinkTree extends \app\components\ActiveRecord
 				return Yii::$app->formatter->asDatetime($model->creation_date, 'medium');
 			},
 			'filter' => $this->filterDatepicker($this, 'creation_date'),
+		];
+		$this->templateColumns['creationDisplayname'] = [
+			'attribute' => 'creationDisplayname',
+			'value' => function($model, $key, $index, $column) {
+				return isset($model->creation) ? $model->creation->displayname : '-';
+				// return $model->creationDisplayname;
+			},
 			'visible' => !Yii::$app->request->get('creation') ? true : false,
 		];
 		$this->templateColumns['modified_date'] = [
@@ -265,38 +313,33 @@ class LinkTree extends \app\components\ActiveRecord
 				return $model->slug;
 			},
 		];
-		$this->templateColumns['link'] = [
-			'attribute' => 'link',
-			'value' => function($model, $key, $index, $column) {
-				$links = $model->link;
-				return Html::a($links, ['manage', 'creation' => $model->creation_id], ['title' => Yii::t('app', '{count} links', ['count' => $links]), 'data-pjax' => 0]);
-			},
-			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class' => 'text-center'],
-			'format' => 'raw',
-			'visible' => !Yii::$app->request->get('creation') ? true : false,
-		];
 		$this->templateColumns['click'] = [
 			'attribute' => 'click',
 			'value' => function($model, $key, $index, $column) {
 				$clicks = $model->getClicks(true);
-				return Html::a($clicks, ['o/click/manage', 'banner' => $model->primaryKey, 'linktree' => true], ['title' => Yii::t('app', '{count} clicks', ['count' => $clicks]), 'data-pjax' => 0]);
+				return Html::a($clicks, ['o/click/manage', 'banner' => $model->primaryKey], ['title' => Yii::t('app', '{count} clicks', ['count' => $clicks]), 'data-pjax' => 0]);
 			},
 			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
-			'visible' => Yii::$app->request->get('creation') ? true : false,
 		];
 		$this->templateColumns['view'] = [
 			'attribute' => 'view',
 			'value' => function($model, $key, $index, $column) {
 				$views = $model->getViews(true);
-				return Html::a($views, ['o/view/manage', 'banner' => $model->primaryKey, 'linktree' => true], ['title' => Yii::t('app', '{count} views', ['count' => $views]), 'data-pjax' => 0]);
+				return Html::a($views, ['o/view/manage', 'banner' => $model->primaryKey], ['title' => Yii::t('app', '{count} views', ['count' => $views]), 'data-pjax' => 0]);
 			},
 			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
-			'visible' => Yii::$app->request->get('creation') ? true : false,
+		];
+		$this->templateColumns['permanent'] = [
+			'attribute' => 'permanent',
+			'value' => function($model, $key, $index, $column) {
+				return $this->filterYesNo($model->permanent);
+			},
+			'filter' => $this->filterYesNo(),
+			'contentOptions' => ['class' => 'text-center'],
 		];
 		$this->templateColumns['publish'] = [
 			'attribute' => 'publish',
@@ -307,7 +350,7 @@ class LinkTree extends \app\components\ActiveRecord
 			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
-			'visible' => !Yii::$app->request->get('trash') && Yii::$app->request->get('creation') ? true : false,
+			'visible' => !Yii::$app->request->get('trash') ? true : false,
 		];
 	}
 
@@ -351,6 +394,12 @@ class LinkTree extends \app\components\ActiveRecord
 		// $this->categoryName = isset($this->category) ? $this->category->title->message : '-';
 		// $this->creationDisplayname = isset($this->creation) ? $this->creation->displayname : '-';
 		// $this->modifiedDisplayname = isset($this->modified) ? $this->modified->displayname : '-';
+		$this->click = $this->getClicks(true) ? 1 : 0;
+		$this->view = $this->getViews(true) ? 1 : 0;
+		$this->permanent = 0;
+        if (Yii::$app->formatter->asDate($this->expired_date, 'php:Y-m-d') == '-') {
+            $this->permanent = 1;
+        }
 	}
 
 	/**
@@ -358,17 +407,16 @@ class LinkTree extends \app\components\ActiveRecord
 	 */
 	public function beforeValidate()
 	{
-		$category = BannerCategory::find()
-			->select(['cat_id'])
-			->andWhere(['publish' => 1])
-			->andWhere(['type' => 'linktree'])
-            ->one();
-
         if (parent::beforeValidate()) {
-            if ($category != null) {
-                $this->cat_id = $category->cat_id;
+            if ($this->permanent == 0) {
+                $this->scenario = self::SCENARIO_IS_NOT_PERMANENT;
             }
+
             $this->is_banner = 0;
+
+            if ($this->permanent) {
+                $this->expired_date = '0000-00-00';
+            }
 
             if ($this->isNewRecord) {
                 if ($this->creation_id == null) {
@@ -379,6 +427,18 @@ class LinkTree extends \app\components\ActiveRecord
                     $this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
                 }
             }
+        }
+        return true;
+	}
+
+	/**
+	 * before save attributes
+	 */
+	public function beforeSave($insert)
+	{
+        if (parent::beforeSave($insert)) {
+            $this->published_date = Yii::$app->formatter->asDate($this->published_date, 'php:Y-m-d');
+            $this->expired_date = Yii::$app->formatter->asDate($this->expired_date, 'php:Y-m-d');
         }
         return true;
 	}

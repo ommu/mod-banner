@@ -36,15 +36,15 @@ use yii\helpers\ArrayHelper;
 <?php //echo $form->errorSummary($model);?>
 
 <?php echo $form->field($model, 'name_i')
-	->textInput(['maxlength'=>true])
+	->textInput(['maxlength' => true])
 	->label($model->getAttributeLabel('name_i')); ?>
 
 <?php echo $form->field($model, 'desc_i')
-	->textarea(['rows'=>6, 'cols'=>50, 'maxlength'=>true])
+	->textarea(['rows' => 6, 'cols' => 50, 'maxlength' => true])
 	->label($model->getAttributeLabel('desc_i')); ?>
 
 <?php echo $form->field($model, 'code')
-	->textInput(['maxlength'=>true])
+	->textInput(['maxlength' => true])
 	->label($model->getAttributeLabel('code')); ?>
 
 <?php 
@@ -60,7 +60,7 @@ echo $form->field($model, 'publish')
 <?php $submitButtonOption = [];
 if (!$model->isNewRecord && Yii::$app->request->isAjax) {
     $submitButtonOption = ArrayHelper::merge($submitButtonOption, [
-        'backTo' => Html::a(Html::tag('span', '&laquo;', ['class' => 'mr-1']).Yii::t('app', 'Back to detail'), ['view', 'id'=>$model->primaryKey], ['title'=>Yii::t('app', 'Detail Rotator'), 'class' => 'ml-4 modal-btn']),
+        'backTo' => Html::a(Html::tag('span', '&laquo;', ['class' => 'mr-1']).Yii::t('app', 'Back to detail'), ['view', 'id' => $model->primaryKey], ['title' => Yii::t('app', 'Detail Rotator'), 'class' => 'ml-4 modal-btn']),
     ]);
 }
 echo $form->field($model, 'submitButton')
