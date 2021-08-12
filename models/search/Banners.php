@@ -132,6 +132,7 @@ class Banners extends BannersModel
 		$query->andFilterWhere([
 			't.banner_id' => $this->banner_id,
 			't.cat_id' => isset($params['category']) ? $params['category'] : $this->cat_id,
+			't.is_banner' => 1,
 			'cast(t.published_date as date)' => $this->published_date,
 			'cast(t.expired_date as date)' => $this->expired_date,
 			'cast(t.creation_date as date)' => $this->creation_date,

@@ -1,15 +1,14 @@
 <?php
 /**
- * Banner Categories (banner-category)
+ * Link Rotators (link-rotators)
  * @var $this app\components\View
- * @var $this ommu\banner\controllers\setting\CategoryController
- * @var $model ommu\banner\models\BannerCategory
+ * @var $this ommu\banner\controllers\rotator\AdminController
+ * @var $model ommu\banner\models\LinkRotators
  *
  * @author Putra Sudaryanto <putra@ommu.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2017 OMMU (www.ommu.id)
- * @created date 5 October 2017, 15:43 WIB
- * @modified date 24 January 2019, 13:06 WIB
+ * @copyright Copyright (c) 2021 OMMU (www.ommu.id)
+ * @created date 9 August 2021, 19:56 WIB
  * @link https://github.com/ommu/mod-banner
  *
  */
@@ -17,12 +16,10 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\DetailView;
-use ommu\banner\models\BannerCategory;
 
 if (!$small) {
-    $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Settings'), 'url' => ['/setting/update']];
-    $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Banner'), 'url' => ['admin/index']];
-    $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Category'), 'url' => ['index']];
+    $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Publication'), 'url' => ['/admin/page/admin/index']];
+    $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Link/WA Rotators'), 'url' => ['index']];
     $this->params['breadcrumbs'][] = $model->title->message;
 
     $this->params['menu']['content'] = [
@@ -31,18 +28,18 @@ if (!$small) {
     ];
 } ?>
 
-<div class="banner-category-view">
+<div class="link-rotators-view">
 
-<?php 
+<?php
 $attributes = [
 	[
 		'attribute' => 'cat_id',
-		'value' => $model->cat_id,
+		'value' => $model->cat_id ? $model->cat_id : '-',
 		'visible' => !$small,
 	],
 	[
 		'attribute' => 'publish',
-		'value' => $model->quickAction(Url::to(['publish', 'id' => $model->primaryKey]), $model->publish, 'Enable,Disable'),
+		'value' => $model->quickAction(Url::to(['publish', 'id' => $model->primaryKey]), $model->publish),
 		'format' => 'raw',
 		'visible' => !$small,
 	],
@@ -56,51 +53,13 @@ $attributes = [
 	],
 	[
 		'attribute' => 'code',
-		'value' => $model->code,
-		'visible' => !$small,
+		'value' => $model->code ? $model->code : '-',
 	],
 	[
-		'attribute' => 'banner_size',
-		'value' => BannerCategory::getSize($model->banner_size),
-		'visible' => !$small,
-	],
-	[
-		'attribute' => 'banner_limit',
-		'value' => $model->banner_limit,
-		'visible' => !$small,
-	],
-	[
-		'attribute' => 'banners',
+		'attribute' => 'item',
 		'value' => function ($model) {
-			$banners = $model->getBanners(true);
-			return Html::a($banners, ['admin/manage', 'category' => $model->primaryKey, 'expired' => 'publish']);
-		},
-		'format' => 'html',
-		'visible' => !$small,
-	],
-	[
-		'attribute' => 'permanent',
-		'value' => function ($model) {
-			$permanent = $model->getPermanent(true);
-			return Html::a($permanent, ['admin/manage', 'category' => $model->primaryKey, 'expired' => 'permanent']);
-		},
-		'format' => 'html',
-		'visible' => !$small,
-	],
-	[
-		'attribute' => 'pending',
-		'value' => function ($model) {
-			$pending = $model->getPending(true);
-			return Html::a($pending, ['admin/manage', 'category' => $model->primaryKey, 'expired' => 'pending']);
-		},
-		'format' => 'html',
-		'visible' => !$small,
-	],
-	[
-		'attribute' => 'expired',
-		'value' => function ($model) {
-			$expired = $model->getExpired(true);
-			return Html::a($expired, ['admin/manage', 'category' => $model->primaryKey, 'expired' => 'expired']);
+			$items = $model->getItems(true);
+			return Html::a($items, ['rotator/item/manage', 'category' => $model->primaryKey, 'publish' => 1], ['title' => Yii::t('app', '{count} items', ['count' => $items])]);
 		},
 		'format' => 'html',
 		'visible' => !$small,
@@ -129,6 +88,12 @@ $attributes = [
 		'attribute' => 'updated_date',
 		'value' => Yii::$app->formatter->asDatetime($model->updated_date, 'medium'),
 		'visible' => !$small,
+	],
+	[
+		'attribute' => '',
+		'value' => Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->primaryKey], ['title' => Yii::t('app', 'Update'), 'class' => 'btn btn-primary btn-sm modal-btn']),
+		'format' => 'html',
+		'visible' => !$small && Yii::$app->request->isAjax ? true : false,
 	],
 ];
 

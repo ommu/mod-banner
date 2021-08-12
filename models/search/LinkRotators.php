@@ -1,14 +1,13 @@
 <?php
 /**
- * BannerCategory
+ * LinkRotators
  *
- * BannerCategory represents the model behind the search form about `ommu\banner\models\BannerCategory`.
+ * LinkRotators represents the model behind the search form about `ommu\banner\models\LinkRotators`.
  *
  * @author Putra Sudaryanto <putra@ommu.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2017 OMMU (www.ommu.id)
- * @created date 5 October 2017, 15:43 WIB
- * @modified date 24 January 2019, 13:06 WIB
+ * @copyright Copyright (c) 2021 OMMU (www.ommu.id)
+ * @created date 9 August 2021, 19:56 WIB
  * @link https://github.com/ommu/mod-banner
  *
  */
@@ -18,9 +17,9 @@ namespace ommu\banner\models\search;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use ommu\banner\models\BannerCategory as BannerCategoryModel;
+use ommu\banner\models\LinkRotators as LinkRotatorsModel;
 
-class BannerCategory extends BannerCategoryModel
+class LinkRotators extends LinkRotatorsModel
 {
 	/**
 	 * {@inheritdoc}
@@ -28,9 +27,9 @@ class BannerCategory extends BannerCategoryModel
 	public function rules()
 	{
 		return [
-			[['cat_id', 'publish', 'name', 'desc', 'banner_limit', 'creation_id', 'modified_id'], 'integer'],
-			[['code', 'banner_size', 'creation_date', 'modified_date', 'updated_date',
-				'name_i', 'desc_i', 'creationDisplayname', 'modifiedDisplayname'], 'safe'],
+			[['cat_id', 'publish', 'name', 'desc', 'creation_id', 'modified_id', 'item'], 'integer'],
+			[['code', 'creation_date', 'modified_date', 'updated_date',
+                'name_i', 'desc_i', 'creationDisplayname', 'modifiedDisplayname'], 'safe'],
 		];
 	}
 
@@ -63,17 +62,34 @@ class BannerCategory extends BannerCategoryModel
 	public function search($params, $column=null)
 	{
         if (!($column && is_array($column))) {
-            $query = BannerCategoryModel::find()->alias('t');
+            $query = LinkRotatorsModel::find()->alias('t');
         } else {
-            $query = BannerCategoryModel::find()->alias('t')->select($column);
+            $query = LinkRotatorsModel::find()->alias('t')->select($column);
         }
 		$query->joinWith([
-			'view view',
-			'title title', 
-			'description description', 
-			'creation creation', 
-			'modified modified'
+			// 'title title', 
+			// 'description description', 
+			// 'creation creation', 
+			// 'modified modified'
 		]);
+        if ((isset($params['sort']) && in_array($params['sort'], ['name_i', '-name_i'])) || (isset($params['name_i']) && $params['name_i'] != '')) {
+            $query->joinWith(['title title']);
+        }
+        if ((isset($params['sort']) && in_array($params['sort'], ['desc_i', '-desc_i'])) || (isset($params['desc_i']) && $params['desc_i'] != '')) {
+            $query->joinWith(['description description']);
+        }
+        if ((isset($params['sort']) && in_array($params['sort'], ['creationDisplayname', '-creationDisplayname'])) || (isset($params['creationDisplayname']) && $params['creationDisplayname'] != '')) {
+            $query->joinWith(['creation creation']);
+        }
+        if ((isset($params['sort']) && in_array($params['sort'], ['modifiedDisplayname', '-modifiedDisplayname'])) || (isset($params['modifiedDisplayname']) && $params['modifiedDisplayname'] != '')) {
+            $query->joinWith(['modified modified']);
+        }
+        if ((isset($params['sort']) && in_array($params['sort'], ['item', '-item'])) || (isset($params['item']) && $params['item'] != '')) {
+            $query->joinWith(['items items']);
+            if (isset($params['sort']) && in_array($params['sort'], ['item', '-item'])) {
+                $query->select(['t.*', 'count(items.banner_id) as item']);
+            }
+        }
 
 		$query->groupBy(['cat_id']);
 
@@ -104,27 +120,18 @@ class BannerCategory extends BannerCategoryModel
 			'asc' => ['modified.displayname' => SORT_ASC],
 			'desc' => ['modified.displayname' => SORT_DESC],
 		];
-		$attributes['banners'] = [
-			'asc' => ['view.banners' => SORT_ASC],
-			'desc' => ['view.banners' => SORT_DESC],
-		];
-		$attributes['permanent'] = [
-			'asc' => ['view.banner_permanent' => SORT_ASC],
-			'desc' => ['view.banner_permanent' => SORT_DESC],
-		];
-		$attributes['pending'] = [
-			'asc' => ['view.banner_pending' => SORT_ASC],
-			'desc' => ['view.banner_pending' => SORT_DESC],
-		];
-		$attributes['expired'] = [
-			'asc' => ['view.banner_expired' => SORT_ASC],
-			'desc' => ['view.banner_expired' => SORT_DESC],
-		];
+        $attributes['item'] = [
+            'asc' => ['item' => SORT_ASC],
+            'desc' => ['item' => SORT_DESC],
+        ];
 		$dataProvider->setSort([
 			'attributes' => $attributes,
 			'defaultOrder' => ['cat_id' => SORT_DESC],
 		]);
 
+        if (Yii::$app->request->get('cat_id')) {
+            unset($params['cat_id']);
+        }
 		$this->load($params);
 
         if (!$this->validate()) {
@@ -134,12 +141,11 @@ class BannerCategory extends BannerCategoryModel
         }
 
 		// grid filtering conditions
-		$query->andFilterWhere([
+        $query->andFilterWhere([
 			't.cat_id' => $this->cat_id,
-			't.type' => 'banner',
+			't.type' => 'rotator',
 			't.name' => $this->name,
 			't.desc' => $this->desc,
-			't.banner_limit' => $this->banner_limit,
 			'cast(t.creation_date as date)' => $this->creation_date,
 			't.creation_id' => isset($params['creation']) ? $params['creation'] : $this->creation_id,
 			'cast(t.modified_date as date)' => $this->modified_date,
@@ -147,7 +153,7 @@ class BannerCategory extends BannerCategoryModel
 			'cast(t.updated_date as date)' => $this->updated_date,
 		]);
 
-        if (isset($params['trash'])) {
+		if (isset($params['trash'])) {
             $query->andFilterWhere(['NOT IN', 't.publish', [0,1]]);
         } else {
             if (!isset($params['publish']) || (isset($params['publish']) && $params['publish'] == '')) {
@@ -157,8 +163,15 @@ class BannerCategory extends BannerCategoryModel
             }
         }
 
+		if (isset($params['item']) && $params['item'] != '') {
+            if ($this->item == 1) {
+                $query->andWhere(['is not', 'items.banner_id', null]);
+            } else if ($this->item == 0) {
+                $query->andWhere(['is', 'items.banner_id', null]);
+            }
+        }
+
 		$query->andFilterWhere(['like', 't.code', $this->code])
-			->andFilterWhere(['like', 't.banner_size', $this->banner_size])
 			->andFilterWhere(['like', 'title.message', $this->name_i])
 			->andFilterWhere(['like', 'description.message', $this->desc_i])
 			->andFilterWhere(['like', 'creation.displayname', $this->creationDisplayname])

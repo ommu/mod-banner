@@ -1,28 +1,27 @@
 <?php
 /**
- * AdminController
- * @var $this ommu\banner\controllers\AdminController
- * @var $model ommu\banner\models\Banners
+ * LinktreeController
+ * @var $this ommu\banner\controllers\LinktreeController
+ * @var $model ommu\banner\models\LinkTree
  *
- * AdminController implements the CRUD actions for Banners model.
+ * LinktreeController implements the CRUD actions for LinkTree model.
  * Reference start
  * TOC :
- *	Index
- *	Manage
- *	Create
- *	Update
- *	View
- *	Delete
- *	RunAction
- *	Publish
+ *  Index
+ *  Manage
+ *  Create
+ *  Update
+ *  View
+ *  Delete
+ *  RunAction
+ *  Publish
  *
- *	findModel
+ *  findModel
  *
  * @author Putra Sudaryanto <putra@ommu.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2017 OMMU (www.ommu.id)
- * @created date 6 October 2017, 08:14 WIB
- * @modified date 13 February 2019, 05:27 WIB
+ * @copyright Copyright (c) 2021 OMMU (www.ommu.id)
+ * @created date 7 August 2021, 22:42 WIB
  * @link https://github.com/ommu/mod-banner
  *
  */
@@ -33,11 +32,10 @@ use Yii;
 use app\components\Controller;
 use mdm\admin\components\AccessControl;
 use yii\filters\VerbFilter;
-use ommu\banner\models\Banners;
-use ommu\banner\models\search\Banners as BannersSearch;
-use yii\web\UploadedFile;
+use ommu\banner\models\LinkTree;
+use ommu\banner\models\search\LinkTree as LinkTreeSearch;
 
-class AdminController extends Controller
+class LinktreeController extends Controller
 {
 	/**
 	 * {@inheritdoc}
@@ -52,7 +50,7 @@ class AdminController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
-                    'publish' => ['POST'],
+					'publish' => ['POST'],
                 ],
             ],
         ];
@@ -67,12 +65,12 @@ class AdminController extends Controller
 	}
 
 	/**
-	 * Lists all Banners models.
+	 * Lists all LinkTree models.
 	 * @return mixed
 	 */
 	public function actionManage()
 	{
-        $searchModel = new BannersSearch();
+        $searchModel = new LinkTreeSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         $gridColumn = Yii::$app->request->get('GridColumn', null);
@@ -89,8 +87,11 @@ class AdminController extends Controller
         if (($category = Yii::$app->request->get('category')) != null) {
             $category = \ommu\banner\models\BannerCategory::findOne($category);
         }
+        if (($creation = Yii::$app->request->get('creation')) != null) {
+            $creation = \app\models\Users::findOne($creation);
+        }
 
-		$this->view->title = Yii::t('app', 'Banners');
+		$this->view->title = Yii::t('app', 'Linktree');
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_manage', [
@@ -98,28 +99,38 @@ class AdminController extends Controller
 			'dataProvider' => $dataProvider,
 			'columns' => $columns,
 			'category' => $category,
+			'creation' => $creation,
 		]);
 	}
 
 	/**
-	 * Creates a new Banners model.
+	 * Creates a new LinkTree model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 * @return mixed
 	 */
 	public function actionCreate()
 	{
-        $model = new Banners();
+        if (($id = Yii::$app->request->get('id')) == null) {
+			throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'The requested page does not exist.'));
+        }
+
+        $model = new LinkTree([
+            'creation_id' => $id,
+        ]);
 
         if (Yii::$app->request->isPost) {
             $model->load(Yii::$app->request->post());
-            $model->banner_filename = UploadedFile::getInstance($model, 'banner_filename');
             // $postData = Yii::$app->request->post();
             // $model->load($postData);
             // $model->order = $postData['order'] ? $postData['order'] : 0;
 
             if ($model->save()) {
-                Yii::$app->session->setFlash('success', Yii::t('app', 'Banner success created.'));
-                return $this->redirect(['manage']);
+                Yii::$app->session->setFlash('success', Yii::t('app', 'Linktree success created.'));
+                if (Yii::$app->request->isAjax) {
+                    return $this->redirect(Yii::$app->request->referrer ?: ['manage', 'creation' => $model->creation_id]);
+                }
+                return $this->redirect(['manage', 'creation' => $model->creation_id]);
+                //return $this->redirect(['view', 'id' => $model->banner_id]);
 
             } else {
                 if (Yii::$app->request->isAjax) {
@@ -128,16 +139,16 @@ class AdminController extends Controller
             }
         }
 
-		$this->view->title = Yii::t('app', 'Create Banner');
+		$this->view->title = Yii::t('app', 'Create Linktree');
 		$this->view->description = '';
 		$this->view->keywords = '';
-		return $this->render('admin_create', [
+		return $this->oRender('admin_create', [
 			'model' => $model,
 		]);
 	}
 
 	/**
-	 * Updates an existing Banners model.
+	 * Updates an existing LinkTree model.
 	 * If update is successful, the browser will be redirected to the 'view' page.
 	 * @param integer $id
 	 * @return mixed
@@ -148,14 +159,16 @@ class AdminController extends Controller
 
         if (Yii::$app->request->isPost) {
             $model->load(Yii::$app->request->post());
-            $model->banner_filename = UploadedFile::getInstance($model, 'banner_filename');
             // $postData = Yii::$app->request->post();
             // $model->load($postData);
             // $model->order = $postData['order'] ? $postData['order'] : 0;
 
             if ($model->save()) {
-                Yii::$app->session->setFlash('success', Yii::t('app', 'Banner success updated.'));
-                return $this->redirect(['update', 'id' => $model->banner_id]);
+                Yii::$app->session->setFlash('success', Yii::t('app', 'Linktree success updated.'));
+                if (Yii::$app->request->isAjax) {
+                    return $this->redirect(Yii::$app->request->referrer ?: ['manage', 'creation' => $model->creation_id]);
+                }
+                return $this->redirect(['manage', 'creation' => $model->creation_id]);
 
             } else {
                 if (Yii::$app->request->isAjax) {
@@ -164,17 +177,16 @@ class AdminController extends Controller
             }
         }
 
-		$this->subMenu = $this->module->params['banner_submenu'];
-		$this->view->title = Yii::t('app', 'Update Banner: {title}', ['title' => $model->title]);
+		$this->view->title = Yii::t('app', 'Update Linktree: {title}', ['title' => $model->title]);
 		$this->view->description = '';
 		$this->view->keywords = '';
-		return $this->render('admin_update', [
+		return $this->oRender('admin_update', [
 			'model' => $model,
 		]);
 	}
 
 	/**
-	 * Displays a single Banners model.
+	 * Displays a single LinkTree model.
 	 * @param integer $id
 	 * @return mixed
 	 */
@@ -182,8 +194,7 @@ class AdminController extends Controller
 	{
         $model = $this->findModel($id);
 
-		$this->subMenu = $this->module->params['banner_submenu'];
-		$this->view->title = Yii::t('app', 'Detail Banner: {title}', ['title' => $model->title]);
+		$this->view->title = Yii::t('app', 'Detail Linktree: {title}', ['title' => $model->title]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->oRender('admin_view', [
@@ -192,7 +203,7 @@ class AdminController extends Controller
 	}
 
 	/**
-	 * Deletes an existing Banners model.
+	 * Deletes an existing LinkTree model.
 	 * If deletion is successful, the browser will be redirected to the 'index' page.
 	 * @param integer $id
 	 * @return mixed
@@ -202,14 +213,14 @@ class AdminController extends Controller
 		$model = $this->findModel($id);
 		$model->publish = 2;
 
-        if ($model->save(false, ['publish', 'modified_id'])) {
-			Yii::$app->session->setFlash('success', Yii::t('app', 'Banner success deleted.'));
-			return $this->redirect(Yii::$app->request->referrer ?: ['manage']);
-		}
+        if ($model->save(false, ['publish','modified_id'])) {
+            Yii::$app->session->setFlash('success', Yii::t('app', 'Linktree success deleted.'));
+            return $this->redirect(Yii::$app->request->referrer ?: ['manage', 'creation' => $model->creation_id]);
+        }
 	}
 
 	/**
-	 * actionPublish an existing Banners model.
+	 * actionPublish an existing LinkTree model.
 	 * If publish is successful, the browser will be redirected to the 'index' page.
 	 * @param integer $id
 	 * @return mixed
@@ -220,24 +231,28 @@ class AdminController extends Controller
 		$replace = $model->publish == 1 ? 0 : 1;
 		$model->publish = $replace;
 
-        if ($model->save(false, ['publish', 'modified_id'])) {
-			Yii::$app->session->setFlash('success', Yii::t('app', 'Banner success updated.'));
-			return $this->redirect(Yii::$app->request->referrer ?: ['manage']);
-		}
+        if ($model->save(false, ['publish','modified_id'])) {
+            Yii::$app->session->setFlash('success', Yii::t('app', 'Linktree success updated.'));
+            return $this->redirect(Yii::$app->request->referrer ?: ['manage', 'creation' => $model->creation_id]);
+        }
 	}
 
 	/**
-	 * Finds the Banners model based on its primary key value.
+	 * Finds the LinkTree model based on its primary key value.
 	 * If the model is not found, a 404 HTTP exception will be thrown.
 	 * @param integer $id
-	 * @return Banners the loaded model
+	 * @return LinkTree the loaded model
 	 * @throws NotFoundHttpException if the model cannot be found
 	 */
 	protected function findModel($id)
 	{
-        $model = Banners::find()
-            ->andWhere(['banner_id' => $id])
-            ->andWhere(['is_banner' => 1])
+        $model = LinkTree::find()
+            ->alias('t')
+            ->select(['t.*'])
+            ->joinWith(['category category'])
+            ->andWhere(['t.banner_id' => $id])
+            ->andWhere(['t.is_banner' => 0])
+            ->andWhere(['category.type' => 'linktree'])
             ->one();
 
         if ($model !== null) {

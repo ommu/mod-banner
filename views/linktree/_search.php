@@ -1,25 +1,25 @@
 <?php
 /**
- * Banner Categories (banner-category)
+ * Link Trees (link-tree)
  * @var $this app\components\View
- * @var $this ommu\banner\controllers\setting\CategoryController
- * @var $model ommu\banner\models\search\BannerCategory
+ * @var $this ommu\banner\controllers\LinktreeController
+ * @var $model ommu\banner\models\search\LinkTree
  * @var $form yii\widgets\ActiveForm
  *
  * @author Putra Sudaryanto <putra@ommu.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2017 OMMU (www.ommu.id)
- * @created date 5 October 2017, 15:43 WIB
- * @modified date 24 January 2019, 13:06 WIB
+ * @copyright Copyright (c) 2021 OMMU (www.ommu.id)
+ * @created date 7 August 2021, 22:42 WIB
  * @link https://github.com/ommu/mod-banner
  *
  */
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use ommu\banner\models\BannerCategory;
 ?>
 
-<div class="banner-category-search search-form">
+<div class="link-tree-search search-form">
 
 	<?php $form = ActiveForm::begin([
 		'action' => ['index'],
@@ -29,15 +29,9 @@ use yii\widgets\ActiveForm;
 		],
 	]); ?>
 
-		<?php echo $form->field($model, 'name_i');?>
+		<?php echo $form->field($model, 'title');?>
 
-		<?php echo $form->field($model, 'desc_i');?>
-
-		<?php echo $form->field($model, 'code');?>
-
-		<?php echo $form->field($model, 'banner_size');?>
-
-		<?php echo $form->field($model, 'banner_limit');?>
+		<?php echo $form->field($model, 'url');?>
 
 		<?php echo $form->field($model, 'creation_date')
 			->input('date');?>
@@ -51,6 +45,8 @@ use yii\widgets\ActiveForm;
 
 		<?php echo $form->field($model, 'updated_date')
 			->input('date');?>
+
+		<?php echo $form->field($model, 'slug');?>
 
 		<?php echo $form->field($model, 'publish')
 			->dropDownList($model->filterYesNo(), ['prompt' => '']);?>

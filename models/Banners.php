@@ -15,6 +15,7 @@
  * @property integer $banner_id
  * @property integer $publish
  * @property integer $cat_id
+ * @property integer $is_banner
  * @property string $title
  * @property string $url
  * @property string $banner_filename
@@ -425,6 +426,8 @@ class Banners extends \app\components\ActiveRecord
         }
 
         if (parent::beforeValidate()) {
+            $this->is_banner = 1;
+
             if ($this->linked) {
                 if ($this->url == '-') {
                     $this->addError('url', Yii::t('app', '{attribute} is not a valid URL', ['attribute' => $this->getAttributeLabel('url')]));

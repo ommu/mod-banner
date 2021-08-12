@@ -1,41 +1,39 @@
 <?php
 /**
  * AdminController
- * @var $this ommu\banner\controllers\AdminController
- * @var $model ommu\banner\models\Banners
+ * @var $this ommu\banner\controllers\rotator\AdminController
+ * @var $model ommu\banner\models\LinkRotators
  *
- * AdminController implements the CRUD actions for Banners model.
+ * AdminController implements the CRUD actions for LinkRotators model.
  * Reference start
  * TOC :
- *	Index
- *	Manage
- *	Create
- *	Update
- *	View
- *	Delete
- *	RunAction
- *	Publish
+ *  Index
+ *  Manage
+ *  Create
+ *  Update
+ *  View
+ *  Delete
+ *  RunAction
+ *  Publish
  *
- *	findModel
+ *  findModel
  *
  * @author Putra Sudaryanto <putra@ommu.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2017 OMMU (www.ommu.id)
- * @created date 6 October 2017, 08:14 WIB
- * @modified date 13 February 2019, 05:27 WIB
+ * @copyright Copyright (c) 2021 OMMU (www.ommu.id)
+ * @created date 9 August 2021, 19:56 WIB
  * @link https://github.com/ommu/mod-banner
  *
  */
 
-namespace ommu\banner\controllers;
+namespace ommu\banner\controllers\rotator;
 
 use Yii;
 use app\components\Controller;
 use mdm\admin\components\AccessControl;
 use yii\filters\VerbFilter;
-use ommu\banner\models\Banners;
-use ommu\banner\models\search\Banners as BannersSearch;
-use yii\web\UploadedFile;
+use ommu\banner\models\LinkRotators;
+use ommu\banner\models\search\LinkRotators as LinkRotatorsSearch;
 
 class AdminController extends Controller
 {
@@ -52,7 +50,7 @@ class AdminController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
-                    'publish' => ['POST'],
+					'publish' => ['POST'],
                 ],
             ],
         ];
@@ -67,12 +65,12 @@ class AdminController extends Controller
 	}
 
 	/**
-	 * Lists all Banners models.
+	 * Lists all LinkRotators models.
 	 * @return mixed
 	 */
 	public function actionManage()
 	{
-        $searchModel = new BannersSearch();
+        $searchModel = new LinkRotatorsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         $gridColumn = Yii::$app->request->get('GridColumn', null);
@@ -86,40 +84,38 @@ class AdminController extends Controller
         }
         $columns = $searchModel->getGridColumn($cols);
 
-        if (($category = Yii::$app->request->get('category')) != null) {
-            $category = \ommu\banner\models\BannerCategory::findOne($category);
-        }
-
-		$this->view->title = Yii::t('app', 'Banners');
+		$this->view->title = Yii::t('app', 'Link/WA Rotators');
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_manage', [
 			'searchModel' => $searchModel,
 			'dataProvider' => $dataProvider,
 			'columns' => $columns,
-			'category' => $category,
 		]);
 	}
 
 	/**
-	 * Creates a new Banners model.
+	 * Creates a new LinkRotators model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 * @return mixed
 	 */
 	public function actionCreate()
 	{
-        $model = new Banners();
+        $model = new LinkRotators();
 
         if (Yii::$app->request->isPost) {
             $model->load(Yii::$app->request->post());
-            $model->banner_filename = UploadedFile::getInstance($model, 'banner_filename');
             // $postData = Yii::$app->request->post();
             // $model->load($postData);
             // $model->order = $postData['order'] ? $postData['order'] : 0;
 
             if ($model->save()) {
-                Yii::$app->session->setFlash('success', Yii::t('app', 'Banner success created.'));
+                Yii::$app->session->setFlash('success', Yii::t('app', 'Link rotator success created.'));
+                if (Yii::$app->request->isAjax) {
+                    return $this->redirect(Yii::$app->request->referrer ?: ['manage']);
+                }
                 return $this->redirect(['manage']);
+                //return $this->redirect(['view', 'id' => $model->cat_id]);
 
             } else {
                 if (Yii::$app->request->isAjax) {
@@ -128,16 +124,16 @@ class AdminController extends Controller
             }
         }
 
-		$this->view->title = Yii::t('app', 'Create Banner');
+		$this->view->title = Yii::t('app', 'Create Rotator');
 		$this->view->description = '';
 		$this->view->keywords = '';
-		return $this->render('admin_create', [
+		return $this->oRender('admin_create', [
 			'model' => $model,
 		]);
 	}
 
 	/**
-	 * Updates an existing Banners model.
+	 * Updates an existing LinkRotators model.
 	 * If update is successful, the browser will be redirected to the 'view' page.
 	 * @param integer $id
 	 * @return mixed
@@ -148,14 +144,16 @@ class AdminController extends Controller
 
         if (Yii::$app->request->isPost) {
             $model->load(Yii::$app->request->post());
-            $model->banner_filename = UploadedFile::getInstance($model, 'banner_filename');
             // $postData = Yii::$app->request->post();
             // $model->load($postData);
             // $model->order = $postData['order'] ? $postData['order'] : 0;
 
             if ($model->save()) {
-                Yii::$app->session->setFlash('success', Yii::t('app', 'Banner success updated.'));
-                return $this->redirect(['update', 'id' => $model->banner_id]);
+                Yii::$app->session->setFlash('success', Yii::t('app', 'Link rotator success updated.'));
+                if (Yii::$app->request->isAjax) {
+                    return $this->redirect(Yii::$app->request->referrer ?: ['manage']);
+                }
+                return $this->redirect(['manage']);
 
             } else {
                 if (Yii::$app->request->isAjax) {
@@ -164,17 +162,16 @@ class AdminController extends Controller
             }
         }
 
-		$this->subMenu = $this->module->params['banner_submenu'];
-		$this->view->title = Yii::t('app', 'Update Banner: {title}', ['title' => $model->title]);
+		$this->view->title = Yii::t('app', 'Update Rotator: {name}', ['name' => $model->title->message]);
 		$this->view->description = '';
 		$this->view->keywords = '';
-		return $this->render('admin_update', [
+		return $this->oRender('admin_update', [
 			'model' => $model,
 		]);
 	}
 
 	/**
-	 * Displays a single Banners model.
+	 * Displays a single LinkRotators model.
 	 * @param integer $id
 	 * @return mixed
 	 */
@@ -182,8 +179,7 @@ class AdminController extends Controller
 	{
         $model = $this->findModel($id);
 
-		$this->subMenu = $this->module->params['banner_submenu'];
-		$this->view->title = Yii::t('app', 'Detail Banner: {title}', ['title' => $model->title]);
+		$this->view->title = Yii::t('app', 'Detail Rotator: {name}', ['name' => $model->title->message]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->oRender('admin_view', [
@@ -192,7 +188,7 @@ class AdminController extends Controller
 	}
 
 	/**
-	 * Deletes an existing Banners model.
+	 * Deletes an existing LinkRotators model.
 	 * If deletion is successful, the browser will be redirected to the 'index' page.
 	 * @param integer $id
 	 * @return mixed
@@ -202,14 +198,14 @@ class AdminController extends Controller
 		$model = $this->findModel($id);
 		$model->publish = 2;
 
-        if ($model->save(false, ['publish', 'modified_id'])) {
-			Yii::$app->session->setFlash('success', Yii::t('app', 'Banner success deleted.'));
-			return $this->redirect(Yii::$app->request->referrer ?: ['manage']);
-		}
+        if ($model->save(false, ['publish','modified_id'])) {
+            Yii::$app->session->setFlash('success', Yii::t('app', 'Link rotator success deleted.'));
+            return $this->redirect(Yii::$app->request->referrer ?: ['manage']);
+        }
 	}
 
 	/**
-	 * actionPublish an existing Banners model.
+	 * actionPublish an existing LinkRotators model.
 	 * If publish is successful, the browser will be redirected to the 'index' page.
 	 * @param integer $id
 	 * @return mixed
@@ -220,27 +216,22 @@ class AdminController extends Controller
 		$replace = $model->publish == 1 ? 0 : 1;
 		$model->publish = $replace;
 
-        if ($model->save(false, ['publish', 'modified_id'])) {
-			Yii::$app->session->setFlash('success', Yii::t('app', 'Banner success updated.'));
-			return $this->redirect(Yii::$app->request->referrer ?: ['manage']);
-		}
+        if ($model->save(false, ['publish','modified_id'])) {
+            Yii::$app->session->setFlash('success', Yii::t('app', 'Link rotator success updated.'));
+            return $this->redirect(Yii::$app->request->referrer ?: ['manage']);
+        }
 	}
 
 	/**
-	 * Finds the Banners model based on its primary key value.
+	 * Finds the LinkRotators model based on its primary key value.
 	 * If the model is not found, a 404 HTTP exception will be thrown.
 	 * @param integer $id
-	 * @return Banners the loaded model
+	 * @return LinkRotators the loaded model
 	 * @throws NotFoundHttpException if the model cannot be found
 	 */
 	protected function findModel($id)
 	{
-        $model = Banners::find()
-            ->andWhere(['banner_id' => $id])
-            ->andWhere(['is_banner' => 1])
-            ->one();
-
-        if ($model !== null) {
+        if (($model = LinkRotators::findOne($id)) !== null) {
             return $model;
         }
 
