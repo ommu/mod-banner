@@ -47,6 +47,7 @@ use yii\behaviors\SluggableBehavior;
 use thamtech\uuid\helpers\UuidHelper;
 use app\models\Users;
 use ommu\banner\models\view\Banners as BannersView;
+use yii\validators\UrlValidator;
 
 class Banners extends \app\components\ActiveRecord
 {
@@ -244,9 +245,13 @@ class Banners extends \app\components\ActiveRecord
 		$this->templateColumns['url'] = [
 			'attribute' => 'url',
 			'value' => function($model, $key, $index, $column) {
-				return $model->url == '-' ? $model->url : Yii::$app->formatter->asUrl($model->url);
+                $validator = new UrlValidator();
+                if ($validator->validate($model->url) === true) {
+                    return Yii::$app->formatter->asUrl($model->url, ['target' => '_blank']);
+                }
+                return '-';
 			},
-            'format' => 'html',
+            'format' => 'raw',
 		];
 		$this->templateColumns['banner_filename'] = [
 			'attribute' => 'banner_filename',
