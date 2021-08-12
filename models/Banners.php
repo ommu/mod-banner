@@ -93,7 +93,7 @@ class Banners extends \app\components\ActiveRecord
 		return [
 			[['cat_id', 'title', 'url', 'published_date', 'expired_date', 'linked', 'permanent'], 'required'],
 			[['publish', 'cat_id', 'creation_id', 'modified_id', 'linked', 'permanent'], 'integer'],
-			[['url', 'banner_desc', 'slug'], 'string'],
+			[['url', 'banner_desc'], 'string'],
 			[['banner_filename', 'banner_desc', 'published_date', 'expired_date'], 'safe'],
 			[['title', 'slug'], 'string', 'max' => 64],
 			[['cat_id'], 'exist', 'skipOnError' => true, 'targetClass' => BannerCategory::className(), 'targetAttribute' => ['cat_id' => 'cat_id']],
@@ -416,7 +416,8 @@ class Banners extends \app\components\ActiveRecord
 	{
 		$setting = BannerSetting::find()
 			->select(['banner_validation', 'banner_file_type'])
-			->where(['id' => 1])->one();
+			->where(['id' => 1])
+            ->one();
 
 		$banner_file_type = $this->formatFileType($setting->banner_file_type);
         if (empty($banner_file_type)) {
@@ -426,7 +427,7 @@ class Banners extends \app\components\ActiveRecord
         if (parent::beforeValidate()) {
             if ($this->linked) {
                 if ($this->url == '-') {
-                    $this->addError('url', Yii::t('app', '{attribute} harus dalam format hyperlink', ['attribute' => $this->getAttributeLabel('url')]));
+                    $this->addError('url', Yii::t('app', '{attribute} is not a valid URL', ['attribute' => $this->getAttributeLabel('url')]));
                 }
 			} else {
                 $this->url = '-';
@@ -498,7 +499,8 @@ class Banners extends \app\components\ActiveRecord
 	{
 		$setting = BannerSetting::find()
 			->select(['banner_validation', 'banner_resize'])
-			->where(['id' => 1])->one();
+			->where(['id' => 1])
+            ->one();
 
         if (parent::beforeSave($insert)) {
             if (!$insert) {
