@@ -70,13 +70,12 @@ class BannerCategory extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['name_i', 'desc_i', 'code', 'banner_size', 'banner_limit'], 'required'],
+			[['type', 'name_i', 'desc_i', 'code', 'banner_size', 'banner_limit'], 'required'],
 			[['publish', 'name', 'desc', 'banner_limit', 'creation_id', 'modified_id'], 'integer'],
-			[['name_i', 'desc_i', 'code'], 'string'],
+			[['type', 'name_i', 'desc_i'], 'string'],
 			//[['banner_size'], 'serialize'],
-			[['name_i'], 'string', 'max' => 64],
+			[['name_i', 'code'], 'string', 'max' => 64],
 			[['desc_i'], 'string', 'max' => 128],
-			[['code'], 'string', 'max' => 64],
 		];
 	}
 
@@ -115,34 +114,18 @@ class BannerCategory extends \app\components\ActiveRecord
 	/**
 	 * @return \yii\db\ActiveQuery
 	 */
-	public function getBannersByType($cat_id, $type='published')
-	{
-		$model = Banners::find()
-            ->alias('t')
-            ->where(['t.cat_id' => $cat_id]);
-        if ($type == 'published') {
-            $model->published();
-        } else if ($type == 'permanent') {
-            $model->permanent();
-        } else if ($type == 'pending') {
-            $model->pending();
-        } else if ($type == 'expired') {
-            $model->expired();
-        }
-		$banners = $model->count();
-
-		return $banners ? $banners : 0;
-	}
-
-	/**
-	 * @return \yii\db\ActiveQuery
-	 */
 	public function getBanners($count=false, $publish=null)
 	{
         if ($count == false) {
-            return $this->hasMany(Banners::className(), ['cat_id' => 'cat_id'])
-                ->alias('banners')
-                ->andOnCondition([sprintf('%s.publish', 'banners') => $publish]);
+            $model = $this->hasMany(Banners::className(), ['cat_id' => 'cat_id'])
+                ->alias('banners');
+            if ($publish != null) {
+                return $model->andOnCondition([sprintf('%s.publish', 'banners') => $publish]);
+            } else {
+                return $model->andOnCondition(['IN', sprintf('%s.publish', 'banners'), [0,1]]);
+            }
+
+            return $model;
         }
 
         if ($publish === null) {
@@ -158,6 +141,68 @@ class BannerCategory extends \app\components\ActiveRecord
             $model->published();
         } else if ($publish == 2) {
             $model->deleted();
+        }
+		$banners = $model->count();
+
+		return $banners ? $banners : 0;
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getTitle()
+	{
+		return $this->hasOne(SourceMessage::className(), ['id' => 'name']);
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getDescription()
+	{
+		return $this->hasOne(SourceMessage::className(), ['id' => 'desc']);
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getCreation()
+	{
+		return $this->hasOne(Users::className(), ['user_id' => 'creation_id']);
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getModified()
+	{
+		return $this->hasOne(Users::className(), ['user_id' => 'modified_id']);
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getView()
+	{
+		return $this->hasOne(BannerCategoryView::className(), ['cat_id' => 'cat_id']);
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getBannersByType($cat_id, $type='published')
+	{
+		$model = Banners::find()
+            ->alias('t')
+            ->where(['t.cat_id' => $cat_id]);
+        if ($type == 'published') {
+            $model->published();
+        } else if ($type == 'permanent') {
+            $model->permanent();
+        } else if ($type == 'pending') {
+            $model->pending();
+        } else if ($type == 'expired') {
+            $model->expired();
         }
 		$banners = $model->count();
 
@@ -199,46 +244,6 @@ class BannerCategory extends \app\components\ActiveRecord
         }
 
 		return self::getBannersByType($this->cat_id, 'expired');
-	}
-
-	/**
-	 * @return \yii\db\ActiveQuery
-	 */
-	public function getTitle()
-	{
-		return $this->hasOne(SourceMessage::className(), ['id' => 'name']);
-	}
-
-	/**
-	 * @return \yii\db\ActiveQuery
-	 */
-	public function getDescription()
-	{
-		return $this->hasOne(SourceMessage::className(), ['id' => 'desc']);
-	}
-
-	/**
-	 * @return \yii\db\ActiveQuery
-	 */
-	public function getCreation()
-	{
-		return $this->hasOne(Users::className(), ['user_id' => 'creation_id']);
-	}
-
-	/**
-	 * @return \yii\db\ActiveQuery
-	 */
-	public function getModified()
-	{
-		return $this->hasOne(Users::className(), ['user_id' => 'modified_id']);
-	}
-
-	/**
-	 * @return \yii\db\ActiveQuery
-	 */
-	public function getView()
-	{
-		return $this->hasOne(BannerCategoryView::className(), ['cat_id' => 'cat_id']);
 	}
 
 	/**
@@ -424,6 +429,7 @@ class BannerCategory extends \app\components\ActiveRecord
         if ($publish != null) {
             $model->andWhere(['t.publish' => $publish]);
         }
+        $model->andWhere(['t.type' => 'banner']);
 
 		$model = $model->orderBy('title.message ASC')->all();
 
@@ -469,6 +475,12 @@ class BannerCategory extends \app\components\ActiveRecord
 	public function beforeValidate()
 	{
         if (parent::beforeValidate()) {
+            $this->type = 'banner';
+
+            if ($this->code == '') {
+                $this->code = Inflector::slug($this->name_i);
+            }
+
             if ($this->banner_size['width'] == '' && $this->banner_size['height'] == '') {
                 $this->addError('banner_size', Yii::t('app', '{attribute} cannot be blank.', ['attribute' => $this->getAttributeLabel('banner_size')]));
             } else {
@@ -487,10 +499,6 @@ class BannerCategory extends \app\components\ActiveRecord
                 if ($this->modified_id == null) {
                     $this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
                 }
-            }
-
-            if ($this->code == '') {
-                $this->code = Inflector::slug($this->name_i);
             }
         }
         return true;
