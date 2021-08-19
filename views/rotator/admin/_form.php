@@ -23,7 +23,7 @@ use yii\helpers\ArrayHelper;
 
 <?php $form = ActiveForm::begin([
 	'options' => ['class' => 'form-horizontal form-label-left'],
-	'enableClientValidation' => true,
+	'enableClientValidation' => false,
 	'enableAjaxValidation' => false,
 	//'enableClientScript' => true,
 	'fieldConfig' => [

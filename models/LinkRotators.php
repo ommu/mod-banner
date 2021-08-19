@@ -71,6 +71,7 @@ class LinkRotators extends \app\components\ActiveRecord
 			[['type', 'rotator_type', 'name_i', 'desc_i'], 'required'],
 			[['publish', 'name', 'desc', 'creation_id', 'modified_id'], 'integer'],
 			[['type', 'rotator_type', 'name_i', 'desc_i'], 'string'],
+			[['code'], 'unique'],
 			[['code'], 'safe'],
 			[['name_i', 'code'], 'string', 'max' => 64],
 			[['desc_i'], 'string', 'max' => 128],
