@@ -14,6 +14,7 @@
  * @property integer $cat_id
  * @property integer $publish
  * @property string $type
+ * @property string $rotator_type
  * @property integer $name
  * @property integer $desc
  * @property string $code
@@ -67,9 +68,10 @@ class LinkRotators extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['type', 'name_i', 'desc_i', 'code'], 'required'],
+			[['type', 'rotator_type', 'name_i', 'desc_i'], 'required'],
 			[['publish', 'name', 'desc', 'creation_id', 'modified_id'], 'integer'],
-			[['type', 'name_i', 'desc_i'], 'string'],
+			[['type', 'rotator_type', 'name_i', 'desc_i'], 'string'],
+			[['code'], 'safe'],
 			[['name_i', 'code'], 'string', 'max' => 64],
 			[['desc_i'], 'string', 'max' => 128],
 		];
@@ -83,6 +85,7 @@ class LinkRotators extends \app\components\ActiveRecord
 		return [
 			'cat_id' => Yii::t('app', 'ID'),
 			'publish' => Yii::t('app', 'Publish'),
+			'rotator_type' => Yii::t('app', 'Type'),
 			'name' => Yii::t('app', 'Name'),
 			'desc' => Yii::t('app', 'Description'),
 			'code' => Yii::t('app', 'Code'),
@@ -209,6 +212,13 @@ class LinkRotators extends \app\components\ActiveRecord
 				return $model->desc_i;
 			},
 		];
+        $this->templateColumns['rotator_type'] = [
+            'attribute' => 'rotator_type',
+            'value' => function($model, $key, $index, $column) {
+                return self::getRotatorType($model->rotator_type);
+            },
+            'filter' => self::getRotatorType(),
+        ];
 		$this->templateColumns['code'] = [
 			'attribute' => 'code',
 			'value' => function($model, $key, $index, $column) {
@@ -296,6 +306,23 @@ class LinkRotators extends \app\components\ActiveRecord
         }
 	}
 
+    /**
+     * function getRotatorType
+     */
+    public static function getRotatorType($value=null)
+    {
+        $items = array(
+            'url' => Yii::t('app', 'URL'),
+            'wa' => Yii::t('app', 'WhatsApp'),
+        );
+
+        if ($value !== null) {
+            return $items[$value];
+        } else {
+            return $items;
+        }
+    }
+
 	/**
 	 * function getRotator
 	 */
@@ -341,8 +368,9 @@ class LinkRotators extends \app\components\ActiveRecord
             $this->type = 'rotator';
 
             if ($this->code == '') {
-                $this->code = Inflector::slug($this->name_i);
+                $this->code = $this->name_i;
             }
+            $this->code = Inflector::camelize($this->code);
 
             if ($this->isNewRecord) {
                 if ($this->creation_id == null) {
@@ -397,6 +425,7 @@ class LinkRotators extends \app\components\ActiveRecord
                 $desc->save();
             }
         }
+
         return true;
 	}
 }

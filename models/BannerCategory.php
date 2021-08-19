@@ -70,10 +70,11 @@ class BannerCategory extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['type', 'name_i', 'desc_i', 'code', 'banner_size', 'banner_limit'], 'required'],
+			[['type', 'name_i', 'desc_i', 'banner_size', 'banner_limit'], 'required'],
 			[['publish', 'name', 'desc', 'banner_limit', 'creation_id', 'modified_id'], 'integer'],
 			[['type', 'name_i', 'desc_i'], 'string'],
 			//[['banner_size'], 'serialize'],
+			[['code'], 'safe'],
 			[['name_i', 'code'], 'string', 'max' => 64],
 			[['desc_i'], 'string', 'max' => 128],
 		];
@@ -478,8 +479,9 @@ class BannerCategory extends \app\components\ActiveRecord
             $this->type = 'banner';
 
             if ($this->code == '') {
-                $this->code = Inflector::slug($this->name_i);
+                $this->code = $this->name_i;
             }
+            $this->code = Inflector::camelize($this->code);
 
             if ($this->banner_size['width'] == '' && $this->banner_size['height'] == '') {
                 $this->addError('banner_size', Yii::t('app', '{attribute} cannot be blank.', ['attribute' => $this->getAttributeLabel('banner_size')]));
@@ -546,6 +548,7 @@ class BannerCategory extends \app\components\ActiveRecord
 
             $this->banner_size = serialize($this->banner_size);
         }
+
         return true;
 	}
 }

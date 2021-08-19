@@ -29,6 +29,10 @@ use ommu\banner\models\LinkRotators;
 		],
 	]); ?>
 
+    <?php $rotatorType = $model::getRotatorType();
+        echo $form->field($model, 'rotator_type')
+        ->dropDownList($rotatorType, ['prompt' => '']);?>
+
 		<?php echo $form->field($model, 'name_i');?>
 
 		<?php echo $form->field($model, 'desc_i');?>

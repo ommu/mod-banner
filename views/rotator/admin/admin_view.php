@@ -43,6 +43,11 @@ $attributes = [
 		'format' => 'raw',
 		'visible' => !$small,
 	],
+    [
+        'attribute' => 'rotator_type',
+        'value' => $model::getRotatorType($model->rotator_type),
+        'visible' => !$small,
+    ],
 	[
 		'attribute' => 'name_i',
 		'value' => $model->name_i,

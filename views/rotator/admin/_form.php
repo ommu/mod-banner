@@ -35,6 +35,11 @@ use yii\helpers\ArrayHelper;
 
 <?php //echo $form->errorSummary($model);?>
 
+<?php $rotatorType = $model::getRotatorType();
+echo $form->field($model, 'rotator_type')
+    ->dropDownList($rotatorType, ['prompt' => ''])
+    ->label($model->getAttributeLabel('rotator_type')); ?>
+
 <?php echo $form->field($model, 'name_i')
 	->textInput(['maxlength' => true])
 	->label($model->getAttributeLabel('name_i')); ?>

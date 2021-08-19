@@ -28,7 +28,7 @@ class LinkRotators extends LinkRotatorsModel
 	{
 		return [
 			[['cat_id', 'publish', 'name', 'desc', 'creation_id', 'modified_id', 'item'], 'integer'],
-			[['code', 'creation_date', 'modified_date', 'updated_date',
+			[['rotator_type', 'code', 'creation_date', 'modified_date', 'updated_date',
                 'name_i', 'desc_i', 'creationDisplayname', 'modifiedDisplayname'], 'safe'],
 		];
 	}
@@ -144,6 +144,7 @@ class LinkRotators extends LinkRotatorsModel
         $query->andFilterWhere([
 			't.cat_id' => $this->cat_id,
 			't.type' => 'rotator',
+            't.rotator_type' => $this->rotator_type,
 			't.name' => $this->name,
 			't.desc' => $this->desc,
 			'cast(t.creation_date as date)' => $this->creation_date,
