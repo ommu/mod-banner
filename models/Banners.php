@@ -48,6 +48,7 @@ use yii\behaviors\SluggableBehavior;
 use thamtech\uuid\helpers\UuidHelper;
 use app\models\Users;
 use ommu\banner\models\view\Banners as BannersView;
+use yii\validators\UrlValidator;
 
 class Banners extends \app\components\ActiveRecord
 {
@@ -62,6 +63,10 @@ class Banners extends \app\components\ActiveRecord
 	public $categoryName;
 	public $creationDisplayname;
 	public $modifiedDisplayname;
+
+	const SCENARIO_IS_LINKED = 'isLinked';
+	const SCENARIO_IS_LINKED_NOT_PERMANENT = 'isLinkedNotPermanent';
+	const SCENARIO_IS_NOT_PERMANENT = 'isNotPermanent';
 
 	/**
 	 * @return string the associated database table name
@@ -93,11 +98,27 @@ class Banners extends \app\components\ActiveRecord
 		return [
 			[['cat_id', 'title', 'url', 'published_date', 'expired_date', 'linked', 'permanent'], 'required'],
 			[['publish', 'cat_id', 'creation_id', 'modified_id', 'linked', 'permanent'], 'integer'],
-			[['url', 'banner_desc', 'slug'], 'string'],
+			[['url', 'banner_desc'], 'string'],
+			[['url'], 'url', 'on' => self::SCENARIO_IS_LINKED],
+			[['url'], 'url', 'on' => self::SCENARIO_IS_LINKED_NOT_PERMANENT],
 			[['banner_filename', 'banner_desc', 'published_date', 'expired_date'], 'safe'],
 			[['title', 'slug'], 'string', 'max' => 64],
 			[['cat_id'], 'exist', 'skipOnError' => true, 'targetClass' => BannerCategory::className(), 'targetAttribute' => ['cat_id' => 'cat_id']],
+			[['expired_date'], 'compare', 'compareAttribute' => 'published_date', 'operator' => '>=', 'on' => self::SCENARIO_IS_NOT_PERMANENT],
+			[['expired_date'], 'compare', 'compareAttribute' => 'published_date', 'operator' => '>=', 'on' => self::SCENARIO_IS_LINKED_NOT_PERMANENT],
 		];
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function scenarios()
+	{
+		$scenarios = parent::scenarios();
+		$scenarios[self::SCENARIO_IS_LINKED] = ['cat_id', 'title', 'url', 'banner_desc', 'published_date', 'expired_date', 'permanent'];
+		$scenarios[self::SCENARIO_IS_NOT_PERMANENT] = ['cat_id', 'title', 'url', 'banner_desc', 'published_date', 'expired_date', 'permanent'];
+		$scenarios[self::SCENARIO_IS_LINKED_NOT_PERMANENT] = ['cat_id', 'title', 'url', 'banner_desc', 'published_date', 'expired_date', 'permanent'];
+		return $scenarios;
 	}
 
 	/**
@@ -245,8 +266,13 @@ class Banners extends \app\components\ActiveRecord
 		$this->templateColumns['url'] = [
 			'attribute' => 'url',
 			'value' => function($model, $key, $index, $column) {
-				return $model->url;
+                $validator = new UrlValidator();
+                if ($validator->validate($model->url) === true) {
+                    return Yii::$app->formatter->asUrl($model->url, ['target' => '_blank']);
+                }
+                return '-';
 			},
+            'format' => 'raw',
 		];
 		$this->templateColumns['banner_filename'] = [
 			'attribute' => 'banner_filename',
@@ -420,30 +446,39 @@ class Banners extends \app\components\ActiveRecord
         }
 
         if (parent::beforeValidate()) {
-            $this->is_banner = 1;
-
-            if ($this->linked) {
-                if ($this->url == '-') {
-                    $this->addError('url', Yii::t('app', '{attribute} harus dalam format hyperlink', ['attribute' => $this->getAttributeLabel('url')]));
+            if ($this->linked == 1) {
+                $this->scenario = self::SCENARIO_IS_LINKED;
+                if ($this->permanent == 0) {
+                    $this->scenario = self::SCENARIO_IS_LINKED_NOT_PERMANENT;
                 }
-			} else {
+
+            } else {
                 $this->url = '-';
+                if ($this->permanent == 0) {
+                    $this->scenario = self::SCENARIO_IS_NOT_PERMANENT;
+                }
             }
+
+            $this->is_banner = 1;
 
             if ($this->permanent) {
                 $this->expired_date = '0000-00-00';
-            } else {
-                if (in_array(Yii::$app->formatter->asDate($this->expired_date, 'php:Y-m-d'), ['0000-00-00', '1970-01-01', '0002-12-02', '-0001-11-30'])) {
-                    $this->addError('expired_date', Yii::t('app', '{attribute} cannot be blank.', ['attribute' => $this->getAttributeLabel('expired_date')]));
-                }
+            }
 
-                if (Yii::$app->formatter->asDate($this->published_date, 'php:Y-m-d') >= Yii::$app->formatter->asDate($this->expired_date, 'php:Y-m-d')) {
-					$this->addError('expired_date', Yii::t('app', '{expired-date} harus lebih besar dari {published-date}', [
-						'expired-date' => $this->getAttributeLabel('expired_date'), 
-						'published-date' => $this->getAttributeLabel('published_date'),
-                    ]));
-                }
-			}
+            // if ($this->permanent) {
+            //     $this->expired_date = '0000-00-00';
+            // } else {
+            //     if (Yii::$app->formatter->asDate($this->expired_date, 'php:Y-m-d') == '-') {
+            //         $this->addError('expired_date', Yii::t('app', '{attribute} cannot be blank.', ['attribute' => $this->getAttributeLabel('expired_date')]));
+            //     }
+
+            //     if (Yii::$app->formatter->asDate($this->published_date, 'php:Y-m-d') >= Yii::$app->formatter->asDate($this->expired_date, 'php:Y-m-d')) {
+			// 		$this->addError('expired_date', Yii::t('app', '{expired-date} harus lebih besar dari {published-date}', [
+			// 			'expired-date' => $this->getAttributeLabel('expired_date'), 
+			// 			'published-date' => $this->getAttributeLabel('published_date'),
+            //         ]));
+            //     }
+			// }
 
 			// $this->banner_filename = UploadedFile::getInstance($this, 'banner_filename');
             if ($this->banner_filename instanceof UploadedFile && !$this->banner_filename->getHasError()) {

@@ -104,7 +104,7 @@ echo $form->field($model, 'banner_filename', ['template' => '{label}{beginWrappe
 <?php
 if (!$model->getErrors()) {
 	$model->permanent = 0;
-    if (!$model->isNewRecord && in_array($model->expired_date, ['0000-00-00', '1970-01-01', '0002-12-02', '-0001-11-30'])) {
+    if (!$model->isNewRecord && Yii::$app->formatter->asDate($model->expired_date) == '-') {
 		$model->permanent = 1;
     }
 }

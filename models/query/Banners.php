@@ -32,8 +32,10 @@ class Banners extends \yii\db\ActiveQuery
 	public function published()
 	{
 		return $this->andWhere(['t.publish' => 1])
-			->andWhere(['not in', 'cast(expired_date as date)', ['0000-00-00', '1970-01-01']])
-			->andWhere(['>=', 'cast(expired_date as date)', Yii::$app->formatter->asDate('now', 'php:Y-m-d')])
+			->andWhere(['or', 
+                ['in', 'cast(expired_date as date)', ['0000-00-00', '1970-01-01']],
+                ['>=', 'cast(expired_date as date)', Yii::$app->formatter->asDate('now', 'php:Y-m-d')],
+            ])
 			->andWhere(['<=', 'cast(published_date as date)', Yii::$app->formatter->asDate('now', 'php:Y-m-d')]);
 	}
 
