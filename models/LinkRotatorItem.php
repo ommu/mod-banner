@@ -259,9 +259,15 @@ class LinkRotatorItem extends \app\components\ActiveRecord
 		$this->templateColumns['url'] = [
 			'attribute' => 'url',
 			'value' => function($model, $key, $index, $column) {
-                $validator = new UrlValidator();
-                if ($validator->validate($model->url) === true) {
-                    return Yii::$app->formatter->asUrl($model->url, ['target' => '_blank']);
+                if ($model->category->rotator_type == 'url') {
+                    $validator = new UrlValidator();
+                    if ($validator->validate($model->url) === true) {
+                        return Yii::$app->formatter->asUrl($model->url, ['target' => '_blank']);
+                    }
+                } else {
+                    if ($model->url != '') {
+                        return $model->url;
+                    }
                 }
                 return '-';
 			},

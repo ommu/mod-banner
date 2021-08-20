@@ -45,7 +45,7 @@ echo $form->field($model, 'rotator_type')
 	->label($model->getAttributeLabel('name_i')); ?>
 
 <?php echo $form->field($model, 'desc_i')
-	->textarea(['rows' => 6, 'cols' => 50, 'maxlength' => true])
+	->textarea(['rows' => 3, 'cols' => 50, 'maxlength' => true])
 	->label($model->getAttributeLabel('desc_i')); ?>
 
 <?php echo $form->field($model, 'code')
