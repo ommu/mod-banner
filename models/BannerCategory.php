@@ -480,8 +480,8 @@ class BannerCategory extends \app\components\ActiveRecord
 
             if ($this->code == '') {
                 $this->code = $this->name_i;
+                $this->code = Inflector::camelize($this->code);
             }
-            $this->code = Inflector::camelize($this->code);
 
             if ($this->banner_size['width'] == '' && $this->banner_size['height'] == '') {
                 $this->addError('banner_size', Yii::t('app', '{attribute} cannot be blank.', ['attribute' => $this->getAttributeLabel('banner_size')]));

@@ -62,7 +62,10 @@ class LinkRotatorItem extends \app\components\ActiveRecord
 	public $click;
 	public $view;
 
-	const SCENARIO_IS_NOT_PERMANENT = 'isNotPermanent';
+	const SCENARIO_IS_LINKED = 'isUrlRotator';
+	const SCENARIO_IS_LINKED_NOT_PERMANENT = 'isUrlRotatorNotPermanent';
+	const SCENARIO_IS_NOT_LINKED = 'isWhatsAppRotator';
+	const SCENARIO_IS_NOT_LINKED_NOT_PERMANENT = 'isWhatsAppRotatorNotPermanent';
 
 	/**
 	 * @return string the associated database table name
@@ -92,14 +95,20 @@ class LinkRotatorItem extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['cat_id', 'title', 'url', 'banner_desc', 'published_date', 'expired_date', 'permanent'], 'required'],
+			[['cat_id', 'title', 'url', 'published_date', 'expired_date', 'permanent'], 'required'],
+			[['cat_id', 'title', 'url', 'banner_desc', 'published_date', 'expired_date', 'permanent'], 'required', 'on' => self::SCENARIO_IS_NOT_LINKED],
+			[['cat_id', 'title', 'url', 'banner_desc', 'published_date', 'expired_date', 'permanent'], 'required', 'on' => self::SCENARIO_IS_NOT_LINKED_NOT_PERMANENT],
 			[['publish', 'cat_id', 'creation_id', 'modified_id', 'permanent'], 'integer'],
-			[['url'], 'url'],
+			[['publish', 'cat_id', 'url', 'creation_id', 'modified_id', 'permanent'], 'integer', 'on' => self::SCENARIO_IS_NOT_LINKED],
+			[['publish', 'cat_id', 'url', 'creation_id', 'modified_id', 'permanent'], 'integer', 'on' => self::SCENARIO_IS_NOT_LINKED_NOT_PERMANENT],
 			[['banner_desc'], 'string'],
-			[['published_date', 'expired_date'], 'safe'],
+			[['url'], 'url', 'on' => self::SCENARIO_IS_LINKED],
+			[['url'], 'url', 'on' => self::SCENARIO_IS_LINKED_NOT_PERMANENT],
+			[['banner_desc', 'published_date', 'expired_date'], 'safe'],
 			[['title', 'slug'], 'string', 'max' => 64],
 			[['cat_id'], 'exist', 'skipOnError' => true, 'targetClass' => LinkRotators::className(), 'targetAttribute' => ['cat_id' => 'cat_id']],
-			[['expired_date'], 'compare', 'compareAttribute' => 'published_date', 'operator' => '>=', 'on' => self::SCENARIO_IS_NOT_PERMANENT],
+			[['expired_date'], 'compare', 'compareAttribute' => 'published_date', 'operator' => '>=', 'on' => self::SCENARIO_IS_LINKED_NOT_PERMANENT],
+			[['expired_date'], 'compare', 'compareAttribute' => 'published_date', 'operator' => '>=', 'on' => self::SCENARIO_IS_NOT_LINKED_NOT_PERMANENT],
 		];
 	}
 
@@ -109,7 +118,10 @@ class LinkRotatorItem extends \app\components\ActiveRecord
 	public function scenarios()
 	{
 		$scenarios = parent::scenarios();
-		$scenarios[self::SCENARIO_IS_NOT_PERMANENT] = ['cat_id', 'title', 'url', 'banner_desc', 'published_date', 'expired_date', 'permanent'];
+		$scenarios[self::SCENARIO_IS_LINKED] = ['cat_id', 'title', 'url', 'banner_desc', 'published_date', 'expired_date', 'permanent'];
+		$scenarios[self::SCENARIO_IS_LINKED_NOT_PERMANENT] = ['cat_id', 'title', 'url', 'banner_desc', 'published_date', 'expired_date', 'permanent'];
+		$scenarios[self::SCENARIO_IS_NOT_LINKED] = ['cat_id', 'title', 'url', 'banner_desc', 'published_date', 'expired_date', 'permanent'];
+		$scenarios[self::SCENARIO_IS_NOT_LINKED_NOT_PERMANENT] = ['cat_id', 'title', 'url', 'banner_desc', 'published_date', 'expired_date', 'permanent'];
 		return $scenarios;
 	}
 
@@ -413,8 +425,15 @@ class LinkRotatorItem extends \app\components\ActiveRecord
 	public function beforeValidate()
 	{
         if (parent::beforeValidate()) {
-            if ($this->permanent == 0) {
-                $this->scenario = self::SCENARIO_IS_NOT_PERMANENT;
+            if ($this->category->rotator_type == 'url') {
+                if ($this->permanent == 0) {
+                    $this->scenario = self::SCENARIO_IS_LINKED_NOT_PERMANENT;
+                }
+
+            } else {
+                if ($this->permanent == 0) {
+                    $this->scenario = self::SCENARIO_IS_NOT_LINKED_NOT_PERMANENT;
+                }
             }
 
             $this->is_banner = 0;

@@ -370,8 +370,8 @@ class LinkRotators extends \app\components\ActiveRecord
 
             if ($this->code == '') {
                 $this->code = $this->name_i;
+                $this->code = Inflector::camelize($this->code);
             }
-            $this->code = Inflector::camelize($this->code);
 
             if ($this->isNewRecord) {
                 if ($this->creation_id == null) {

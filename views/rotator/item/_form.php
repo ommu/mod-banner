@@ -63,9 +63,15 @@ JS;
 	->textarea(['rows' => 3, 'cols' => 50])
 	->label($model->getAttributeLabel('banner_desc')); ?>
 
-<?php echo $form->field($model, 'url')
-	->textarea(['rows' => 2, 'cols' => 50])
-	->label($model->getAttributeLabel('url')); ?>
+<?php if ($model->category->rotator_type == 'url') {
+    echo $form->field($model, 'url')
+        ->textarea(['rows' => 2, 'cols' => 50])
+        ->label($model->getAttributeLabel('url'));
+} else {
+    echo $form->field($model, 'url')
+        ->textInput(['maxlength' => true])
+        ->label($model->getAttributeLabel('url'));
+} ?>
 
 <?php echo $form->field($model, 'published_date')
     ->widget(Flatpickr::className(), ['model' => $model, 'attribute' => 'published_date'])
