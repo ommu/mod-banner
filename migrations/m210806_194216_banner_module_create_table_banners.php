@@ -28,7 +28,7 @@ class m210806_194216_banner_module_create_table_banners extends \yii\db\Migratio
 				'publish' => Schema::TYPE_TINYINT . '(1) NOT NULL DEFAULT \'1\'',
 				'cat_id' => Schema::TYPE_SMALLINT . '(5) UNSIGNED NOT NULL',
 				'title' => Schema::TYPE_STRING . '(64) NOT NULL',
-				'url' => Schema::TYPE_TEXT . ' NOT NULL',
+				'url' => Schema::TYPE_TEXT . ' NOT NULL COMMENT \'url\'',
 				'banner_filename' => Schema::TYPE_TEXT . ' NOT NULL COMMENT \'file\'',
 				'banner_desc' => Schema::TYPE_TEXT . ' NOT NULL',
 				'published_date' => Schema::TYPE_DATE . ' NOT NULL',

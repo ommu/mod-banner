@@ -159,6 +159,12 @@ class ItemController extends Controller
 	{
 		$model = $this->findModel($id);
 
+        if ($model->category->rotator_type == 'url') {
+            $model->scenario = $model::SCENARIO_IS_LINKED;
+        } else {
+            $model->scenario = $model::SCENARIO_IS_NOT_LINKED;
+        }
+
         if (Yii::$app->request->isPost) {
             $model->load(Yii::$app->request->post());
             // $postData = Yii::$app->request->post();
