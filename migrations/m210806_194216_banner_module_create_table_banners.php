@@ -42,13 +42,13 @@ class m210806_194216_banner_module_create_table_banners extends \yii\db\Migratio
 				'PRIMARY KEY ([[banner_id]])',
 				'FOREIGN KEY ([[cat_id]]) REFERENCES ommu_banner_category ([[cat_id]]) ON DELETE CASCADE ON UPDATE CASCADE',
 			], $tableOptions);
-		}
 
-        $this->createIndex(
-            'publishWithCategory',
-            $tableName,
-            ['publish', 'cat_id']
-        );
+            $this->createIndex(
+                'publishWithCategory',
+                $tableName,
+                ['publish', 'cat_id']
+            );
+		}
 	}
 
 	public function down()
