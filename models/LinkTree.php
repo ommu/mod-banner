@@ -22,7 +22,6 @@
  * @property string $modified_date
  * @property integer $modified_id
  * @property string $updated_date
- * @property string $slug
  *
  * The followings are the available model relations:
  * @property BannerClicks[] $clicks
@@ -40,7 +39,6 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\helpers\Inflector;
 use yii\web\UploadedFile;
-use yii\behaviors\SluggableBehavior;
 use thamtech\uuid\helpers\UuidHelper;
 use app\models\Users;
 use yii\validators\UrlValidator;
@@ -49,7 +47,7 @@ class LinkTree extends \app\components\ActiveRecord
 {
 	use \ommu\traits\UtilityTrait;
 
-	public $gridForbiddenColumn = ['modified_date', 'modifiedDisplayname', 'updated_date', 'slug'];
+	public $gridForbiddenColumn = ['modified_date', 'modifiedDisplayname', 'updated_date'];
 
 	public $categoryName;
 	public $creationDisplayname;
@@ -67,20 +65,6 @@ class LinkTree extends \app\components\ActiveRecord
 	}
 
 	/**
-	 * behaviors model class.
-	 */
-	public function behaviors() {
-		return [
-			[
-				'class' => SluggableBehavior::className(),
-				'attribute' => 'title',
-				'immutable' => true,
-				'ensureUnique' => true,
-			],
-		];
-	}
-
-	/**
 	 * @return array validation rules for model attributes.
 	 */
 	public function rules()
@@ -89,7 +73,7 @@ class LinkTree extends \app\components\ActiveRecord
 			[['cat_id', 'title', 'url', 'creation_id'], 'required'],
 			[['publish', 'cat_id', 'creation_id', 'modified_id'], 'integer'],
 			[['url'], 'url'],
-			[['title', 'slug'], 'string', 'max' => 64],
+			[['title'], 'string', 'max' => 64],
 			[['cat_id'], 'exist', 'skipOnError' => true, 'targetClass' => BannerCategory::className(), 'targetAttribute' => ['cat_id' => 'cat_id']],
 		];
 	}
@@ -110,7 +94,6 @@ class LinkTree extends \app\components\ActiveRecord
 			'modified_date' => Yii::t('app', 'Modified Date'),
 			'modified_id' => Yii::t('app', 'Modified'),
 			'updated_date' => Yii::t('app', 'Updated Date'),
-			'slug' => Yii::t('app', 'Slug'),
 			'categoryName' => Yii::t('app', 'Category'),
 			'creationDisplayname' => Yii::t('app', 'Creation'),
 			'modifiedDisplayname' => Yii::t('app', 'Modified'),
@@ -263,12 +246,6 @@ class LinkTree extends \app\components\ActiveRecord
 				return Yii::$app->formatter->asDatetime($model->updated_date, 'medium');
 			},
 			'filter' => $this->filterDatepicker($this, 'updated_date'),
-		];
-		$this->templateColumns['slug'] = [
-			'attribute' => 'slug',
-			'value' => function($model, $key, $index, $column) {
-				return $model->slug;
-			},
 		];
 		$this->templateColumns['link'] = [
 			'attribute' => 'link',

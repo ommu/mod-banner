@@ -104,11 +104,6 @@ $attributes = [
 		'visible' => !$small,
 	],
 	[
-		'attribute' => 'slug',
-		'value' => $model->slug ? $model->slug : '-',
-		'visible' => !$small,
-	],
-	[
 		'attribute' => '',
 		'value' => Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->primaryKey], ['title' => Yii::t('app', 'Update'), 'class' => 'btn btn-primary btn-sm modal-btn']),
 		'format' => 'html',

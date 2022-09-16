@@ -25,7 +25,6 @@
  * @property string $modified_date
  * @property integer $modified_id
  * @property string $updated_date
- * @property string $slug
  *
  * The followings are the available model relations:
  * @property BannerClicks[] $clicks
@@ -43,7 +42,6 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\helpers\Inflector;
 use yii\web\UploadedFile;
-use yii\behaviors\SluggableBehavior;
 use thamtech\uuid\helpers\UuidHelper;
 use app\models\Users;
 use yii\validators\UrlValidator;
@@ -53,7 +51,7 @@ class LinkRotatorItem extends \app\components\ActiveRecord
 	use \ommu\traits\UtilityTrait;
 	use \ommu\traits\FileTrait;
 
-	public $gridForbiddenColumn = ['url', 'banner_desc', 'creation_date', 'creationDisplayname', 'modified_date', 'modifiedDisplayname', 'updated_date', 'slug'];
+	public $gridForbiddenColumn = ['url', 'banner_desc', 'creation_date', 'creationDisplayname', 'modified_date', 'modifiedDisplayname', 'updated_date'];
 
 	public $permanent;
 	public $categoryName;
@@ -76,20 +74,6 @@ class LinkRotatorItem extends \app\components\ActiveRecord
 	}
 
 	/**
-	 * behaviors model class.
-	 */
-	public function behaviors() {
-		return [
-			[
-				'class' => SluggableBehavior::className(),
-				'attribute' => 'title',
-				'immutable' => true,
-				'ensureUnique' => true,
-			],
-		];
-	}
-
-	/**
 	 * @return array validation rules for model attributes.
 	 */
 	public function rules()
@@ -105,7 +89,7 @@ class LinkRotatorItem extends \app\components\ActiveRecord
 			[['url'], 'url', 'on' => self::SCENARIO_IS_LINKED],
 			[['url'], 'url', 'on' => self::SCENARIO_IS_LINKED_NOT_PERMANENT],
 			[['banner_desc', 'published_date', 'expired_date'], 'safe'],
-			[['title', 'slug'], 'string', 'max' => 64],
+			[['title'], 'string', 'max' => 64],
 			[['cat_id'], 'exist', 'skipOnError' => true, 'targetClass' => LinkRotators::className(), 'targetAttribute' => ['cat_id' => 'cat_id']],
 			[['expired_date'], 'compare', 'compareAttribute' => 'published_date', 'operator' => '>=', 'on' => self::SCENARIO_IS_LINKED_NOT_PERMANENT],
 			[['expired_date'], 'compare', 'compareAttribute' => 'published_date', 'operator' => '>=', 'on' => self::SCENARIO_IS_NOT_LINKED_NOT_PERMANENT],
@@ -144,7 +128,6 @@ class LinkRotatorItem extends \app\components\ActiveRecord
 			'modified_date' => Yii::t('app', 'Modified Date'),
 			'modified_id' => Yii::t('app', 'Modified'),
 			'updated_date' => Yii::t('app', 'Updated Date'),
-			'slug' => Yii::t('app', 'Slug'),
 			'categoryName' => Yii::t('app', 'Rotator'),
 			'creationDisplayname' => Yii::t('app', 'Creation'),
 			'modifiedDisplayname' => Yii::t('app', 'Modified'),
@@ -329,12 +312,6 @@ class LinkRotatorItem extends \app\components\ActiveRecord
 				return Yii::$app->formatter->asDatetime($model->updated_date, 'medium');
 			},
 			'filter' => $this->filterDatepicker($this, 'updated_date'),
-		];
-		$this->templateColumns['slug'] = [
-			'attribute' => 'slug',
-			'value' => function($model, $key, $index, $column) {
-				return $model->slug;
-			},
 		];
 		$this->templateColumns['click'] = [
 			'attribute' => 'click',

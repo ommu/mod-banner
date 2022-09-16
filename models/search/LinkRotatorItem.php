@@ -28,7 +28,7 @@ class LinkRotatorItem extends LinkRotatorItemModel
 	{
 		return [
 			[['banner_id', 'publish', 'cat_id', 'creation_id', 'modified_id', 'click', 'view', 'permanent'], 'integer'],
-			[['title', 'url', 'banner_desc', 'published_date', 'expired_date', 'creation_date', 'modified_date', 'updated_date', 'slug',
+			[['title', 'url', 'banner_desc', 'published_date', 'expired_date', 'creation_date', 'modified_date', 'updated_date',
                 'categoryName', 'creationDisplayname', 'modifiedDisplayname'], 'safe'],
 		];
 	}
@@ -195,7 +195,6 @@ class LinkRotatorItem extends LinkRotatorItemModel
 		$query->andFilterWhere(['like', 't.title', $this->title])
 			->andFilterWhere(['like', 't.url', $this->url])
 			->andFilterWhere(['like', 't.banner_desc', $this->banner_desc])
-			->andFilterWhere(['like', 't.slug', $this->slug])
 			->andFilterWhere(['like', 'categoryTitle.message', $this->categoryName])
 			->andFilterWhere(['like', 'creation.displayname', $this->creationDisplayname])
 			->andFilterWhere(['like', 'modified.displayname', $this->modifiedDisplayname]);

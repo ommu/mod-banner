@@ -27,7 +27,6 @@
  * @property string $modified_date
  * @property integer $modified_id
  * @property string $updated_date
- * @property string $slug
  *
  * The followings are the available model relations:
  * @property BannerClicks[] $clicks
@@ -44,7 +43,6 @@ use Yii;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\UploadedFile;
-use yii\behaviors\SluggableBehavior;
 use thamtech\uuid\helpers\UuidHelper;
 use app\models\Users;
 use ommu\banner\models\view\Banners as BannersView;
@@ -55,7 +53,7 @@ class Banners extends \app\components\ActiveRecord
 	use \ommu\traits\UtilityTrait;
 	use \ommu\traits\FileTrait;
 
-	public $gridForbiddenColumn = ['url', 'banner_filename', 'banner_desc', 'creation_date', 'creationDisplayname', 'modified_date', 'modifiedDisplayname', 'updated_date', 'slug'];
+	public $gridForbiddenColumn = ['url', 'banner_filename', 'banner_desc', 'creation_date', 'creationDisplayname', 'modified_date', 'modifiedDisplayname', 'updated_date'];
 
 	public $linked;
 	public $permanent;
@@ -77,20 +75,6 @@ class Banners extends \app\components\ActiveRecord
 	}
 
 	/**
-	 * behaviors model class.
-	 */
-	public function behaviors() {
-		return [
-			[
-				'class' => SluggableBehavior::className(),
-				'attribute' => 'title',
-				'immutable' => true,
-				'ensureUnique' => true,
-			],
-		];
-	}
-
-	/**
 	 * @return array validation rules for model attributes.
 	 */
 	public function rules()
@@ -102,7 +86,7 @@ class Banners extends \app\components\ActiveRecord
 			[['url'], 'url', 'on' => self::SCENARIO_IS_LINKED],
 			[['url'], 'url', 'on' => self::SCENARIO_IS_LINKED_NOT_PERMANENT],
 			[['banner_filename', 'banner_desc', 'published_date', 'expired_date'], 'safe'],
-			[['title', 'slug'], 'string', 'max' => 64],
+			[['title'], 'string', 'max' => 64],
 			[['cat_id'], 'exist', 'skipOnError' => true, 'targetClass' => BannerCategory::className(), 'targetAttribute' => ['cat_id' => 'cat_id']],
 			[['expired_date'], 'compare', 'compareAttribute' => 'published_date', 'operator' => '>=', 'on' => self::SCENARIO_IS_NOT_PERMANENT],
 			[['expired_date'], 'compare', 'compareAttribute' => 'published_date', 'operator' => '>=', 'on' => self::SCENARIO_IS_LINKED_NOT_PERMANENT],
@@ -141,7 +125,6 @@ class Banners extends \app\components\ActiveRecord
 			'modified_date' => Yii::t('app', 'Modified Date'),
 			'modified_id' => Yii::t('app', 'Modified'),
 			'updated_date' => Yii::t('app', 'Updated Date'),
-			'slug' => Yii::t('app', 'Slug'),
 			'old_banner_filename' => Yii::t('app', 'Old Filename'),
 			'clicks' => Yii::t('app', 'Clicks'),
 			'views' => Yii::t('app', 'Views'),
@@ -339,12 +322,6 @@ class Banners extends \app\components\ActiveRecord
 				return Yii::$app->formatter->asDatetime($model->updated_date, 'medium');
 			},
 			'filter' => $this->filterDatepicker($this, 'updated_date'),
-		];
-		$this->templateColumns['slug'] = [
-			'attribute' => 'slug',
-			'value' => function($model, $key, $index, $column) {
-				return $model->slug;
-			},
 		];
 		$this->templateColumns['clicks'] = [
 			'attribute' => 'clicks',

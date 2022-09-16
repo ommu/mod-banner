@@ -28,7 +28,7 @@ class LinkTree extends LinkTreeModel
 	{
 		return [
 			[['banner_id', 'publish', 'cat_id', 'creation_id', 'modified_id', 'click', 'view'], 'integer'],
-			[['title', 'url', 'creation_date', 'modified_date', 'updated_date', 'slug',
+			[['title', 'url', 'creation_date', 'modified_date', 'updated_date',
                 'categoryName', 'creationDisplayname', 'modifiedDisplayname'], 'safe'],
 		];
 	}
@@ -193,7 +193,6 @@ class LinkTree extends LinkTreeModel
 
 		$query->andFilterWhere(['like', 't.title', $this->title])
 			->andFilterWhere(['like', 't.url', $this->url])
-			->andFilterWhere(['like', 't.slug', $this->slug])
 			->andFilterWhere(['like', 'categoryTitle.message', $this->categoryName])
 			->andFilterWhere(['like', 'creation.displayname', $this->creationDisplayname])
 			->andFilterWhere(['like', 'modified.displayname', $this->modifiedDisplayname]);

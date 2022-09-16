@@ -29,7 +29,7 @@ class Banners extends BannersModel
 	{
 		return [
 			[['banner_id', 'publish', 'cat_id', 'creation_id', 'modified_id'], 'integer'],
-			[['title', 'url', 'banner_filename', 'banner_desc', 'published_date', 'expired_date', 'creation_date', 'modified_date', 'updated_date', 'slug',
+			[['title', 'url', 'banner_filename', 'banner_desc', 'published_date', 'expired_date', 'creation_date', 'modified_date', 'updated_date',
 				'permanent', 'categoryName', 'creationDisplayname', 'modifiedDisplayname'], 'safe'],
 		];
 	}
@@ -176,7 +176,6 @@ class Banners extends BannersModel
 			->andFilterWhere(['like', 't.url', $this->url])
 			->andFilterWhere(['like', 't.banner_filename', $this->banner_filename])
 			->andFilterWhere(['like', 't.banner_desc', $this->banner_desc])
-			->andFilterWhere(['like', 't.slug', $this->slug])
 			->andFilterWhere(['like', 'category.message', $this->categoryName])
 			->andFilterWhere(['like', 'creation.displayname', $this->creationDisplayname])
 			->andFilterWhere(['like', 'modified.displayname', $this->modifiedDisplayname]);
