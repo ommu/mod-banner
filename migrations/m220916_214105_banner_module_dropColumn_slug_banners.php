@@ -1,10 +1,10 @@
 <?php
 /**
- * m210806_204829_banner_module_drop_column_slug_banners
+ * m220916_214105_banner_module_dropColumn_slug_banners
  * @author Putra Sudaryanto <putra@ommu.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2021 OMMU (www.ommu.id)
- * @created date 6 August 2021, 20:48 WIB
+ * @copyright Copyright (c) 2022 OMMU (www.ommu.id)
+ * @created date 16 September 2022, 21:42 WIB
  * @link https://www.ommu.id
  *
  */
@@ -12,7 +12,7 @@
 use Yii;
 use yii\db\Schema;
 
-class m210806_204829_banner_module_drop_column_slug_banners extends \yii\db\Migration
+class m220916_214105_banner_module_dropColumn_slug_banners extends \yii\db\Migration
 {
 	public function up()
 	{
