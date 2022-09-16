@@ -57,6 +57,7 @@ class BannerViews extends \app\components\ActiveRecord
 			[['banner_id'], 'required'],
 			[['banner_id', 'user_id', 'views'], 'integer'],
 			[['view_ip'], 'string', 'max' => 20],
+			[['user_id'], 'safe'],
 			[['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_id' => 'user_id']],
 			[['banner_id'], 'exist', 'skipOnError' => true, 'targetClass' => Banners::className(), 'targetAttribute' => ['banner_id' => 'banner_id']],
 		];

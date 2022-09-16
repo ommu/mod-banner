@@ -1,6 +1,6 @@
 banner_submenu:
   view:
-    label: Info
+    label: Detail
     url:
       0: 'admin/view'
       id: $_GET*id
