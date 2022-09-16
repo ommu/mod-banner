@@ -1,10 +1,10 @@
 <?php
 /**
- * ClickController
- * @var $this ommu\banner\controllers\o\ClickController
- * @var $model ommu\banner\models\BannerClicks
+ * AdminController
+ * @var $this ommu\banner\controllers\view\AdminController
+ * @var $model ommu\banner\models\BannerViews
  *
- * ClickController implements the CRUD actions for BannerClicks model.
+ * AdminController implements the CRUD actions for BannerViews model.
  * Reference start
  * TOC :
  *	Index
@@ -17,22 +17,22 @@
  * @author Putra Sudaryanto <putra@ommu.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.id)
- * @created date 6 October 2017, 13:06 WIB
- * @modified date 24 January 2019, 17:53 WIB
+ * @created date 6 October 2017, 13:24 WIB
+ * @modified date 24 January 2019, 17:54 WIB
  * @link https://github.com/ommu/mod-banner
  *
  */
 
-namespace ommu\banner\controllers\o;
+namespace ommu\banner\controllers\view;
 
 use Yii;
 use app\components\Controller;
 use mdm\admin\components\AccessControl;
 use yii\filters\VerbFilter;
-use ommu\banner\models\BannerClicks;
-use ommu\banner\models\search\BannerClicks as BannerClicksSearch;
+use ommu\banner\models\BannerViews;
+use ommu\banner\models\search\BannerViews as BannerViewsSearch;
 
-class ClickController extends Controller
+class AdminController extends Controller
 {
 	/**
 	 * {@inheritdoc}
@@ -42,7 +42,7 @@ class ClickController extends Controller
         parent::init();
 
         if (Yii::$app->request->get('id') || Yii::$app->request->get('banner')) {
-            $this->subMenu = $this->module->params['banner_submenu'];
+			$this->subMenu = $this->module->params['banner_submenu'];
         }
 	}
 
@@ -73,12 +73,12 @@ class ClickController extends Controller
 	}
 
 	/**
-	 * Lists all BannerClicks models.
+	 * Lists all BannerViews models.
 	 * @return mixed
 	 */
 	public function actionManage()
 	{
-        $searchModel = new BannerClicksSearch();
+        $searchModel = new BannerViewsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         $gridColumn = Yii::$app->request->get('GridColumn', null);
@@ -100,7 +100,7 @@ class ClickController extends Controller
             $user = \app\models\Users::findOne($user);
         }
 
-		$this->view->title = Yii::t('app', 'Clicks');
+		$this->view->title = Yii::t('app', 'Views');
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_manage', [
@@ -113,7 +113,7 @@ class ClickController extends Controller
 	}
 
 	/**
-	 * Displays a single BannerClicks model.
+	 * Displays a single BannerViews model.
 	 * @param integer $id
 	 * @return mixed
 	 */
@@ -122,7 +122,7 @@ class ClickController extends Controller
         $model = $this->findModel($id);
 
 		$this->subMenuParam = $model->banner_id;
-		$this->view->title = Yii::t('app', 'Detail Click: {banner-id}', ['banner-id' => $model->banner->title]);
+		$this->view->title = Yii::t('app', 'Detail View: {banner-id}', ['banner-id' => $model->banner->title]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->oRender('admin_view', [
@@ -131,7 +131,7 @@ class ClickController extends Controller
 	}
 
 	/**
-	 * Deletes an existing BannerClicks model.
+	 * Deletes an existing BannerViews model.
 	 * If deletion is successful, the browser will be redirected to the 'index' page.
 	 * @param integer $id
 	 * @return mixed
@@ -141,20 +141,20 @@ class ClickController extends Controller
 		$model = $this->findModel($id);
 		$model->delete();
 
-		Yii::$app->session->setFlash('success', Yii::t('app', 'Banner click success deleted.'));
+		Yii::$app->session->setFlash('success', Yii::t('app', 'Banner view success deleted.'));
 		return $this->redirect(Yii::$app->request->referrer ?: ['manage', 'banner' => $model->banner_id]);
 	}
 
 	/**
-	 * Finds the BannerClicks model based on its primary key value.
+	 * Finds the BannerViews model based on its primary key value.
 	 * If the model is not found, a 404 HTTP exception will be thrown.
 	 * @param integer $id
-	 * @return BannerClicks the loaded model
+	 * @return BannerViews the loaded model
 	 * @throws NotFoundHttpException if the model cannot be found
 	 */
 	protected function findModel($id)
 	{
-        if (($model = BannerClicks::findOne($id)) !== null) {
+        if (($model = BannerViews::findOne($id)) !== null) {
             return $model;
         }
 

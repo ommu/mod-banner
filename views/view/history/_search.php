@@ -1,16 +1,16 @@
 <?php
 /**
- * Banner Views (banner-views)
+ * Banner View Histories (banner-view-history)
  * @var $this app\components\View
- * @var $this ommu\banner\controllers\history\ViewController
- * @var $model ommu\banner\models\search\BannerViews
+ * @var $this oommu\banner\controllers\view\HistoryController
+ * @var $model ommu\banner\models\search\BannerViewHistory
  * @var $form yii\widgets\ActiveForm
  *
  * @author Putra Sudaryanto <putra@ommu.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.id)
  * @created date 6 October 2017, 13:24 WIB
- * @modified date 24 January 2019, 17:54 WIB
+ * @modified date 24 January 2019, 17:55 WIB
  * @link https://github.com/ommu/mod-banner
  *
  */
@@ -20,7 +20,7 @@ use yii\widgets\ActiveForm;
 use ommu\banner\models\BannerCategory;
 ?>
 
-<div class="banner-views-search search-form">
+<div class="banner-view-history-search search-form">
 
 	<?php $form = ActiveForm::begin([
 		'action' => ['index'],
@@ -37,8 +37,6 @@ use ommu\banner\models\BannerCategory;
 		<?php echo $form->field($model, 'bannerTitle');?>
 
 		<?php echo $form->field($model, 'userDisplayname');?>
-
-		<?php echo $form->field($model, 'views');?>
 
 		<?php echo $form->field($model, 'view_date')
 			->input('date');?>

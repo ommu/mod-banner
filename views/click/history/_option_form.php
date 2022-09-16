@@ -1,15 +1,15 @@
 <?php
 /**
- * Banner View Histories (banner-view-history)
+ * Banner Click Histories (banner-click-history)
  * @var $this app\components\View
- * @var $this ommu\banner\controllers\history\ViewController
- * @var $model ommu\banner\models\search\BannerViewHistory
+ * @var $this ommu\banner\controllers\click\HistoryController
+ * @var $model ommu\banner\models\search\BannerClickHistory
  * @var $form yii\widgets\ActiveForm
  *
  * @author Putra Sudaryanto <putra@ommu.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.id)
- * @created date 6 October 2017, 13:24 WIB
+ * @created date 6 October 2017, 13:29 WIB
  * @modified date 2 May 2018, 11:10 WIB
  * @link https://github.com/ommu/mod-banner
  *

@@ -2,7 +2,7 @@
 /**
  * Banner Clicks (banner-clicks)
  * @var $this app\components\View
- * @var $this ommu\banner\controllers\history\ClickController
+ * @var $this ommu\banner\controllers\click\HistoryController
  * @var $model ommu\banner\models\search\BannerClicks
  * @var $form yii\widgets\ActiveForm
  *

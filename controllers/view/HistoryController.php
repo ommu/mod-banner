@@ -1,10 +1,10 @@
 <?php
 /**
- * ViewController
- * @var $this ommu\banner\controllers\history\ViewController
+ * HistoryController
+ * @var $this ommu\banner\controllers\view\HistoryController
  * @var $model ommu\banner\models\BannerViewHistory
  *
- * ViewController implements the CRUD actions for BannerViewHistory model.
+ * HistoryController implements the CRUD actions for BannerViewHistory model.
  * Reference start
  * TOC :
  *	Index
@@ -23,7 +23,7 @@
  *
  */
 
-namespace ommu\banner\controllers\history;
+namespace ommu\banner\controllers\view;
 
 use Yii;
 use app\components\Controller;
@@ -32,7 +32,7 @@ use yii\filters\VerbFilter;
 use ommu\banner\models\BannerViewHistory;
 use ommu\banner\models\search\BannerViewHistory as BannerViewHistorySearch;
 
-class ViewController extends Controller
+class HistoryController extends Controller
 {
 	/**
 	 * {@inheritdoc}

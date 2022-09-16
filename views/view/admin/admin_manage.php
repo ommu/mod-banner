@@ -1,16 +1,16 @@
 <?php
 /**
- * Banner Clicks (banner-clicks)
+ * Banner Views (banner-views)
  * @var $this app\components\View
- * @var $this ommu\banner\controllers\o\ClickController
- * @var $model ommu\banner\models\BannerClicks
- * @var $searchModel ommu\banner\models\search\BannerClicks
+ * @var $this ommu\banner\controllers\view\AdminController
+ * @var $model ommu\banner\models\BannerViews
+ * @var $searchModel ommu\banner\models\search\BannerViews
  *
  * @author Putra Sudaryanto <putra@ommu.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.id)
- * @created date 6 October 2017, 13:06 WIB
- * @modified date 24 January 2019, 17:53 WIB
+ * @created date 6 October 2017, 13:24 WIB
+ * @modified date 24 January 2019, 17:54 WIB
  * @link https://github.com/ommu/mod-banner
  *
  */
@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Banner'), 'url' => [
 if ($banner != null) {
     $this->params['breadcrumbs'][] = ['label' => $banner->title, 'url' => ['admin/view', 'id' => $banner->banner_id]];
 }
-$this->params['breadcrumbs'][] = Yii::t('app', 'Clicks');
+$this->params['breadcrumbs'][] = Yii::t('app', 'Views');
 
 $this->params['menu']['option'] = [
 	//['label' => Yii::t('app', 'Search'), 'url' => 'javascript:void(0);'],
@@ -33,7 +33,7 @@ $this->params['menu']['option'] = [
 ];
 ?>
 
-<div class="banner-clicks-manage">
+<div class="banner-views-manage">
 <?php Pjax::begin(); ?>
 
 <?php if ($banner != null) {

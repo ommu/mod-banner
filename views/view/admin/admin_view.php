@@ -1,15 +1,15 @@
 <?php
 /**
- * Banner Clicks (banner-clicks)
+ * Banner Views (banner-views)
  * @var $this app\components\View
- * @var $this ommu\banner\controllers\o\ClickController
- * @var $model ommu\banner\models\BannerClicks
+ * @var $this ommu\banner\controllers\view\AdminController
+ * @var $model ommu\banner\models\BannerViews
  *
  * @author Putra Sudaryanto <putra@ommu.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.id)
- * @created date 6 October 2017, 13:06 WIB
- * @modified date 24 January 2019, 17:53 WIB
+ * @created date 6 October 2017, 13:24 WIB
+ * @modified date 24 January 2019, 17:54 WIB
  * @link https://github.com/ommu/mod-banner
  *
  */
@@ -22,21 +22,21 @@ if (!$small) {
     $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Publication'), 'url' => ['/admin/page/admin/index']];
     $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Banner'), 'url' => ['admin/index']];
     $this->params['breadcrumbs'][] = ['label' => $model->banner->title, 'url' => ['admin/view', 'id' => $model->banner_id]];
-    $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Click'), 'url' => ['manage', 'banner' => $model->banner_id]];
+    $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'View'), 'url' => ['manage', 'banner' => $model->banner_id]];
     $this->params['breadcrumbs'][] = Yii::t('app', 'Detail');
 
     $this->params['menu']['content'] = [
-        ['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id' => $model->click_id]), 'htmlOptions' => ['data-confirm' => Yii::t('app', 'Are you sure you want to delete this item?'), 'data-method' => 'post', 'class' => 'btn btn-danger'], 'icon' => 'trash'],
+        ['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id' => $model->view_id]), 'htmlOptions' => ['data-confirm' => Yii::t('app', 'Are you sure you want to delete this item?'), 'data-method' => 'post', 'class' => 'btn btn-danger'], 'icon' => 'trash'],
     ];
 } ?>
 
-<div class="banner-clicks-view">
+<div class="banner-views-view">
 
 <?php 
 $attributes = [
 	[
-		'attribute' => 'click_id',
-		'value' => $model->click_id,
+		'attribute' => 'view_id',
+		'value' => $model->view_id,
 		'visible' => !$small,
 	],
 	[
@@ -44,7 +44,7 @@ $attributes = [
 		'value' => function ($model) {
 			$categoryId = isset($model->banner->category) ? $model->banner->category->title->message : '-';
             if ($categoryId != '-') {
-				return Html::a($categoryId, ['setting/category/view', 'id' => $model->banner->cat_id], ['title' => $categoryId, 'class' => 'modal-btn']);
+                return Html::a($categoryId, ['setting/category/view', 'id' => $model->banner->cat_id], ['title' => $categoryId, 'class' => 'modal-btn']);
             }
 			return $categoryId;
 		},
@@ -55,7 +55,7 @@ $attributes = [
 		'value' => function ($model) {
 			$bannerTitle = isset($model->banner) ? $model->banner->title : '-';
             if ($bannerTitle != '-') {
-				return Html::a($bannerTitle, ['admin/view', 'id' => $model->banner_id], ['title' => $bannerTitle, 'class' => 'modal-btn']);
+                return Html::a($bannerTitle, ['admin/view', 'id' => $model->banner_id], ['title' => $bannerTitle, 'class' => 'modal-btn']);
             }
 			return $bannerTitle;
 		},
@@ -66,22 +66,22 @@ $attributes = [
 		'value' => isset($model->user) ? $model->user->displayname : '-',
 	],
 	[
-		'attribute' => 'clicks',
+		'attribute' => 'views',
 		'value' => function ($model) {
-			$clicks = $model->clicks;
-			return  Html::a($clicks, ['history/click/manage', 'click' => $model->primaryKey], ['title' => Yii::t('app', '{count} histories', ['count' => $clicks])]);
+			$views = $model->views;
+			return  Html::a($views, ['view/history/manage', 'view' => $model->primaryKey], ['title' => Yii::t('app', '{count} histories', ['count' => $views])]);
 		},
 		'format' => 'html',
 		'visible' => !$small,
 	],
 	[
-		'attribute' => 'click_date',
-		'value' => Yii::$app->formatter->asDatetime($model->click_date, 'medium'),
+		'attribute' => 'view_date',
+		'value' => Yii::$app->formatter->asDatetime($model->view_date, 'medium'),
 		'visible' => !$small,
 	],
 	[
-		'attribute' => 'click_ip',
-		'value' => $model->click_ip,
+		'attribute' => 'view_ip',
+		'value' => $model->view_ip,
 		'visible' => !$small,
 	],
 ];

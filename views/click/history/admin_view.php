@@ -2,7 +2,7 @@
 /**
  * Banner Click Histories (banner-click-history)
  * @var $this app\components\View
- * @var $this ommu\banner\controllers\history\ClickController
+ * @var $this ommu\banner\controllers\click\HistoryController
  * @var $model ommu\banner\models\BannerClickHistory
  *
  * @author Putra Sudaryanto <putra@ommu.id>
@@ -22,7 +22,7 @@ if (!$small) {
     $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Publication'), 'url' => ['/admin/page/admin/index']];
     $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Banner'), 'url' => ['admin/index']];
     $this->params['breadcrumbs'][] = ['label' => $model->click->banner->title, 'url' => ['admin/view', 'id' => $model->click->banner_id]];
-    $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Click'), 'url' => ['o/click/manage', 'banner' => $model->click->banner_id]];
+    $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Click'), 'url' => ['click/admin/manage', 'banner' => $model->click->banner_id]];
     $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'History'), 'url' => ['index']];
     $this->params['breadcrumbs'][] = Yii::t('app', 'Detail');
 

@@ -1,16 +1,16 @@
 <?php
 /**
- * Banner View Histories (banner-view-history)
+ * Banner Clicks (banner-clicks)
  * @var $this app\components\View
- * @var $this ommu\banner\controllers\history\ViewController
- * @var $model ommu\banner\models\BannerViewHistory
- * @var $searchModel ommu\banner\models\search\BannerViewHistory
+ * @var $this ommu\banner\controllers\click\AdminController
+ * @var $model ommu\banner\models\BannerClicks
+ * @var $searchModel ommu\banner\models\search\BannerClicks
  *
  * @author Putra Sudaryanto <putra@ommu.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.id)
- * @created date 6 October 2017, 13:24 WIB
- * @modified date 24 January 2019, 17:55 WIB
+ * @created date 6 October 2017, 13:06 WIB
+ * @modified date 24 January 2019, 17:53 WIB
  * @link https://github.com/ommu/mod-banner
  *
  */
@@ -22,33 +22,26 @@ use yii\widgets\Pjax;
 
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Publication'), 'url' => ['/admin/page/admin/index']];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Banner'), 'url' => ['admin/index']];
-if ($view != null) {
-	$this->params['breadcrumbs'][] = ['label' => $view->banner->title, 'url' => ['admin/view', 'id' => $view->banner_id]];
-	$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'View'), 'url' => ['o/view/manage', 'banner' => $view->banner_id]];
-} else {
-	$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'View'), 'url' => ['o/view/index']];
+if ($banner != null) {
+    $this->params['breadcrumbs'][] = ['label' => $banner->title, 'url' => ['admin/view', 'id' => $banner->banner_id]];
 }
-$this->params['breadcrumbs'][] = Yii::t('app', 'Histories');
+$this->params['breadcrumbs'][] = Yii::t('app', 'Clicks');
 
-$viewUrl = $view ? Url::to(['o/view/manage', 'banner' => $view->banner_id]) : Url::to(['o/view/manage']);
-$this->params['menu']['content'] = [
-	['label' => Yii::t('app', 'Back To Views'), 'url' => $viewUrl, 'icon' => 'table', 'htmlOptions' => ['class' => 'btn btn-default']],
-];
 $this->params['menu']['option'] = [
 	//['label' => Yii::t('app', 'Search'), 'url' => 'javascript:void(0);'],
 	['label' => Yii::t('app', 'Grid Option'), 'url' => 'javascript:void(0);'],
 ];
 ?>
 
-<div class="banner-view-history-manage">
+<div class="banner-clicks-manage">
 <?php Pjax::begin(); ?>
 
-<?php if ($view != null) {
-	echo $this->render('/o/view/admin_view', ['model' => $view, 'small' => true]);
+<?php if ($banner != null) {
+    echo $this->render('/admin/admin_view', ['model' => $banner, 'small' => true]);
 } ?>
 
-<?php if ($banner != null) {
-	echo $this->render('/admin/admin_view', ['model' => $banner, 'small' => true]);
+<?php if ($user != null) {
+	echo $this->render('@users/views/member/admin_view', ['model' => $user, 'small' => true]);
 } ?>
 
 <?php //echo $this->render('_search', ['model' => $searchModel]); ?>

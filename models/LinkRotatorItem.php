@@ -340,7 +340,7 @@ class LinkRotatorItem extends \app\components\ActiveRecord
 			'attribute' => 'click',
 			'value' => function($model, $key, $index, $column) {
 				$clicks = $model->getClicks(true);
-				return Html::a($clicks, ['o/click/manage', 'banner' => $model->primaryKey], ['title' => Yii::t('app', '{count} clicks', ['count' => $clicks]), 'data-pjax' => 0]);
+				return Html::a($clicks, ['click/admin/manage', 'banner' => $model->primaryKey], ['title' => Yii::t('app', '{count} clicks', ['count' => $clicks]), 'data-pjax' => 0]);
 			},
 			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class' => 'text-center'],
@@ -350,7 +350,7 @@ class LinkRotatorItem extends \app\components\ActiveRecord
 			'attribute' => 'view',
 			'value' => function($model, $key, $index, $column) {
 				$views = $model->getViews(true);
-				return Html::a($views, ['o/view/manage', 'banner' => $model->primaryKey], ['title' => Yii::t('app', '{count} views', ['count' => $views]), 'data-pjax' => 0]);
+				return Html::a($views, ['view/admin/manage', 'banner' => $model->primaryKey], ['title' => Yii::t('app', '{count} views', ['count' => $views]), 'data-pjax' => 0]);
 			},
 			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class' => 'text-center'],

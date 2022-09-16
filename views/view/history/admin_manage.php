@@ -1,15 +1,15 @@
 <?php
 /**
- * Banner Click Histories (banner-click-history)
+ * Banner View Histories (banner-view-history)
  * @var $this app\components\View
- * @var $this ommu\banner\controllers\history\ClickController
- * @var $model ommu\banner\models\BannerClickHistory
- * @var $searchModel ommu\banner\models\search\BannerClickHistory
+ * @var $this ommu\banner\controllers\view\HistoryController
+ * @var $model ommu\banner\models\BannerViewHistory
+ * @var $searchModel ommu\banner\models\search\BannerViewHistory
  *
  * @author Putra Sudaryanto <putra@ommu.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.id)
- * @created date 6 October 2017, 13:29 WIB
+ * @created date 6 October 2017, 13:24 WIB
  * @modified date 24 January 2019, 17:55 WIB
  * @link https://github.com/ommu/mod-banner
  *
@@ -22,17 +22,17 @@ use yii\widgets\Pjax;
 
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Publication'), 'url' => ['/admin/page/admin/index']];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Banner'), 'url' => ['admin/index']];
-if ($click != null) {
-	$this->params['breadcrumbs'][] = ['label' => $click->banner->title, 'url' => ['admin/view', 'id' => $click->banner_id]];
-	$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Click'), 'url' => ['o/click/manage', 'banner' => $click->banner_id]];
+if ($view != null) {
+	$this->params['breadcrumbs'][] = ['label' => $view->banner->title, 'url' => ['admin/view', 'id' => $view->banner_id]];
+	$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'View'), 'url' => ['view/admin/manage', 'banner' => $view->banner_id]];
 } else {
-	$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Click'), 'url' => ['o/click/index']];
+	$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'View'), 'url' => ['view/admin/index']];
 }
 $this->params['breadcrumbs'][] = Yii::t('app', 'Histories');
 
-$clickUrl = $click ? Url::to(['o/click/manage', 'banner' => $click->banner_id]) : Url::to(['o/click/manage']);
+$viewUrl = $view ? Url::to(['view/admin/manage', 'banner' => $view->banner_id]) : Url::to(['view/admin/manage']);
 $this->params['menu']['content'] = [
-	['label' => Yii::t('app', 'Back To Clicks'), 'url' => $clickUrl, 'icon' => 'table', 'htmlOptions' => ['class' => 'btn btn-default']],
+	['label' => Yii::t('app', 'Back To Views'), 'url' => $viewUrl, 'icon' => 'table', 'htmlOptions' => ['class' => 'btn btn-default']],
 ];
 $this->params['menu']['option'] = [
 	//['label' => Yii::t('app', 'Search'), 'url' => 'javascript:void(0);'],
@@ -40,11 +40,11 @@ $this->params['menu']['option'] = [
 ];
 ?>
 
-<div class="banner-click-history-manage">
+<div class="banner-view-history-manage">
 <?php Pjax::begin(); ?>
 
-<?php if ($click != null) {
-	echo $this->render('/o/click/admin_view', ['model' => $click, 'small' => true]);
+<?php if ($view != null) {
+	echo $this->render('/view/admin/admin_view', ['model' => $view, 'small' => true]);
 } ?>
 
 <?php if ($banner != null) {
