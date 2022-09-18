@@ -13,12 +13,12 @@
  *
  * The followings are the available columns in table "_banner_category":
  * @property integer $cat_id
- * @property string $banners
- * @property string $banner_permanent
- * @property string $banner_pending
- * @property string $banner_expired
- * @property string $banner_unpublish
- * @property integer $banner_all
+ * @property string $publish
+ * @property string $permanent
+ * @property string $pending
+ * @property string $expired
+ * @property string $unpublish
+ * @property integer $all
  *
  */
 
@@ -52,8 +52,8 @@ class BannerCategory extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['cat_id', 'banner_all'], 'integer'],
-			[['banners', 'banner_permanent', 'banner_pending', 'banner_expired', 'banner_unpublish'], 'number'],
+			[['cat_id', 'all'], 'integer'],
+			[['publish', 'permanent', 'pending', 'expired', 'unpublish'], 'number'],
 		];
 	}
 
@@ -64,12 +64,12 @@ class BannerCategory extends \app\components\ActiveRecord
 	{
 		return [
 			'cat_id' => Yii::t('app', 'Category'),
-			'banners' => Yii::t('app', 'Banners'),
-			'banner_permanent' => Yii::t('app', 'Banner Permanent'),
-			'banner_pending' => Yii::t('app', 'Banner Pending'),
-			'banner_expired' => Yii::t('app', 'Banner Expired'),
-			'banner_unpublish' => Yii::t('app', 'Banner Unpublish'),
-			'banner_all' => Yii::t('app', 'Banner All'),
+			'publish' => Yii::t('app', 'Publish'),
+			'permanent' => Yii::t('app', 'Permanent'),
+			'pending' => Yii::t('app', 'Pending'),
+			'expired' => Yii::t('app', 'Expired'),
+			'unpublish' => Yii::t('app', 'Unpublish'),
+			'all' => Yii::t('app', 'All'),
 		];
 	}
 
@@ -99,40 +99,40 @@ class BannerCategory extends \app\components\ActiveRecord
 				return $model->cat_id;
 			},
 		];
-		$this->templateColumns['banners'] = [
-			'attribute' => 'banners',
+		$this->templateColumns['publish'] = [
+			'attribute' => 'publish',
 			'value' => function($model, $key, $index, $column) {
-				return $model->banners;
+				return $model->publish;
 			},
 		];
-		$this->templateColumns['banner_permanent'] = [
-			'attribute' => 'banner_permanent',
+		$this->templateColumns['permanent'] = [
+			'attribute' => 'permanent',
 			'value' => function($model, $key, $index, $column) {
-				return $model->banner_permanent;
+				return $model->permanent;
 			},
 		];
-		$this->templateColumns['banner_pending'] = [
-			'attribute' => 'banner_pending',
+		$this->templateColumns['pending'] = [
+			'attribute' => 'pending',
 			'value' => function($model, $key, $index, $column) {
-				return $model->banner_pending;
+				return $model->pending;
 			},
 		];
-		$this->templateColumns['banner_expired'] = [
-			'attribute' => 'banner_expired',
+		$this->templateColumns['expired'] = [
+			'attribute' => 'expired',
 			'value' => function($model, $key, $index, $column) {
-				return $model->banner_expired;
+				return $model->expired;
 			},
 		];
-		$this->templateColumns['banner_unpublish'] = [
-			'attribute' => 'banner_unpublish',
+		$this->templateColumns['unpublish'] = [
+			'attribute' => 'unpublish',
 			'value' => function($model, $key, $index, $column) {
-				return $model->banner_unpublish;
+				return $model->unpublish;
 			},
 		];
-		$this->templateColumns['banner_all'] = [
-			'attribute' => 'banner_all',
+		$this->templateColumns['all'] = [
+			'attribute' => 'all',
 			'value' => function($model, $key, $index, $column) {
-				return $model->banner_all;
+				return $model->all;
 			},
 		];
 	}
