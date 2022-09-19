@@ -27,10 +27,10 @@ class m220918_095852_banner_module_addView_all extends \yii\db\Migration
 CREATE VIEW `_banner_category` AS
 select
   `a`.`cat_id` AS `cat_id`,
-  sum(case when `b`.`publish` = '1' and `b`.`published_date` <= curdate() and (`b`.`expired_date` not in ('0000-00-00','1970-01-01','0002-12-02') or `b`.`expired_date` >= curdate()) then 1 else 0 end) AS `publish`,
+  sum(case when `b`.`publish` = '1' and `b`.`published_date` <= curdate() and (`b`.`expired_date` in ('0000-00-00','1970-01-01','0002-12-02') or `b`.`expired_date` >= curdate()) then 1 else 0 end) AS `publish`,
   sum(case when `b`.`publish` = '1' and `b`.`expired_date` in ('0000-00-00','1970-01-01','0002-12-02') and `b`.`published_date` <= curdate() then 1 else 0 end) AS `permanent`,
   sum(case when `b`.`publish` = '1' and `b`.`published_date` > curdate() then 1 else 0 end) AS `pending`,
-  sum(case when `b`.`publish` = '1' and `b`.`expired_date` < curdate() then 1 else 0 end) AS `expired`,
+  sum(case when `b`.`publish` = '1' and `b`.`expired_date` not in ('0000-00-00','1970-01-01','0002-12-02') and `b`.`expired_date` < curdate() then 1 else 0 end) AS `expired`,
   sum(case when `b`.`publish` = '0' then 1 else 0 end) AS `unpublish`,
   count(`b`.`cat_id`) AS `all`
 from (`ommu_banner_category` `a`

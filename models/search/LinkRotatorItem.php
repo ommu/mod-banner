@@ -155,6 +155,28 @@ class LinkRotatorItem extends LinkRotatorItemModel
 			'category.type' => 'rotator',
 		]);
 
+        if (isset($params['expired'])) {
+            $this->publish = 1;
+			$query->andFilterCompare('t.publish', $this->publish);
+            if ($params['expired'] == 'publish') {
+				$query->andFilterWhere(['or', 
+                        ['in', 'cast(expired_date as date)', ['0000-00-00', '1970-01-01']],
+                        ['>=', 'cast(expired_date as date)', Yii::$app->formatter->asDate('now', 'php:Y-m-d')]
+                    ])
+                    ->andFilterWhere(['<=', 'cast(published_date as date)', Yii::$app->formatter->asDate('now', 'php:Y-m-d')]);
+
+			} else if ($params['expired'] == 'permanent') {
+				$query->andFilterWhere(['in', 'cast(expired_date as date)', ['0000-00-00', '1970-01-01']])
+					->andFilterWhere(['<=', 'cast(published_date as date)', Yii::$app->formatter->asDate('now', 'php:Y-m-d')]);
+
+			} else if ($params['expired'] == 'pending') {
+                $query->andFilterWhere(['>', 'cast(t.published_date as date)', Yii::$app->formatter->asDate('now', 'php:Y-m-d')]);
+            } else if ($params['expired'] == 'expired') {
+                $query->andFilterWhere(['not in', 'cast(expired_date as date)', ['0000-00-00', '1970-01-01']])
+                    ->andFilterWhere(['<', 'cast(t.expired_date as date)', Yii::$app->formatter->asDate('now', 'php:Y-m-d')]);
+            }
+        }
+
         if (isset($params['permanent'])) {
             if ($params['permanent'] != '') {
                 $query->andFilterCompare('grid.permanent', $this->permanent);

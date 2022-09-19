@@ -155,18 +155,21 @@ class Banners extends BannersModel
             $this->publish = 1;
 			$query->andFilterCompare('t.publish', $this->publish);
             if ($params['expired'] == 'publish') {
-				$query->andFilterWhere(['not in', 'cast(expired_date as date)', ['0000-00-00', '1970-01-01']])
-					->andFilterWhere(['>=', 'cast(expired_date as date)', Yii::$app->formatter->asDate('now', 'php:Y-m-d')])
-					->andFilterWhere(['<=', 'cast(published_date as date)', Yii::$app->formatter->asDate('now', 'php:Y-m-d')]);
+				$query->andFilterWhere(['or', 
+                        ['in', 'cast(expired_date as date)', ['0000-00-00', '1970-01-01']],
+                        ['>=', 'cast(expired_date as date)', Yii::$app->formatter->asDate('now', 'php:Y-m-d')]
+                    ])
+                    ->andFilterWhere(['<=', 'cast(published_date as date)', Yii::$app->formatter->asDate('now', 'php:Y-m-d')]);
 
 			} else if ($params['expired'] == 'permanent') {
-				$query->andWhere(['in', 'cast(expired_date as date)', ['0000-00-00', '1970-01-01']])
-					->andWhere(['<=', 'cast(published_date as date)', Yii::$app->formatter->asDate('now', 'php:Y-m-d')]);
+				$query->andFilterWhere(['in', 'cast(expired_date as date)', ['0000-00-00', '1970-01-01']])
+					->andFilterWhere(['<=', 'cast(published_date as date)', Yii::$app->formatter->asDate('now', 'php:Y-m-d')]);
 
 			} else if ($params['expired'] == 'pending') {
                 $query->andFilterWhere(['>', 'cast(t.published_date as date)', Yii::$app->formatter->asDate('now', 'php:Y-m-d')]);
             } else if ($params['expired'] == 'expired') {
-                $query->andFilterWhere(['<', 'cast(t.expired_date as date)', Yii::$app->formatter->asDate('now', 'php:Y-m-d')]);
+                $query->andFilterWhere(['not in', 'cast(expired_date as date)', ['0000-00-00', '1970-01-01']])
+                    ->andFilterWhere(['<', 'cast(t.expired_date as date)', Yii::$app->formatter->asDate('now', 'php:Y-m-d')]);
             }
         }
 
@@ -176,6 +179,8 @@ class Banners extends BannersModel
                 if ($params['permanent'] == 1) {
                     $this->publish = 1;
                     $query->andFilterCompare('t.publish', $this->publish);
+                    // $query->andFilterWhere(['in', 'cast(expired_date as date)', ['0000-00-00', '1970-01-01']])
+                    //     ->andFilterWhere(['<=', 'cast(published_date as date)', Yii::$app->formatter->asDate('now', 'php:Y-m-d')]);
                 } else {
                     $query->andFilterWhere(['IN', 't.publish', [0,1]]);
                 }

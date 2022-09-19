@@ -70,37 +70,55 @@ $attributes = [
 		'visible' => !$small,
 	],
 	[
-		'attribute' => 'banners',
+		'attribute' => 'oPublish',
 		'value' => function ($model) {
-			$banners = $model->getBanners(true);
+			$banners = $model->oPublish;
 			return Html::a($banners, ['admin/manage', 'category' => $model->primaryKey, 'expired' => 'publish']);
 		},
 		'format' => 'html',
 		'visible' => !$small,
 	],
 	[
-		'attribute' => 'permanent',
+		'attribute' => 'oPermanent',
 		'value' => function ($model) {
-			$permanent = $model->getPermanent(true);
+			$permanent = $model->oPermanent;
 			return Html::a($permanent, ['admin/manage', 'category' => $model->primaryKey, 'expired' => 'permanent']);
 		},
 		'format' => 'html',
 		'visible' => !$small,
 	],
 	[
-		'attribute' => 'pending',
+		'attribute' => 'oPending',
 		'value' => function ($model) {
-			$pending = $model->getPending(true);
+			$pending = $model->oPending;
 			return Html::a($pending, ['admin/manage', 'category' => $model->primaryKey, 'expired' => 'pending']);
 		},
 		'format' => 'html',
 		'visible' => !$small,
 	],
 	[
-		'attribute' => 'expired',
+		'attribute' => 'oExpired',
 		'value' => function ($model) {
-			$expired = $model->getExpired(true);
+			$expired = $model->oExpired;
 			return Html::a($expired, ['admin/manage', 'category' => $model->primaryKey, 'expired' => 'expired']);
+		},
+		'format' => 'html',
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'oUnpublish',
+		'value' => function ($model) {
+			$unpublish = $model->oUnpublish;
+			return Html::a($unpublish, ['admin/manage', 'category' => $model->primaryKey, 'publish' => 0]);
+		},
+		'format' => 'html',
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'oAll',
+		'value' => function ($model) {
+			$banners = $model->oAll;
+			return Html::a($banners, ['admin/manage', 'category' => $model->primaryKey]);
 		},
 		'format' => 'html',
 		'visible' => !$small,

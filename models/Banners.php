@@ -364,7 +364,7 @@ class Banners extends \app\components\ActiveRecord
             'filter' => $this->filterYesNo(),
             'contentOptions' => ['class' => 'text-center'],
             'format' => 'raw',
-            'visible' => !Yii::$app->request->get('trash') && !Yii::$app->request->get('expired') ? true : false,
+            'visible' => Yii::$app->request->get('trash') || Yii::$app->request->get('expired') ? false : true,
         ];
 	}
 

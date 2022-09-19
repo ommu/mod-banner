@@ -61,10 +61,10 @@ $attributes = [
 		'value' => $model->code ? $model->code : '-',
 	],
 	[
-		'attribute' => 'item',
+		'attribute' => 'oPublish',
 		'value' => function ($model) {
-			$items = $model->getItems(true);
-			return Html::a($items, ['rotator/item/manage', 'category' => $model->primaryKey, 'publish' => 1], ['title' => Yii::t('app', '{count} items', ['count' => $items])]);
+			$items = $model->oPublish;
+			return Html::a($items, ['rotator/item/manage', 'category' => $model->primaryKey, 'expired' => 'publish'], ['title' => Yii::t('app', '{count} items', ['count' => $items])]);
 		},
 		'format' => 'html',
 		'visible' => !$small,

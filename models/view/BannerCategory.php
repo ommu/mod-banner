@@ -87,54 +87,6 @@ class BannerCategory extends \app\components\ActiveRecord
         if (!$this->hasMethod('search')) {
             return;
         }
-
-		$this->templateColumns['_no'] = [
-			'header' => '#',
-			'class' => 'app\components\grid\SerialColumn',
-			'contentOptions' => ['class' => 'text-center'],
-		];
-		$this->templateColumns['cat_id'] = [
-			'attribute' => 'cat_id',
-			'value' => function($model, $key, $index, $column) {
-				return $model->cat_id;
-			},
-		];
-		$this->templateColumns['publish'] = [
-			'attribute' => 'publish',
-			'value' => function($model, $key, $index, $column) {
-				return $model->publish;
-			},
-		];
-		$this->templateColumns['permanent'] = [
-			'attribute' => 'permanent',
-			'value' => function($model, $key, $index, $column) {
-				return $model->permanent;
-			},
-		];
-		$this->templateColumns['pending'] = [
-			'attribute' => 'pending',
-			'value' => function($model, $key, $index, $column) {
-				return $model->pending;
-			},
-		];
-		$this->templateColumns['expired'] = [
-			'attribute' => 'expired',
-			'value' => function($model, $key, $index, $column) {
-				return $model->expired;
-			},
-		];
-		$this->templateColumns['unpublish'] = [
-			'attribute' => 'unpublish',
-			'value' => function($model, $key, $index, $column) {
-				return $model->unpublish;
-			},
-		];
-		$this->templateColumns['all'] = [
-			'attribute' => 'all',
-			'value' => function($model, $key, $index, $column) {
-				return $model->all;
-			},
-		];
 	}
 
 	/**
