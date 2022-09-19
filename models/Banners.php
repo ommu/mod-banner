@@ -30,6 +30,7 @@
  *
  * The followings are the available model relations:
  * @property BannerClicks[] $clicks
+ * @property BannerGrid $grid
  * @property BannerViews[] $views
  * @property BannerCategory $category
  * @property Users $creation
@@ -45,7 +46,6 @@ use yii\helpers\Url;
 use yii\web\UploadedFile;
 use thamtech\uuid\helpers\UuidHelper;
 use app\models\Users;
-use ommu\banner\models\view\Banners as BannersView;
 use yii\validators\UrlValidator;
 
 class Banners extends \app\components\ActiveRecord
@@ -61,6 +61,8 @@ class Banners extends \app\components\ActiveRecord
 	public $categoryName;
 	public $creationDisplayname;
 	public $modifiedDisplayname;
+    public $oClick;
+    public $oView;
 
 	const SCENARIO_IS_LINKED = 'isLinked';
 	const SCENARIO_IS_LINKED_NOT_PERMANENT = 'isLinkedNotPermanent';
@@ -126,13 +128,13 @@ class Banners extends \app\components\ActiveRecord
 			'modified_id' => Yii::t('app', 'Modified'),
 			'updated_date' => Yii::t('app', 'Updated Date'),
 			'old_banner_filename' => Yii::t('app', 'Old Filename'),
-			'clicks' => Yii::t('app', 'Clicks'),
-			'views' => Yii::t('app', 'Views'),
 			'linked' => Yii::t('app', 'Linked'),
 			'permanent' => Yii::t('app', 'Permanent'),
 			'categoryName' => Yii::t('app', 'Category'),
 			'creationDisplayname' => Yii::t('app', 'Creation'),
 			'modifiedDisplayname' => Yii::t('app', 'Modified'),
+			'oClick' => Yii::t('app', 'Clicks'),
+			'oView' => Yii::t('app', 'Views'),
 		];
 	}
 
@@ -152,6 +154,14 @@ class Banners extends \app\components\ActiveRecord
 
 		return $clicks ? $clicks : 0;
 	}
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getGrid()
+    {
+        return $this->hasOne(BannerGrid::className(), ['id' => 'banner_id']);
+    }
 
 	/**
 	 * @return \yii\db\ActiveQuery
@@ -192,14 +202,6 @@ class Banners extends \app\components\ActiveRecord
 	public function getModified()
 	{
 		return $this->hasOne(Users::className(), ['user_id' => 'modified_id']);
-	}
-
-	/**
-	 * @return \yii\db\ActiveQuery
-	 */
-	public function getView()
-	{
-		return $this->hasOne(BannersView::className(), ['banner_id' => 'banner_id']);
 	}
 
 	/**
@@ -323,30 +325,32 @@ class Banners extends \app\components\ActiveRecord
 			},
 			'filter' => $this->filterDatepicker($this, 'updated_date'),
 		];
-		$this->templateColumns['clicks'] = [
-			'attribute' => 'clicks',
+		$this->templateColumns['oClick'] = [
+			'attribute' => 'oClick',
 			'value' => function($model, $key, $index, $column) {
-				$clicks = $model->getClicks(true);
+				// $clicks = $model->getClicks(true);
+				$clicks = $model->oClick;
 				return Html::a($clicks, ['click/admin/manage', 'banner' => $model->primaryKey], ['title' => Yii::t('app', '{count} clicks', ['count' => $clicks]), 'data-pjax' => 0]);
 			},
-			'filter' => false,
+            'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 		];
-		$this->templateColumns['views'] = [
-			'attribute' => 'views',
+		$this->templateColumns['oView'] = [
+			'attribute' => 'oView',
 			'value' => function($model, $key, $index, $column) {
-				$views = $model->getViews(true);
+				// $views = $model->getViews(true);
+				$views = $model->oView;
 				return Html::a($views, ['view/admin/manage', 'banner' => $model->primaryKey], ['title' => Yii::t('app', '{count} views', ['count' => $views]), 'data-pjax' => 0]);
 			},
-			'filter' => false,
+            'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['permanent'] = [
 			'attribute' => 'permanent',
 			'value' => function($model, $key, $index, $column) {
-				return $this->filterYesNo($model->view->permanent);
+				return $this->filterYesNo($model->grid->permanent);
 			},
 			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class' => 'text-center'],
@@ -405,6 +409,13 @@ class Banners extends \app\components\ActiveRecord
 		// $this->categoryName = isset($this->category) ? $this->category->title->message : '-';
 		// $this->creationDisplayname = isset($this->creation) ? $this->creation->displayname : '-';
 		// $this->modifiedDisplayname = isset($this->modified) ? $this->modified->displayname : '-';
+        $this->oClick = isset($this->grid) ? $this->grid->click : 0;
+        $this->oView = isset($this->grid) ? $this->grid->view : 0;
+
+		$this->permanent = 0;
+        if (Yii::$app->formatter->asDate($this->expired_date, 'php:Y-m-d') == '-') {
+            $this->permanent = 1;
+        }
 	}
 
 	/**

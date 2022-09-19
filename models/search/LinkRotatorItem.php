@@ -27,7 +27,7 @@ class LinkRotatorItem extends LinkRotatorItemModel
 	public function rules()
 	{
 		return [
-			[['banner_id', 'publish', 'cat_id', 'creation_id', 'modified_id', 'click', 'view', 'permanent'], 'integer'],
+			[['banner_id', 'publish', 'cat_id', 'creation_id', 'modified_id', 'oClick', 'oView', 'permanent'], 'integer'],
 			[['title', 'url', 'banner_desc', 'published_date', 'expired_date', 'creation_date', 'modified_date', 'updated_date',
                 'categoryName', 'creationDisplayname', 'modifiedDisplayname'], 'safe'],
 		];
@@ -67,12 +67,13 @@ class LinkRotatorItem extends LinkRotatorItemModel
             $query = LinkRotatorItemModel::find()->alias('t')->select($column);
         }
 		$query->joinWith([
+			'grid grid', 
 			'category category', 
 			// 'category.title categoryTitle', 
 			// 'creation creation', 
 			// 'modified modified'
 		]);
-        if ((isset($params['sort']) && in_array($params['sort'], ['cat_id', '-cat_id'])) || (isset($params['categoryName']) && $params['categoryName'] != '')) {
+        if ((isset($params['sort']) && (in_array($params['sort'], ['cat_id', '-cat_id']) || in_array($params['sort'], ['categoryName', '-categoryName']))) || (isset($params['categoryName']) && $params['categoryName'] != '')) {
             $query->joinWith(['category.title categoryTitle']);
         }
         if ((isset($params['sort']) && in_array($params['sort'], ['creationDisplayname', '-creationDisplayname'])) || (isset($params['creationDisplayname']) && $params['creationDisplayname'] != '')) {
@@ -80,18 +81,6 @@ class LinkRotatorItem extends LinkRotatorItemModel
         }
         if ((isset($params['sort']) && in_array($params['sort'], ['modifiedDisplayname', '-modifiedDisplayname'])) || (isset($params['modifiedDisplayname']) && $params['modifiedDisplayname'] != '')) {
             $query->joinWith(['modified modified']);
-        }
-        if ((isset($params['sort']) && in_array($params['sort'], ['click', '-click'])) || (isset($params['click']) && $params['click'] != '')) {
-            $query->joinWith(['clicks clicks']);
-            if (isset($params['sort']) && in_array($params['sort'], ['click', '-click'])) {
-                $query->select(['t.*', 'count(clicks.id) as click']);
-            }
-        }
-        if ((isset($params['sort']) && in_array($params['sort'], ['view', '-view'])) || (isset($params['view']) && $params['view'] != '')) {
-            $query->joinWith(['views views']);
-            if (isset($params['sort']) && in_array($params['sort'], ['view', '-view'])) {
-                $query->select(['t.*', 'count(views.id) as view']);
-            }
         }
 
 		$query->groupBy(['banner_id']);
@@ -111,6 +100,10 @@ class LinkRotatorItem extends LinkRotatorItemModel
 			'asc' => ['categoryTitle.message' => SORT_ASC],
 			'desc' => ['categoryTitle.message' => SORT_DESC],
 		];
+		$attributes['categoryName'] = [
+			'asc' => ['categoryTitle.message' => SORT_ASC],
+			'desc' => ['categoryTitle.message' => SORT_DESC],
+		];
 		$attributes['creationDisplayname'] = [
 			'asc' => ['creation.displayname' => SORT_ASC],
 			'desc' => ['creation.displayname' => SORT_DESC],
@@ -119,14 +112,18 @@ class LinkRotatorItem extends LinkRotatorItemModel
 			'asc' => ['modified.displayname' => SORT_ASC],
 			'desc' => ['modified.displayname' => SORT_DESC],
 		];
-        $attributes['click'] = [
-            'asc' => ['click' => SORT_ASC],
-            'desc' => ['click' => SORT_DESC],
+        $attributes['oClick'] = [
+            'asc' => ['grid.click' => SORT_ASC],
+            'desc' => ['grid.click' => SORT_DESC],
         ];
-        $attributes['view'] = [
-            'asc' => ['view' => SORT_ASC],
-            'desc' => ['view' => SORT_DESC],
+        $attributes['oView'] = [
+            'asc' => ['grid.view' => SORT_ASC],
+            'desc' => ['grid.view' => SORT_DESC],
         ];
+		$attributes['permanent'] = [
+			'asc' => ['grid.permanent' => SORT_ASC],
+			'desc' => ['grid.permanent' => SORT_DESC],
+		];
 		$dataProvider->setSort([
 			'attributes' => $attributes,
 			'defaultOrder' => ['banner_id' => SORT_DESC],
@@ -158,38 +155,41 @@ class LinkRotatorItem extends LinkRotatorItemModel
 			'category.type' => 'rotator',
 		]);
 
-		if (isset($params['trash'])) {
-            $query->andFilterWhere(['NOT IN', 't.publish', [0,1]]);
+        if (isset($params['permanent'])) {
+            if ($params['permanent'] != '') {
+                $query->andFilterCompare('grid.permanent', $this->permanent);
+                if ($params['permanent'] == 1) {
+                    $this->publish = 1;
+                    $query->andFilterCompare('t.publish', $this->publish);
+                } else {
+                    $query->andFilterWhere(['IN', 't.publish', [0,1]]);
+                }
+            }
+		}
+
+        if (isset($params['oClick']) && $params['oClick'] != '') {
+            if ($this->oClick == 1) {
+                $query->andWhere(['<>', 'grid.click', 0]);
+            } else if ($this->oClick == 0) {
+                $query->andWhere(['=', 'grid.click', 0]);
+            }
+        }
+        if (isset($params['oView']) && $params['oView'] != '') {
+            if ($this->oView == 1) {
+                $query->andWhere(['<>', 'grid.view', 0]);
+            } else if ($this->oView == 0) {
+                $query->andWhere(['=', 'grid.view', 0]);
+            }
+        }
+
+        if (!isset($params['publish']) || (isset($params['publish']) && $params['publish'] == '')) {
+            $query->andFilterWhere(['IN', 't.publish', [0,1]]);
         } else {
-            if (!isset($params['publish']) || (isset($params['publish']) && $params['publish'] == '')) {
-                $query->andFilterWhere(['IN', 't.publish', [0,1]]);
-            } else {
-                $query->andFilterWhere(['t.publish' => $this->publish]);
-            }
+            $query->andFilterWhere(['t.publish' => $this->publish]);
         }
 
-		if (isset($params['click']) && $params['click'] != '') {
-            if ($this->click == 1) {
-                $query->andWhere(['is not', 'clicks.id', null]);
-            } else if ($this->click == 0) {
-                $query->andWhere(['is', 'clicks.id', null]);
-            }
-        }
-
-		if (isset($params['view']) && $params['view'] != '') {
-            if ($this->view == 1) {
-                $query->andWhere(['is not', 'views.id', null]);
-            } else if ($this->view == 0) {
-                $query->andWhere(['is', 'views.id', null]);
-            }
-        }
-
-		if (isset($params['permanent']) && $params['permanent'] != '') {
-            if ($this->permanent == 1) {
-                $query->andWhere(['in', 't.expired_date', ['0000-00-00', '1970-01-01', '0002-12-02', '-0001-11-30']]);
-            } else if ($this->permanent == 0) {
-                $query->andWhere(['not in', 't.expired_date', ['0000-00-00', '1970-01-01', '0002-12-02', '-0001-11-30']]);
-            }
+        if (isset($params['trash']) && $params['trash'] == 1) {
+            $query->andFilterWhere(['NOT IN', 't.publish', [0,1]]);
         }
 
 		$query->andFilterWhere(['like', 't.title', $this->title])

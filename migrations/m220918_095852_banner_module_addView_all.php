@@ -67,7 +67,7 @@ SQL;
 CREATE VIEW `_banners` AS
 select
   `a`.`banner_id` AS `banner_id`,
-  case when `a`.`publish` = '1' and `a`.`expired_date` in ('0000-00-00','1970-01-01','0002-12-02') and `a`.`published_date` <= CURDATE() then 1 else 0 end AS `permanent`,
+  case when `a`.`publish` = '1' and `a`.`expired_date` in ('0000-00-00','1970-01-01','0002-12-02') and `a`.`published_date` <= curdate() then 1 else 0 end AS `permanent`,
   `b`.`views` AS `views`,
   `c`.`clicks` AS `clicks`
 from ((`ommu_banners` `a`

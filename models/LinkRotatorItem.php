@@ -28,6 +28,7 @@
  *
  * The followings are the available model relations:
  * @property BannerClicks[] $clicks
+ * @property BannerGrid $grid
  * @property BannerViews[] $views
  * @property LinkRotators $category
  * @property Users $creation
@@ -57,8 +58,8 @@ class LinkRotatorItem extends \app\components\ActiveRecord
 	public $categoryName;
 	public $creationDisplayname;
 	public $modifiedDisplayname;
-	public $click;
-	public $view;
+	public $oClick;
+	public $oView;
 
 	const SCENARIO_IS_LINKED = 'isUrlRotator';
 	const SCENARIO_IS_LINKED_NOT_PERMANENT = 'isUrlRotatorNotPermanent';
@@ -131,8 +132,8 @@ class LinkRotatorItem extends \app\components\ActiveRecord
 			'categoryName' => Yii::t('app', 'Rotator'),
 			'creationDisplayname' => Yii::t('app', 'Creation'),
 			'modifiedDisplayname' => Yii::t('app', 'Modified'),
-			'click' => Yii::t('app', 'Click'),
-			'view' => Yii::t('app', 'View'),
+			'oClick' => Yii::t('app', 'Click'),
+			'oView' => Yii::t('app', 'View'),
 			'permanent' => Yii::t('app', 'Permanent'),
 		];
 	}
@@ -153,6 +154,14 @@ class LinkRotatorItem extends \app\components\ActiveRecord
 
 		return $clicks ? $clicks : 0;
 	}
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getGrid()
+    {
+        return $this->hasOne(BannerGrid::className(), ['id' => 'banner_id']);
+    }
 
 	/**
 	 * @return \yii\db\ActiveQuery
@@ -313,20 +322,22 @@ class LinkRotatorItem extends \app\components\ActiveRecord
 			},
 			'filter' => $this->filterDatepicker($this, 'updated_date'),
 		];
-		$this->templateColumns['click'] = [
-			'attribute' => 'click',
+		$this->templateColumns['oClick'] = [
+			'attribute' => 'oClick',
 			'value' => function($model, $key, $index, $column) {
-				$clicks = $model->getClicks(true);
+				// $clicks = $model->getClicks(true);
+				$clicks = $model->oClick;
 				return Html::a($clicks, ['click/admin/manage', 'banner' => $model->primaryKey], ['title' => Yii::t('app', '{count} clicks', ['count' => $clicks]), 'data-pjax' => 0]);
 			},
 			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 		];
-		$this->templateColumns['view'] = [
-			'attribute' => 'view',
+		$this->templateColumns['oView'] = [
+			'attribute' => 'oView',
 			'value' => function($model, $key, $index, $column) {
-				$views = $model->getViews(true);
+				// $views = $model->getViews(true);
+				$views = $model->oView;
 				return Html::a($views, ['view/admin/manage', 'banner' => $model->primaryKey], ['title' => Yii::t('app', '{count} views', ['count' => $views]), 'data-pjax' => 0]);
 			},
 			'filter' => $this->filterYesNo(),
@@ -394,8 +405,9 @@ class LinkRotatorItem extends \app\components\ActiveRecord
 		// $this->categoryName = isset($this->category) ? $this->category->title->message : '-';
 		// $this->creationDisplayname = isset($this->creation) ? $this->creation->displayname : '-';
 		// $this->modifiedDisplayname = isset($this->modified) ? $this->modified->displayname : '-';
-		$this->click = $this->getClicks(true) ? 1 : 0;
-		$this->view = $this->getViews(true) ? 1 : 0;
+        $this->oClick = isset($this->grid) ? $this->grid->click : 0;
+        $this->oView = isset($this->grid) ? $this->grid->view : 0;
+
 		$this->permanent = 0;
         if (Yii::$app->formatter->asDate($this->expired_date, 'php:Y-m-d') == '-') {
             $this->permanent = 1;

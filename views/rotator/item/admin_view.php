@@ -97,7 +97,7 @@ $attributes = [
 	[
 		'attribute' => 'click',
 		'value' => function ($model) {
-			$clicks = $model->getClicks(true);
+			$clicks = $model->oClick;
 			return Html::a($clicks, ['click/admin/manage', 'banner' => $model->primaryKey], ['title' => Yii::t('app', '{count} clicks', ['count' => $clicks])]);
 		},
 		'format' => 'html',
@@ -106,7 +106,7 @@ $attributes = [
 	[
 		'attribute' => 'view',
 		'value' => function ($model) {
-			$views = $model->getViews(true);
+			$views = $model->oView;
 			return Html::a($views, ['view/admin/manage', 'banner' => $model->primaryKey], ['title' => Yii::t('app', '{count} views', ['count' => $views])]);
 		},
 		'format' => 'html',
