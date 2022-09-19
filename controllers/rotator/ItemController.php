@@ -122,6 +122,7 @@ class ItemController extends Controller
         if (($id = Yii::$app->request->get('id')) == null) {
 			throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'The requested page does not exist.'));
         }
+        $this->subMenuParam = $id;
 
         $model = new LinkRotatorItem([
             'cat_id' => $id,

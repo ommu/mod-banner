@@ -64,41 +64,41 @@ rotator_submenu:
         0: 'rotator/item/manage'
         category: $_GET*id
         expired: publish
-      select: controller
+      select: url
     permanent:
       label: Permanent(s)
       url:
         0: 'rotator/item/manage'
         category: $_GET*id
         expired: permanent
-      select: controller
+      select: url
     pending:
       label: Pending(s)
       url:
         0: 'rotator/item/manage'
         category: $_GET*id
         expired: pending
-      select: controller
+      select: url
     expired:
       label: Expired(s)
       url:
         0: 'rotator/item/manage'
         category: $_GET*id
         expired: expired
-      select: controller
+      select: url
     unpublish:
       label: Unpublish(s)
       url:
         0: 'rotator/item/manage'
         category: $_GET*id
         publish: 0
-      select: controller
+      select: url
     items:
       label: Item(s)
       url:
         0: 'rotator/item/manage'
         category: $_GET*id
-      select: controller
+      select: url
   2:
     delete:
       label: Delete
