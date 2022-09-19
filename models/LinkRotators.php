@@ -183,11 +183,11 @@ class LinkRotators extends \app\components\ActiveRecord
 
 	/**
 	 * {@inheritdoc}
-	 * @return \ommu\banner\models\query\LinkRotators the active query used by this AR class.
+	 * @return \ommu\banner\models\query\BannerCategory the active query used by this AR class.
 	 */
 	public static function find()
 	{
-		return new \ommu\banner\models\query\LinkRotators(get_called_class());
+		return new \ommu\banner\models\query\BannerCategory(get_called_class());
 	}
 
 	/**

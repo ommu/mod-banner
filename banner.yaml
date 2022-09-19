@@ -20,7 +20,7 @@ banner_submenu:
   clicks:
     label: Click(s)
     url:
-      0: 'o/click/manage'
+      0: 'rotator/item/manage'
       banner: $_GET*id
     select: controller
   delete:
@@ -32,6 +32,7 @@ banner_submenu:
       data-confirm: Are you sure you want to delete this item?
       data-method: post
     select: action
+
 setting_submenu:
   update:
     label: Settings
@@ -41,3 +42,70 @@ setting_submenu:
     label: Categories
     url: ['setting/category']
     select: controller
+
+rotator_submenu:
+  0:
+    view:
+      label: Detail
+      url:
+        0: 'rotator/admin/view'
+        id: $_GET*id
+      select: action
+    update:
+      label: Update
+      url:
+        0: 'rotator/admin/update'
+        id: $_GET*id
+      select: action
+  1:
+    published:
+      label: Published(s)
+      url:
+        0: 'rotator/item/manage'
+        category: $_GET*id
+        expired: publish
+      select: controller
+    permanent:
+      label: Permanent(s)
+      url:
+        0: 'rotator/item/manage'
+        category: $_GET*id
+        expired: permanent
+      select: controller
+    pending:
+      label: Pending(s)
+      url:
+        0: 'rotator/item/manage'
+        category: $_GET*id
+        expired: pending
+      select: controller
+    expired:
+      label: Expired(s)
+      url:
+        0: 'rotator/item/manage'
+        category: $_GET*id
+        expired: expired
+      select: controller
+    unpublish:
+      label: Unpublish(s)
+      url:
+        0: 'rotator/item/manage'
+        category: $_GET*id
+        publish: 0
+      select: controller
+    items:
+      label: Item(s)
+      url:
+        0: 'rotator/item/manage'
+        category: $_GET*id
+      select: controller
+  2:
+    delete:
+      label: Delete
+      url:
+        0: 'rotator/admin/delete'
+        id: $_GET*id
+      htmlOptions:
+        data-confirm: Are you sure you want to delete this item?
+        data-method: post
+      select: action

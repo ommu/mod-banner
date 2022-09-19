@@ -206,11 +206,11 @@ class LinkRotatorItem extends \app\components\ActiveRecord
 
 	/**
 	 * {@inheritdoc}
-	 * @return \ommu\banner\models\query\LinkRotatorItem the active query used by this AR class.
+	 * @return \ommu\banner\models\query\Banners the active query used by this AR class.
 	 */
 	public static function find()
 	{
-		return new \ommu\banner\models\query\LinkRotatorItem(get_called_class());
+		return new \ommu\banner\models\query\Banners(get_called_class());
 	}
 
 	/**
