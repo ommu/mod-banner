@@ -28,8 +28,10 @@ class BannerViewHistory extends BannerViewHistoryModel
 	public function rules()
 	{
 		return [
-			[['id', 'view_id', 'categoryId', 'bannerId'], 'integer'],
-			[['view_date', 'view_ip', 'bannerTitle', 'userDisplayname'], 'safe'],
+			[['id', 'view_id', 
+                'categoryId', 'bannerId'], 'integer'],
+			[['view_date', 'view_ip', 
+                'bannerTitle', 'userDisplayname'], 'safe'],
 		];
 	}
 
@@ -67,11 +69,27 @@ class BannerViewHistory extends BannerViewHistoryModel
             $query = BannerViewHistoryModel::find()->alias('t')->select($column);
         }
 		$query->joinWith([
-			'view view',
-			'view.banner banner',
-			'view.banner.category.title category',
-			'view.user user',
+			// 'view view',
+			// 'view.banner banner',
+			// 'view.banner.category.title category',
+			// 'view.user user',
 		]);
+        if ((isset($params['sort']) && in_array($params['sort'], ['bannerTitle', '-bannerTitle'])) || (
+            (isset($params['bannerTitle']) && $params['bannerTitle'] != '') ||
+            (isset($params['categoryId']) && $params['categoryId'] != '') ||
+            (isset($params['category']) && $params['category'] != '')
+        )) {
+            $query->joinWith(['banner banner']);
+        }
+        if ((isset($params['sort']) && in_array($params['sort'], ['userDisplayname', '-userDisplayname'])) || (isset($params['userDisplayname']) && $params['userDisplayname'] != '')) {
+            $query->joinWith(['user user']);
+        }
+        if ((isset($params['sort']) && in_array($params['sort'], ['categoryId', '-categoryId']))) {
+            $query->joinWith(['categoryTitle categoryTitle']);
+        }
+        if ((isset($params['bannerId']) && $params['bannerId'] != '') || (isset($params['banner']) && $params['banner'] != '')) {
+            $query->joinWith(['view view']);
+        }
 
 		$query->groupBy(['id']);
 
@@ -95,8 +113,8 @@ class BannerViewHistory extends BannerViewHistoryModel
 			'desc' => ['user.displayname' => SORT_DESC],
 		];
 		$attributes['categoryId'] = [
-			'asc' => ['category.message' => SORT_ASC],
-			'desc' => ['category.message' => SORT_DESC],
+			'asc' => ['categoryTitle.message' => SORT_ASC],
+			'desc' => ['categoryTitle.message' => SORT_DESC],
 		];
 		$dataProvider->setSort([
 			'attributes' => $attributes,
@@ -120,7 +138,7 @@ class BannerViewHistory extends BannerViewHistoryModel
 			't.view_id' => isset($params['view']) ? $params['view'] : $this->view_id,
 			'cast(t.view_date as date)' => $this->view_date,
 			'banner.cat_id' => isset($params['category']) ? $params['category'] : $this->categoryId,
-			'view.banner_id' => $this->bannerId,
+			'view.banner_id' => isset($params['banner']) ? $params['banner'] : $this->bannerId,
 		]);
 
 		$query->andFilterWhere(['like', 't.view_ip', $this->view_ip])

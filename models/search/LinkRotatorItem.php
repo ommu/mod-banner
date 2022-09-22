@@ -67,13 +67,20 @@ class LinkRotatorItem extends LinkRotatorItemModel
             $query = LinkRotatorItemModel::find()->alias('t')->select($column);
         }
 		$query->joinWith([
-			'grid grid', 
+			// 'grid grid', 
 			'category category', 
 			// 'category.title categoryTitle', 
 			// 'creation creation', 
 			// 'modified modified'
 		]);
-        if ((isset($params['sort']) && (in_array($params['sort'], ['cat_id', '-cat_id']) || in_array($params['sort'], ['categoryName', '-categoryName']))) || (isset($params['categoryName']) && $params['categoryName'] != '')) {
+        if ((isset($params['sort']) && in_array($params['sort'], ['permanent', '-permanent', 'oClick', '-oClick', 'oView', '-oView'])) || (
+            (isset($params['permanent']) && $params['permanent'] != '') ||
+            (isset($params['oClick']) && $params['oClick'] != '') ||
+            (isset($params['oView']) && $params['oView'] != '')
+        )) {
+            $query->joinWith(['grid grid']);
+        }
+        if (isset($params['sort']) && (in_array($params['sort'], ['cat_id', '-cat_id', 'categoryName', '-categoryName'])) || (isset($params['categoryName']) && $params['categoryName'] != '')) {
             $query->joinWith(['category.title categoryTitle']);
         }
         if ((isset($params['sort']) && in_array($params['sort'], ['creationDisplayname', '-creationDisplayname'])) || (isset($params['creationDisplayname']) && $params['creationDisplayname'] != '')) {

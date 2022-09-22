@@ -68,12 +68,22 @@ class BannerCategory extends BannerCategoryModel
             $query = BannerCategoryModel::find()->alias('t')->select($column);
         }
 		$query->joinWith([
-			'view view',
+			// 'view view',
 			// 'title title', 
 			// 'description description', 
 			// 'creation creation', 
 			// 'modified modified'
 		]);
+        if ((isset($params['sort']) && in_array($params['sort'], ['oPublish', '-oPublish', 'oPermanent', '-oPermanent', 'oPending', '-oPending', 'oExpired', '-oExpired', 'oUnpublish', '-oUnpublish', 'oAll', '-oAll'])) || (
+            (isset($params['oPublish']) && $params['oPublish'] != '') ||
+            (isset($params['oPermanent']) && $params['oPermanent'] != '') ||
+            (isset($params['oPending']) && $params['oPending'] != '') ||
+            (isset($params['oExpired']) && $params['name_i'] != '') ||
+            (isset($params['oUnpublish']) && $params['oUnpublish'] != '') ||
+            (isset($params['oAll']) && $params['oAll'] != '')
+        )) {
+            $query->joinWith(['view view']);
+        }
         if ((isset($params['sort']) && in_array($params['sort'], ['name_i', '-name_i'])) || (isset($params['name_i']) && $params['name_i'] != '')) {
             $query->joinWith(['title title']);
         }

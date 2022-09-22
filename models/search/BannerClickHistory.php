@@ -28,8 +28,10 @@ class BannerClickHistory extends BannerClickHistoryModel
 	public function rules()
 	{
 		return [
-			[['id', 'click_id', 'categoryId', 'bannerId'], 'integer'],
-			[['click_date', 'click_ip', 'bannerTitle', 'userDisplayname'], 'safe'],
+			[['id', 'click_id', 
+                'categoryId', 'bannerId'], 'integer'],
+			[['click_date', 'click_ip', 
+                'bannerTitle', 'userDisplayname'], 'safe'],
 		];
 	}
 
@@ -67,11 +69,27 @@ class BannerClickHistory extends BannerClickHistoryModel
             $query = BannerClickHistoryModel::find()->alias('t')->select($column);
         }
 		$query->joinWith([
-			'click click',
-			'click.banner banner',
-			'click.banner.category.title category',
-			'click.user user',
+			// 'click click',
+			// 'click.banner banner',
+			// 'click.banner.category.title category',
+			// 'click.user user',
 		]);
+        if ((isset($params['sort']) && in_array($params['sort'], ['bannerTitle', '-bannerTitle'])) || (
+            (isset($params['bannerTitle']) && $params['bannerTitle'] != '') ||
+            (isset($params['categoryId']) && $params['categoryId'] != '') ||
+            (isset($params['category']) && $params['category'] != '')
+        )) {
+            $query->joinWith(['banner banner']);
+        }
+        if ((isset($params['sort']) && in_array($params['sort'], ['userDisplayname', '-userDisplayname'])) || (isset($params['userDisplayname']) && $params['userDisplayname'] != '')) {
+            $query->joinWith(['user user']);
+        }
+        if ((isset($params['sort']) && in_array($params['sort'], ['categoryId', '-categoryId']))) {
+            $query->joinWith(['categoryTitle categoryTitle']);
+        }
+        if ((isset($params['bannerId']) && $params['bannerId'] != '') || (isset($params['banner']) && $params['banner'] != '')) {
+            $query->joinWith(['click click']);
+        }
 
 		$query->groupBy(['id']);
 
@@ -95,8 +113,8 @@ class BannerClickHistory extends BannerClickHistoryModel
 			'desc' => ['user.displayname' => SORT_DESC],
 		];
 		$attributes['categoryId'] = [
-			'asc' => ['category.message' => SORT_ASC],
-			'desc' => ['category.message' => SORT_DESC],
+			'asc' => ['categoryTitle.message' => SORT_ASC],
+			'desc' => ['categoryTitle.message' => SORT_DESC],
 		];
 		$dataProvider->setSort([
 			'attributes' => $attributes,
@@ -120,7 +138,7 @@ class BannerClickHistory extends BannerClickHistoryModel
 			't.click_id' => isset($params['click']) ? $params['click'] : $this->click_id,
 			'cast(t.click_date as date)' => $this->click_date,
 			'banner.cat_id' => isset($params['category']) ? $params['category'] : $this->categoryId,
-			'click.banner_id' => $this->bannerId,
+			'click.banner_id' => isset($params['banner']) ? $params['banner'] : $this->bannerId,
 		]);
 
 		$query->andFilterWhere(['like', 't.click_ip', $this->click_ip])

@@ -126,7 +126,7 @@ class HistoryController extends Controller
         $model = $this->findModel($id);
 		$this->subMenuParam = $model->view->banner_id;
 
-		$this->view->title = Yii::t('app', 'Detail View History: {view-id}', ['view-id' => $model->view->banner->title]);
+		$this->view->title = Yii::t('app', 'Detail View History: {view-id}', ['view-id' => $model->banner->title]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->oRender('admin_view', [

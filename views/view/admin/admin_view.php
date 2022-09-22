@@ -42,7 +42,7 @@ $attributes = [
 	[
 		'attribute' => 'categoryId',
 		'value' => function ($model) {
-			$categoryId = isset($model->banner->category) ? $model->banner->category->title->message : '-';
+			$categoryId = isset($model->categoryTitle) ? $model->categoryTitle->message : '-';
             if ($categoryId != '-') {
                 return Html::a($categoryId, ['setting/category/view', 'id' => $model->banner->cat_id], ['title' => $categoryId, 'class' => 'modal-btn']);
             }

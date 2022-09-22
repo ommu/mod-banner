@@ -21,7 +21,7 @@ use yii\widgets\DetailView;
 if (!$small) {
     $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Publication'), 'url' => ['/admin/page/admin/index']];
     $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Banner'), 'url' => ['admin/index']];
-    $this->params['breadcrumbs'][] = ['label' => $model->view->banner->title, 'url' => ['admin/view', 'id' => $model->view->banner_id]];
+    $this->params['breadcrumbs'][] = ['label' => $model->banner->title, 'url' => ['admin/view', 'id' => $model->view->banner_id]];
     $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'View'), 'url' => ['view/admin/manage', 'banner' => $model->view->banner_id]];
     $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'History'), 'url' => ['index']];
     $this->params['breadcrumbs'][] = Yii::t('app', 'Detail');
@@ -43,9 +43,9 @@ $attributes = [
 	[
 		'attribute' => 'categoryId',
 		'value' => function ($model) {
-			$categoryId = isset($model->view->banner->category) ? $model->view->banner->category->title->message : '-';
+			$categoryId = isset($model->categoryTitle) ? $model->categoryTitle->message : '-';
             if ($categoryId != '-') {
-                return Html::a($categoryId, ['setting/category/view', 'id' => $model->view->banner->cat_id], ['title' => $categoryId, 'class' => 'modal-btn']);
+                return Html::a($categoryId, ['setting/category/view', 'id' => $model->banner->cat_id], ['title' => $categoryId, 'class' => 'modal-btn']);
             }
 			return $categoryId;
 		},
@@ -54,7 +54,7 @@ $attributes = [
 	[
 		'attribute' => 'bannerTitle',
 		'value' => function ($model) {
-			$bannerTitle = isset($model->view->banner) ? $model->view->banner->title : '-';
+			$bannerTitle = isset($model->banner) ? $model->banner->title : '-';
             if ($bannerTitle != '-') {
                 return Html::a($bannerTitle, ['admin/view', 'id' => $model->view->banner_id], ['title' => $bannerTitle, 'class' => 'modal-btn']);
             }

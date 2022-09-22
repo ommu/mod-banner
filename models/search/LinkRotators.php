@@ -67,12 +67,15 @@ class LinkRotators extends LinkRotatorsModel
             $query = LinkRotatorsModel::find()->alias('t')->select($column);
         }
 		$query->joinWith([
-			'view view',
+			// 'view view',
 			// 'title title', 
 			// 'description description', 
 			// 'creation creation', 
 			// 'modified modified'
 		]);
+        if ((isset($params['sort']) && in_array($params['sort'], ['oPublish', '-oPublish'])) || (isset($params['oPublish']) && $params['oPublish'] != '')) {
+            $query->joinWith(['view view']);
+        }
         if ((isset($params['sort']) && in_array($params['sort'], ['name_i', '-name_i'])) || (isset($params['name_i']) && $params['name_i'] != '')) {
             $query->joinWith(['title title']);
         }

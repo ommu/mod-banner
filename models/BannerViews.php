@@ -31,9 +31,12 @@ namespace ommu\banner\models;
 use Yii;
 use yii\helpers\Html;
 use app\models\Users;
+use app\models\SourceMessage;
 
 class BannerViews extends \app\components\ActiveRecord
 {
+	use \ommu\traits\UtilityTrait;
+
 	public $gridForbiddenColumn = [];
 
 	public $categoryId;
@@ -116,6 +119,22 @@ class BannerViews extends \app\components\ActiveRecord
 	}
 
 	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getCategory()
+	{
+		return $this->hasOne(BannerCategory::className(), ['cat_id' => 'cat_id'])->via('banner');
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getCategoryTitle()
+	{
+		return $this->hasOne(SourceMessage::className(), ['id' => 'name'])->via('category');
+	}
+
+	/**
 	 * {@inheritdoc}
 	 * @return \ommu\banner\models\query\BannerViews the active query used by this AR class.
 	 */
@@ -147,7 +166,7 @@ class BannerViews extends \app\components\ActiveRecord
 		$this->templateColumns['categoryId'] = [
 			'attribute' => 'categoryId',
 			'value' => function($model, $key, $index, $column) {
-				return isset($model->banner->category) ? $model->banner->category->title->message : '-';
+				return isset($model->categoryTitle) ? $model->categoryTitle->message : '-';
 				// return $model->categoryId;
 			},
 			'filter' => BannerCategory::getCategory(),
@@ -188,7 +207,7 @@ class BannerViews extends \app\components\ActiveRecord
 				$views = $model->views;
 				return Html::a($views, ['view/history/manage', 'view' => $model->primaryKey], ['title' => Yii::t('app', '{count} histories', ['count' => $views]), 'data-pjax' => 0]);
 			},
-			'filter' => false,
+			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 		];

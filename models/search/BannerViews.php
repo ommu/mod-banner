@@ -68,10 +68,23 @@ class BannerViews extends BannerViewsModel
             $query = BannerViewsModel::find()->alias('t')->select($column);
         }
 		$query->joinWith([
-			'banner banner',
-			'banner.category.title category',
-			'user user'
+			// 'banner banner',
+			// 'banner.category.title category',
+			// 'user user'
 		]);
+        if ((isset($params['sort']) && in_array($params['sort'], ['bannerTitle', '-bannerTitle'])) || (
+            (isset($params['bannerTitle']) && $params['bannerTitle'] != '') ||
+            (isset($params['categoryId']) && $params['categoryId'] != '') ||
+            (isset($params['category']) && $params['category'] != '')
+        )) {
+            $query->joinWith(['banner banner']);
+        }
+        if ((isset($params['sort']) && in_array($params['sort'], ['categoryId', '-categoryId']))) {
+            $query->joinWith(['categoryTitle categoryTitle']);
+        }
+        if ((isset($params['sort']) && in_array($params['sort'], ['userDisplayname', '-userDisplayname'])) || (isset($params['userDisplayname']) && $params['userDisplayname'] != '')) {
+            $query->joinWith(['user user']);
+        }
 
 		$query->groupBy(['view_id']);
 
@@ -87,8 +100,8 @@ class BannerViews extends BannerViewsModel
 
 		$attributes = array_keys($this->getTableSchema()->columns);
 		$attributes['categoryId'] = [
-			'asc' => ['category.message' => SORT_ASC],
-			'desc' => ['category.message' => SORT_DESC],
+			'asc' => ['categoryTitle.message' => SORT_ASC],
+			'desc' => ['categoryTitle.message' => SORT_DESC],
 		];
 		$attributes['bannerTitle'] = [
 			'asc' => ['banner.title' => SORT_ASC],
@@ -116,10 +129,17 @@ class BannerViews extends BannerViewsModel
 			't.view_id' => $this->view_id,
 			't.banner_id' => isset($params['banner']) ? $params['banner'] : $this->banner_id,
 			't.user_id' => isset($params['user']) ? $params['user'] : $this->user_id,
-			't.views' => $this->views,
 			'cast(t.view_date as date)' => $this->view_date,
 			'banner.cat_id' => isset($params['category']) ? $params['category'] : $this->categoryId,
 		]);
+
+        if (isset($params['views']) && $params['views'] != '') {
+            if ($this->views == 1) {
+                $query->andWhere(['<>', 'views', 0]);
+            } else if ($this->views == 0) {
+                $query->andWhere(['=', 'views', 0]);
+            }
+        }
 
 		$query->andFilterWhere(['like', 't.view_ip', $this->view_ip])
 			->andFilterWhere(['like', 'banner.title', $this->bannerTitle])

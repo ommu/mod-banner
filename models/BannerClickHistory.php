@@ -70,6 +70,7 @@ class BannerClickHistory extends \app\components\ActiveRecord
 			'bannerTitle' => Yii::t('app', 'Banner'),
 			'userDisplayname' => Yii::t('app', 'User'),
 			'categoryId' => Yii::t('app', 'Category'),
+			'bannerId' => Yii::t('app', 'Banner'),
 		];
 	}
 
@@ -79,6 +80,38 @@ class BannerClickHistory extends \app\components\ActiveRecord
 	public function getClick()
 	{
 		return $this->hasOne(BannerClicks::className(), ['click_id' => 'click_id']);
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getBanner()
+	{
+		return $this->hasOne(Banners::className(), ['banner_id' => 'banner_id'])->via('click');
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getCategory()
+	{
+		return $this->hasOne(BannerCategory::className(), ['cat_id' => 'cat_id'])->via('banner');
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getCategoryTitle()
+	{
+		return $this->hasOne(SourceMessage::className(), ['id' => 'name'])->via('category');
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getUser()
+	{
+		return $this->hasOne(Users::className(), ['user_id' => 'user_id'])->via('click');
 	}
 
 	/**
@@ -113,7 +146,7 @@ class BannerClickHistory extends \app\components\ActiveRecord
 		$this->templateColumns['categoryId'] = [
 			'attribute' => 'categoryId',
 			'value' => function($model, $key, $index, $column) {
-				return isset($model->click->banner->category) ? $model->click->banner->category->title->message : '-';
+				return isset($model->categoryTitle) ? $model->categoryTitle->message : '-';
 				// return $model->categoryId;
 			},
 			'filter' => BannerCategory::getCategory(),
@@ -122,7 +155,7 @@ class BannerClickHistory extends \app\components\ActiveRecord
 		$this->templateColumns['bannerTitle'] = [
 			'attribute' => 'bannerTitle',
 			'value' => function($model, $key, $index, $column) {
-				return isset($model->click->banner) ? $model->click->banner->title : '-';
+				return isset($model->banner) ? $model->banner->title : '-';
 				// return $model->bannerTitle;
 			},
 			'visible' => !Yii::$app->request->get('click') && !Yii::$app->request->get('banner') ? true : false,
