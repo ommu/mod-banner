@@ -109,6 +109,7 @@ class ClickController extends Controller
 			'columns' => $columns,
 			'banner' => $banner,
 			'user' => $user,
+			'linktree' => Yii::$app->request->get('linktree'),
 		]);
 	}
 
