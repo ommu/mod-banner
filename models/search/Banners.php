@@ -28,9 +28,9 @@ class Banners extends BannersModel
 	public function rules()
 	{
 		return [
-			[['banner_id', 'publish', 'cat_id', 'creation_id', 'modified_id'], 'integer'],
-			[['title', 'url', 'banner_filename', 'banner_desc', 'published_date', 'expired_date', 'creation_date', 'modified_date', 'updated_date', 'slug',
-				'permanent', 'categoryName', 'creationDisplayname', 'modifiedDisplayname'], 'safe'],
+			[['banner_id', 'publish', 'cat_id', 'creation_id', 'modified_id', 'oClick', 'oView', 'permanent'], 'integer'],
+			[['title', 'url', 'banner_filename', 'banner_desc', 'published_date', 'expired_date', 'creation_date', 'modified_date', 'updated_date', 
+                'categoryName', 'creationDisplayname', 'modifiedDisplayname'], 'safe'],
 		];
 	}
 
@@ -68,11 +68,27 @@ class Banners extends BannersModel
             $query = BannersModel::find()->alias('t')->select($column);
         }
 		$query->joinWith([
-			'view view',
-			'category.title category', 
-			'creation creation', 
-			'modified modified'
+			// 'grid grid',
+			// 'category.title category', 
+			// 'creation creation', 
+			// 'modified modified'
 		]);
+        if ((isset($params['sort']) && in_array($params['sort'], ['permanent', '-permanent', 'oClick', '-oClick', 'oView', '-oView'])) || (
+            (isset($params['permanent']) && $params['permanent'] != '') ||
+            (isset($params['oClick']) && $params['oClick'] != '') ||
+            (isset($params['oView']) && $params['oView'] != '')
+        )) {
+            $query->joinWith(['grid grid']);
+        }
+        if ((isset($params['sort']) && in_array($params['sort'], ['cat_id', '-cat_id', 'categoryName', '-categoryName'])) || (isset($params['categoryName']) && $params['categoryName'] != '')) {
+            $query->joinWith(['category.title category']);
+        }
+        if ((isset($params['sort']) && in_array($params['sort'], ['creationDisplayname', '-creationDisplayname'])) || (isset($params['creationDisplayname']) && $params['creationDisplayname'] != '')) {
+            $query->joinWith(['creation creation']);
+        }
+        if ((isset($params['sort']) && in_array($params['sort'], ['modifiedDisplayname', '-modifiedDisplayname'])) || (isset($params['modifiedDisplayname']) && $params['modifiedDisplayname'] != '')) {
+            $query->joinWith(['modified modified']);
+        }
 
 		$query->groupBy(['banner_id']);
 
@@ -104,16 +120,16 @@ class Banners extends BannersModel
 			'desc' => ['modified.displayname' => SORT_DESC],
 		];
 		$attributes['permanent'] = [
-			'asc' => ['view.permanent' => SORT_ASC],
-			'desc' => ['view.permanent' => SORT_DESC],
+			'asc' => ['grid.permanent' => SORT_ASC],
+			'desc' => ['grid.permanent' => SORT_DESC],
 		];
-		$attributes['views'] = [
-			'asc' => ['view.views' => SORT_ASC],
-			'desc' => ['view.views' => SORT_DESC],
+		$attributes['oClick'] = [
+			'asc' => ['grid.click' => SORT_ASC],
+			'desc' => ['grid.click' => SORT_DESC],
 		];
-		$attributes['clicks'] = [
-			'asc' => ['view.clicks' => SORT_ASC],
-			'desc' => ['view.clicks' => SORT_DESC],
+		$attributes['oView'] = [
+			'asc' => ['grid.view' => SORT_ASC],
+			'desc' => ['grid.view' => SORT_DESC],
 		];
 		$dataProvider->setSort([
 			'attributes' => $attributes,
@@ -140,43 +156,73 @@ class Banners extends BannersModel
 			'cast(t.modified_date as date)' => $this->modified_date,
 			't.modified_id' => isset($params['modified']) ? $params['modified'] : $this->modified_id,
 			'cast(t.updated_date as date)' => $this->updated_date,
-			'view.permanent' => $this->permanent,
 		]);
 
         if (isset($params['expired'])) {
-			$query->andFilterCompare('t.publish', 1);
+            $this->publish = 1;
+			$query->andFilterCompare('t.publish', $this->publish);
             if ($params['expired'] == 'publish') {
-				$query->andFilterWhere(['not in', 'cast(expired_date as date)', ['0000-00-00', '1970-01-01']])
-					->andFilterWhere(['>=', 'cast(expired_date as date)', Yii::$app->formatter->asDate('now', 'php:Y-m-d')])
-					->andFilterWhere(['<=', 'cast(published_date as date)', Yii::$app->formatter->asDate('now', 'php:Y-m-d')]);
+				$query->andFilterWhere(['or', 
+                        ['in', 'cast(expired_date as date)', ['0000-00-00', '1970-01-01']],
+                        ['>=', 'cast(expired_date as date)', Yii::$app->formatter->asDate('now', 'php:Y-m-d')]
+                    ])
+                    ->andFilterWhere(['<=', 'cast(published_date as date)', Yii::$app->formatter->asDate('now', 'php:Y-m-d')]);
 
 			} else if ($params['expired'] == 'permanent') {
-				$query->andWhere(['in', 'cast(expired_date as date)', ['0000-00-00', '1970-01-01']])
-					->andWhere(['<=', 'cast(published_date as date)', Yii::$app->formatter->asDate('now', 'php:Y-m-d')]);
+				$query->andFilterWhere(['in', 'cast(expired_date as date)', ['0000-00-00', '1970-01-01']])
+					->andFilterWhere(['<=', 'cast(published_date as date)', Yii::$app->formatter->asDate('now', 'php:Y-m-d')]);
 
 			} else if ($params['expired'] == 'pending') {
                 $query->andFilterWhere(['>', 'cast(t.published_date as date)', Yii::$app->formatter->asDate('now', 'php:Y-m-d')]);
             } else if ($params['expired'] == 'expired') {
-                $query->andFilterWhere(['<', 'cast(t.expired_date as date)', Yii::$app->formatter->asDate('now', 'php:Y-m-d')]);
+                $query->andFilterWhere(['not in', 'cast(expired_date as date)', ['0000-00-00', '1970-01-01']])
+                    ->andFilterWhere(['<', 'cast(t.expired_date as date)', Yii::$app->formatter->asDate('now', 'php:Y-m-d')]);
             }
+        }
 
-		} else {
-            if (isset($params['trash'])) {
-                $query->andFilterWhere(['NOT IN', 't.publish', [0,1]]);
-            } else {
-                if (!isset($params['publish']) || (isset($params['publish']) && $params['publish'] == '')) {
-                    $query->andFilterWhere(['IN', 't.publish', [0,1]]);
+        if (isset($params['permanent'])) {
+            if ($params['permanent'] != '') {
+                $query->andFilterCompare('grid.permanent', $this->permanent);
+                if ($params['permanent'] == 1) {
+                    $this->publish = 1;
+                    $query->andFilterCompare('t.publish', $this->publish);
+                    // $query->andFilterWhere(['in', 'cast(expired_date as date)', ['0000-00-00', '1970-01-01']])
+                    //     ->andFilterWhere(['<=', 'cast(published_date as date)', Yii::$app->formatter->asDate('now', 'php:Y-m-d')]);
                 } else {
-                    $query->andFilterWhere(['t.publish' => $this->publish]);
+                    $query->andFilterWhere(['IN', 't.publish', [0,1]]);
                 }
             }
+		}
+
+        if (isset($params['oClick']) && $params['oClick'] != '') {
+            if ($this->oClick == 1) {
+                $query->andWhere(['<>', 'grid.click', 0]);
+            } else if ($this->oClick == 0) {
+                $query->andWhere(['=', 'grid.click', 0]);
+            }
+        }
+        if (isset($params['oView']) && $params['oView'] != '') {
+            if ($this->oView == 1) {
+                $query->andWhere(['<>', 'grid.view', 0]);
+            } else if ($this->oView == 0) {
+                $query->andWhere(['=', 'grid.view', 0]);
+            }
+        }
+
+        if (!isset($params['publish']) || (isset($params['publish']) && $params['publish'] == '')) {
+            $query->andFilterWhere(['IN', 't.publish', [0,1]]);
+        } else {
+            $query->andFilterWhere(['t.publish' => $this->publish]);
+        }
+
+        if (isset($params['trash']) && $params['trash'] == 1) {
+            $query->andFilterWhere(['NOT IN', 't.publish', [0,1]]);
         }
 
 		$query->andFilterWhere(['like', 't.title', $this->title])
 			->andFilterWhere(['like', 't.url', $this->url])
 			->andFilterWhere(['like', 't.banner_filename', $this->banner_filename])
 			->andFilterWhere(['like', 't.banner_desc', $this->banner_desc])
-			->andFilterWhere(['like', 't.slug', $this->slug])
 			->andFilterWhere(['like', 'category.message', $this->categoryName])
 			->andFilterWhere(['like', 'creation.displayname', $this->creationDisplayname])
 			->andFilterWhere(['like', 'modified.displayname', $this->modifiedDisplayname]);

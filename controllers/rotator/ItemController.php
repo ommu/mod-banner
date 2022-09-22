@@ -40,6 +40,18 @@ class ItemController extends Controller
 	/**
 	 * {@inheritdoc}
 	 */
+	public function init()
+	{
+        parent::init();
+
+        if (Yii::$app->request->get('category') || Yii::$app->request->get('id')) {
+            $this->subMenu = $this->module->params['rotator_submenu'];
+        }
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
 	public function behaviors()
 	{
         return [
@@ -85,6 +97,7 @@ class ItemController extends Controller
         $columns = $searchModel->getGridColumn($cols);
 
         if (($category = Yii::$app->request->get('category')) != null) {
+            $this->subMenuParam = $category;
             $category = \ommu\banner\models\LinkRotators::findOne($category);
         }
 
@@ -109,6 +122,7 @@ class ItemController extends Controller
         if (($id = Yii::$app->request->get('id')) == null) {
 			throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'The requested page does not exist.'));
         }
+        $this->subMenuParam = $id;
 
         $model = new LinkRotatorItem([
             'cat_id' => $id,
@@ -158,6 +172,7 @@ class ItemController extends Controller
 	public function actionUpdate($id)
 	{
 		$model = $this->findModel($id);
+        $this->subMenuParam = $model->cat_id;
 
         if ($model->category->rotator_type == 'url') {
             $model->scenario = $model::SCENARIO_IS_LINKED;
@@ -201,6 +216,7 @@ class ItemController extends Controller
 	public function actionView($id)
 	{
         $model = $this->findModel($id);
+        $this->subMenuParam = $model->cat_id;
 
 		$this->view->title = Yii::t('app', 'Detail Rotator Item: {title}', ['title' => $model->title]);
 		$this->view->description = '';

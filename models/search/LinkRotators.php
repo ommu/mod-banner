@@ -27,7 +27,7 @@ class LinkRotators extends LinkRotatorsModel
 	public function rules()
 	{
 		return [
-			[['cat_id', 'publish', 'name', 'desc', 'creation_id', 'modified_id', 'item'], 'integer'],
+			[['cat_id', 'publish', 'name', 'desc', 'creation_id', 'modified_id', 'oPublish'], 'integer'],
 			[['rotator_type', 'code', 'creation_date', 'modified_date', 'updated_date',
                 'name_i', 'desc_i', 'creationDisplayname', 'modifiedDisplayname'], 'safe'],
 		];
@@ -67,11 +67,15 @@ class LinkRotators extends LinkRotatorsModel
             $query = LinkRotatorsModel::find()->alias('t')->select($column);
         }
 		$query->joinWith([
+			// 'view view',
 			// 'title title', 
 			// 'description description', 
 			// 'creation creation', 
 			// 'modified modified'
 		]);
+        if ((isset($params['sort']) && in_array($params['sort'], ['oPublish', '-oPublish'])) || (isset($params['oPublish']) && $params['oPublish'] != '')) {
+            $query->joinWith(['view view']);
+        }
         if ((isset($params['sort']) && in_array($params['sort'], ['name_i', '-name_i'])) || (isset($params['name_i']) && $params['name_i'] != '')) {
             $query->joinWith(['title title']);
         }
@@ -83,12 +87,6 @@ class LinkRotators extends LinkRotatorsModel
         }
         if ((isset($params['sort']) && in_array($params['sort'], ['modifiedDisplayname', '-modifiedDisplayname'])) || (isset($params['modifiedDisplayname']) && $params['modifiedDisplayname'] != '')) {
             $query->joinWith(['modified modified']);
-        }
-        if ((isset($params['sort']) && in_array($params['sort'], ['item', '-item'])) || (isset($params['item']) && $params['item'] != '')) {
-            $query->joinWith(['items items']);
-            if (isset($params['sort']) && in_array($params['sort'], ['item', '-item'])) {
-                $query->select(['t.*', 'count(items.banner_id) as item']);
-            }
         }
 
 		$query->groupBy(['cat_id']);
@@ -120,9 +118,9 @@ class LinkRotators extends LinkRotatorsModel
 			'asc' => ['modified.displayname' => SORT_ASC],
 			'desc' => ['modified.displayname' => SORT_DESC],
 		];
-        $attributes['item'] = [
-            'asc' => ['item' => SORT_ASC],
-            'desc' => ['item' => SORT_DESC],
+        $attributes['oPublish'] = [
+            'asc' => ['view.publish' => SORT_ASC],
+            'desc' => ['view.publish' => SORT_DESC],
         ];
 		$dataProvider->setSort([
 			'attributes' => $attributes,
@@ -154,22 +152,22 @@ class LinkRotators extends LinkRotatorsModel
 			'cast(t.updated_date as date)' => $this->updated_date,
 		]);
 
-		if (isset($params['trash'])) {
-            $query->andFilterWhere(['NOT IN', 't.publish', [0,1]]);
-        } else {
-            if (!isset($params['publish']) || (isset($params['publish']) && $params['publish'] == '')) {
-                $query->andFilterWhere(['IN', 't.publish', [0,1]]);
-            } else {
-                $query->andFilterWhere(['t.publish' => $this->publish]);
+        if (isset($params['oPublish']) && $params['oPublish'] != '') {
+            if ($this->oPublish == 1) {
+                $query->andWhere(['<>', 'view.publish', 0]);
+            } else if ($this->oPublish == 0) {
+                $query->andWhere(['=', 'view.publish', 0]);
             }
         }
 
-		if (isset($params['item']) && $params['item'] != '') {
-            if ($this->item == 1) {
-                $query->andWhere(['is not', 'items.banner_id', null]);
-            } else if ($this->item == 0) {
-                $query->andWhere(['is', 'items.banner_id', null]);
-            }
+        if (!isset($params['publish']) || (isset($params['publish']) && $params['publish'] == '')) {
+            $query->andFilterWhere(['IN', 't.publish', [0,1]]);
+        } else {
+            $query->andFilterWhere(['t.publish' => $this->publish]);
+        }
+
+        if (isset($params['trash']) && $params['trash'] == 1) {
+            $query->andFilterWhere(['NOT IN', 't.publish', [0,1]]);
         }
 
 		$query->andFilterWhere(['like', 't.code', $this->code])

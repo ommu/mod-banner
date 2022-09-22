@@ -25,6 +25,8 @@
 namespace ommu\banner\models;
 
 use Yii;
+use app\models\Users;
+use app\models\SourceMessage;
 
 class BannerViewHistory extends \app\components\ActiveRecord
 {
@@ -70,6 +72,7 @@ class BannerViewHistory extends \app\components\ActiveRecord
 			'bannerTitle' => Yii::t('app', 'Banner'),
 			'userDisplayname' => Yii::t('app', 'User'),
 			'categoryId' => Yii::t('app', 'Category'),
+			'bannerId' => Yii::t('app', 'Banner'),
 		];
 	}
 
@@ -79,6 +82,38 @@ class BannerViewHistory extends \app\components\ActiveRecord
 	public function getView()
 	{
 		return $this->hasOne(BannerViews::className(), ['view_id' => 'view_id']);
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getBanner()
+	{
+		return $this->hasOne(Banners::className(), ['banner_id' => 'banner_id'])->via('view');
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getCategory()
+	{
+		return $this->hasOne(BannerCategory::className(), ['cat_id' => 'cat_id'])->via('banner');
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getCategoryTitle()
+	{
+		return $this->hasOne(SourceMessage::className(), ['id' => 'name'])->via('category');
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getUser()
+	{
+		return $this->hasOne(Users::className(), ['user_id' => 'user_id'])->via('view');
 	}
 
 	/**
@@ -113,7 +148,7 @@ class BannerViewHistory extends \app\components\ActiveRecord
 		$this->templateColumns['categoryId'] = [
 			'attribute' => 'categoryId',
 			'value' => function($model, $key, $index, $column) {
-				return isset($model->view->banner->category) ? $model->view->banner->category->title->message : '-';
+				return isset($model->categoryTitle) ? $model->categoryTitle->message : '-';
 				// return $model->categoryId;
 			},
 			'filter' => BannerCategory::getCategory(),
@@ -122,7 +157,7 @@ class BannerViewHistory extends \app\components\ActiveRecord
 		$this->templateColumns['bannerTitle'] = [
 			'attribute' => 'bannerTitle',
 			'value' => function($model, $key, $index, $column) {
-				return isset($model->view->banner) ? $model->view->banner->title : '-';
+				return isset($model->banner) ? $model->banner->title : '-';
 				// return $model->bannerTitle;
 			},
 			'visible' => !Yii::$app->request->get('view') && !Yii::$app->request->get('banner') ? true : false,

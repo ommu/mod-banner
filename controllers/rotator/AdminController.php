@@ -40,6 +40,18 @@ class AdminController extends Controller
 	/**
 	 * {@inheritdoc}
 	 */
+	public function init()
+	{
+        parent::init();
+
+        if (Yii::$app->request->get('id')) {
+            $this->subMenu = $this->module->params['rotator_submenu'];
+        }
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
 	public function behaviors()
 	{
         return [
@@ -153,7 +165,7 @@ class AdminController extends Controller
                 if (Yii::$app->request->isAjax) {
                     return $this->redirect(Yii::$app->request->referrer ?: ['manage']);
                 }
-                return $this->redirect(['manage']);
+				return $this->redirect(['update', 'id' => $model->cat_id]);
 
             } else {
                 if (Yii::$app->request->isAjax) {

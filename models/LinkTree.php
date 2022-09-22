@@ -22,10 +22,10 @@
  * @property string $modified_date
  * @property integer $modified_id
  * @property string $updated_date
- * @property string $slug
  *
  * The followings are the available model relations:
  * @property BannerClicks[] $clicks
+ * @property BannerGrid $grid
  * @property BannerViews[] $views
  * @property BannerCategory $category
  * @property Users $creation
@@ -40,7 +40,6 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\helpers\Inflector;
 use yii\web\UploadedFile;
-use yii\behaviors\SluggableBehavior;
 use thamtech\uuid\helpers\UuidHelper;
 use app\models\Users;
 use yii\validators\UrlValidator;
@@ -49,13 +48,13 @@ class LinkTree extends \app\components\ActiveRecord
 {
 	use \ommu\traits\UtilityTrait;
 
-	public $gridForbiddenColumn = ['modified_date', 'modifiedDisplayname', 'updated_date', 'slug'];
+	public $gridForbiddenColumn = ['modified_date', 'modifiedDisplayname', 'updated_date'];
 
 	public $categoryName;
 	public $creationDisplayname;
 	public $modifiedDisplayname;
-	public $click;
-	public $view;
+	public $oClick;
+	public $oView;
 	public $link;
 
 	/**
@@ -67,20 +66,6 @@ class LinkTree extends \app\components\ActiveRecord
 	}
 
 	/**
-	 * behaviors model class.
-	 */
-	public function behaviors() {
-		return [
-			[
-				'class' => SluggableBehavior::className(),
-				'attribute' => 'title',
-				'immutable' => true,
-				'ensureUnique' => true,
-			],
-		];
-	}
-
-	/**
 	 * @return array validation rules for model attributes.
 	 */
 	public function rules()
@@ -89,7 +74,7 @@ class LinkTree extends \app\components\ActiveRecord
 			[['cat_id', 'title', 'url', 'creation_id'], 'required'],
 			[['publish', 'cat_id', 'creation_id', 'modified_id'], 'integer'],
 			[['url'], 'url'],
-			[['title', 'slug'], 'string', 'max' => 64],
+			[['title'], 'string', 'max' => 64],
 			[['cat_id'], 'exist', 'skipOnError' => true, 'targetClass' => BannerCategory::className(), 'targetAttribute' => ['cat_id' => 'cat_id']],
 		];
 	}
@@ -110,12 +95,11 @@ class LinkTree extends \app\components\ActiveRecord
 			'modified_date' => Yii::t('app', 'Modified Date'),
 			'modified_id' => Yii::t('app', 'Modified'),
 			'updated_date' => Yii::t('app', 'Updated Date'),
-			'slug' => Yii::t('app', 'Slug'),
 			'categoryName' => Yii::t('app', 'Category'),
 			'creationDisplayname' => Yii::t('app', 'Creation'),
 			'modifiedDisplayname' => Yii::t('app', 'Modified'),
-			'click' => Yii::t('app', 'Click'),
-			'view' => Yii::t('app', 'View'),
+			'oClick' => Yii::t('app', 'Click'),
+			'oView' => Yii::t('app', 'View'),
 			'link' => Yii::t('app', 'Link'),
 		];
 	}
@@ -136,6 +120,14 @@ class LinkTree extends \app\components\ActiveRecord
 
 		return $clicks ? $clicks : 0;
 	}
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getGrid()
+    {
+        return $this->hasOne(BannerGrid::className(), ['id' => 'banner_id']);
+    }
 
 	/**
 	 * @return \yii\db\ActiveQuery
@@ -264,12 +256,6 @@ class LinkTree extends \app\components\ActiveRecord
 			},
 			'filter' => $this->filterDatepicker($this, 'updated_date'),
 		];
-		$this->templateColumns['slug'] = [
-			'attribute' => 'slug',
-			'value' => function($model, $key, $index, $column) {
-				return $model->slug;
-			},
-		];
 		$this->templateColumns['link'] = [
 			'attribute' => 'link',
 			'value' => function($model, $key, $index, $column) {
@@ -281,22 +267,23 @@ class LinkTree extends \app\components\ActiveRecord
 			'format' => 'raw',
 			'visible' => !Yii::$app->request->get('creation') ? true : false,
 		];
-		$this->templateColumns['click'] = [
-			'attribute' => 'click',
+		$this->templateColumns['oClick'] = [
+			'attribute' => 'oClick',
 			'value' => function($model, $key, $index, $column) {
 				$clicks = $model->getClicks(true);
-				return Html::a($clicks, ['o/click/manage', 'banner' => $model->primaryKey, 'linktree' => true], ['title' => Yii::t('app', '{count} clicks', ['count' => $clicks]), 'data-pjax' => 0]);
+				return Html::a($clicks, ['click/admin/manage', 'banner' => $model->primaryKey, 'linktree' => true], ['title' => Yii::t('app', '{count} clicks', ['count' => $clicks]), 'data-pjax' => 0]);
 			},
 			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 			'visible' => Yii::$app->request->get('creation') ? true : false,
 		];
-		$this->templateColumns['view'] = [
-			'attribute' => 'view',
+		$this->templateColumns['oView'] = [
+			'attribute' => 'oView',
 			'value' => function($model, $key, $index, $column) {
-				$views = $model->getViews(true);
-				return Html::a($views, ['o/view/manage', 'banner' => $model->primaryKey, 'linktree' => true], ['title' => Yii::t('app', '{count} views', ['count' => $views]), 'data-pjax' => 0]);
+				// $views = $model->getViews(true);
+				$views = $model->oView;
+				return Html::a($views, ['view/admin/manage', 'banner' => $model->primaryKey, 'linktree' => true], ['title' => Yii::t('app', '{count} views', ['count' => $views]), 'data-pjax' => 0]);
 			},
 			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class' => 'text-center'],
@@ -356,6 +343,8 @@ class LinkTree extends \app\components\ActiveRecord
 		// $this->categoryName = isset($this->category) ? $this->category->title->message : '-';
 		// $this->creationDisplayname = isset($this->creation) ? $this->creation->displayname : '-';
 		// $this->modifiedDisplayname = isset($this->modified) ? $this->modified->displayname : '-';
+        $this->oClick = isset($this->grid) ? $this->grid->click : 0;
+        $this->oView = isset($this->grid) ? $this->grid->view : 0;
 	}
 
 	/**

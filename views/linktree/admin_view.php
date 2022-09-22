@@ -63,8 +63,8 @@ $attributes = [
 	[
 		'attribute' => 'click',
 		'value' => function ($model) {
-			$clicks = $model->getClicks(true);
-			return Html::a($clicks, ['o/click/manage', 'banner' => $model->primaryKey, 'linktree' => true], ['title' => Yii::t('app', '{count} clicks', ['count' => $clicks])]);
+			$clicks = $model->oClick;
+			return Html::a($clicks, ['click/admin/manage', 'banner' => $model->primaryKey, 'linktree' => true], ['title' => Yii::t('app', '{count} clicks', ['count' => $clicks])]);
 		},
 		'format' => 'html',
 		'visible' => !$small,
@@ -72,8 +72,8 @@ $attributes = [
 	[
 		'attribute' => 'view',
 		'value' => function ($model) {
-			$views = $model->getViews(true);
-			return Html::a($views, ['o/view/manage', 'banner' => $model->primaryKey, 'linktree' => true], ['title' => Yii::t('app', '{count} views', ['count' => $views])]);
+			$views = $model->oView;
+			return Html::a($views, ['view/admin/manage', 'banner' => $model->primaryKey, 'linktree' => true], ['title' => Yii::t('app', '{count} views', ['count' => $views])]);
 		},
 		'format' => 'html',
 		'visible' => !$small,
@@ -101,11 +101,6 @@ $attributes = [
 	[
 		'attribute' => 'updated_date',
 		'value' => Yii::$app->formatter->asDatetime($model->updated_date, 'medium'),
-		'visible' => !$small,
-	],
-	[
-		'attribute' => 'slug',
-		'value' => $model->slug ? $model->slug : '-',
 		'visible' => !$small,
 	],
 	[

@@ -68,10 +68,23 @@ class BannerClicks extends BannerClicksModel
             $query = BannerClicksModel::find()->alias('t')->select($column);
         }
 		$query->joinWith([
-			'banner banner',
-			'banner.category.title category',
-			'user user'
+			// 'banner banner',
+			// 'banner.category.title category',
+			// 'user user'
 		]);
+        if ((isset($params['sort']) && in_array($params['sort'], ['bannerTitle', '-bannerTitle'])) || (
+            (isset($params['bannerTitle']) && $params['bannerTitle'] != '') ||
+            (isset($params['categoryId']) && $params['categoryId'] != '') ||
+            (isset($params['category']) && $params['category'] != '')
+        )) {
+            $query->joinWith(['banner banner']);
+        }
+        if ((isset($params['sort']) && in_array($params['sort'], ['categoryId', '-categoryId']))) {
+            $query->joinWith(['categoryTitle categoryTitle']);
+        }
+        if ((isset($params['sort']) && in_array($params['sort'], ['userDisplayname', '-userDisplayname'])) || (isset($params['userDisplayname']) && $params['userDisplayname'] != '')) {
+            $query->joinWith(['user user']);
+        }
 
 		$query->groupBy(['click_id']);
 
@@ -87,8 +100,8 @@ class BannerClicks extends BannerClicksModel
 
 		$attributes = array_keys($this->getTableSchema()->columns);
 		$attributes['categoryId'] = [
-			'asc' => ['category.message' => SORT_ASC],
-			'desc' => ['category.message' => SORT_DESC],
+			'asc' => ['categoryTitle.message' => SORT_ASC],
+			'desc' => ['categoryTitle.message' => SORT_DESC],
 		];
 		$attributes['bannerTitle'] = [
 			'asc' => ['banner.title' => SORT_ASC],
@@ -116,10 +129,17 @@ class BannerClicks extends BannerClicksModel
 			't.click_id' => $this->click_id,
 			't.banner_id' => isset($params['banner']) ? $params['banner'] : $this->banner_id,
 			't.user_id' => isset($params['user']) ? $params['user'] : $this->user_id,
-			't.clicks' => $this->clicks,
 			'cast(t.click_date as date)' => $this->click_date,
 			'banner.cat_id' => isset($params['category']) ? $params['category'] : $this->categoryId,
 		]);
+
+        if (isset($params['clicks']) && $params['clicks'] != '') {
+            if ($this->clicks == 1) {
+                $query->andWhere(['<>', 'clicks', 0]);
+            } else if ($this->clicks == 0) {
+                $query->andWhere(['=', 'clicks', 0]);
+            }
+        }
 
 		$query->andFilterWhere(['like', 't.click_ip', $this->click_ip])
 			->andFilterWhere(['like', 'banner.title', $this->bannerTitle])

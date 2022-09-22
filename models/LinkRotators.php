@@ -30,6 +30,7 @@
  * @property SourceMessage $description
  * @property Users $creation
  * @property Users $modified
+ * @property BannerCategoryView $view
  *
  */
 
@@ -41,6 +42,7 @@ use yii\helpers\Url;
 use yii\helpers\Inflector;
 use app\models\SourceMessage;
 use app\models\Users;
+use ommu\banner\models\view\BannerCategory as BannerCategoryView;
 
 class LinkRotators extends \app\components\ActiveRecord
 {
@@ -52,7 +54,7 @@ class LinkRotators extends \app\components\ActiveRecord
 	public $desc_i;
 	public $creationDisplayname;
 	public $modifiedDisplayname;
-	public $item;
+	public $oPublish;
 
 	/**
 	 * @return string the associated database table name
@@ -99,7 +101,7 @@ class LinkRotators extends \app\components\ActiveRecord
 			'desc_i' => Yii::t('app', 'Description'),
 			'creationDisplayname' => Yii::t('app', 'Creation'),
 			'modifiedDisplayname' => Yii::t('app', 'Modified'),
-			'item' => Yii::t('app', 'Item'),
+			'oPublish' => Yii::t('app', 'Published'),
 		];
 	}
 
@@ -172,12 +174,20 @@ class LinkRotators extends \app\components\ActiveRecord
 	}
 
 	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getView()
+	{
+		return $this->hasOne(BannerCategoryView::className(), ['cat_id' => 'cat_id']);
+	}
+
+	/**
 	 * {@inheritdoc}
-	 * @return \ommu\banner\models\query\LinkRotators the active query used by this AR class.
+	 * @return \ommu\banner\models\query\BannerCategory the active query used by this AR class.
 	 */
 	public static function find()
 	{
-		return new \ommu\banner\models\query\LinkRotators(get_called_class());
+		return new \ommu\banner\models\query\BannerCategory(get_called_class());
 	}
 
 	/**
@@ -204,8 +214,9 @@ class LinkRotators extends \app\components\ActiveRecord
 			'label' => Yii::t('app', 'Name'),
 			'attribute' => 'name_i',
 			'value' => function($model, $key, $index, $column) {
-				return $model->name_i;
+				return $model->parseRotatorName();
 			},
+			'format' => 'raw',
 		];
 		$this->templateColumns['desc_i'] = [
 			'attribute' => 'desc_i',
@@ -263,11 +274,18 @@ class LinkRotators extends \app\components\ActiveRecord
 			},
 			'filter' => $this->filterDatepicker($this, 'updated_date'),
 		];
-		$this->templateColumns['item'] = [
-			'attribute' => 'item',
+		$this->templateColumns['oPublish'] = [
+			'attribute' => 'oPublish',
 			'value' => function($model, $key, $index, $column) {
-				$items = $model->getItems(true);
-				return Html::a($items, ['rotator/item/manage', 'category' => $model->primaryKey, 'publish' => 1], ['title' => Yii::t('app', '{count} items', ['count' => $items]), 'data-pjax' => 0]);
+				// $items = $model->getItems(true);
+				$items = $model->oPublish;
+                $class = 'btn btn-warning btn-xs';
+                $content = Yii::t('app', 'no published');
+                if ($items) {
+                    $class = 'btn btn-success btn-xs';
+                    $content = Yii::t('app', '{count} published', ['count' => $items]);
+                }
+				return Html::a($content, ['rotator/item/manage', 'category' => $model->primaryKey, 'expired' => 'publish'], ['title' => $content, 'class' => $class, 'data-pjax' => 0]);
 			},
 			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class' => 'text-center'],
@@ -347,6 +365,31 @@ class LinkRotators extends \app\components\ActiveRecord
 	}
 
 	/**
+	 * {@inheritdoc}
+	 */
+	public function parseRotatorName()
+	{
+		$oPermanent = isset($this->view) ? $this->view->permanent : 0;
+		$oPending = isset($this->view) ? $this->view->pending : 0;
+		$oExpired = isset($this->view) ? $this->view->expired : 0;
+		$oUnpublish = isset($this->view) ? $this->view->unpublish : 0;
+		$oAll = isset($this->view) ? $this->view->all : 0;
+    
+        $html = $this->name_i;
+        if ($oPermanent || $oPending || $oExpired || $oUnpublish || $oAll) {
+            $html .= '<hr class="mt-5 mb-5"/>';
+        }
+        
+        $html .= $oPermanent ? Html::a(Yii::t('app', '{count} permanent', ['count' => $oPermanent]), ['rotator/item/manage', 'category' => $this->primaryKey, 'expired' => 'permanent'], ['title' => Yii::t('app', '{count} permanent', ['count' => $oPermanent]), 'class' => 'btn btn-primary btn-xs mr-5', 'data-pjax' => 0]) : '';
+        $html .= $oPending ? Html::a(Yii::t('app', '{count} pending', ['count' => $oPending]), ['rotator/item/manage', 'category' => $this->primaryKey, 'expired' => 'pending'], ['title' => Yii::t('app', '{count} pending', ['count' => $oPending]), 'class' => 'btn btn-info btn-xs mr-5', 'data-pjax' => 0]) : '';
+        $html .= $oExpired ? Html::a(Yii::t('app', '{count} expired', ['count' => $oExpired]), ['rotator/item/manage', 'category' => $this->primaryKey, 'expired' => 'expired'], ['title' => Yii::t('app', '{count} expired', ['count' => $oExpired]), 'class' => 'btn btn-danger btn-xs mr-5', 'data-pjax' => 0]) : '';
+        $html .= $oUnpublish ? Html::a(Yii::t('app', '{count} unpublish', ['count' => $oUnpublish]), ['rotator/item/manage', 'category' => $this->primaryKey, 'publish' => 0], ['title' => Yii::t('app', '{count} unpublish', ['count' => $oUnpublish]), 'class' => 'btn btn-warning btn-xs mr-5', 'data-pjax' => 0]) : '';
+        $html .= $oAll ? Html::a(Yii::t('app', '{count} items', ['count' => $oAll]), ['rotator/item/manage', 'category' => $this->primaryKey], ['title' => Yii::t('app', '{count} items', ['count' => $oAll]), 'class' => 'btn btn-dark btn-xs mr-5', 'data-pjax' => 0]) : '';
+
+        return $html;
+    }
+
+	/**
 	 * after find attributes
 	 */
 	public function afterFind()
@@ -357,7 +400,7 @@ class LinkRotators extends \app\components\ActiveRecord
 		$this->desc_i = isset($this->description) ? $this->description->message : '';
 		// $this->creationDisplayname = isset($this->creation) ? $this->creation->displayname : '-';
 		// $this->modifiedDisplayname = isset($this->modified) ? $this->modified->displayname : '-';
-		$this->item = $this->getItems(true) ? 1 : 0;
+		$this->oPublish = isset($this->view) ? $this->view->publish : '';
 	}
 
 	/**

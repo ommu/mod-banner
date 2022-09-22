@@ -32,6 +32,7 @@
  * @property SourceMessage $description
  * @property Users $creation
  * @property Users $modified
+ * @property BannerCategoryView $view
  *
  */
 
@@ -55,6 +56,12 @@ class BannerCategory extends \app\components\ActiveRecord
 	public $desc_i;
 	public $creationDisplayname;
 	public $modifiedDisplayname;
+	public $oPublish;
+	public $oPermanent;
+	public $oPending;
+	public $oExpired;
+	public $oUnpublish;
+	public $oAll;
 
 	/**
 	 * @return string the associated database table name
@@ -103,12 +110,14 @@ class BannerCategory extends \app\components\ActiveRecord
 			'updated_date' => Yii::t('app', 'Updated Date'),
 			'name_i' => Yii::t('app', 'Category'),
 			'desc_i' => Yii::t('app', 'Description'),
-			'banners' => Yii::t('app', 'Banners'),
-			'permanent' => Yii::t('app', 'Permanent'),
-			'pending' => Yii::t('app', 'Pending'),
-			'expired' => Yii::t('app', 'Expired'),
 			'creationDisplayname' => Yii::t('app', 'Creation'),
 			'modifiedDisplayname' => Yii::t('app', 'Modified'),
+			'oPublish' => Yii::t('app', 'Published'),
+			'oPermanent' => Yii::t('app', 'Permanent'),
+			'oPending' => Yii::t('app', 'Pending'),
+			'oExpired' => Yii::t('app', 'Expired'),
+			'oUnpublish' => Yii::t('app', 'Unpublished'),
+			'oAll' => Yii::t('app', 'Banners'),
 		];
 	}
 
@@ -346,43 +355,67 @@ class BannerCategory extends \app\components\ActiveRecord
 			},
 			'filter' => $this->filterDatepicker($this, 'updated_date'),
 		];
-		$this->templateColumns['banners'] = [
-			'attribute' => 'banners',
+		$this->templateColumns['oPublish'] = [
+			'attribute' => 'oPublish',
 			'value' => function($model, $key, $index, $column) {
-				$banners = $model->getBanners(true);
-				return Html::a($banners, ['admin/manage', 'category' => $model->primaryKey, 'expired' => 'publish'], ['title' => Yii::t('app', '{count} publish', ['count' => $banners]), 'data-pjax' => 0]);
+				// $banners = $model->getBanners(true);
+				$published = $model->oPublish;
+				return Html::a($published, ['admin/manage', 'category' => $model->primaryKey, 'expired' => 'publish'], ['title' => Yii::t('app', '{count} published', ['count' => $published]), 'data-pjax' => 0]);
 			},
-			'filter' => false,
+			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 		];
-		$this->templateColumns['permanent'] = [
-			'attribute' => 'permanent',
+		$this->templateColumns['oPermanent'] = [
+			'attribute' => 'oPermanent',
 			'value' => function($model, $key, $index, $column) {
-				$permanent = $model->getPermanent(true);
+				// $permanent = $model->getPermanent(true);
+				$permanent = $model->oPermanent;
 				return Html::a($permanent, ['admin/manage', 'category' => $model->primaryKey, 'expired' => 'permanent'], ['title' => Yii::t('app', '{count} permanent', ['count' => $permanent]), 'data-pjax' => 0]);
 			},
-			'filter' => false,
+			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 		];
-		$this->templateColumns['pending'] = [
-			'attribute' => 'pending',
+		$this->templateColumns['oPending'] = [
+			'attribute' => 'oPending',
 			'value' => function($model, $key, $index, $column) {
-				$pending = $model->getPending(true);
+				// $pending = $model->getPending(true);
+				$pending = $model->oPending;
 				return Html::a($pending, ['admin/manage', 'category' => $model->primaryKey, 'expired' => 'pending'], ['title' => Yii::t('app', '{count} pending', ['count' => $pending]), 'data-pjax' => 0]);
 			},
-			'filter' => false,
+			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 		];
-		$this->templateColumns['expired'] = [
-			'attribute' => 'expired',
+		$this->templateColumns['oExpired'] = [
+			'attribute' => 'oExpired',
 			'value' => function($model, $key, $index, $column) {
-				$expired = $model->getExpired(true);
+				// $expired = $model->getExpired(true);
+				$expired = $model->oExpired;
 				return Html::a($expired, ['admin/manage', 'category' => $model->primaryKey, 'expired' => 'expired'], ['title' => Yii::t('app', '{count} expired', ['count' => $expired]), 'data-pjax' => 0]);
 			},
-			'filter' => false,
+			'filter' => $this->filterYesNo(),
+			'contentOptions' => ['class' => 'text-center'],
+			'format' => 'raw',
+		];
+		$this->templateColumns['oUnpublish'] = [
+			'attribute' => 'oUnpublish',
+			'value' => function($model, $key, $index, $column) {
+				$unpublish = $model->oUnpublish;
+				return Html::a($unpublish, ['admin/manage', 'category' => $model->primaryKey, 'publish' => 0], ['title' => Yii::t('app', '{count} unpublish', ['count' => $unpublish]), 'data-pjax' => 0]);
+			},
+			'filter' => $this->filterYesNo(),
+			'contentOptions' => ['class' => 'text-center'],
+			'format' => 'raw',
+		];
+		$this->templateColumns['oAll'] = [
+			'attribute' => 'oAll',
+			'value' => function($model, $key, $index, $column) {
+				$banners = $model->oAll;
+				return Html::a($banners, ['admin/manage', 'category' => $model->primaryKey], ['title' => Yii::t('app', '{count} banners', ['count' => $banners]), 'data-pjax' => 0]);
+			},
+			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 		];
@@ -468,6 +501,12 @@ class BannerCategory extends \app\components\ActiveRecord
 		$this->banner_size = unserialize($this->banner_size);
 		// $this->creationDisplayname = isset($this->creation) ? $this->creation->displayname : '-';
 		// $this->modifiedDisplayname = isset($this->modified) ? $this->modified->displayname : '-';
+		$this->oPublish = isset($this->view) ? $this->view->publish : 0;
+		$this->oPermanent = isset($this->view) ? $this->view->permanent : 0;
+		$this->oPending = isset($this->view) ? $this->view->pending : 0;
+		$this->oExpired = isset($this->view) ? $this->view->expired : 0;
+		$this->oUnpublish = isset($this->view) ? $this->view->unpublish : 0;
+		$this->oAll = isset($this->view) ? $this->view->all : 0;
 	}
 
 	/**
