@@ -21,8 +21,15 @@ use app\components\grid\GridView;
 use yii\widgets\Pjax;
 
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Publication'), 'url' => ['/admin/page/admin/index']];
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Banner'), 'url' => ['admin/index']];
+if ($linktree) {
+    $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Linktree'), 'url' => ['linktree/index']];
+} else {
+    $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Banner'), 'url' => ['admin/index']];
+}
 if ($banner != null) {
+    if ($linktree) {
+        $this->params['breadcrumbs'][] = ['label' => $banner->creation->username ? $banner->creation->username : $banner->creation->displayname, 'url' => ['linktree/manage', 'creation' => $banner->creation_id]];
+    }
     $this->params['breadcrumbs'][] = ['label' => $banner->title, 'url' => ['admin/view', 'id' => $banner->banner_id]];
 }
 $this->params['breadcrumbs'][] = Yii::t('app', 'Views');
