@@ -25,6 +25,8 @@
 namespace ommu\banner\models;
 
 use Yii;
+use app\models\Users;
+use app\models\SourceMessage;
 
 class BannerClickHistory extends \app\components\ActiveRecord
 {
