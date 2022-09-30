@@ -63,7 +63,7 @@ $attributes = [
 	[
 		'attribute' => 'click',
 		'value' => function ($model) {
-			$clicks = $model->oClick;
+			$clicks = $model->grid->click;
 			return Html::a($clicks, ['click/admin/manage', 'banner' => $model->primaryKey, 'linktree' => true], ['title' => Yii::t('app', '{count} clicks', ['count' => $clicks])]);
 		},
 		'format' => 'html',
@@ -72,7 +72,7 @@ $attributes = [
 	[
 		'attribute' => 'view',
 		'value' => function ($model) {
-			$views = $model->oView;
+			$views = $model->grid->view;
 			return Html::a($views, ['view/admin/manage', 'banner' => $model->primaryKey, 'linktree' => true], ['title' => Yii::t('app', '{count} views', ['count' => $views])]);
 		},
 		'format' => 'html',

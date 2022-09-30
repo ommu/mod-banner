@@ -326,7 +326,7 @@ class LinkRotatorItem extends \app\components\ActiveRecord
 			'attribute' => 'oClick',
 			'value' => function($model, $key, $index, $column) {
 				// $clicks = $model->getClicks(true);
-				$clicks = $model->oClick;
+				$clicks = $model->grid->click;
 				return Html::a($clicks, ['click/admin/manage', 'banner' => $model->primaryKey], ['title' => Yii::t('app', '{count} clicks', ['count' => $clicks]), 'data-pjax' => 0]);
 			},
 			'filter' => $this->filterYesNo(),
@@ -337,7 +337,7 @@ class LinkRotatorItem extends \app\components\ActiveRecord
 			'attribute' => 'oView',
 			'value' => function($model, $key, $index, $column) {
 				// $views = $model->getViews(true);
-				$views = $model->oView;
+				$views = $model->grid->view;
 				return Html::a($views, ['view/admin/manage', 'banner' => $model->primaryKey], ['title' => Yii::t('app', '{count} views', ['count' => $views]), 'data-pjax' => 0]);
 			},
 			'filter' => $this->filterYesNo(),
@@ -405,8 +405,6 @@ class LinkRotatorItem extends \app\components\ActiveRecord
 		// $this->categoryName = isset($this->category) ? $this->category->title->message : '-';
 		// $this->creationDisplayname = isset($this->creation) ? $this->creation->displayname : '-';
 		// $this->modifiedDisplayname = isset($this->modified) ? $this->modified->displayname : '-';
-        $this->oClick = isset($this->grid) ? $this->grid->click : 0;
-        $this->oView = isset($this->grid) ? $this->grid->view : 0;
 
 		$this->permanent = 0;
         if (Yii::$app->formatter->asDate($this->expired_date, 'php:Y-m-d') == '-') {

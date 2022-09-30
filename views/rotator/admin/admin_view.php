@@ -58,7 +58,7 @@ $attributes = [
 	[
 		'attribute' => 'oPublish',
 		'value' => function ($model) {
-			$items = $model->oPublish;
+			$items = $model->view->publish;
 			return Html::a($items, ['rotator/item/manage', 'category' => $model->primaryKey, 'expired' => 'publish'], ['title' => Yii::t('app', '{count} items', ['count' => $items])]);
 		},
 		'format' => 'html',

@@ -278,7 +278,7 @@ class LinkRotators extends \app\components\ActiveRecord
 			'attribute' => 'oPublish',
 			'value' => function($model, $key, $index, $column) {
 				// $items = $model->getItems(true);
-				$items = $model->oPublish;
+				$items = $model->view->publish;
                 $class = 'btn btn-warning btn-xs';
                 $content = Yii::t('app', 'no published');
                 if ($items) {
