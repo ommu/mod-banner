@@ -400,7 +400,6 @@ class LinkRotators extends \app\components\ActiveRecord
 		$this->desc_i = isset($this->description) ? $this->description->message : '';
 		// $this->creationDisplayname = isset($this->creation) ? $this->creation->displayname : '-';
 		// $this->modifiedDisplayname = isset($this->modified) ? $this->modified->displayname : '-';
-		$this->oPublish = isset($this->view) ? $this->view->publish : '';
 	}
 
 	/**
