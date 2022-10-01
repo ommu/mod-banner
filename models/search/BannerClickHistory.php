@@ -64,9 +64,9 @@ class BannerClickHistory extends BannerClickHistoryModel
 	public function search($params, $column=null)
 	{
         if (!($column && is_array($column))) {
-            $query = BannerClickHistoryModel::find()->alias('t');
+            $query = BannerClickHistoryModel::find();
         } else {
-            $query = BannerClickHistoryModel::find()->alias('t')->select($column);
+            $query = BannerClickHistoryModel::find();
         }
 		$query->joinWith([
 			// 'click click',

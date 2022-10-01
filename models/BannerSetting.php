@@ -90,7 +90,8 @@ class BannerSetting extends \app\components\ActiveRecord
 	 */
 	public function getModified()
 	{
-		return $this->hasOne(Users::className(), ['user_id' => 'modified_id']);
+		return $this->hasOne(Users::className(), ['user_id' => 'modified_id'])
+            ->select(['displayname']);
 	}
 
 	/**

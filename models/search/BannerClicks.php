@@ -82,7 +82,9 @@ class BannerClicks extends BannerClicksModel
         if ((isset($params['sort']) && in_array($params['sort'], ['categoryId', '-categoryId']))) {
             $query->joinWith(['categoryTitle categoryTitle']);
         }
-        if ((isset($params['sort']) && in_array($params['sort'], ['userDisplayname', '-userDisplayname'])) || (isset($params['userDisplayname']) && $params['userDisplayname'] != '')) {
+        if ((isset($params['sort']) && in_array($params['sort'], ['userDisplayname', '-userDisplayname'])) || 
+            (isset($params['userDisplayname']) && $params['userDisplayname'] != '')
+        ) {
             $query->joinWith(['user user']);
         }
 

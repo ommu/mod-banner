@@ -47,6 +47,7 @@ use yii\web\UploadedFile;
 use thamtech\uuid\helpers\UuidHelper;
 use app\models\Users;
 use yii\validators\UrlValidator;
+use app\models\SourceMessage;
 
 class Banners extends \app\components\ActiveRecord
 {
@@ -185,7 +186,18 @@ class Banners extends \app\components\ActiveRecord
 	 */
 	public function getCategory()
 	{
-		return $this->hasOne(BannerCategory::className(), ['cat_id' => 'cat_id']);
+		return $this->hasOne(BannerCategory::className(), ['cat_id' => 'cat_id'])
+            ->select(['cat_id', 'type', 'name', 'banner_size']);
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getCategoryTitle()
+	{
+		return $this->hasOne(SourceMessage::className(), ['id' => 'name'])
+            ->select(['id', 'message'])
+            ->via('category');
 	}
 
 	/**
@@ -193,7 +205,8 @@ class Banners extends \app\components\ActiveRecord
 	 */
 	public function getCreation()
 	{
-		return $this->hasOne(Users::className(), ['user_id' => 'creation_id']);
+		return $this->hasOne(Users::className(), ['user_id' => 'creation_id'])
+            ->select(['user_id', 'displayname']);
 	}
 
 	/**
@@ -201,7 +214,8 @@ class Banners extends \app\components\ActiveRecord
 	 */
 	public function getModified()
 	{
-		return $this->hasOne(Users::className(), ['user_id' => 'modified_id']);
+		return $this->hasOne(Users::className(), ['user_id' => 'modified_id'])
+            ->select(['user_id', 'displayname']);
 	}
 
 	/**
@@ -236,7 +250,7 @@ class Banners extends \app\components\ActiveRecord
 		$this->templateColumns['cat_id'] = [
 			'attribute' => 'cat_id',
 			'value' => function($model, $key, $index, $column) {
-				return isset($model->category) ? $model->category->title->message : '-';
+				return isset($model->categoryTitle) ? $model->categoryTitle->message : '-';
 				// return $model->categoryName;
 			},
 			'filter' => BannerCategory::getCategory(),

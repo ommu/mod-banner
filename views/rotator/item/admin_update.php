@@ -18,7 +18,7 @@ use yii\helpers\Url;
 
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Publication'), 'url' => ['/admin/page/admin/index']];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Link/WA Rotators'), 'url' => ['rotator/admin/index']];
-$this->params['breadcrumbs'][] = ['label' => $model->category->title->message, 'url' => ['rotator/admin/view', 'id' => $model->cat_id]];
+$this->params['breadcrumbs'][] = ['label' => $model->categoryTitle->message, 'url' => ['rotator/admin/view', 'id' => $model->cat_id]];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Item'), 'url' => ['rotator/item/manage', 'category' => $model->cat_id]];
 $this->params['breadcrumbs'][] = ['label' => $model->title, 'url' => ['view', 'id' => $model->banner_id]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Update');

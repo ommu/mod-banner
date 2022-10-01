@@ -45,11 +45,11 @@ $attributes = [
     ],
 	[
 		'attribute' => 'name_i',
-		'value' => $model->name_i,
+		'value' => $model->title->message,
 	],
 	[
 		'attribute' => 'desc_i',
-		'value' => $model->desc_i,
+		'value' => $model->description->message,
 	],
 	[
 		'attribute' => 'code',

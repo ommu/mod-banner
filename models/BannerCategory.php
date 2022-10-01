@@ -162,7 +162,8 @@ class BannerCategory extends \app\components\ActiveRecord
 	 */
 	public function getTitle()
 	{
-		return $this->hasOne(SourceMessage::className(), ['id' => 'name']);
+		return $this->hasOne(SourceMessage::className(), ['id' => 'name'])
+            ->select(['id', 'message']);
 	}
 
 	/**
@@ -170,7 +171,8 @@ class BannerCategory extends \app\components\ActiveRecord
 	 */
 	public function getDescription()
 	{
-		return $this->hasOne(SourceMessage::className(), ['id' => 'desc']);
+		return $this->hasOne(SourceMessage::className(), ['id' => 'desc'])
+            ->select(['id', 'message']);
 	}
 
 	/**
@@ -178,7 +180,8 @@ class BannerCategory extends \app\components\ActiveRecord
 	 */
 	public function getCreation()
 	{
-		return $this->hasOne(Users::className(), ['user_id' => 'creation_id']);
+		return $this->hasOne(Users::className(), ['user_id' => 'creation_id'])
+            ->select(['user_id', 'displayname']);
 	}
 
 	/**
@@ -186,7 +189,8 @@ class BannerCategory extends \app\components\ActiveRecord
 	 */
 	public function getModified()
 	{
-		return $this->hasOne(Users::className(), ['user_id' => 'modified_id']);
+		return $this->hasOne(Users::className(), ['user_id' => 'modified_id'])
+            ->select(['user_id', 'displayname']);
 	}
 
 	/**
@@ -288,13 +292,13 @@ class BannerCategory extends \app\components\ActiveRecord
 		$this->templateColumns['name_i'] = [
 			'attribute' => 'name_i',
 			'value' => function($model, $key, $index, $column) {
-				return $model->name_i;
+				return $model->title->message;
 			},
 		];
 		$this->templateColumns['desc_i'] = [
 			'attribute' => 'desc_i',
 			'value' => function($model, $key, $index, $column) {
-				return $model->desc_i;
+				return $model->description->message;
 			},
 		];
 		$this->templateColumns['code'] = [
@@ -496,8 +500,8 @@ class BannerCategory extends \app\components\ActiveRecord
 	{
 		parent::afterFind();
 
-		$this->name_i = isset($this->title) ? $this->title->message : '';
-		$this->desc_i = isset($this->description) ? $this->description->message : '';
+		// $this->name_i = isset($this->title) ? $this->title->message : '';
+		// $this->desc_i = isset($this->description) ? $this->description->message : '';
 		$this->banner_size = unserialize($this->banner_size);
 		// $this->creationDisplayname = isset($this->creation) ? $this->creation->displayname : '-';
 		// $this->modifiedDisplayname = isset($this->modified) ? $this->modified->displayname : '-';
