@@ -472,7 +472,7 @@ class BannerCategory extends \app\components\ActiveRecord
 		$model = $model->orderBy('title.message ASC')->all();
 
         if ($array == true) {
-            return \yii\helpers\ArrayHelper::map($model, 'cat_id', 'name_i');
+            return \yii\helpers\ArrayHelper::map($model, 'cat_id', 'title.message');
         }
 
 		return $model;
