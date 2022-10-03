@@ -64,7 +64,8 @@ class LinkTree extends LinkTreeModel
         if (!($column && is_array($column))) {
             $query = LinkTreeModel::find()->alias('t');
         } else {
-            $query = LinkTreeModel::find()->alias('t')->select($column);
+            $query = LinkTreeModel::find()->alias('t')
+                ->select($column);
         }
 		$query->joinWith([
 			'grid grid', 

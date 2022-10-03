@@ -65,7 +65,8 @@ class Banners extends BannersModel
         if (!($column && is_array($column))) {
             $query = BannersModel::find()->alias('t');
         } else {
-            $query = BannersModel::find()->alias('t')->select($column);
+            $query = BannersModel::find()->alias('t')
+                ->select($column);
         }
 		$query->joinWith([
 			// 'grid grid',

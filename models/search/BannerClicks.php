@@ -65,7 +65,8 @@ class BannerClicks extends BannerClicksModel
         if (!($column && is_array($column))) {
             $query = BannerClicksModel::find()->alias('t');
         } else {
-            $query = BannerClicksModel::find()->alias('t')->select($column);
+            $query = BannerClicksModel::find()->alias('t')
+                ->select($column);
         }
 		$query->joinWith([
 			// 'banner banner',

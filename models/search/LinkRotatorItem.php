@@ -64,7 +64,8 @@ class LinkRotatorItem extends LinkRotatorItemModel
         if (!($column && is_array($column))) {
             $query = LinkRotatorItemModel::find()->alias('t');
         } else {
-            $query = LinkRotatorItemModel::find()->alias('t')->select($column);
+            $query = LinkRotatorItemModel::find()->alias('t')
+                ->select($column);
         }
 		$query->joinWith([
 			// 'grid grid', 

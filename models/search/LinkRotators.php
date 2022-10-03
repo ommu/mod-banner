@@ -64,7 +64,8 @@ class LinkRotators extends LinkRotatorsModel
         if (!($column && is_array($column))) {
             $query = LinkRotatorsModel::find()->alias('t');
         } else {
-            $query = LinkRotatorsModel::find()->alias('t')->select($column);
+            $query = LinkRotatorsModel::find()->alias('t')
+                ->select($column);
         }
 		$query->joinWith([
 			// 'view view',

@@ -65,7 +65,8 @@ class BannerCategory extends BannerCategoryModel
         if (!($column && is_array($column))) {
             $query = BannerCategoryModel::find()->alias('t');
         } else {
-            $query = BannerCategoryModel::find()->alias('t')->select($column);
+            $query = BannerCategoryModel::find()->alias('t')
+                ->select($column);
         }
 		$query->joinWith([
 			// 'view view',

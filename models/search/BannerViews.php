@@ -65,7 +65,8 @@ class BannerViews extends BannerViewsModel
         if (!($column && is_array($column))) {
             $query = BannerViewsModel::find()->alias('t');
         } else {
-            $query = BannerViewsModel::find()->alias('t')->select($column);
+            $query = BannerViewsModel::find()->alias('t')
+                ->select($column);
         }
 		$query->joinWith([
 			// 'banner banner',
