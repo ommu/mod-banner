@@ -244,6 +244,9 @@ class AdminController extends Controller
 	protected function findModel($id)
 	{
         if (($model = LinkRotators::findOne($id)) !== null) {
+            $model->name_i = $model->title->message;
+            $model->desc_i = $model->description->message;
+
             return $model;
         }
 

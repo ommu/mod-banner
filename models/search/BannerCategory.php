@@ -79,7 +79,7 @@ class BannerCategory extends BannerCategoryModel
             (isset($params['oPublish']) && $params['oPublish'] != '') ||
             (isset($params['oPermanent']) && $params['oPermanent'] != '') ||
             (isset($params['oPending']) && $params['oPending'] != '') ||
-            (isset($params['oExpired']) && $params['name_i'] != '') ||
+            (isset($params['oExpired']) && $params['oExpired'] != '') ||
             (isset($params['oUnpublish']) && $params['oUnpublish'] != '') ||
             (isset($params['oAll']) && $params['oAll'] != '')
         )) {
