@@ -30,7 +30,7 @@ if ($creation) {
 
 if ($creation != null) {
     $this->params['menu']['content'] = [
-        ['label' => Yii::t('app', 'Add Link'), 'url' => Url::to(['create', 'id' => $creation->user_id]), 'icon' => 'plus-square', 'htmlOptions' => ['class' => 'btn btn-primary modal-btn']],
+        ['label' => Yii::t('app', 'Add Link'), 'url' => Url::to(['create', 'id' => $creation->user_id]), 'icon' => 'plus-square', 'htmlOptions' => ['class' => 'btn btn-success modal-btn']],
     ];
 }
 $this->params['menu']['option'] = [
