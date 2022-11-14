@@ -45,11 +45,11 @@ $attributes = [
     ],
 	[
 		'attribute' => 'name_i',
-		'value' => $model->name_i,
+		'value' => $model->title->message,
 	],
 	[
 		'attribute' => 'desc_i',
-		'value' => $model->desc_i,
+		'value' => $model->description->message,
 	],
 	[
 		'attribute' => 'code',
@@ -58,7 +58,7 @@ $attributes = [
 	[
 		'attribute' => 'oPublish',
 		'value' => function ($model) {
-			$items = $model->oPublish;
+			$items = $model->view->publish;
 			return Html::a($items, ['rotator/item/manage', 'category' => $model->primaryKey, 'expired' => 'publish'], ['title' => Yii::t('app', '{count} items', ['count' => $items])]);
 		},
 		'format' => 'html',

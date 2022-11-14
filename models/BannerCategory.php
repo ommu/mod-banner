@@ -162,7 +162,8 @@ class BannerCategory extends \app\components\ActiveRecord
 	 */
 	public function getTitle()
 	{
-		return $this->hasOne(SourceMessage::className(), ['id' => 'name']);
+		return $this->hasOne(SourceMessage::className(), ['id' => 'name'])
+            ->select(['id', 'message']);
 	}
 
 	/**
@@ -170,7 +171,8 @@ class BannerCategory extends \app\components\ActiveRecord
 	 */
 	public function getDescription()
 	{
-		return $this->hasOne(SourceMessage::className(), ['id' => 'desc']);
+		return $this->hasOne(SourceMessage::className(), ['id' => 'desc'])
+            ->select(['id', 'message']);
 	}
 
 	/**
@@ -178,7 +180,8 @@ class BannerCategory extends \app\components\ActiveRecord
 	 */
 	public function getCreation()
 	{
-		return $this->hasOne(Users::className(), ['user_id' => 'creation_id']);
+		return $this->hasOne(Users::className(), ['user_id' => 'creation_id'])
+            ->select(['user_id', 'displayname']);
 	}
 
 	/**
@@ -186,7 +189,8 @@ class BannerCategory extends \app\components\ActiveRecord
 	 */
 	public function getModified()
 	{
-		return $this->hasOne(Users::className(), ['user_id' => 'modified_id']);
+		return $this->hasOne(Users::className(), ['user_id' => 'modified_id'])
+            ->select(['user_id', 'displayname']);
 	}
 
 	/**
@@ -288,13 +292,13 @@ class BannerCategory extends \app\components\ActiveRecord
 		$this->templateColumns['name_i'] = [
 			'attribute' => 'name_i',
 			'value' => function($model, $key, $index, $column) {
-				return $model->name_i;
+				return $model->title->message;
 			},
 		];
 		$this->templateColumns['desc_i'] = [
 			'attribute' => 'desc_i',
 			'value' => function($model, $key, $index, $column) {
-				return $model->desc_i;
+				return $model->description->message;
 			},
 		];
 		$this->templateColumns['code'] = [
@@ -359,7 +363,7 @@ class BannerCategory extends \app\components\ActiveRecord
 			'attribute' => 'oPublish',
 			'value' => function($model, $key, $index, $column) {
 				// $banners = $model->getBanners(true);
-				$published = $model->oPublish;
+				$published = $model->view->publish;
 				return Html::a($published, ['admin/manage', 'category' => $model->primaryKey, 'expired' => 'publish'], ['title' => Yii::t('app', '{count} published', ['count' => $published]), 'data-pjax' => 0]);
 			},
 			'filter' => $this->filterYesNo(),
@@ -370,7 +374,7 @@ class BannerCategory extends \app\components\ActiveRecord
 			'attribute' => 'oPermanent',
 			'value' => function($model, $key, $index, $column) {
 				// $permanent = $model->getPermanent(true);
-				$permanent = $model->oPermanent;
+				$permanent = $model->view->permanent;
 				return Html::a($permanent, ['admin/manage', 'category' => $model->primaryKey, 'expired' => 'permanent'], ['title' => Yii::t('app', '{count} permanent', ['count' => $permanent]), 'data-pjax' => 0]);
 			},
 			'filter' => $this->filterYesNo(),
@@ -381,7 +385,7 @@ class BannerCategory extends \app\components\ActiveRecord
 			'attribute' => 'oPending',
 			'value' => function($model, $key, $index, $column) {
 				// $pending = $model->getPending(true);
-				$pending = $model->oPending;
+				$pending = $model->view->pending;
 				return Html::a($pending, ['admin/manage', 'category' => $model->primaryKey, 'expired' => 'pending'], ['title' => Yii::t('app', '{count} pending', ['count' => $pending]), 'data-pjax' => 0]);
 			},
 			'filter' => $this->filterYesNo(),
@@ -392,7 +396,7 @@ class BannerCategory extends \app\components\ActiveRecord
 			'attribute' => 'oExpired',
 			'value' => function($model, $key, $index, $column) {
 				// $expired = $model->getExpired(true);
-				$expired = $model->oExpired;
+				$expired = $model->view->expired;
 				return Html::a($expired, ['admin/manage', 'category' => $model->primaryKey, 'expired' => 'expired'], ['title' => Yii::t('app', '{count} expired', ['count' => $expired]), 'data-pjax' => 0]);
 			},
 			'filter' => $this->filterYesNo(),
@@ -402,7 +406,7 @@ class BannerCategory extends \app\components\ActiveRecord
 		$this->templateColumns['oUnpublish'] = [
 			'attribute' => 'oUnpublish',
 			'value' => function($model, $key, $index, $column) {
-				$unpublish = $model->oUnpublish;
+				$unpublish = $model->view->unpublish;
 				return Html::a($unpublish, ['admin/manage', 'category' => $model->primaryKey, 'publish' => 0], ['title' => Yii::t('app', '{count} unpublish', ['count' => $unpublish]), 'data-pjax' => 0]);
 			},
 			'filter' => $this->filterYesNo(),
@@ -412,7 +416,7 @@ class BannerCategory extends \app\components\ActiveRecord
 		$this->templateColumns['oAll'] = [
 			'attribute' => 'oAll',
 			'value' => function($model, $key, $index, $column) {
-				$banners = $model->oAll;
+				$banners = $model->view->all;
 				return Html::a($banners, ['admin/manage', 'category' => $model->primaryKey], ['title' => Yii::t('app', '{count} banners', ['count' => $banners]), 'data-pjax' => 0]);
 			},
 			'filter' => $this->filterYesNo(),
@@ -468,7 +472,7 @@ class BannerCategory extends \app\components\ActiveRecord
 		$model = $model->orderBy('title.message ASC')->all();
 
         if ($array == true) {
-            return \yii\helpers\ArrayHelper::map($model, 'cat_id', 'name_i');
+            return \yii\helpers\ArrayHelper::map($model, 'cat_id', 'title.message');
         }
 
 		return $model;
@@ -496,17 +500,11 @@ class BannerCategory extends \app\components\ActiveRecord
 	{
 		parent::afterFind();
 
-		$this->name_i = isset($this->title) ? $this->title->message : '';
-		$this->desc_i = isset($this->description) ? $this->description->message : '';
+		// $this->name_i = isset($this->title) ? $this->title->message : '';
+		// $this->desc_i = isset($this->description) ? $this->description->message : '';
 		$this->banner_size = unserialize($this->banner_size);
 		// $this->creationDisplayname = isset($this->creation) ? $this->creation->displayname : '-';
 		// $this->modifiedDisplayname = isset($this->modified) ? $this->modified->displayname : '-';
-		$this->oPublish = isset($this->view) ? $this->view->publish : 0;
-		$this->oPermanent = isset($this->view) ? $this->view->permanent : 0;
-		$this->oPending = isset($this->view) ? $this->view->pending : 0;
-		$this->oExpired = isset($this->view) ? $this->view->expired : 0;
-		$this->oUnpublish = isset($this->view) ? $this->view->unpublish : 0;
-		$this->oAll = isset($this->view) ? $this->view->all : 0;
 	}
 
 	/**

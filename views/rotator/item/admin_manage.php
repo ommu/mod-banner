@@ -26,7 +26,7 @@ if ($category != null) {
     $this->params['breadcrumbs'][] = Yii::t('app', 'Items');
 
     $this->params['menu']['content'] = [
-        ['label' => Yii::t('app', 'Add Item'), 'url' => Url::to(['create', 'id' => $category->cat_id]), 'icon' => 'plus-square', 'htmlOptions' => ['class' => 'btn btn-primary modal-btn']],
+        ['label' => Yii::t('app', 'Add Item'), 'url' => Url::to(['create', 'id' => $category->cat_id]), 'icon' => 'plus-square', 'htmlOptions' => ['class' => 'btn btn-success modal-btn']],
     ];
 } else {
     $this->params['breadcrumbs'][] = Yii::t('app', 'Items');

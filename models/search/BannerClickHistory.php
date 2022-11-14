@@ -64,9 +64,9 @@ class BannerClickHistory extends BannerClickHistoryModel
 	public function search($params, $column=null)
 	{
         if (!($column && is_array($column))) {
-            $query = BannerClickHistoryModel::find()->alias('t');
+            $query = BannerClickHistoryModel::find();
         } else {
-            $query = BannerClickHistoryModel::find()->alias('t')->select($column);
+            $query = BannerClickHistoryModel::find();
         }
 		$query->joinWith([
 			// 'click click',
@@ -81,13 +81,17 @@ class BannerClickHistory extends BannerClickHistoryModel
         )) {
             $query->joinWith(['banner banner']);
         }
-        if ((isset($params['sort']) && in_array($params['sort'], ['userDisplayname', '-userDisplayname'])) || (isset($params['userDisplayname']) && $params['userDisplayname'] != '')) {
+        if ((isset($params['sort']) && in_array($params['sort'], ['userDisplayname', '-userDisplayname'])) || 
+            (isset($params['userDisplayname']) && $params['userDisplayname'] != '')
+        ) {
             $query->joinWith(['user user']);
         }
         if ((isset($params['sort']) && in_array($params['sort'], ['categoryId', '-categoryId']))) {
             $query->joinWith(['categoryTitle categoryTitle']);
         }
-        if ((isset($params['bannerId']) && $params['bannerId'] != '') || (isset($params['banner']) && $params['banner'] != '')) {
+        if ((isset($params['bannerId']) && $params['bannerId'] != '') || 
+            (isset($params['banner']) && $params['banner'] != '')
+        ) {
             $query->joinWith(['click click']);
         }
 

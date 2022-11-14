@@ -48,11 +48,11 @@ $attributes = [
 	],
 	[
 		'attribute' => 'name_i',
-		'value' => $model->name_i,
+		'value' => $model->title->message,
 	],
 	[
 		'attribute' => 'desc_i',
-		'value' => $model->desc_i,
+		'value' => $model->description->message,
 	],
 	[
 		'attribute' => 'code',
@@ -72,7 +72,7 @@ $attributes = [
 	[
 		'attribute' => 'oPublish',
 		'value' => function ($model) {
-			$banners = $model->oPublish;
+			$banners = $model->view->publish;
 			return Html::a($banners, ['admin/manage', 'category' => $model->primaryKey, 'expired' => 'publish']);
 		},
 		'format' => 'html',
@@ -81,7 +81,7 @@ $attributes = [
 	[
 		'attribute' => 'oPermanent',
 		'value' => function ($model) {
-			$permanent = $model->oPermanent;
+			$permanent = $model->view->permanent;
 			return Html::a($permanent, ['admin/manage', 'category' => $model->primaryKey, 'expired' => 'permanent']);
 		},
 		'format' => 'html',
@@ -90,7 +90,7 @@ $attributes = [
 	[
 		'attribute' => 'oPending',
 		'value' => function ($model) {
-			$pending = $model->oPending;
+			$pending = $model->view->pending;
 			return Html::a($pending, ['admin/manage', 'category' => $model->primaryKey, 'expired' => 'pending']);
 		},
 		'format' => 'html',
@@ -99,7 +99,7 @@ $attributes = [
 	[
 		'attribute' => 'oExpired',
 		'value' => function ($model) {
-			$expired = $model->oExpired;
+			$expired = $model->view->expired;
 			return Html::a($expired, ['admin/manage', 'category' => $model->primaryKey, 'expired' => 'expired']);
 		},
 		'format' => 'html',
@@ -108,7 +108,7 @@ $attributes = [
 	[
 		'attribute' => 'oUnpublish',
 		'value' => function ($model) {
-			$unpublish = $model->oUnpublish;
+			$unpublish = $model->view->unpublish;
 			return Html::a($unpublish, ['admin/manage', 'category' => $model->primaryKey, 'publish' => 0]);
 		},
 		'format' => 'html',
@@ -117,7 +117,7 @@ $attributes = [
 	[
 		'attribute' => 'oAll',
 		'value' => function ($model) {
-			$banners = $model->oAll;
+			$banners = $model->view->all;
 			return Html::a($banners, ['admin/manage', 'category' => $model->primaryKey]);
 		},
 		'format' => 'html',

@@ -40,9 +40,9 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\helpers\Inflector;
 use yii\web\UploadedFile;
-use thamtech\uuid\helpers\UuidHelper;
 use app\models\Users;
 use yii\validators\UrlValidator;
+use app\models\SourceMessage;
 
 class LinkTree extends \app\components\ActiveRecord
 {
@@ -151,7 +151,18 @@ class LinkTree extends \app\components\ActiveRecord
 	 */
 	public function getCategory()
 	{
-		return $this->hasOne(BannerCategory::className(), ['cat_id' => 'cat_id']);
+		return $this->hasOne(BannerCategory::className(), ['cat_id' => 'cat_id'])
+            ->select(['cat_id', 'type', 'name']);
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getCategoryTitle()
+	{
+		return $this->hasOne(SourceMessage::className(), ['id' => 'name'])
+            ->select(['id', 'message'])
+            ->via('category');
 	}
 
 	/**
@@ -159,7 +170,8 @@ class LinkTree extends \app\components\ActiveRecord
 	 */
 	public function getCreation()
 	{
-		return $this->hasOne(Users::className(), ['user_id' => 'creation_id']);
+		return $this->hasOne(Users::className(), ['user_id' => 'creation_id'])
+            ->select(['user_id', 'displayname']);
 	}
 
 	/**
@@ -167,7 +179,8 @@ class LinkTree extends \app\components\ActiveRecord
 	 */
 	public function getModified()
 	{
-		return $this->hasOne(Users::className(), ['user_id' => 'modified_id']);
+		return $this->hasOne(Users::className(), ['user_id' => 'modified_id'])
+            ->select(['user_id', 'displayname']);
 	}
 
 	/**
@@ -270,7 +283,8 @@ class LinkTree extends \app\components\ActiveRecord
 		$this->templateColumns['oClick'] = [
 			'attribute' => 'oClick',
 			'value' => function($model, $key, $index, $column) {
-				$clicks = $model->getClicks(true);
+				// $clicks = $model->getClicks(true);
+				$clicks = $model->grid->click;
 				return Html::a($clicks, ['click/admin/manage', 'banner' => $model->primaryKey, 'linktree' => true], ['title' => Yii::t('app', '{count} clicks', ['count' => $clicks]), 'data-pjax' => 0]);
 			},
 			'filter' => $this->filterYesNo(),
@@ -282,7 +296,7 @@ class LinkTree extends \app\components\ActiveRecord
 			'attribute' => 'oView',
 			'value' => function($model, $key, $index, $column) {
 				// $views = $model->getViews(true);
-				$views = $model->oView;
+				$views = $model->grid->view;
 				return Html::a($views, ['view/admin/manage', 'banner' => $model->primaryKey, 'linktree' => true], ['title' => Yii::t('app', '{count} views', ['count' => $views]), 'data-pjax' => 0]);
 			},
 			'filter' => $this->filterYesNo(),
@@ -343,8 +357,6 @@ class LinkTree extends \app\components\ActiveRecord
 		// $this->categoryName = isset($this->category) ? $this->category->title->message : '-';
 		// $this->creationDisplayname = isset($this->creation) ? $this->creation->displayname : '-';
 		// $this->modifiedDisplayname = isset($this->modified) ? $this->modified->displayname : '-';
-        $this->oClick = isset($this->grid) ? $this->grid->click : 0;
-        $this->oView = isset($this->grid) ? $this->grid->view : 0;
 	}
 
 	/**

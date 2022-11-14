@@ -44,7 +44,7 @@ $attributes = [
 	[
 		'attribute' => 'categoryName',
 		'value' => function ($model) {
-			$categoryName = isset($model->category) ? $model->category->title->message : '-';
+			$categoryName = isset($model->categoryTitle) ? $model->categoryTitle->message : '-';
             if ($categoryName != '-') {
                 return Html::a($categoryName, ['setting/category/view', 'id' => $model->cat_id], ['title' => $categoryName, 'class' => 'modal-btn']);
             }
@@ -89,7 +89,7 @@ $attributes = [
 	[
 		'attribute' => 'clicks',
 		'value' => function ($model) {
-			$clicks = $model->oClick;
+			$clicks = $model->grid->click;
 			return Html::a($clicks, ['click/admin/manage', 'banner' => $model->primaryKey], ['title' => Yii::t('app', '{count} clicks', ['count' => $clicks])]);
 		},
 		'format' => 'html',
@@ -98,7 +98,7 @@ $attributes = [
 	[
 		'attribute' => 'views',
 		'value' => function ($model) {
-			$views = $model->oView;
+			$views = $model->grid->view;
 			return Html::a($views, ['view/admin/manage', 'banner' => $model->primaryKey], ['title' => Yii::t('app', '{count} views', ['count' => $views])]);
 		},
 		'format' => 'html',

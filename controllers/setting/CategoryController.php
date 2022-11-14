@@ -195,6 +195,7 @@ class CategoryController extends Controller
 		$this->view->keywords = '';
 		return $this->oRender('admin_view', [
 			'model' => $model,
+			'small' => false,
 		]);
 	}
 
@@ -243,6 +244,9 @@ class CategoryController extends Controller
 	protected function findModel($id)
 	{
         if (($model = BannerCategory::findOne($id)) !== null) {
+            $model->name_i = $model->title->message;
+            $model->desc_i = $model->description->message;
+
             return $model;
         }
 

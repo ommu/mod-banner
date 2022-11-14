@@ -64,7 +64,8 @@ class LinkRotators extends LinkRotatorsModel
         if (!($column && is_array($column))) {
             $query = LinkRotatorsModel::find()->alias('t');
         } else {
-            $query = LinkRotatorsModel::find()->alias('t')->select($column);
+            $query = LinkRotatorsModel::find()->alias('t')
+                ->select($column);
         }
 		$query->joinWith([
 			// 'view view',
@@ -160,7 +161,7 @@ class LinkRotators extends LinkRotatorsModel
             }
         }
 
-        if (!isset($params['publish']) || (isset($params['publish']) && $params['publish'] == '')) {
+        if ((!isset($params['publish']) || (isset($params['publish']) && $params['publish'] == '')) && !$this->publish) {
             $query->andFilterWhere(['IN', 't.publish', [0,1]]);
         } else {
             $query->andFilterWhere(['t.publish' => $this->publish]);

@@ -21,7 +21,7 @@ use yii\validators\UrlValidator;
 if (!$small) {
     $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Publication'), 'url' => ['/admin/page/admin/index']];
     $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Link/WA Rotators'), 'url' => ['rotator/admin/index']];
-    $this->params['breadcrumbs'][] = ['label' => $model->category->title->message, 'url' => ['rotator/admin/view', 'id' => $model->cat_id]];
+    $this->params['breadcrumbs'][] = ['label' => $model->categoryTitle->message, 'url' => ['rotator/admin/view', 'id' => $model->cat_id]];
     $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Item'), 'url' => ['rotator/item/manage', 'category' => $model->cat_id]];
     $this->params['breadcrumbs'][] = $model->title;
 
@@ -49,7 +49,7 @@ $attributes = [
 	[
 		'attribute' => 'categoryName',
 		'value' => function ($model) {
-            $categoryName = isset($model->category) ? $model->category->title->message : '-';
+            $categoryName = isset($model->categoryTitle) ? $model->categoryTitle->message : '-';
             if ($categoryName != '-') {
                 return Html::a($categoryName, ['rotator/admin/view', 'id' => $model->cat_id], ['title' => $categoryName, 'class' => 'modal-btn']);
             }
@@ -97,7 +97,7 @@ $attributes = [
 	[
 		'attribute' => 'click',
 		'value' => function ($model) {
-			$clicks = $model->oClick;
+			$clicks = $model->grid->click;
 			return Html::a($clicks, ['click/admin/manage', 'banner' => $model->primaryKey], ['title' => Yii::t('app', '{count} clicks', ['count' => $clicks])]);
 		},
 		'format' => 'html',
@@ -106,7 +106,7 @@ $attributes = [
 	[
 		'attribute' => 'view',
 		'value' => function ($model) {
-			$views = $model->oView;
+			$views = $model->grid->view;
 			return Html::a($views, ['view/admin/manage', 'banner' => $model->primaryKey], ['title' => Yii::t('app', '{count} views', ['count' => $views])]);
 		},
 		'format' => 'html',

@@ -196,6 +196,7 @@ class AdminController extends Controller
 		$this->view->keywords = '';
 		return $this->oRender('admin_view', [
 			'model' => $model,
+			'small' => false,
 		]);
 	}
 
@@ -244,6 +245,9 @@ class AdminController extends Controller
 	protected function findModel($id)
 	{
         if (($model = LinkRotators::findOne($id)) !== null) {
+            $model->name_i = $model->title->message;
+            $model->desc_i = $model->description->message;
+
             return $model;
         }
 

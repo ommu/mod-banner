@@ -81,7 +81,8 @@ class BannerViewHistory extends \app\components\ActiveRecord
 	 */
 	public function getView()
 	{
-		return $this->hasOne(BannerViews::className(), ['view_id' => 'view_id']);
+		return $this->hasOne(BannerViews::className(), ['view_id' => 'view_id'])
+            ->select(['view_id', 'banner_id', 'user_id']);
 	}
 
 	/**
@@ -89,7 +90,9 @@ class BannerViewHistory extends \app\components\ActiveRecord
 	 */
 	public function getBanner()
 	{
-		return $this->hasOne(Banners::className(), ['banner_id' => 'banner_id'])->via('view');
+		return $this->hasOne(Banners::className(), ['banner_id' => 'banner_id'])
+            ->select(['banner_id', 'cat_id', 'title'])
+            ->via('view');
 	}
 
 	/**
@@ -97,7 +100,9 @@ class BannerViewHistory extends \app\components\ActiveRecord
 	 */
 	public function getCategory()
 	{
-		return $this->hasOne(BannerCategory::className(), ['cat_id' => 'cat_id'])->via('banner');
+		return $this->hasOne(BannerCategory::className(), ['cat_id' => 'cat_id'])
+            ->select(['cat_id', 'name'])
+            ->via('banner');
 	}
 
 	/**
@@ -105,7 +110,9 @@ class BannerViewHistory extends \app\components\ActiveRecord
 	 */
 	public function getCategoryTitle()
 	{
-		return $this->hasOne(SourceMessage::className(), ['id' => 'name'])->via('category');
+		return $this->hasOne(SourceMessage::className(), ['id' => 'name'])
+            ->select(['id', 'message'])
+            ->via('category');
 	}
 
 	/**
@@ -113,7 +120,9 @@ class BannerViewHistory extends \app\components\ActiveRecord
 	 */
 	public function getUser()
 	{
-		return $this->hasOne(Users::className(), ['user_id' => 'user_id'])->via('view');
+		return $this->hasOne(Users::className(), ['user_id' => 'user_id'])
+            ->select(['user_id', 'displayname'])
+            ->via('view');
 	}
 
 	/**

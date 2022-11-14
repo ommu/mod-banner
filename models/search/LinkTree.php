@@ -64,7 +64,8 @@ class LinkTree extends LinkTreeModel
         if (!($column && is_array($column))) {
             $query = LinkTreeModel::find()->alias('t');
         } else {
-            $query = LinkTreeModel::find()->alias('t')->select($column);
+            $query = LinkTreeModel::find()->alias('t')
+                ->select($column);
         }
 		$query->joinWith([
 			'grid grid', 
@@ -173,7 +174,7 @@ class LinkTree extends LinkTreeModel
             }
         }
 
-        if (!isset($params['publish']) || (isset($params['publish']) && $params['publish'] == '')) {
+        if ((!isset($params['publish']) || (isset($params['publish']) && $params['publish'] == '')) && !$this->publish) {
             $query->andFilterWhere(['IN', 't.publish', [0,1]]);
         } else {
             $query->andFilterWhere(['t.publish' => $this->publish]);

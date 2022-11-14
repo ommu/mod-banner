@@ -23,11 +23,10 @@ if ($breadcrumb) {
 	$this->params['breadcrumbs'][] = Yii::t('app', 'Banner');
 }
 
-if (!$small) {
-    $this->params['menu']['content'] = [
-        ['label' => Yii::t('app', 'Reset'), 'url' => Url::to(['delete']), 'htmlOptions' => ['data-confirm' => Yii::t('app', 'Are you sure you want to reset this setting?'), 'data-method' => 'post', 'class' => 'btn btn-danger'], 'icon' => 'trash'],
-    ];
-} ?>
+$this->params['menu']['content'] = [
+    ['label' => Yii::t('app', 'Reset'), 'url' => Url::to(['delete']), 'htmlOptions' => ['data-confirm' => Yii::t('app', 'Are you sure you want to reset this setting?'), 'data-method' => 'post', 'class' => 'btn btn-danger'], 'icon' => 'trash'],
+];
+?>
 
 <div class="banner-setting-view">
 
@@ -36,7 +35,6 @@ $attributes = [
 	[
 		'attribute' => 'id',
 		'value' => $model->id ? $model->id : '-',
-		'visible' => !$small,
 	],
 	[
 		'attribute' => 'license',
@@ -49,37 +47,30 @@ $attributes = [
 	[
 		'attribute' => 'meta_description',
 		'value' => $model->meta_description ? $model->meta_description : '-',
-		'visible' => !$small,
 	],
 	[
 		'attribute' => 'meta_keyword',
 		'value' => $model->meta_keyword ? $model->meta_keyword : '-',
-		'visible' => !$small,
 	],
 	[
 		'attribute' => 'banner_validation',
 		'value' => $model::getBannerValidation($model->banner_validation),
-		'visible' => !$small,
 	],
 	[
 		'attribute' => 'banner_resize',
 		'value' => $model::getBannerResize($model->banner_resize),
-		'visible' => !$small,
 	],
 	[
 		'attribute' => 'banner_file_type',
 		'value' => $model->banner_file_type,
-		'visible' => !$small,
 	],
 	[
 		'attribute' => 'modified_date',
 		'value' => Yii::$app->formatter->asDatetime($model->modified_date, 'medium'),
-		'visible' => !$small,
 	],
 	[
 		'attribute' => 'modifiedDisplayname',
 		'value' => isset($model->modified) ? $model->modified->displayname : '-',
-		'visible' => !$small,
 	],
 	[
 		'attribute' => '',
@@ -87,7 +78,6 @@ $attributes = [
 			'class' => 'btn btn-primary',
 		]),
 		'format' => 'raw',
-		'visible' => !$small,
 	],
 ];
 

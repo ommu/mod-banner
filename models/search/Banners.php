@@ -65,7 +65,8 @@ class Banners extends BannersModel
         if (!($column && is_array($column))) {
             $query = BannersModel::find()->alias('t');
         } else {
-            $query = BannersModel::find()->alias('t')->select($column);
+            $query = BannersModel::find()->alias('t')
+                ->select($column);
         }
 		$query->joinWith([
 			// 'grid grid',
@@ -209,7 +210,7 @@ class Banners extends BannersModel
             }
         }
 
-        if (!isset($params['publish']) || (isset($params['publish']) && $params['publish'] == '')) {
+        if ((!isset($params['publish']) || (isset($params['publish']) && $params['publish'] == '')) && !$this->publish) {
             $query->andFilterWhere(['IN', 't.publish', [0,1]]);
         } else {
             $query->andFilterWhere(['t.publish' => $this->publish]);
