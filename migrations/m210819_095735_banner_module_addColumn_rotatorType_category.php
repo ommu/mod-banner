@@ -3,7 +3,7 @@
  * m210819_095735_banner_module_addColumn_rotatorType_category
  * 
  * @author Putra Sudaryanto <putra@ommu.id>
- * @contact (+62)856-299-4114
+ * @contact (+62)811-2540-432
  * @copyright Copyright (c) 2021 OMMU (www.ommu.id)
  * @created date 19 August 2021, 16:05 WIB
  * @link https://github.com/ommu/mod-banner

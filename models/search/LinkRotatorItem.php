@@ -5,7 +5,7 @@
  * LinkRotatorItem represents the model behind the search form about `ommu\banner\models\LinkRotatorItem`.
  *
  * @author Putra Sudaryanto <putra@ommu.id>
- * @contact (+62)856-299-4114
+ * @contact (+62)811-2540-432
  * @copyright Copyright (c) 2021 OMMU (www.ommu.id)
  * @created date 9 August 2021, 19:58 WIB
  * @link https://github.com/ommu/mod-banner

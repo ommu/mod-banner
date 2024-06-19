@@ -3,7 +3,7 @@
  * m220920_081919_banner_module_insert_newRole_click_view
  * 
  * @author Putra Sudaryanto <putra@ommu.id>
- * @contact (+62)856-299-4114
+ * @contact (+62)811-2540-432
  * @copyright Copyright (c) 2022 OMMU (www.ommu.id)
  * @created date 18 March 2022, 08:20 WIB
  * @link https://github.com/ommu/mod-banner

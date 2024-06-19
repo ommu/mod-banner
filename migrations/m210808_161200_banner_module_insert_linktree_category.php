@@ -3,7 +3,7 @@
  * m210808_161200_banner_module_insert_linktree_category
  * 
  * @author Putra Sudaryanto <putra@ommu.id>
- * @contact (+62)856-299-4114
+ * @contact (+62)811-2540-432
  * @copyright Copyright (c) 2019 OMMU (www.ommu.id)
  * @created date 8 August 2021, 16:12 WIB
  * @link https://github.com/ommu/mod-banner

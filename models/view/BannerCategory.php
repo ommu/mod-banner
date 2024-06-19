@@ -3,7 +3,7 @@
  * BannerCategory
  * 
  * @author Putra Sudaryanto <putra@ommu.id>
- * @contact (+62)856-299-4114
+ * @contact (+62)811-2540-432
  * @copyright Copyright (c) 2017 OMMU (www.ommu.id)
  * @created date 11 October 2017, 10:32 WIB
  * @modified date 24 January 2019, 16:50 WIB

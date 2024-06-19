@@ -3,7 +3,7 @@
  * m210807_140621_banner_module_renameColumn_catCode_category
  * 
  * @author Putra Sudaryanto <putra@ommu.id>
- * @contact (+62)856-299-4114
+ * @contact (+62)811-2540-432
  * @copyright Copyright (c) 2021 OMMU (www.ommu.id)
  * @created date 7 August 2021, 14:09 WIB
  * @link https://github.com/ommu/mod-banner
